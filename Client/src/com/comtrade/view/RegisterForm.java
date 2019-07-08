@@ -6,12 +6,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.comtrade.domain.Country;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.time.Month;
 import java.time.Year;
+import java.util.List;
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -35,6 +39,8 @@ public class RegisterForm extends JFrame {
 	private JComboBox<Month> comboMonth;
 	private JComboBox<Integer> comboDay;
 	private JComboBox<String> comboCountries;
+	private List<Country> countryImages;
+	private int idCountry;
 	private JLabel lblImage;
 
 	/**
@@ -220,5 +226,9 @@ public class RegisterForm extends JFrame {
 		for (int i = 1; i < 32; i++) {
 			comboDay.addItem(i);
 		}
+	}
+	
+	private void uploadCountryImagesFromDB() {
+		
 	}
 }
