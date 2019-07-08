@@ -24,8 +24,8 @@ public class MainForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private final int regularUser = 1;
-	private final int host = 2;
+	private final String USER_REGULAR = "USER";
+	private final String USER_HOST = "SUPER_USER";
 	private JTextField tfUsernane;
 	private JPasswordField passwordField;
 	private JPanel registerPanel;
@@ -167,6 +167,10 @@ public class MainForm extends JFrame {
 		panel_2.setLayout(null);
 		
 		JButton btnRegUser = new JButton("Register as user");
+		btnRegUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnRegUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegUser.addMouseListener(new MouseAdapter() {
 			@Override
@@ -190,6 +194,14 @@ public class MainForm extends JFrame {
 		panel_2.add(btnRegUser);
 		
 		JButton btnHost = new JButton("Become a host");
+		btnHost.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				RegisterForm registerForm = new RegisterForm(USER_HOST);
+				registerForm.setLocationRelativeTo(null);
+				registerForm.setVisible(true);
+				dispose();
+			}
+		});
 		btnHost.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
