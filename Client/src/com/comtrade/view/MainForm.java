@@ -16,13 +16,16 @@ import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private final int regularUser = 1;
-	private final int host = 2;
+	private final String USER_REGULAR = "USER";
+	private final String USER_HOST = "SUPER_USER";
 	private JTextField tfUsernane;
 	private JPasswordField passwordField;
 	private JPanel registerPanel;
@@ -90,16 +93,46 @@ public class MainForm extends JFrame {
 		passwordField.setBounds(557, 361, 477, 55);
 		loginPanel.add(passwordField);
 		
-		JButton button = new JButton("Login");
-		button.setForeground(Color.WHITE);
-		button.setFont(new Font("Dialog", Font.PLAIN, 18));
-		button.setContentAreaFilled(false);
-		button.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		button.setBounds(557, 451, 231, 55);
-		loginPanel.add(button);
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setContentAreaFilled(false);
+		btnLogin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnLogin.setContentAreaFilled(true);
+				btnLogin.setBackground(new Color(255, 88, 93));
+				btnLogin.setBorder(new LineBorder(new Color(255, 88, 93), 2));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnLogin.setContentAreaFilled(false);
+				btnLogin.setBackground(null);
+				btnLogin.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+			}
+		});
+		btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnLogin.setForeground(Color.WHITE);
+		btnLogin.setFont(new Font("Dialog", Font.PLAIN, 18));
+		btnLogin.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+		btnLogin.setBounds(557, 451, 231, 55);
+		loginPanel.add(btnLogin);
 		
-		JButton button_1 = new JButton("Register");
-		button_1.addActionListener(new ActionListener() {
+		JButton btnRegister = new JButton("Register");
+		btnRegister.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRegister.setContentAreaFilled(true);
+				btnRegister.setBackground(new Color(255, 88, 93));
+				btnRegister.setBorder(new LineBorder(new Color(255, 88, 93), 2));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRegister.setContentAreaFilled(false);
+				btnRegister.setBackground(null);
+				btnRegister.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+			}
+		});
+		btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				layeredPane.removeAll();
 				layeredPane.add(registerPanel);
@@ -107,12 +140,12 @@ public class MainForm extends JFrame {
 				layeredPane.revalidate();
 			}
 		});
-		button_1.setForeground(Color.WHITE);
-		button_1.setFont(new Font("Dialog", Font.PLAIN, 18));
-		button_1.setContentAreaFilled(false);
-		button_1.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		button_1.setBounds(803, 451, 231, 55);
-		loginPanel.add(button_1);
+		btnRegister.setForeground(Color.WHITE);
+		btnRegister.setFont(new Font("Dialog", Font.PLAIN, 18));
+		btnRegister.setContentAreaFilled(false);
+		btnRegister.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+		btnRegister.setBounds(803, 451, 231, 55);
+		loginPanel.add(btnRegister);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(255, 255, 255), 3));
@@ -133,15 +166,57 @@ public class MainForm extends JFrame {
 		registerPanel.add(panel_2);
 		panel_2.setLayout(null);
 		
-		JButton btnRegister = new JButton("Register as user");
-		btnRegister.setForeground(Color.WHITE);
-		btnRegister.setFont(new Font("Dialog", Font.PLAIN, 18));
-		btnRegister.setContentAreaFilled(false);
-		btnRegister.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		btnRegister.setBounds(82, 172, 231, 55);
-		panel_2.add(btnRegister);
+		JButton btnRegUser = new JButton("Register as user");
+		btnRegUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnRegUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRegUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRegUser.setContentAreaFilled(true);
+				btnRegUser.setBackground(new Color(255, 88, 93));
+				btnRegUser.setBorder(new LineBorder(new Color(255, 88, 93), 2));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRegUser.setContentAreaFilled(false);
+				btnRegUser.setBackground(null);
+				btnRegUser.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+			}
+		});
+		btnRegUser.setForeground(Color.WHITE);
+		btnRegUser.setFont(new Font("Dialog", Font.PLAIN, 18));
+		btnRegUser.setContentAreaFilled(false);
+		btnRegUser.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+		btnRegUser.setBounds(82, 172, 231, 55);
+		panel_2.add(btnRegUser);
 		
 		JButton btnHost = new JButton("Become a host");
+		btnHost.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				RegisterForm registerForm = new RegisterForm(USER_HOST);
+				registerForm.setLocationRelativeTo(null);
+				registerForm.setVisible(true);
+				dispose();
+			}
+		});
+		btnHost.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnHost.setContentAreaFilled(true);
+				btnHost.setBackground(new Color(255, 88, 93));
+				btnHost.setBorder(new LineBorder(new Color(255, 88, 93), 2));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnHost.setContentAreaFilled(false);
+				btnHost.setBackground(null);
+				btnHost.setBorder(new LineBorder(new Color(255, 255, 255), 2));
+			}
+		});
+		btnHost.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnHost.setForeground(Color.WHITE);
 		btnHost.setFont(new Font("Dialog", Font.PLAIN, 18));
 		btnHost.setContentAreaFilled(false);
