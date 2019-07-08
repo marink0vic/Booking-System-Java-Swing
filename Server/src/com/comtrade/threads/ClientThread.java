@@ -10,6 +10,7 @@ import java.util.List;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerBL;
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -24,10 +25,8 @@ public class ClientThread extends Thread {
 				TransferClass transferClass = (TransferClass) inputStream.readObject();
 				processRequest(transferClass);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -45,7 +44,21 @@ public class ClientThread extends Thread {
 				countries = ControllerBL.getController().getAllCountries();
 				transfer.setServerResponse(countries);
 			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem happened while returning data from database");
+				transfer.setMessageResponse("Problem occurred while returning data from database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		}
+		case SAVE_USER:
+		{
+		
+			GeneralDomain user = (GeneralDomain) transferClass.getClientRequest();
+			try {
+				user = ControllerBL.getController().saveUser(user);
+				transfer.setServerResponse(user);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while saving user to database");
 				e.printStackTrace();
 			}
 			sendResponse(transfer);

@@ -8,12 +8,15 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.property.PropertyForm;
 
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
@@ -35,7 +38,7 @@ public class RegisterForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private final String USER;
+	private final String STATUS;
 	private JTextField tfFirstName;
 	private JTextField tfLastName;
 	private JTextField tfEmail;
@@ -47,6 +50,9 @@ public class RegisterForm extends JFrame {
 	private JComboBox<String> comboCountries;
 	private List<Country> countries;
 	private int idCountry;
+	private int year;
+	private Month month;
+	private int day;
 	private JLabel lblImage;
 
 	/**
@@ -69,8 +75,8 @@ public class RegisterForm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegisterForm(String USER) {
-		this.USER = USER;
+	public RegisterForm(String STATUS) {
+		this.STATUS = STATUS;
 		initializeComponents();
 	}
 
@@ -155,6 +161,8 @@ public class RegisterForm extends JFrame {
 		contentPane.add(lblPassword);
 		
 		passwordField = new JPasswordField();
+		passwordField.setForeground(new Color(71, 71, 71));
+		passwordField.setFont(new Font("Dialog", Font.BOLD, 13));
 		passwordField.setBounds(198, 480, 383, 55);
 		contentPane.add(passwordField);
 		
@@ -166,18 +174,33 @@ public class RegisterForm extends JFrame {
 		contentPane.add(lblYourBirthday);
 		
 		comboYear = new JComboBox<>();
+		comboYear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				year = Integer.parseInt(comboYear.getSelectedItem().toString());
+			}
+		});
 		comboYear.setForeground(new Color(71, 71, 71));
 		comboYear.setFont(new Font("Dialog", Font.BOLD, 17));
 		comboYear.setBounds(51, 635, 149, 45);
 		contentPane.add(comboYear);
 		
 		comboMonth = new JComboBox<>();
+		comboMonth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				month = (Month) comboMonth.getSelectedItem();
+			}
+		});
 		comboMonth.setForeground(new Color(71, 71, 71));
 		comboMonth.setFont(new Font("Dialog", Font.BOLD, 17));
 		comboMonth.setBounds(235, 635, 184, 45);
 		contentPane.add(comboMonth);
 		
 		comboDay = new JComboBox<>();
+		comboDay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				day = Integer.parseInt(comboDay.getSelectedItem().toString());
+			}
+		});
 		comboDay.setForeground(new Color(71, 71, 71));
 		comboDay.setFont(new Font("Dialog", Font.BOLD, 17));
 		comboDay.setBounds(451, 635, 130, 45);
@@ -200,6 +223,22 @@ public class RegisterForm extends JFrame {
 		contentPane.add(lblImage);
 		
 		JButton btnSignIn = new JButton("Sign in");
+		btnSignIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				User user = createUser();
+				try {
+					TransferClass transferClass = ControllerUI.getController().saveUser(user);
+					User savedUser = (User) transferClass.getServerResponse();
+					PropertyForm propertyForm = new PropertyForm(savedUser);
+					propertyForm.setLocationRelativeTo(null);
+					propertyForm.setVisible(true);
+					dispose();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnSignIn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -223,6 +262,16 @@ public class RegisterForm extends JFrame {
 		fillComboMonth();
 		fillComboDay();
 		uploadCountryImagesFromDB();
+	}
+
+	protected User createUser() {
+		String firstName = tfFirstName.getText();
+		String lastName = tfLastName.getText();
+		String email = tfEmail.getText();
+		String username = tfUsername.getText();
+		String password = String.copyValueOf(passwordField.getPassword());
+		LocalDate dateOfBirth = LocalDate.of(year, month, day);
+		return new User(idCountry, firstName, lastName, email, username, password, dateOfBirth, "USER");
 	}
 
 	private void fillComboYear() {
