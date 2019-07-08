@@ -16,6 +16,10 @@ import java.time.Year;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
+import javax.swing.JButton;
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegisterForm extends JFrame {
 
@@ -175,6 +179,26 @@ public class RegisterForm extends JFrame {
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImage.setBounds(438, 733, 102, 45);
 		contentPane.add(lblImage);
+		
+		JButton btnSignIn = new JButton("Sign in");
+		btnSignIn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnSignIn.setBounds(172, 822, 290, 60);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnSignIn.setBounds(174, 824, 285, 55);
+			}
+		});
+		btnSignIn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnSignIn.setForeground(new Color(255, 255, 255));
+		btnSignIn.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnSignIn.setBounds(174, 824, 285, 55);
+		btnSignIn.setBackground(new Color(255, 88, 93));
+		btnSignIn.setBorder(null);
+		contentPane.add(btnSignIn);
 		
 		fillComboYear();
 		fillComboMonth();
