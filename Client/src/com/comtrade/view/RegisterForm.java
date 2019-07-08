@@ -1,6 +1,5 @@
 package com.comtrade.view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -27,7 +26,10 @@ import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RegisterForm extends JFrame {
 
@@ -182,6 +184,13 @@ public class RegisterForm extends JFrame {
 		contentPane.add(comboDay);
 		
 		comboCountries = new JComboBox<>();
+		comboCountries.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String country = String.valueOf(comboCountries.getSelectedItem());
+				setCountryImage(country);
+			}
+		});
+		comboCountries.setFont(new Font("Dialog", Font.BOLD, 17));
 		comboCountries.setBounds(51, 733, 368, 45);
 		contentPane.add(comboCountries);
 		
@@ -215,7 +224,7 @@ public class RegisterForm extends JFrame {
 		fillComboDay();
 		uploadCountryImagesFromDB();
 	}
-	
+
 	private void fillComboYear() {
 		for (int i = Year.now().getValue(); i > 1899 ; i--) {
 			comboYear.addItem(i);
@@ -244,13 +253,25 @@ public class RegisterForm extends JFrame {
 	
 	@SuppressWarnings("unchecked")
 	private void uploadCountryImagesFromDB() {
+		TransferClass transferClass = null;
 		try {
-			TransferClass transferClass = ControllerUI.getController().returnCountriesList();
+			transferClass = ControllerUI.getController().returnCountriesList();
 			countries = (List<Country>) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("Problem happened while returning data from database");
 			e.printStackTrace();
 		}
 		fillComboCountires();
+	}
+	
+	protected void setCountryImage(String countryName) {
+		for (Country country : countries) {
+			if (country.getName().equals(countryName)) {
+				idCountry = country.getIdCountry();
+				File file = new File(country.getImage());
+				ImageIcon im = new ImageIcon(file.toString());
+				lblImage.setIcon(im);
+				break;
+			}
+		}
 	}
 }

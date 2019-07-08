@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface GeneralDomain {
+import com.comtrade.generics.Generic;
+
+public interface GeneralDomain extends Generic {
 	
 	String returnTableName();
 	String returnColumnNames();
