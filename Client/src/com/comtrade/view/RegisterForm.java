@@ -250,7 +250,7 @@ public class RegisterForm extends JFrame {
 				btnSignIn.setBounds(174, 824, 285, 55);
 			}
 		});
-		btnSignIn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		btnSignIn.setForeground(new Color(255, 255, 255));
 		btnSignIn.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnSignIn.setBounds(174, 824, 285, 55);
@@ -312,7 +312,7 @@ public class RegisterForm extends JFrame {
 		fillComboCountires();
 	}
 	
-	protected void setCountryImage(String countryName) {
+	private void setCountryImage(String countryName) {
 		for (Country country : countries) {
 			if (country.getName().equals(countryName)) {
 				idCountry = country.getIdCountry();
