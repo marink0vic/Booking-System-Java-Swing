@@ -7,7 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
+import com.comtrade.transfer.TransferClass;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -20,10 +22,12 @@ import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class RegisterForm extends JFrame {
 
@@ -39,7 +43,7 @@ public class RegisterForm extends JFrame {
 	private JComboBox<Month> comboMonth;
 	private JComboBox<Integer> comboDay;
 	private JComboBox<String> comboCountries;
-	private List<Country> countryImages;
+	private List<Country> countries;
 	private int idCountry;
 	private JLabel lblImage;
 
@@ -181,7 +185,7 @@ public class RegisterForm extends JFrame {
 		comboCountries.setBounds(51, 733, 368, 45);
 		contentPane.add(comboCountries);
 		
-		lblImage = new JLabel("image");
+		lblImage = new JLabel("");
 		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImage.setBounds(438, 733, 102, 45);
 		contentPane.add(lblImage);
@@ -209,6 +213,7 @@ public class RegisterForm extends JFrame {
 		fillComboYear();
 		fillComboMonth();
 		fillComboDay();
+		uploadCountryImagesFromDB();
 	}
 	
 	private void fillComboYear() {
@@ -228,7 +233,24 @@ public class RegisterForm extends JFrame {
 		}
 	}
 	
+	private void fillComboCountires() {
+		for (Country country : countries) {
+			comboCountries.addItem(country.getName());
+		}
+		idCountry = countries.get(0).getIdCountry();
+		ImageIcon im = new ImageIcon(countries.get(0).getImage());
+		lblImage.setIcon(im);
+	}
+	
+	@SuppressWarnings("unchecked")
 	private void uploadCountryImagesFromDB() {
-		
+		try {
+			TransferClass transferClass = ControllerUI.getController().returnCountriesList();
+			countries = (List<Country>) transferClass.getServerResponse();
+		} catch (ClassNotFoundException | IOException e) {
+			System.out.println("Problem happened while returning data from database");
+			e.printStackTrace();
+		}
+		fillComboCountires();
 	}
 }
