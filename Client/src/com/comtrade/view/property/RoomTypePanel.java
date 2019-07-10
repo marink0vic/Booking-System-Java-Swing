@@ -46,17 +46,17 @@ public class RoomTypePanel extends JPanel {
 	//----
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
-	private JPanel RoomPanel;
+	private RoomPanel roomPanel;
 	private JLabel lblRoomtype;
 	private JLabel lblRoomsInfo;
 
 	/**
 	 * Create the panel.
 	 */
-	public RoomTypePanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, JPanel roomPanel, JLabel lblRoomtype, JLabel lblRoomsInfo) {
+	public RoomTypePanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, RoomPanel roomPanel, JLabel lblRoomtype, JLabel lblRoomsInfo) {
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
-		this.RoomPanel = roomPanel;
+		this.roomPanel = roomPanel;
 		this.lblRoomtype = lblRoomtype;
 		this.lblRoomsInfo = lblRoomsInfo;
 		initializeComponents();
@@ -193,7 +193,7 @@ public class RoomTypePanel extends JPanel {
 		btnAddAnotherRoom.setForeground(Color.WHITE);
 		btnAddAnotherRoom.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnAddAnotherRoom.setBorder(null);
-		btnAddAnotherRoom.setBackground(new Color(255, 88, 93));
+		btnAddAnotherRoom.setBackground(new Color(9, 121, 186));
 		btnAddAnotherRoom.setBounds(126, 629, 323, 55);
 		moreRoomType.add(btnAddAnotherRoom);
 		
@@ -201,8 +201,9 @@ public class RoomTypePanel extends JPanel {
 		btnContinueNext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnContinueNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switchPanel(RoomPanel);
+				switchPanel(roomPanel);
 				updateUI(lblRoomtype,lblRoomsInfo);
+				setHeaderValue();
 			}
 		});
 		btnContinueNext.addMouseListener(new MouseAdapter() {
@@ -228,6 +229,10 @@ public class RoomTypePanel extends JPanel {
 		dtm.addColumn(object[2]);
 	
 		fillCombo();
+	}
+	
+	public void setHeaderValue() {
+		   roomPanel.setHeaderValue(listOfTypes.get(0).getRoomType());
 	}
 	
 	private void fillTable() {

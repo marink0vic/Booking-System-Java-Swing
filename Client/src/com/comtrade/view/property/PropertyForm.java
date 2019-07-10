@@ -10,6 +10,7 @@ import com.comtrade.constants.PropertyTypeConstants;
 import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
@@ -18,10 +19,14 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
@@ -29,13 +34,21 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -56,6 +69,8 @@ public class PropertyForm extends JFrame {
 	private User user;
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
+	private Map<RoomType, List<Room>> rooms;
+	private List<File> propertyImageFiles;
 	
 	//--- navigation labels and panel
 	private JPanel navigationPanel = new JPanel();
@@ -70,10 +85,14 @@ public class PropertyForm extends JFrame {
 	private AddressPanel addressPanel;
 	private BasicInfoPanel basicInfoPanel;
 	private RoomTypePanel roomTypePanel;
+	private RoomPanel roomPanel;
+	private ImagesPanel imagesPanel;
 	
-	//----specific room
-	private JPanel RoomPanel = new JPanel();;
-	private JLabel lblSpecificRoomPanel;
+	
+	//-----
+	private JPanel PaymentPanel = new JPanel();
+	private JLabel lblThisIsLast;
+	
 
 	/**
 	 * Launch the application.
@@ -102,6 +121,8 @@ public class PropertyForm extends JFrame {
 
 	private void initializeComponents() {
 		listOfTypes = new ArrayList<>();
+		rooms = new LinkedHashMap<>();
+		propertyImageFiles = new ArrayList<>();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1300, 950);
@@ -119,7 +140,9 @@ public class PropertyForm extends JFrame {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		//--- panels
-		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, RoomPanel, lblRoomtype, lblRoomsInfo);
+		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, PaymentPanel, lblPropertyImages, lblPayment);
+		roomPanel = new RoomPanel(layeredPane, listOfTypes, rooms, lblRoomsInfo, lblPropertyImages, imagesPanel);
+		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomtype, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblPropertyInfo, lblRoomtype);
 		addressPanel = new AddressPanel(layeredPane, basicInfoPanel,lblAddress,lblPropertyInfo);
 	
@@ -127,22 +150,24 @@ public class PropertyForm extends JFrame {
 		layeredPane.add(addressPanel, "name_96510051729800");
 		layeredPane.add(basicInfoPanel, "name_100717019548000");
 		layeredPane.add(roomTypePanel, "name_153876851081600");
+		layeredPane.add(roomPanel, "name_237876643457800");
+		layeredPane.add(imagesPanel, "name_241975292003400");
 		
 		
 		
 		
-		RoomPanel.setBackground(new Color(255, 255, 255));
-		layeredPane.add(RoomPanel, "name_237876643457800");
-		RoomPanel.setLayout(null);
+		PaymentPanel.setBackground(new Color(255, 255, 255));
+		layeredPane.add(PaymentPanel, "name_258197792870600");
+		PaymentPanel.setLayout(null);
 		
-		lblSpecificRoomPanel = new JLabel("Specific Room panel");
-		lblSpecificRoomPanel.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblSpecificRoomPanel.setBounds(297, 312, 205, 80);
-		RoomPanel.add(lblSpecificRoomPanel);
+		lblThisIsLast = new JLabel("This is last");
+		lblThisIsLast.setBounds(370, 403, 164, 55);
+		PaymentPanel.add(lblThisIsLast);
 	}
+
 	
 	
-	
+
 	private void switchPanel(JPanel panel) {
 		layeredPane.removeAll();
 		layeredPane.add(panel);
@@ -212,4 +237,6 @@ public class PropertyForm extends JFrame {
 		lblPayment.setBounds(1070, 36, 144, 59);
 		navigationPanel.add(lblPayment);
 	}
+	
+	
 }
