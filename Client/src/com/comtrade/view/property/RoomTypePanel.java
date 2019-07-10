@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -120,14 +121,18 @@ public class RoomTypePanel extends JPanel {
 		btnAddRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAddRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int numOfRooms = (Integer) spinner.getValue();
-				Double pricePerNight = Double.valueOf(tfPrice.getText());
 				String typeOfRoom = String.valueOf(comboRoomType.getSelectedItem());
-				RoomType roomType = new RoomType(typeOfRoom, numOfRooms, pricePerNight);
-				
-				listOfTypes.add(roomType);
-				fillTable();
-				switchPanel(moreRoomType);
+				if (!listContains(typeOfRoom)) {
+					int numOfRooms = (Integer) spinner.getValue();
+					Double pricePerNight = Double.valueOf(tfPrice.getText());
+					RoomType roomType = new RoomType(typeOfRoom, numOfRooms, pricePerNight);
+					
+					listOfTypes.add(roomType);
+					fillTable();
+					switchPanel(moreRoomType);
+				} else {
+					JOptionPane.showMessageDialog(null, "You have already chosen that room type");
+				}
 			}
 		});
 		btnAddRoom.addMouseListener(new MouseAdapter() {
@@ -230,9 +235,18 @@ public class RoomTypePanel extends JPanel {
 	
 		fillCombo();
 	}
-	
+
 	public void setHeaderValue() {
 		   roomPanel.setHeaderValue(listOfTypes.get(0).getRoomType());
+	}
+	
+	private boolean listContains(String typeOfRoom) {
+		for (RoomType type : listOfTypes) {
+			if (type.getRoomType().equals(typeOfRoom)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void fillTable() {

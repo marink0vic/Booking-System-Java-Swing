@@ -45,15 +45,15 @@ public class ImagesPanel extends JPanel {
 	//----
 	private JLayeredPane layeredPane;
 	private List<File> propertyImageFiles;
-	private JPanel PaymentPanel;
+	private PaymentPanel paymentPanel;
 	private JLabel lblPropertyImages;
 	private JLabel lblPayment;
 	
 
-	public ImagesPanel(JLayeredPane layeredPane, List<File> propertyImageFiles, JPanel paymentPanel, JLabel lblPropertyImages, JLabel lblPayment) {
+	public ImagesPanel(JLayeredPane layeredPane, List<File> propertyImageFiles, PaymentPanel paymentPanel, JLabel lblPropertyImages, JLabel lblPayment) {
 		this.layeredPane = layeredPane;
 		this.propertyImageFiles = propertyImageFiles;
-		this.PaymentPanel = paymentPanel;
+		this.paymentPanel = paymentPanel;
 		this.lblPropertyImages = lblPropertyImages;
 		this.lblPayment = lblPayment;
 		initializeComponents();
@@ -94,7 +94,7 @@ public class ImagesPanel extends JPanel {
 		btnAddImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser file = new JFileChooser();
-				file.setCurrentDirectory(new File(System.getProperty("user.home")));
+				file.setCurrentDirectory(new File("C:\\Users\\marko\\Desktop\\hotel_images"));
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg","png");
 				file.addChoosableFileFilter(filter);
 				int result = file.showSaveDialog(null);
@@ -131,7 +131,7 @@ public class ImagesPanel extends JPanel {
 		btnContinue = new JButton("Continue");
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switchPanel(PaymentPanel);
+				switchPanel(paymentPanel);
 				updateUI(lblPropertyImages,lblPayment);
 			}
 		});

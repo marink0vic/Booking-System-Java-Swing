@@ -6,62 +6,28 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.comtrade.constants.PropertyTypeConstants;
-import com.comtrade.constants.RoomTypeConstants;
-import com.comtrade.controller.ControllerUI;
-import com.comtrade.domain.Country;
-import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
-import com.comtrade.transfer.TransferClass;
 
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Color;
-import java.awt.Component;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
 
 import java.awt.Cursor;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 
 import java.awt.CardLayout;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.JCheckBox;
-import javax.swing.border.LineBorder;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 public class PropertyForm extends JFrame {
 
@@ -72,7 +38,6 @@ public class PropertyForm extends JFrame {
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, List<Room>> rooms;
 	private List<File> propertyImageFiles;
-	private List<PaymentType> paymentList;
 	
 	//--- navigation labels and panel
 	private JPanel navigationPanel = new JPanel();
@@ -89,11 +54,7 @@ public class PropertyForm extends JFrame {
 	private RoomTypePanel roomTypePanel;
 	private RoomPanel roomPanel;
 	private ImagesPanel imagesPanel;
-	
-	
-	//-----
-	private JPanel PaymentPanel = new JPanel();
-	private JLabel lblChosePaymentOption;
+	private PaymentPanel paymentPanel;
 	
 
 	/**
@@ -125,7 +86,6 @@ public class PropertyForm extends JFrame {
 		listOfTypes = new ArrayList<>();
 		rooms = new LinkedHashMap<>();
 		propertyImageFiles = new ArrayList<>();
-		paymentList = new ArrayList<>();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1300, 950);
@@ -143,7 +103,8 @@ public class PropertyForm extends JFrame {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		//--- panels
-		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, PaymentPanel, lblPropertyImages, lblPayment);
+		paymentPanel = new PaymentPanel();
+		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, paymentPanel, lblPropertyImages, lblPayment);
 		roomPanel = new RoomPanel(layeredPane, listOfTypes, rooms, lblRoomsInfo, lblPropertyImages, imagesPanel);
 		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomtype, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblPropertyInfo, lblRoomtype);
@@ -155,48 +116,11 @@ public class PropertyForm extends JFrame {
 		layeredPane.add(roomTypePanel, "name_153876851081600");
 		layeredPane.add(roomPanel, "name_237876643457800");
 		layeredPane.add(imagesPanel, "name_241975292003400");
-		
-		
-		
-		
-		PaymentPanel.setBackground(new Color(255, 255, 255));
-		layeredPane.add(PaymentPanel, "name_258197792870600");
-		PaymentPanel.setLayout(null);
-		
-		lblChosePaymentOption = new JLabel("Chose payment option");
-		lblChosePaymentOption.setHorizontalAlignment(SwingConstants.CENTER);
-		lblChosePaymentOption.setForeground(new Color(71, 71, 71));
-		lblChosePaymentOption.setFont(new Font("Dialog", Font.PLAIN, 23));
-		lblChosePaymentOption.setBounds(492, 105, 300, 80);
-		PaymentPanel.add(lblChosePaymentOption);
-		
-		returnPaymentImagesFromDB();
-	}
+		layeredPane.add(paymentPanel, "name_258197792870600");
 
+	}
 	
-	@SuppressWarnings("unchecked")
-	private void returnPaymentImagesFromDB() {
-		try {
-			TransferClass transferClass = ControllerUI.getController().returnPaymentList();
-			paymentList = (List<PaymentType>) transferClass.getServerResponse();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void switchPanel(JPanel panel) {
-		layeredPane.removeAll();
-		layeredPane.add(panel);
-		layeredPane.repaint();
-		layeredPane.revalidate();
-	}
-
-	private void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
-	}
+	
 
 	
 	
