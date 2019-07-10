@@ -10,6 +10,7 @@ import com.comtrade.constants.PropertyTypeConstants;
 import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
@@ -71,6 +72,7 @@ public class PropertyForm extends JFrame {
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, List<Room>> rooms;
 	private List<File> propertyImageFiles;
+	private List<PaymentType> paymentList;
 	
 	//--- navigation labels and panel
 	private JPanel navigationPanel = new JPanel();
@@ -91,7 +93,7 @@ public class PropertyForm extends JFrame {
 	
 	//-----
 	private JPanel PaymentPanel = new JPanel();
-	private JLabel lblThisIsLast;
+	private JLabel lblChosePaymentOption;
 	
 
 	/**
@@ -123,6 +125,7 @@ public class PropertyForm extends JFrame {
 		listOfTypes = new ArrayList<>();
 		rooms = new LinkedHashMap<>();
 		propertyImageFiles = new ArrayList<>();
+		paymentList = new ArrayList<>();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1300, 950);
@@ -160,13 +163,28 @@ public class PropertyForm extends JFrame {
 		layeredPane.add(PaymentPanel, "name_258197792870600");
 		PaymentPanel.setLayout(null);
 		
-		lblThisIsLast = new JLabel("This is last");
-		lblThisIsLast.setBounds(370, 403, 164, 55);
-		PaymentPanel.add(lblThisIsLast);
+		lblChosePaymentOption = new JLabel("Chose payment option");
+		lblChosePaymentOption.setHorizontalAlignment(SwingConstants.CENTER);
+		lblChosePaymentOption.setForeground(new Color(71, 71, 71));
+		lblChosePaymentOption.setFont(new Font("Dialog", Font.PLAIN, 23));
+		lblChosePaymentOption.setBounds(492, 105, 300, 80);
+		PaymentPanel.add(lblChosePaymentOption);
+		
+		returnPaymentImagesFromDB();
 	}
 
 	
-	
+	@SuppressWarnings("unchecked")
+	private void returnPaymentImagesFromDB() {
+		try {
+			TransferClass transferClass = ControllerUI.getController().returnPaymentList();
+			paymentList = (List<PaymentType>) transferClass.getServerResponse();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void switchPanel(JPanel panel) {
 		layeredPane.removeAll();

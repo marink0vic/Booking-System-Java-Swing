@@ -74,8 +74,8 @@ public class PaymentType implements GeneralDomain, Serializable {
 	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
 		List<GeneralDomain> list = new ArrayList<>();
 		while (resultSet.next()) {
-			int id = resultSet.getInt("id_image");
-			String name = resultSet.getString("id_property");
+			int id = resultSet.getInt("id_card_type");
+			String name = resultSet.getString("name");
 			String image = resultSet.getString("image");
 			String dateTime = resultSet.getString("created");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

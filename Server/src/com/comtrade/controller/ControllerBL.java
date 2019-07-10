@@ -8,6 +8,7 @@ import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.country.ReturnCountriesSO;
+import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
 
 public class ControllerBL {
@@ -34,6 +35,13 @@ public class ControllerBL {
 		sysOperation.executeSystemOperation(genericList);
 		return genericList.getList();
 	}
+	
+	public List<GeneralDomain> getAllPaymentTypes() throws SQLException {
+		GenericList<GeneralDomain> genericList = new GenericList<>();
+		GeneralSystemOperation<GenericList<GeneralDomain>> sysOperation = new ReturnPaymentTypesSO();
+		sysOperation.executeSystemOperation(genericList);
+		return genericList.getList();
+	}
 
 	public GeneralDomain saveUser(GeneralDomain user) throws SQLException {
 		GenericClass<GeneralDomain> genericClass = new GenericClass<>(user);
@@ -41,4 +49,5 @@ public class ControllerBL {
 		sysOperation.executeSystemOperation(genericClass);
 		return  genericClass.getDomain();
 	}
+
 }

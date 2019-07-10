@@ -1,9 +1,11 @@
 package com.comtrade.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.comtrade.communication.Communication;
 import com.comtrade.constants.Operations;
+import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
 
@@ -34,10 +36,17 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setOperation(Operations.RETURN_ALL_PAYMENT_TYPES);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 }

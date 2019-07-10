@@ -50,6 +50,19 @@ public class ClientThread extends Thread {
 			sendResponse(transfer);
 			break;
 		}
+		case RETURN_ALL_PAYMENT_TYPES:
+		{
+			List<GeneralDomain> paymentTypes;
+			try {
+				paymentTypes = ControllerBL.getController().getAllPaymentTypes();
+				transfer.setServerResponse(paymentTypes);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while returning data from database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		}
 		case SAVE_USER:
 		{
 		

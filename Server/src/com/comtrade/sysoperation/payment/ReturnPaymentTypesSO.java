@@ -1,4 +1,4 @@
-package com.comtrade.sysoperation.country;
+package com.comtrade.sysoperation.payment;
 
 import java.sql.SQLException;
 
@@ -7,11 +7,11 @@ import com.comtrade.generics.GenericList;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
-public class ReturnCountriesSO extends GeneralSystemOperation<GenericList<GeneralDomain>> {
+public class ReturnPaymentTypesSO extends GeneralSystemOperation<GenericList<GeneralDomain>> {
 
 	@Override
 	protected void executeSpecificOperation(GenericList<GeneralDomain> object) throws SQLException {
-		object.setList(ServerData.getInstance().returnListOfCountries());
+		object.setList(ServerData.getInstance().returnListOfPaymentTypes());
 	}
 
 }
