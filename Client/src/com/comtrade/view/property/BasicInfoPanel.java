@@ -35,14 +35,14 @@ public class BasicInfoPanel extends JPanel {
 	
 	//-----
 	private JLayeredPane layeredPane;
-	private JPanel RoomTypePanel;
+	private RoomTypePanel roomTypePanel;
 	private JLabel lblPropertyInfo;
 	private JLabel lblRoomtype;
 	
 	
-	public BasicInfoPanel(JLayeredPane layeredPane, JPanel roomTypePanel, JLabel lblPropertyInfo, JLabel lblRoomtype) {
+	public BasicInfoPanel(JLayeredPane layeredPane, RoomTypePanel roomTypePanel, JLabel lblPropertyInfo, JLabel lblRoomtype) {
 		this.layeredPane = layeredPane;
-		RoomTypePanel = roomTypePanel;
+		this.roomTypePanel = roomTypePanel;
 		this.lblPropertyInfo = lblPropertyInfo;
 		this.lblRoomtype = lblRoomtype;
 		initializeComponents();
@@ -130,7 +130,7 @@ public class BasicInfoPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				updateUI(lblPropertyInfo, lblRoomtype);
-				switchPanel(RoomTypePanel);
+				switchPanel(roomTypePanel);
 			}
 		});
 		btnContinue.setForeground(Color.WHITE);

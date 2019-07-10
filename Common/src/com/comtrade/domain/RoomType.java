@@ -23,9 +23,8 @@ public class RoomType implements GeneralDomain, Serializable {
 		
 	}
 
-	public RoomType(int idProperty, String roomType, int numberOfRooms, double pricePerNight) {
+	public RoomType(String roomType, int numberOfRooms, double pricePerNight) {
 		super();
-		this.idProperty = idProperty;
 		this.roomType = roomType;
 		this.numberOfRooms = numberOfRooms;
 		this.pricePerNight = pricePerNight;
