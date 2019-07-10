@@ -126,13 +126,7 @@ public class RoomPanel extends JPanel {
 					boolean airConditioning = cbAirCon.isSelected();
 					boolean wifi = cbWifi.isSelected();
 					
-					Room r = new Room();
-					r.setAirConditioning(airConditioning);
-					r.setNumOfBads(numOfBads);
-					r.setKitchen(kitchen);
-					r.setTv(tv);
-					r.setWifi(wifi);
-					
+					Room r = new Room(numOfBads, kitchen, tv, airConditioning, wifi);
 					addToMap(r);
 				}
 				

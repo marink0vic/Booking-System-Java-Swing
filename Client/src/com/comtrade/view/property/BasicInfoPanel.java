@@ -22,6 +22,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import com.comtrade.constants.PropertyTypeConstants;
+import com.comtrade.domain.Property;
+import com.comtrade.domain.User;
 
 public class BasicInfoPanel extends JPanel {
 
@@ -38,6 +40,11 @@ public class BasicInfoPanel extends JPanel {
 	private RoomTypePanel roomTypePanel;
 	private JLabel lblPropertyInfo;
 	private JLabel lblRoomtype;
+	private JSpinner ratingSpinner;
+	private JTextArea textArea;
+	
+	private User user;
+	private Property property;
 	
 	
 	public BasicInfoPanel(JLayeredPane layeredPane, RoomTypePanel roomTypePanel, JLabel lblPropertyInfo, JLabel lblRoomtype) {
@@ -46,6 +53,14 @@ public class BasicInfoPanel extends JPanel {
 		this.lblPropertyInfo = lblPropertyInfo;
 		this.lblRoomtype = lblRoomtype;
 		initializeComponents();
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setProperty(Property property) {
+		this.property = property;
 	}
 
 	private void initializeComponents() {
@@ -91,7 +106,7 @@ public class BasicInfoPanel extends JPanel {
 		this.add(tfPhoneNumber);
 		
 		SpinnerModel sm = new SpinnerNumberModel(1, 1, 5, 1);
-		JSpinner ratingSpinner = new JSpinner(sm);
+		ratingSpinner = new JSpinner(sm);
 		ratingSpinner.setFont(new Font("Dialog", Font.PLAIN, 17));
 		ratingSpinner.setBounds(316, 433, 62, 49);
 		this.add(ratingSpinner);
@@ -108,7 +123,7 @@ public class BasicInfoPanel extends JPanel {
 		lblAddDescriptionFor.setBounds(785, 113, 376, 37);
 		this.add(lblAddDescriptionFor);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setForeground(new Color(71, 71, 71));
 		textArea.setBorder(new LineBorder(new Color(71, 71, 71)));
 		textArea.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -129,6 +144,7 @@ public class BasicInfoPanel extends JPanel {
 		});
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				createProperty();
 				updateUI(lblPropertyInfo, lblRoomtype);
 				switchPanel(roomTypePanel);
 			}
@@ -143,6 +159,15 @@ public class BasicInfoPanel extends JPanel {
 		fillComboPropertyType();
 	}
 	
+	protected void createProperty() {
+		property.setIdUser(user.getIdUser());
+		property.setType(comboType.getSelectedItem().toString());
+		property.setName(tfName.getText());
+		property.setPhoneNumner(tfPhoneNumber.getText());
+		property.setRating((Integer)ratingSpinner.getValue());
+		property.setDescription(textArea.getText());
+	}
+
 	private void fillComboPropertyType() {
 		comboType.addItem(PropertyTypeConstants.HOTEL);
 		comboType.addItem(PropertyTypeConstants.HOSTEL);
@@ -159,7 +184,7 @@ public class BasicInfoPanel extends JPanel {
 
 	protected void updateUI(JLabel label1, JLabel label2) {
 		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
+		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 
 

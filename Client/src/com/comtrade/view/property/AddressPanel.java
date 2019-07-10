@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
 import com.comtrade.transfer.TransferClass;
 
@@ -32,25 +33,28 @@ public class AddressPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel lblCountryImage;
 	private JComboBox<String> comboCountries;
-	private List<Country> countries;
 	private int idCountry;
 	private JTextField tfStreet;
 	private JTextField tfNumber;
 	private JTextField tfCity;
 	private JTextField tfZip;
 	//-------
+	private List<Country> countries;
 	private JLayeredPane layeredPane;
 	private BasicInfoPanel basicInfoPanel;
 	private JLabel lblAddress;
 	private JLabel lblPropertyInfo;
+	private Address address;
 	
 	
 	
-	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblAddress, JLabel lblPropertyInfo) {
+	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblAddress, JLabel lblPropertyInfo, Address address, List<Country> countries) {
 		this.layeredPane = layeredPane;
 		this.basicInfoPanel = basicInfoPanel;
 		this.lblAddress = lblAddress;
 		this.lblPropertyInfo = lblPropertyInfo;
+		this.address = address;
+		this.countries = countries;
 		initializeComponents();
 	}
 
@@ -139,11 +143,7 @@ public class AddressPanel extends JPanel {
 		btnContinue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String street = tfStreet.getText();
-				int num = Integer.parseInt(tfNumber.getText());
-				String city = tfCity.getText();
-				int zip = Integer.parseInt(tfZip.getText());
-				
+				createAddress();
 				updateUI(lblAddress, lblPropertyInfo);
 				switchPanel(basicInfoPanel);
 			}
@@ -166,55 +166,56 @@ public class AddressPanel extends JPanel {
 		btnContinue.setBounds(242, 589, 628, 55);
 		this.add(btnContinue);
 		
-		uploadCountryImagesFromDB();
+		fillComboCountires();
 	}
 	
-	protected void switchPanel(JPanel panel) {
+	private void createAddress() {
+		String street = tfStreet.getText();
+		int num = Integer.parseInt(tfNumber.getText());
+		String city = tfCity.getText();
+		int zip = Integer.parseInt(tfZip.getText());
+		
+		address.setIdCountry(idCountry);
+		address.setStreet(street);
+		address.setNumber(num);
+		address.setCity(city);
+		address.setZipCode(zip);
+	}
+
+
+	private void switchPanel(JPanel panel) {
 		layeredPane.removeAll();
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}
 
-	protected void updateUI(JLabel label1, JLabel label2) {
+	private void updateUI(JLabel label1, JLabel label2) {
 		label1.setBorder(null);
 		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
 	}
 	
-	// This methods will be removed 
-		private void fillComboCountires() {
-			for (Country country : countries) {
-				comboCountries.addItem(country.getName());
-			}
-			idCountry = countries.get(0).getIdCountry();
-			Image im = new ImageIcon(countries.get(0).getImage()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
-			ImageIcon imIcon = new ImageIcon(im);
-			lblCountryImage.setIcon(imIcon);
+	private void fillComboCountires() {
+		for (Country country : countries) {
+			comboCountries.addItem(country.getName());
 		}
-		
-		@SuppressWarnings("unchecked")
-		private void uploadCountryImagesFromDB() {
-			TransferClass transferClass = null;
-			try {
-				transferClass = ControllerUI.getController().returnCountriesList();
-				countries = (List<Country>) transferClass.getServerResponse();
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-			fillComboCountires();
-		}
-		
-		private void setCountryImage(String countryName) {
-			for (Country country : countries) {
-				if (country.getName().equals(countryName)) {
-					idCountry = country.getIdCountry();
-					File file = new File(country.getImage());
-					Image im = new ImageIcon(file.toString()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
-					ImageIcon imIcon = new ImageIcon(im);
-					lblCountryImage.setIcon(imIcon);
-					break;
-				}
+		idCountry = countries.get(0).getIdCountry();
+		Image im = new ImageIcon(countries.get(0).getImage()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
+		ImageIcon imIcon = new ImageIcon(im);
+		lblCountryImage.setIcon(imIcon);
+	}
+
+	private void setCountryImage(String countryName) {
+		for (Country country : countries) {
+			if (country.getName().equals(countryName)) {
+				idCountry = country.getIdCountry();
+				File file = new File(country.getImage());
+				Image im = new ImageIcon(file.toString()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
+				ImageIcon imIcon = new ImageIcon(im);
+				lblCountryImage.setIcon(imIcon);
+				break;
 			}
 		}
+	}
 
 }

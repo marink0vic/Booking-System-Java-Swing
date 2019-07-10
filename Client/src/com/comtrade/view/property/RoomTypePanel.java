@@ -37,6 +37,7 @@ public class RoomTypePanel extends JPanel {
 	private JPanel addRoomType;
 	private JPanel moreRoomType;
 	private JTextField tfPrice;
+	private JSpinner spinner;
 	private JComboBox<RoomTypeConstants> comboRoomType;
 	//---more rooms
 	private JLabel lblYourCurrentInserted;
@@ -62,8 +63,6 @@ public class RoomTypePanel extends JPanel {
 		this.lblRoomsInfo = lblRoomsInfo;
 		initializeComponents();
 	}
-
-
 
 	private void initializeComponents() {
 		this.setBounds(0, 120, 1282, 783);
@@ -99,7 +98,7 @@ public class RoomTypePanel extends JPanel {
 		addRoomType.add(lblNumberOfRoom);
 		
 		SpinnerModel sm = new SpinnerNumberModel(1, 1, 5, 1);
-		JSpinner spinner = new JSpinner(sm);
+		spinner = new JSpinner(sm);
 		spinner.setFont(new Font("Dialog", Font.PLAIN, 17));
 		spinner.setBounds(612, 226, 62, 49);
 		addRoomType.add(spinner);
@@ -123,10 +122,7 @@ public class RoomTypePanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String typeOfRoom = String.valueOf(comboRoomType.getSelectedItem());
 				if (!listContains(typeOfRoom)) {
-					int numOfRooms = (Integer) spinner.getValue();
-					Double pricePerNight = Double.valueOf(tfPrice.getText());
-					RoomType roomType = new RoomType(typeOfRoom, numOfRooms, pricePerNight);
-					
+					RoomType roomType = createRoomType(typeOfRoom);
 					listOfTypes.add(roomType);
 					fillTable();
 					switchPanel(moreRoomType);
@@ -238,6 +234,13 @@ public class RoomTypePanel extends JPanel {
 
 	public void setHeaderValue() {
 		   roomPanel.setHeaderValue(listOfTypes.get(0).getRoomType());
+	}
+	
+	private RoomType createRoomType(String typeOfRoom) {
+		int numOfRooms = (Integer) spinner.getValue();
+		Double pricePerNight = Double.valueOf(tfPrice.getText());
+		RoomType roomType = new RoomType(typeOfRoom, numOfRooms, pricePerNight);
+		return roomType;
 	}
 	
 	private boolean listContains(String typeOfRoom) {

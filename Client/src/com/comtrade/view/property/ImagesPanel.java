@@ -99,11 +99,14 @@ public class ImagesPanel extends JPanel {
 				file.addChoosableFileFilter(filter);
 				int result = file.showSaveDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
+					
 					File selectedFile = file.getSelectedFile();
 					propertyImageFiles.add(selectedFile);
+					
 					Icon icon = resizeImage(selectedFile);
 					images.add(icon);
 					updateTable();
+					
 				} else if (result == JFileChooser.CANCEL_OPTION) {
 					System.out.println("No file select");
 				}

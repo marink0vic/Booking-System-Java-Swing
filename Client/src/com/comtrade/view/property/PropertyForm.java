@@ -1,11 +1,13 @@
 package com.comtrade.view.property;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.domain.Address;
+import com.comtrade.domain.Country;
+import com.comtrade.domain.Property;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
@@ -34,10 +36,13 @@ public class PropertyForm extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private User user;
+	private Address address;
+	private Property property;
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, List<Room>> rooms;
 	private List<File> propertyImageFiles;
+	private List<Country> countries;
 	
 	//--- navigation labels and panel
 	private JPanel navigationPanel = new JPanel();
@@ -58,27 +63,11 @@ public class PropertyForm extends JFrame {
 	
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PropertyForm frame = new PropertyForm(null);
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public PropertyForm(User user) {
+	public PropertyForm(User user, List<Country> countries) {
 		this.user = user;
+		this.countries = countries;
 		initializeComponents();
 	}
 
@@ -86,6 +75,8 @@ public class PropertyForm extends JFrame {
 		listOfTypes = new ArrayList<>();
 		rooms = new LinkedHashMap<>();
 		propertyImageFiles = new ArrayList<>();
+		address = new Address();
+		property = new Property();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1300, 950);
@@ -103,13 +94,15 @@ public class PropertyForm extends JFrame {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		//--- panels
-		paymentPanel = new PaymentPanel();
+		paymentPanel = new PaymentPanel(user, address, property, rooms, propertyImageFiles);
 		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, paymentPanel, lblPropertyImages, lblPayment);
 		roomPanel = new RoomPanel(layeredPane, listOfTypes, rooms, lblRoomsInfo, lblPropertyImages, imagesPanel);
 		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomtype, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblPropertyInfo, lblRoomtype);
-		addressPanel = new AddressPanel(layeredPane, basicInfoPanel,lblAddress,lblPropertyInfo);
-	
+		addressPanel = new AddressPanel(layeredPane, basicInfoPanel,lblAddress,lblPropertyInfo, address, countries);
+		
+		basicInfoPanel.setUser(user);
+		basicInfoPanel.setProperty(property);
 		
 		layeredPane.add(addressPanel, "name_96510051729800");
 		layeredPane.add(basicInfoPanel, "name_100717019548000");

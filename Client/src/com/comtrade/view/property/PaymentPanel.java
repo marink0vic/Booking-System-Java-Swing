@@ -29,6 +29,7 @@ import com.comtrade.domain.Property;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 
 public class PaymentPanel extends JPanel {
@@ -61,18 +62,12 @@ public class PaymentPanel extends JPanel {
 	private List<PaymentType> paymentList;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images, List<PaymentType> paymentList) {
+	public PaymentPanel(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
 		this.rooms = rooms;
 		this.images = images;
-		this.paymentList = paymentList;
-		initializeComponents();
-	}
-
-
-	public PaymentPanel() {
 		initializeComponents();
 	}
 
@@ -156,6 +151,7 @@ public class PaymentPanel extends JPanel {
 		btnFinishRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				preparePaymentList();
+				registerProperty(user, address, property, rooms, images, paymentList);
 			}
 		});
 		btnFinishRegistration.addMouseListener(new MouseAdapter() {
@@ -181,6 +177,12 @@ public class PaymentPanel extends JPanel {
 		fillLabels();
 	}
 	
+	private void registerProperty(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images, List<PaymentType> paymentList) {
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, rooms, images, paymentList);
+		
+	}
+
+
 	private void preparePaymentList() {
 		paymentList = new ArrayList<>();
 		if (cb1.isSelected())

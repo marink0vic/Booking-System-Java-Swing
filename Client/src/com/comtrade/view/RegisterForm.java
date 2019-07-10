@@ -1,6 +1,5 @@
 package com.comtrade.view;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +13,7 @@ import com.comtrade.view.property.PropertyForm;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.time.LocalDate;
@@ -26,7 +26,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -54,23 +53,6 @@ public class RegisterForm extends JFrame {
 	private Month month;
 	private int day;
 	private JLabel lblImage;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegisterForm frame = new RegisterForm("");
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -226,16 +208,26 @@ public class RegisterForm extends JFrame {
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				User user = createUser();
+				User savedUser = null;
 				try {
 					TransferClass transferClass = ControllerUI.getController().saveUser(user);
-					User savedUser = (User) transferClass.getServerResponse();
-					PropertyForm propertyForm = new PropertyForm(savedUser);
-					propertyForm.setLocationRelativeTo(null);
-					propertyForm.setVisible(true);
-					dispose();
+					savedUser = (User) transferClass.getServerResponse();
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
+				if (savedUser != null) {
+					if (STATUS.equals("SUPER_USER")) {
+						PropertyForm propertyForm = new PropertyForm(savedUser, countries);
+						propertyForm.setLocationRelativeTo(null);
+						propertyForm.setVisible(true);
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "You are regular user");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "<html>Something went wrong with your information"
+							+ "<br> we'll get back to you soon</html>");
 				}
 			}
 		});
@@ -271,7 +263,7 @@ public class RegisterForm extends JFrame {
 		String username = tfUsername.getText();
 		String password = String.copyValueOf(passwordField.getPassword());
 		LocalDate dateOfBirth = LocalDate.of(year, month, day);
-		return new User(idCountry, firstName, lastName, email, username, password, dateOfBirth, "USER");
+		return new User(idCountry, firstName, lastName, email, username, password, dateOfBirth, STATUS);
 	}
 
 	private void fillComboYear() {
