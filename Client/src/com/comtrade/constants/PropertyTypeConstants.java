@@ -1,6 +1,6 @@
 package com.comtrade.constants;
 
-public enum PropertyType {
+public enum PropertyTypeConstants {
 	HOUSE,
 	HOSTEL,
 	HOTEL,

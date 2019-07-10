@@ -6,7 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.comtrade.constants.PropertyType;
+import com.comtrade.constants.PropertyTypeConstants;
+import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.User;
@@ -18,6 +19,8 @@ import java.awt.Image;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -40,6 +43,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
 import javax.swing.border.LineBorder;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class PropertyForm extends JFrame {
 
@@ -47,6 +52,7 @@ public class PropertyForm extends JFrame {
 	private JPanel contentPane;
 	private User user;
 	private JLayeredPane layeredPane;
+	
 	//--- navigation labels and panel
 	private JPanel navigationPanel = new JPanel();
 	private JLabel lblAddress;
@@ -60,8 +66,18 @@ public class PropertyForm extends JFrame {
 	private AddressPanel addressPanel;
 	private BasicInfoPanel basicInfoPanel;
 	
+	//-----roomType
 	private JPanel RoomTypePanel = new JPanel();
-	private JLabel lblRoomTypePanel;
+	private JPanel addRoomType;
+	private JPanel moreRoomType;
+	private JTextField tfPrice;
+	private JComboBox<RoomTypeConstants> comboRoomType;
+	//---more rooms
+	private JLabel lblYourCurrentInserted;
+	private JTable table;
+	private DefaultTableModel dtm = new DefaultTableModel();
+	private JButton btnAddAnotherRoom;
+	private JButton btnContinueNext;
 
 	/**
 	 * Launch the application.
@@ -121,15 +137,148 @@ public class PropertyForm extends JFrame {
 		layeredPane.add(RoomTypePanel, "name_153876851081600");
 		RoomTypePanel.setLayout(null);
 		
-		lblRoomTypePanel = new JLabel("ROOM TYPE PANEL");
-		lblRoomTypePanel.setFont(new Font("Tahoma", Font.BOLD, 17));
-		lblRoomTypePanel.setBounds(237, 287, 344, 90);
-		RoomTypePanel.add(lblRoomTypePanel);
-	
+		JLayeredPane roomLayeredPane = new JLayeredPane();
+		roomLayeredPane.setBounds(0, 0, 1282, 783);
+		RoomTypePanel.add(roomLayeredPane);
+		roomLayeredPane.setLayout(new CardLayout(0, 0));
 		
+		addRoomType = new JPanel();
+		addRoomType.setBackground(new Color(255, 255, 255));
+		roomLayeredPane.add(addRoomType, "name_233721651129900");
+		addRoomType.setLayout(null);
+		
+		JLabel lblTypeOfRoom = new JLabel("Type of room:");
+		lblTypeOfRoom.setForeground(new Color(71, 71, 71));
+		lblTypeOfRoom.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblTypeOfRoom.setBounds(289, 152, 174, 37);
+		addRoomType.add(lblTypeOfRoom);
+		
+		comboRoomType = new JComboBox<>();
+		comboRoomType.setForeground(new Color(71, 71, 71));
+		comboRoomType.setFont(new Font("Dialog", Font.BOLD, 17));
+		comboRoomType.setBounds(612, 141, 389, 56);
+		addRoomType.add(comboRoomType);
+		
+		JLabel lblNumberOfRoom = new JLabel("Number of room(of this type)");
+		lblNumberOfRoom.setForeground(new Color(71, 71, 71));
+		lblNumberOfRoom.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblNumberOfRoom.setBounds(289, 238, 291, 37);
+		addRoomType.add(lblNumberOfRoom);
+		
+		SpinnerModel sm = new SpinnerNumberModel(1, 1, 5, 1);
+		JSpinner spinner = new JSpinner(sm);
+		spinner.setFont(new Font("Dialog", Font.PLAIN, 17));
+		spinner.setBounds(612, 226, 62, 49);
+		addRoomType.add(spinner);
+		
+		JLabel lblPricePerNight = new JLabel("Price per night:");
+		lblPricePerNight.setForeground(new Color(71, 71, 71));
+		lblPricePerNight.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblPricePerNight.setBounds(289, 316, 155, 37);
+		addRoomType.add(lblPricePerNight);
+		
+		tfPrice = new JTextField();
+		tfPrice.setForeground(new Color(71, 71, 71));
+		tfPrice.setFont(new Font("Dialog", Font.BOLD, 19));
+		tfPrice.setColumns(10);
+		tfPrice.setBounds(612, 307, 389, 55);
+		addRoomType.add(tfPrice);
+		
+		JButton btnContinue = new JButton("Continue");
+		btnContinue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int numOfRooms = (Integer) spinner.getValue();
+				Double pricePerNight = Double.valueOf(tfPrice.getText());
+				String typeOfRoom = String.valueOf(comboRoomType.getSelectedItem());
+				
+				switchPanel(moreRoomType);
+			}
+		});
+		btnContinue.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnContinue.setBounds(356, 427, 531, 60);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnContinue.setBounds(358, 429, 527, 55);
+			}
+		});
+		btnContinue.setForeground(Color.WHITE);
+		btnContinue.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnContinue.setBorder(null);
+		btnContinue.setBackground(new Color(255, 88, 93));
+		btnContinue.setBounds(358, 429, 527, 55);
+		addRoomType.add(btnContinue);
+		
+		moreRoomType = new JPanel();
+		moreRoomType.setBackground(new Color(255, 255, 255));
+		roomLayeredPane.add(moreRoomType, "name_233754703723600");
+		moreRoomType.setLayout(null);
+		
+		lblYourCurrentInserted = new JLabel("Your current inserted rooms:");
+		lblYourCurrentInserted.setForeground(new Color(71, 71, 71));
+		lblYourCurrentInserted.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblYourCurrentInserted.setBounds(126, 122, 302, 37);
+		moreRoomType.add(lblYourCurrentInserted);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(130, 195, 881, 382);
+		moreRoomType.add(scrollPane);
+		
+		table = new JTable(dtm);
+		scrollPane.setViewportView(table);
+		
+		btnAddAnotherRoom = new JButton("Add another room");
+		btnAddAnotherRoom.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnAddAnotherRoom.setBounds(124, 627, 327, 60);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnAddAnotherRoom.setBounds(126, 629, 323, 55);
+			}
+		});
+		btnAddAnotherRoom.setForeground(Color.WHITE);
+		btnAddAnotherRoom.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnAddAnotherRoom.setBorder(null);
+		btnAddAnotherRoom.setBackground(new Color(255, 88, 93));
+		btnAddAnotherRoom.setBounds(126, 629, 323, 55);
+		moreRoomType.add(btnAddAnotherRoom);
+		
+		btnContinueNext = new JButton("Continue");
+		btnContinueNext.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnContinueNext.setBounds(490, 627, 327, 60);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnContinueNext.setBounds(492, 629, 323, 55);
+			}
+		});
+		btnContinueNext.setForeground(Color.WHITE);
+		btnContinueNext.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnContinueNext.setBorder(null);
+		btnContinueNext.setBackground(new Color(255, 88, 93));
+		btnContinueNext.setBounds(492, 629, 323, 55);
+		moreRoomType.add(btnContinueNext);
+		Object[] object = {"Room type", "Number of rooms", "Price per night"};
+		dtm.addColumn(object[0]);
+		dtm.addColumn(object[1]);
+		dtm.addColumn(object[2]);
+	
+		fillCombo();
 	}
 	
-	
+	private void fillCombo() {
+		comboRoomType.addItem(RoomTypeConstants.STANDARD);
+		comboRoomType.addItem(RoomTypeConstants.FAMILY);
+		comboRoomType.addItem(RoomTypeConstants.STUDIO);
+		comboRoomType.addItem(RoomTypeConstants.DELUXE);
+		comboRoomType.addItem(RoomTypeConstants.APARTMENT);
+	}
 	
 	protected void switchPanel(JPanel panel) {
 		layeredPane.removeAll();

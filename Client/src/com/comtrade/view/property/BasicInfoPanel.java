@@ -21,13 +21,13 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-import com.comtrade.constants.PropertyType;
+import com.comtrade.constants.PropertyTypeConstants;
 
 public class BasicInfoPanel extends JPanel {
 
 	
 	private static final long serialVersionUID = 1L;
-	JComboBox<PropertyType> comboType;
+	JComboBox<PropertyTypeConstants> comboType;
 	private JTextField tfName;
 	private JLabel lblPhoneNumber;
 	private JTextField tfPhoneNumber;
@@ -144,10 +144,10 @@ public class BasicInfoPanel extends JPanel {
 	}
 	
 	private void fillComboPropertyType() {
-		comboType.addItem(PropertyType.HOTEL);
-		comboType.addItem(PropertyType.HOSTEL);
-		comboType.addItem(PropertyType.HOUSE);
-		comboType.addItem(PropertyType.APARTMENT);
+		comboType.addItem(PropertyTypeConstants.HOTEL);
+		comboType.addItem(PropertyTypeConstants.HOSTEL);
+		comboType.addItem(PropertyTypeConstants.HOUSE);
+		comboType.addItem(PropertyTypeConstants.APARTMENT);
 	}
 	
 	protected void switchPanel(JPanel panel) {
