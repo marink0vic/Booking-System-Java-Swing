@@ -21,15 +21,15 @@ public class PropertyWrapper implements Serializable, Generic {
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, List<RoomInfo>> rooms;
+	private Map<RoomType, RoomInfo> room;
 	private List<File> images; 
 	private List<PaymentType> paymentList = new ArrayList<>();
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<File> images, List<PaymentType> paymentList) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
-		this.rooms = rooms;
+		this.room = room;
 		this.images = images;
 		this.paymentList = paymentList;
 	}
@@ -58,12 +58,12 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.property = property;
 	}
 
-	public Map<RoomType, List<RoomInfo>> getRooms() {
-		return rooms;
+	public Map<RoomType, RoomInfo> getRoom() {
+		return room;
 	}
 
-	public void setRooms(Map<RoomType, List<RoomInfo>> rooms) {
-		this.rooms = rooms;
+	public void setRoom(Map<RoomType, RoomInfo> room) {
+		this.room = room;
 	}
 
 	public List<File> getImages() {

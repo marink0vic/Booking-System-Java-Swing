@@ -41,7 +41,7 @@ public class PropertyForm extends JFrame {
 	private Property property;
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
-	private Map<RoomType, List<RoomInfo>> rooms;
+	private Map<RoomType, RoomInfo> room;
 	private List<File> propertyImageFiles;
 	private List<Country> countries;
 	
@@ -74,7 +74,7 @@ public class PropertyForm extends JFrame {
 
 	private void initializeComponents() {
 		listOfTypes = new ArrayList<>();
-		rooms = new LinkedHashMap<>();
+		room = new LinkedHashMap<>();
 		propertyImageFiles = new ArrayList<>();
 		address = new Address();
 		property = new Property();
@@ -95,9 +95,9 @@ public class PropertyForm extends JFrame {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		//--- panels
-		paymentPanel = new PaymentPanel(user, address, property, rooms, propertyImageFiles);
+		paymentPanel = new PaymentPanel(user, address, property, room, propertyImageFiles);
 		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, paymentPanel, lblPropertyImages, lblPayment);
-		roomPanel = new RoomPanel(layeredPane, listOfTypes, rooms, lblRoomsInfo, lblPropertyImages, imagesPanel);
+		roomPanel = new RoomPanel(layeredPane, listOfTypes, room, lblRoomsInfo, lblPropertyImages, imagesPanel);
 		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomtype, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblPropertyInfo, lblRoomtype);
 		addressPanel = new AddressPanel(layeredPane, basicInfoPanel,lblAddress,lblPropertyInfo, address, countries);

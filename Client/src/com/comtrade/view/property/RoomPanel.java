@@ -44,7 +44,7 @@ public class RoomPanel extends JPanel {
 	//----
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
-	private Map<RoomType, List<RoomInfo>> rooms;
+	private Map<RoomType, RoomInfo> room;
 	private JLabel lblRoomsInfo;
 	private JLabel lblPropertyImages;
 	private ImagesPanel imagesPanel;
@@ -53,10 +53,10 @@ public class RoomPanel extends JPanel {
 	 * Create the panel.
 	 */
 	
-	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, List<RoomInfo>> rooms, JLabel lblRoomsInfo, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
+	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, RoomInfo> room, JLabel lblRoomsInfo, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
-		this.rooms = rooms;
+		this.room = room;
 		this.lblRoomsInfo = lblRoomsInfo;
 		this.lblPropertyImages = lblPropertyImages;
 		this.imagesPanel = imagesPanel;
@@ -188,12 +188,7 @@ public class RoomPanel extends JPanel {
 
 	private void addToMap(RoomInfo r) {
 		RoomType roomType = listOfTypes.get(tempRoomTypePosition);
-		List<RoomInfo>list = new ArrayList<>(roomType.getNumberOfRooms());
-		
-		for (int i = 0; i < roomType.getNumberOfRooms(); i++) {
-			list.add(r);
-		}
-		rooms.put(roomType, list);
+		room.put(roomType, r);
 		tempRoomTypePosition++;
 		if (tempRoomTypePosition != listOfTypes.size()) lblHeaderText.setText(headerText + listOfTypes.get(tempRoomTypePosition).getRoomType());
 		else lblHeaderText.setText("You entered all your rooms");

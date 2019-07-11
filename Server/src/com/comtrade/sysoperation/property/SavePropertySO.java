@@ -29,30 +29,30 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		property = saveProperty(property);
 		wrapper.setProperty(property);
 		
-		Map<RoomType, List<RoomInfo>> rooms = wrapper.getRooms();
-		wrapper.setRooms(saveAllRooms(rooms, property.getIdProperty()));
+		Map<RoomType, RoomInfo> room = wrapper.getRoom();
+		wrapper.setRoom(saveAllRooms(room, property.getIdProperty()));
 	}
 
-	private Map<RoomType, List<RoomInfo>> saveAllRooms(Map<RoomType, List<RoomInfo>> rooms, int idProperty) throws SQLException {
-		Map<RoomType, List<RoomInfo>> savedRooms = new LinkedHashMap<>();
-		for (Map.Entry<RoomType, List<RoomInfo>> mapRooms : rooms.entrySet()) {
-			RoomType roomType = mapRooms.getKey();
+	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int idProperty) throws SQLException {
+		Map<RoomType, RoomInfo> savedRoom = new LinkedHashMap<>();
+		for (Map.Entry<RoomType, RoomInfo> mapRoom : room.entrySet()) {
+			RoomInfo info = mapRoom.getValue();
+			info.setIdRoom(saveRoomInfo(info));
+			
+			RoomType roomType = mapRoom.getKey();
 			roomType.setIdProperty(idProperty);
+			roomType.setIdRoomInfo(info.getIdRoom());
 			roomType.setIdRoomType(saveRoomType(roomType));
 			
-			List<RoomInfo> roomList = mapRooms.getValue();
-			roomList = saveRooms(roomList, roomType.getIdRoomType());
-			savedRooms.put(roomType, roomList);
+			savedRoom.put(roomType, info);
 		}
-		return savedRooms;
+		return savedRoom;
 	}
 
-	private List<RoomInfo> saveRooms(List<RoomInfo> roomList, int idRoomType) throws SQLException {
-//		for (RoomInfo room : roomList) {
-//			room.setIdRoomType(idRoomType);
-//		}
-//		ib.saveCollectionOfData(roomList);
-		return null;
+	private int saveRoomInfo(RoomInfo info) throws SQLException {
+		ib.save(info);
+		RoomInfo temp = (RoomInfo) ib.returnLastInsertedData(info);
+		return temp.getIdRoom();
 	}
 
 	private int saveRoomType(RoomType r) throws SQLException {

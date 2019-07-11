@@ -57,16 +57,16 @@ public class PaymentPanel extends JPanel {
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, List<RoomInfo>> rooms;
+	private Map<RoomType, RoomInfo> room;
 	private List<File> images; 
 	private List<PaymentType> paymentList;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images) {
+	public PaymentPanel(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<File> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
-		this.rooms = rooms;
+		this.room = room;
 		this.images = images;
 		initializeComponents();
 	}
@@ -151,7 +151,7 @@ public class PaymentPanel extends JPanel {
 		btnFinishRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				preparePaymentList();
-				registerProperty(user, address, property, rooms, images, paymentList);
+				registerProperty(user, address, property, room, images, paymentList);
 			}
 		});
 		btnFinishRegistration.addMouseListener(new MouseAdapter() {
@@ -177,8 +177,8 @@ public class PaymentPanel extends JPanel {
 		fillLabels();
 	}
 	
-	private void registerProperty(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images, List<PaymentType> paymentList) {
-		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, rooms, images, paymentList);
+	private void registerProperty(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<File> images, List<PaymentType> paymentList) {
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		try {
 			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
 			
