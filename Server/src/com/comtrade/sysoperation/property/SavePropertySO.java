@@ -1,7 +1,7 @@
 package com.comtrade.sysoperation.property;
 
+import java.io.File;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +31,23 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		
 		Map<RoomType, RoomInfo> room = wrapper.getRoom();
 		wrapper.setRoom(saveAllRooms(room, property.getIdProperty()));
+		
+		List<File> imageFiles = wrapper.getImages();
+		imageFiles = saveAllImages(imageFiles, property.getIdProperty());
+		
+		System.out.println("Address: " + address.getIdAddress());
+		System.out.println("PropertyAddress: " + property.getIdAddress() + ". PropertyUser: " + property.getIdUser() + "PropertyID: " + property.getIdProperty());
+		for (Map.Entry<RoomType, RoomInfo> mapRoom : wrapper.getRoom().entrySet()) {
+			RoomInfo info = mapRoom.getValue();
+			System.out.println("Info: " + info.getIdRoom());
+			RoomType roomType = mapRoom.getKey();
+			System.out.println("RoomTypeIDInfo: " + roomType.getIdRoomInfo() + ". IDProperty " + roomType.getIdProperty() + ". IdRoomType: " + roomType.getIdRoomType());
+		}
+	}
+
+	private List<File> saveAllImages(List<File> imageFiles, int idProperty) {
+		
+		return null;
 	}
 
 	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int idProperty) throws SQLException {

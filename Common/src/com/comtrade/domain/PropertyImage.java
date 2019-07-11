@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PropertyImages implements GeneralDomain, Serializable {
+public class PropertyImage implements GeneralDomain, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -17,11 +17,11 @@ public class PropertyImages implements GeneralDomain, Serializable {
 	private String image;
 	private LocalDateTime created;
 	
-	public PropertyImages() {
+	public PropertyImage() {
 		
 	}
 
-	public PropertyImages(int idProperty, String image) {
+	public PropertyImage(int idProperty, String image) {
 		super();
 		this.idProperty = idProperty;
 		this.image = image;
@@ -92,13 +92,12 @@ public class PropertyImages implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnIdColumnName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "id_image";
 	}
 
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
