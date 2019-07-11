@@ -22,7 +22,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 
-import com.comtrade.domain.Room;
+import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 
 public class RoomPanel extends JPanel {
@@ -44,7 +44,7 @@ public class RoomPanel extends JPanel {
 	//----
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
-	private Map<RoomType, List<Room>> rooms;
+	private Map<RoomType, List<RoomInfo>> rooms;
 	private JLabel lblRoomsInfo;
 	private JLabel lblPropertyImages;
 	private ImagesPanel imagesPanel;
@@ -53,7 +53,7 @@ public class RoomPanel extends JPanel {
 	 * Create the panel.
 	 */
 	
-	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, List<Room>> rooms, JLabel lblRoomsInfo, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
+	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, List<RoomInfo>> rooms, JLabel lblRoomsInfo, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
 		this.rooms = rooms;
@@ -126,7 +126,7 @@ public class RoomPanel extends JPanel {
 					boolean airConditioning = cbAirCon.isSelected();
 					boolean wifi = cbWifi.isSelected();
 					
-					Room r = new Room(numOfBads, kitchen, tv, airConditioning, wifi);
+					RoomInfo r = new RoomInfo(numOfBads, kitchen, tv, airConditioning, wifi);
 					addToMap(r);
 				}
 				
@@ -186,9 +186,9 @@ public class RoomPanel extends JPanel {
 		
 	}
 
-	private void addToMap(Room r) {
+	private void addToMap(RoomInfo r) {
 		RoomType roomType = listOfTypes.get(tempRoomTypePosition);
-		List<Room>list = new ArrayList<>(roomType.getNumberOfRooms());
+		List<RoomInfo>list = new ArrayList<>(roomType.getNumberOfRooms());
 		
 		for (int i = 0; i < roomType.getNumberOfRooms(); i++) {
 			list.add(r);

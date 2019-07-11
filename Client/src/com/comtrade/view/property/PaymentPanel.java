@@ -26,7 +26,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
-import com.comtrade.domain.Room;
+import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -57,12 +57,12 @@ public class PaymentPanel extends JPanel {
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, List<Room>> rooms;
+	private Map<RoomType, List<RoomInfo>> rooms;
 	private List<File> images; 
 	private List<PaymentType> paymentList;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images) {
+	public PaymentPanel(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
@@ -177,9 +177,15 @@ public class PaymentPanel extends JPanel {
 		fillLabels();
 	}
 	
-	private void registerProperty(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images, List<PaymentType> paymentList) {
+	private void registerProperty(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images, List<PaymentType> paymentList) {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, rooms, images, paymentList);
-		
+		try {
+			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
+			
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

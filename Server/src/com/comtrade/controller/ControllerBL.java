@@ -4,11 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.country.ReturnCountriesSO;
 import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;
+import com.comtrade.sysoperation.property.SavePropertySO;
 import com.comtrade.sysoperation.user.SaveUserSO;
 
 public class ControllerBL {
@@ -48,6 +50,12 @@ public class ControllerBL {
 		GeneralSystemOperation<GenericClass<GeneralDomain>> sysOperation = new SaveUserSO();
 		sysOperation.executeSystemOperation(genericClass);
 		return  genericClass.getDomain();
+	}
+
+	public PropertyWrapper saveProperty(PropertyWrapper propertyWraper) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
+		sysOperation.executeSystemOperation(propertyWraper);
+		return propertyWraper;
 	}
 
 }

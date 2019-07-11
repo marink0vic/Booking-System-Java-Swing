@@ -11,6 +11,7 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerBL;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -77,7 +78,19 @@ public class ClientThread extends Thread {
 			sendResponse(transfer);
 			break;
 		}
-			
+		case SAVE_ALL_PROPERTY_INFO:
+		{
+			PropertyWrapper propertyWraper = (PropertyWrapper) transferClass.getClientRequest();
+			try {
+				propertyWraper = ControllerBL.getController().saveProperty(propertyWraper);
+				transfer.setServerResponse(propertyWraper);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while saving property to database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		}
 		default:
 			break;
 		}

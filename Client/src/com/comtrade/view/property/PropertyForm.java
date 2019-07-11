@@ -7,8 +7,9 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.Property;
-import com.comtrade.domain.Room;
+import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 
@@ -40,7 +41,7 @@ public class PropertyForm extends JFrame {
 	private Property property;
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
-	private Map<RoomType, List<Room>> rooms;
+	private Map<RoomType, List<RoomInfo>> rooms;
 	private List<File> propertyImageFiles;
 	private List<Country> countries;
 	

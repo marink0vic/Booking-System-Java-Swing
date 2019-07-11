@@ -7,6 +7,7 @@ import com.comtrade.communication.Communication;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {
@@ -42,11 +43,19 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass saveProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 
 }

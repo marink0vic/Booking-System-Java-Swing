@@ -9,22 +9,23 @@ import java.util.Map;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
-import com.comtrade.domain.Room;
+import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.generics.Generic;
 
-public class PropertyWrapper implements Serializable {
+public class PropertyWrapper implements Serializable, Generic {
 
 	
 	private static final long serialVersionUID = 1L;
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, List<Room>> rooms;
+	private Map<RoomType, List<RoomInfo>> rooms;
 	private List<File> images; 
 	private List<PaymentType> paymentList = new ArrayList<>();
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, List<Room>> rooms, List<File> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, List<RoomInfo>> rooms, List<File> images, List<PaymentType> paymentList) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
@@ -57,11 +58,11 @@ public class PropertyWrapper implements Serializable {
 		this.property = property;
 	}
 
-	public Map<RoomType, List<Room>> getRooms() {
+	public Map<RoomType, List<RoomInfo>> getRooms() {
 		return rooms;
 	}
 
-	public void setRooms(Map<RoomType, List<Room>> rooms) {
+	public void setRooms(Map<RoomType, List<RoomInfo>> rooms) {
 		this.rooms = rooms;
 	}
 
