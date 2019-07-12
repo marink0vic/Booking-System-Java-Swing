@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
@@ -52,10 +53,10 @@ public class ControllerBL {
 		return  genericClass.getDomain();
 	}
 
-	public PropertyWrapper saveProperty(PropertyWrapper propertyWraper) throws SQLException {
+	public User saveProperty(PropertyWrapper propertyWraper) throws SQLException {
 		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
 		sysOperation.executeSystemOperation(propertyWraper);
-		return propertyWraper;
+		return propertyWraper.getUser();
 	}
 
 }

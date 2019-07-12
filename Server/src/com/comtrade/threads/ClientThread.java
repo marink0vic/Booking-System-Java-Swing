@@ -82,8 +82,8 @@ public class ClientThread extends Thread {
 		{
 			PropertyWrapper propertyWraper = (PropertyWrapper) transferClass.getClientRequest();
 			try {
-				propertyWraper = ControllerBL.getController().saveProperty(propertyWraper);
-				transfer.setServerResponse(propertyWraper);
+				User user = ControllerBL.getController().saveProperty(propertyWraper);
+				transfer.setServerResponse(user);
 			} catch (SQLException e) {
 				transfer.setMessageResponse("Problem occurred while saving property to database");
 				e.printStackTrace();

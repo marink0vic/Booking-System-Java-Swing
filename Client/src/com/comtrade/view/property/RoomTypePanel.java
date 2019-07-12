@@ -97,7 +97,7 @@ public class RoomTypePanel extends JPanel {
 		lblNumberOfRoom.setBounds(289, 238, 291, 37);
 		addRoomType.add(lblNumberOfRoom);
 		
-		SpinnerModel sm = new SpinnerNumberModel(1, 1, 20, 1);
+		SpinnerModel sm = new SpinnerNumberModel(1, 1, 100, 1);
 		spinner = new JSpinner(sm);
 		spinner.setFont(new Font("Dialog", Font.PLAIN, 17));
 		spinner.setBounds(612, 226, 62, 49);

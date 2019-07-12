@@ -126,7 +126,7 @@ public class BasicInfoPanel extends JPanel {
 		textArea = new JTextArea();
 		textArea.setForeground(new Color(71, 71, 71));
 		textArea.setBorder(new LineBorder(new Color(71, 71, 71)));
-		textArea.setFont(new Font("Dialog", Font.BOLD, 18));
+		textArea.setFont(new Font("Dialog", Font.PLAIN, 18));
 		textArea.setBounds(785, 164, 394, 318);
 		textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
