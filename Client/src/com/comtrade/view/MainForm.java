@@ -169,6 +169,10 @@ public class MainForm extends JFrame {
 		JButton btnRegUser = new JButton("Register as user");
 		btnRegUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				RegisterForm registerForm = new RegisterForm(USER_REGULAR);
+				registerForm.setLocationRelativeTo(null);
+				registerForm.setVisible(true);
+				dispose();
 			}
 		});
 		btnRegUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
