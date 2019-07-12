@@ -39,13 +39,13 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		Map<RoomType, RoomInfo> room = wrapper.getRoom();
 		wrapper.setRoom(saveAllRooms(room, property.getIdProperty()));
 		
-		List<File> imageFiles = wrapper.getImages();
+		List<PropertyImage> imageFiles = wrapper.getImages();
 		imageFiles = saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());
 		
 		
 	}
 
-	private List<File> saveAllImages(List<File> imageFiles, int idProperty, String username) throws SQLException {
+	private List<PropertyImage> saveAllImages(List<PropertyImage> imageFiles, int idProperty, String username) throws SQLException {
 		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + idProperty;
 		File folderToSave = new File(pathToSave);
 		
@@ -53,7 +53,8 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 			folderToSave.mkdir();
 		}
 		List<PropertyImage> propertyImages = new ArrayList<>();
-		for (File file : imageFiles) {
+		for (PropertyImage propertyImage : imageFiles) {
+			File file = new File(propertyImage.getImage());
 			File pathForDatabase = new File(pathToSave + "/" + file.getName());
 			String image = pathForDatabase.getPath();
 			propertyImages.add(new PropertyImage(idProperty, image.substring(1)));
@@ -67,7 +68,7 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		return saveImagesToDataBase(propertyImages, idProperty);
 	}
 
-	private List<File> saveImagesToDataBase(List<PropertyImage> propertyImages, int idProperty) throws SQLException {
+	private List<PropertyImage> saveImagesToDataBase(List<PropertyImage> propertyImages, int idProperty) throws SQLException {
 		ib.saveCollectionOfData(propertyImages);
 		PropertyImage image = propertyImages.get(0);
 		return null;

@@ -9,6 +9,7 @@ import java.util.Map;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
@@ -22,10 +23,10 @@ public class PropertyWrapper implements Serializable, Generic {
 	private Address address;
 	private Property property;
 	private Map<RoomType, RoomInfo> room;
-	private List<File> images; 
+	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList = new ArrayList<>();
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<File> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
@@ -66,11 +67,11 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.room = room;
 	}
 
-	public List<File> getImages() {
+	public List<PropertyImage> getImages() {
 		return images;
 	}
 
-	public void setImages(List<File> images) {
+	public void setImages(List<PropertyImage> images) {
 		this.images = images;
 	}
 

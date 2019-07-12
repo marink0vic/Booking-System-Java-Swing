@@ -29,6 +29,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
+import com.comtrade.domain.PropertyImage;
+
 
 public class ImagesPanel extends JPanel {
 
@@ -44,13 +46,13 @@ public class ImagesPanel extends JPanel {
 	private JButton btnContinue;
 	//----
 	private JLayeredPane layeredPane;
-	private List<File> propertyImageFiles;
+	private List<PropertyImage> propertyImageFiles;
 	private PaymentPanel paymentPanel;
 	private JLabel lblPropertyImages;
 	private JLabel lblPayment;
 	
 
-	public ImagesPanel(JLayeredPane layeredPane, List<File> propertyImageFiles, PaymentPanel paymentPanel, JLabel lblPropertyImages, JLabel lblPayment) {
+	public ImagesPanel(JLayeredPane layeredPane, List<PropertyImage> propertyImageFiles, PaymentPanel paymentPanel, JLabel lblPropertyImages, JLabel lblPayment) {
 		this.layeredPane = layeredPane;
 		this.propertyImageFiles = propertyImageFiles;
 		this.paymentPanel = paymentPanel;
@@ -101,7 +103,10 @@ public class ImagesPanel extends JPanel {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					
 					File selectedFile = file.getSelectedFile();
-					propertyImageFiles.add(selectedFile);
+					PropertyImage image = new PropertyImage();
+					String path = selectedFile.getAbsolutePath();
+					image.setImage(path);
+					propertyImageFiles.add(image);
 					
 					Icon icon = resizeImage(selectedFile);
 					images.add(icon);

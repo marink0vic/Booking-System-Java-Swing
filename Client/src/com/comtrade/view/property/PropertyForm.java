@@ -9,6 +9,7 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.Property;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
@@ -42,7 +43,7 @@ public class PropertyForm extends JFrame {
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, RoomInfo> room;
-	private List<File> propertyImageFiles;
+	private List<PropertyImage> propertyImageFiles;
 	private List<Country> countries;
 	
 	//--- navigation labels and panel
