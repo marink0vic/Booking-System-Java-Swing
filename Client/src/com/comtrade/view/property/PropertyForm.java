@@ -105,6 +105,7 @@ public class PropertyForm extends JFrame {
 		
 		basicInfoPanel.setUser(user);
 		basicInfoPanel.setProperty(property);
+		paymentPanel.setPropertyForm(this);
 		
 		layeredPane.add(addressPanel, "name_96510051729800");
 		layeredPane.add(basicInfoPanel, "name_100717019548000");
@@ -114,9 +115,6 @@ public class PropertyForm extends JFrame {
 		layeredPane.add(paymentPanel, "name_258197792870600");
 
 	}
-	
-	
-
 	
 	
 	private void createNavigationPanel() {

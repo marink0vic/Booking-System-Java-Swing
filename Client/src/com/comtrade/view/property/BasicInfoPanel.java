@@ -128,6 +128,8 @@ public class BasicInfoPanel extends JPanel {
 		textArea.setBorder(new LineBorder(new Color(71, 71, 71)));
 		textArea.setFont(new Font("Dialog", Font.BOLD, 18));
 		textArea.setBounds(785, 164, 394, 318);
+		textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
 		this.add(textArea);
 		
 		JButton btnContinue = new JButton("Continue");

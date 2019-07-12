@@ -13,6 +13,8 @@ import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.Address;
+import com.comtrade.domain.PaymentProperty;
+import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
@@ -41,23 +43,34 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		
 		List<PropertyImage> imageFiles = wrapper.getImages();
 		imageFiles = saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());
+		wrapper.setImages(imageFiles);
 		
-		
+		List<PaymentType> payments = wrapper.getPaymentList();
+		savePropertyPayments(payments, property.getIdProperty());
 	}
 
-	private List<PropertyImage> saveAllImages(List<PropertyImage> imageFiles, int idProperty, String username) throws SQLException {
-		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + idProperty;
+	private void savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
+		List<PaymentProperty> paymentProperty = new ArrayList<>();
+		for (PaymentType type : payments) {
+			PaymentProperty pp = new PaymentProperty(type.getId_payment(), id_property);
+			paymentProperty.add(pp);
+		}
+		ib.saveCollectionOfData(paymentProperty);
+	}
+
+	private List<PropertyImage> saveAllImages(List<PropertyImage> image_files, int id_property, String username) throws SQLException {
+		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + id_property;
 		File folderToSave = new File(pathToSave);
 		
 		if (!folderToSave.exists()) {
 			folderToSave.mkdir();
 		}
 		List<PropertyImage> propertyImages = new ArrayList<>();
-		for (PropertyImage propertyImage : imageFiles) {
+		for (PropertyImage propertyImage : image_files) {
 			File file = new File(propertyImage.getImage());
 			File pathForDatabase = new File(pathToSave + "/" + file.getName());
 			String image = pathForDatabase.getPath();
-			propertyImages.add(new PropertyImage(idProperty, image.substring(1)));
+			propertyImages.add(new PropertyImage(id_property, image.substring(1)));
 			try {
 				java.nio.file.Files.copy(file.toPath(), pathForDatabase.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
@@ -65,23 +78,23 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 		}
 		
-		return saveImagesToDataBase(propertyImages, idProperty);
+		return saveImagesToDataBase(propertyImages, id_property);
 	}
 
-	private List<PropertyImage> saveImagesToDataBase(List<PropertyImage> propertyImages, int idProperty) throws SQLException {
-		ib.saveCollectionOfData(propertyImages);
-		PropertyImage image = propertyImages.get(0);
-		return null;
+	private List<PropertyImage> saveImagesToDataBase(List<PropertyImage> property_images, int id_property) throws SQLException {
+		ib.saveCollectionOfData(property_images);
+		PropertyImage image = property_images.get(0);
+		return ib.returnPropertyImages(image, id_property);
 	}
 
-	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int idProperty) throws SQLException {
+	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int id_property) throws SQLException {
 		Map<RoomType, RoomInfo> savedRoom = new LinkedHashMap<>();
 		for (Map.Entry<RoomType, RoomInfo> mapRoom : room.entrySet()) {
 			RoomInfo info = mapRoom.getValue();
 			info.setIdRoom(saveRoomInfo(info));
 			
 			RoomType roomType = mapRoom.getKey();
-			roomType.setIdProperty(idProperty);
+			roomType.setIdProperty(id_property);
 			roomType.setIdRoomInfo(info.getIdRoom());
 			roomType.setIdRoomType(saveRoomType(roomType));
 			

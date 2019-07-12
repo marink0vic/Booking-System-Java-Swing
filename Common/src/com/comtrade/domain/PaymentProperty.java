@@ -15,6 +15,14 @@ public class PaymentProperty implements GeneralDomain, Serializable {
 	private int idProperty;
 	private LocalDateTime created;
 	
+	public PaymentProperty() {
+		
+	}
+
+	public PaymentProperty(int idPayment, int idProperty) {
+		this.idPayment = idPayment;
+		this.idProperty = idProperty;
+	}
 
 	public int getIdPayment() {
 		return idPayment;

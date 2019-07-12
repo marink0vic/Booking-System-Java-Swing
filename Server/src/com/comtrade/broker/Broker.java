@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.comtrade.connection.Connection;
+import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.Position;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 
 public class Broker implements IBroker {
@@ -59,6 +61,25 @@ public class Broker implements IBroker {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		GeneralDomain newDomain = domain.returnLastInsertedObject(resultSet);
 		return newDomain;
+	}
+
+	@Override
+	public List<PropertyImage> returnPropertyImages(PropertyImage image, int idProperty) throws SQLException {
+		String sql = "SELECT * FROM " + image.returnTableName() + " WHERE " + image.getIdProperty() + " = " + idProperty;
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		List<PropertyImage> propertyImages = new ArrayList<>();
+		
+		while (resultSet.next()) {
+			int idImage = resultSet.getInt("id_image");
+			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
+			PropertyImage propertyImage = new PropertyImage();
+			propertyImage.setIdImage(idImage);
+			propertyImage.setIdProperty(idProperty);
+			propertyImage.setImage(fullPath);
+			propertyImages.add(propertyImage);
+		}
+		return propertyImages;
 	}
 
 

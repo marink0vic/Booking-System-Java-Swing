@@ -32,6 +32,7 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.user.host.PropertyOwnerFrame;
 
 public class PaymentPanel extends JPanel {
 
@@ -53,6 +54,7 @@ public class PaymentPanel extends JPanel {
 	private JButton btnFinishRegistration;
 	private List<JLabel> labelList;
 	private Map<Integer,PaymentType> map;
+	private PropertyForm propertyForm;
 	
 	//---
 	private User user;
@@ -72,6 +74,9 @@ public class PaymentPanel extends JPanel {
 		initializeComponents();
 	}
 
+	public void setPropertyForm(PropertyForm propertyForm) {
+		this.propertyForm = propertyForm;
+	}
 
 	private void initializeComponents() {
 		labelList = new ArrayList<>();
@@ -182,7 +187,11 @@ public class PaymentPanel extends JPanel {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		try {
 			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
-			
+			PropertyWrapper pw = (PropertyWrapper) transferClass.getServerResponse();
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(pw.getUser());
+			propertyOwner.setLocationRelativeTo(null);
+			propertyOwner.setVisible(true);
+			propertyForm.dispose();
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

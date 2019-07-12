@@ -14,4 +14,5 @@ public interface IBroker {
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	List<GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException;
+	List<PropertyImage> returnPropertyImages(PropertyImage image, int idProperty) throws SQLException;
 }
