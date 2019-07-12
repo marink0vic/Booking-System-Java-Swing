@@ -1,17 +1,23 @@
 package com.comtrade.sysoperation.property;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
+import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Property;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
@@ -21,6 +27,7 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
+		User user = wrapper.getUser();
 		Address address = saveAddress(wrapper.getAddress());
 		wrapper.setAddress(address);
 
@@ -33,20 +40,36 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		wrapper.setRoom(saveAllRooms(room, property.getIdProperty()));
 		
 		List<File> imageFiles = wrapper.getImages();
-		imageFiles = saveAllImages(imageFiles, property.getIdProperty());
+		imageFiles = saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());
 		
-		System.out.println("Address: " + address.getIdAddress());
-		System.out.println("PropertyAddress: " + property.getIdAddress() + ". PropertyUser: " + property.getIdUser() + "PropertyID: " + property.getIdProperty());
-		for (Map.Entry<RoomType, RoomInfo> mapRoom : wrapper.getRoom().entrySet()) {
-			RoomInfo info = mapRoom.getValue();
-			System.out.println("Info: " + info.getIdRoom());
-			RoomType roomType = mapRoom.getKey();
-			System.out.println("RoomTypeIDInfo: " + roomType.getIdRoomInfo() + ". IDProperty " + roomType.getIdProperty() + ". IdRoomType: " + roomType.getIdRoomType());
-		}
+		
 	}
 
-	private List<File> saveAllImages(List<File> imageFiles, int idProperty) {
+	private List<File> saveAllImages(List<File> imageFiles, int idProperty, String username) throws SQLException {
+		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + idProperty;
+		File folderToSave = new File(pathToSave);
 		
+		if (!folderToSave.exists()) {
+			folderToSave.mkdir();
+		}
+		List<PropertyImage> propertyImages = new ArrayList<>();
+		for (File file : imageFiles) {
+			File pathForDatabase = new File(pathToSave + "/" + file.getName());
+			String image = pathForDatabase.getPath();
+			propertyImages.add(new PropertyImage(idProperty, image.substring(1)));
+			try {
+				java.nio.file.Files.copy(file.toPath(), pathForDatabase.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return saveImagesToDataBase(propertyImages, idProperty);
+	}
+
+	private List<File> saveImagesToDataBase(List<PropertyImage> propertyImages, int idProperty) throws SQLException {
+		ib.saveCollectionOfData(propertyImages);
+		PropertyImage image = propertyImages.get(0);
 		return null;
 	}
 

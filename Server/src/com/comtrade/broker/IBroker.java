@@ -1,9 +1,11 @@
 package com.comtrade.broker;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 
 public interface IBroker {
@@ -12,5 +14,4 @@ public interface IBroker {
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	List<GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException;
-	List<GeneralDomain> returnLastInsertedData(GeneralDomain domain, int limit) throws SQLException;
 }

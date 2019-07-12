@@ -62,10 +62,4 @@ public class Broker implements IBroker {
 	}
 
 
-	@Override
-	public List<GeneralDomain> returnLastInsertedData(GeneralDomain domain, int limit) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
