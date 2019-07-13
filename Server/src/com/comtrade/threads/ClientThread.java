@@ -90,6 +90,18 @@ public class ClientThread extends Thread {
 			}
 			sendResponse(transfer);
 			break;
+		} case RETURN_PROPERTY_FOR_OWNER:
+		{
+			PropertyWrapper propertyOwner = (PropertyWrapper) transferClass.getClientRequest();
+			try {
+				PropertyWrapper propertyWrapper = ControllerBL.getController().returnPropertyForOwner(propertyOwner);
+				transfer.setServerResponse(propertyWrapper);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while retrieving property information");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
 		}
 		default:
 			break;

@@ -13,14 +13,18 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.comtrade.dto.PropertyWrapper;
+
 public class HomePanel extends JPanel {
 
 	
 	private static final long serialVersionUID = 1L;
 	private JTable table;
 	private DefaultTableModel dtm = new DefaultTableModel();
+	private PropertyWrapper propertyOwner;
 	
-	public HomePanel() {
+	public HomePanel(PropertyWrapper propertyOwner) {
+		this.propertyOwner = propertyOwner;
 		initializeComponents();
 	}
 

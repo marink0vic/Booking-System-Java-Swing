@@ -7,8 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
 
 import javax.swing.JLabel;
 
@@ -20,6 +22,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.LineBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
 import javax.swing.JTextArea;
@@ -49,7 +53,7 @@ public class PropertyOwnerFrame extends JFrame {
 	
 	//--
 	private User user;
-	private PropertyWrapper propertyWrapper;
+	private PropertyWrapper propertyOwner;
 	
 //
 //	/**
@@ -74,6 +78,8 @@ public class PropertyOwnerFrame extends JFrame {
 	 */
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
+		propertyOwner = new PropertyWrapper();
+		propertyOwner.setUser(user);
 		initializeComponents();
 	}
 
@@ -88,13 +94,14 @@ public class PropertyOwnerFrame extends JFrame {
 		
 		createSidePanel();
 		
-
+	
+		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		homePanelRight = new HomePanel();
+		homePanelRight = new HomePanel(propertyOwner);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
 		
@@ -112,6 +119,8 @@ public class PropertyOwnerFrame extends JFrame {
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
 		
+		//--read user data
+		returnPropertyForUser(user);
 	}
 
 	private void createSidePanel() {
@@ -337,9 +346,19 @@ public class PropertyOwnerFrame extends JFrame {
 		lblInances.setBounds(130, 13, 145, 32);
 		earningsPanel.add(lblInances);
 		
+		
+	}
+	
+	private void returnPropertyForUser(User user) {
+		try {
+			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyOwner);
+			propertyOwner = (PropertyWrapper) transferClass.getServerResponse();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	protected void changeSelectedBackgroundColor(boolean[] activePanel, int index) {
+	private void changeSelectedBackgroundColor(boolean[] activePanel, int index) {
 		for (int i = 0; i < activePanel.length; i++) {
 			if (i != index) {
 				activePanel[i] = false;

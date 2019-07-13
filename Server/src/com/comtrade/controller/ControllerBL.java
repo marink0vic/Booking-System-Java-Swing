@@ -11,6 +11,7 @@ import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.country.ReturnCountriesSO;
 import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;
+import com.comtrade.sysoperation.property.ReturnUserPropertySO;
 import com.comtrade.sysoperation.property.SavePropertySO;
 import com.comtrade.sysoperation.user.SaveUserSO;
 
@@ -57,6 +58,12 @@ public class ControllerBL {
 		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
 		sysOperation.executeSystemOperation(propertyWraper);
 		return propertyWraper.getUser();
+	}
+
+	public PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyOwner) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new ReturnUserPropertySO();
+		sysOperation.executeSystemOperation(propertyOwner);
+		return propertyOwner;
 	}
 
 }
