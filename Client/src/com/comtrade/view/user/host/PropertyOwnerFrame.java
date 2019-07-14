@@ -94,7 +94,7 @@ public class PropertyOwnerFrame extends JFrame {
 		
 		createSidePanel();
 		
-	
+		returnPropertyForUser(user);
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
@@ -119,8 +119,7 @@ public class PropertyOwnerFrame extends JFrame {
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
 		
-		//--read user data
-		returnPropertyForUser(user);
+		
 	}
 
 	private void createSidePanel() {

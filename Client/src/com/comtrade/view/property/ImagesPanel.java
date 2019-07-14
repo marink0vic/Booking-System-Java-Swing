@@ -37,7 +37,6 @@ public class ImagesPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private JLabel lblAddImagesOf;
-	private JLabel lblImage;
 	private JButton btnAddImage;
 	private JScrollPane scrollPane;
 	private JTable table;
@@ -74,23 +73,15 @@ public class ImagesPanel extends JPanel {
 		lblAddImagesOf.setBounds(423, 92, 300, 80);
 		this.add(lblAddImagesOf);
 		
-		lblImage = new JLabel("Image holder");
-		lblImage.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblImage.setForeground(new Color(71, 71, 71));
-		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImage.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblImage.setBounds(147, 209, 335, 289);
-		this.add(lblImage);
-		
 		btnAddImage = new JButton("Add image");
 		btnAddImage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnAddImage.setBounds(145, 540, 339, 60);
+				btnAddImage.setBounds(139, 370, 339, 60);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnAddImage.setBounds(147, 542, 335, 55);
+				btnAddImage.setBounds(141, 372, 335, 55);
 			}
 		});
 		btnAddImage.addActionListener(new ActionListener() {
@@ -121,7 +112,7 @@ public class ImagesPanel extends JPanel {
 		btnAddImage.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnAddImage.setBorder(null);
 		btnAddImage.setBackground(new Color(9, 121, 186));
-		btnAddImage.setBounds(147, 542, 335, 55);
+		btnAddImage.setBounds(141, 372, 335, 55);
 		this.add(btnAddImage);
 		
 		scrollPane = new JScrollPane(table);
@@ -134,7 +125,7 @@ public class ImagesPanel extends JPanel {
 		scrollPane.setViewportView(table);
 		Object[] o = {"Image"};
 		dtm.addColumn(o[0]);
-		table.setRowHeight(lblImage.getHeight());
+		table.setRowHeight(300);
 		
 		btnContinue = new JButton("Continue");
 		btnContinue.addActionListener(new ActionListener() {
@@ -188,7 +179,7 @@ public class ImagesPanel extends JPanel {
 
 	private void updateUI(JLabel label1, JLabel label2) {
 		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
+		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 	
 	class LabelRenderer implements TableCellRenderer {

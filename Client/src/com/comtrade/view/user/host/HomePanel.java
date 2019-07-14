@@ -2,6 +2,10 @@ package com.comtrade.view.user.host;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -13,6 +17,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.comtrade.domain.Address;
+import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 
 public class HomePanel extends JPanel {
@@ -20,11 +27,16 @@ public class HomePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private JTable table;
+	private JLabel lblPropertyName;
+	private JLabel lblPropertyAddress;
+	private JLabel lblSmallImage;
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private PropertyWrapper propertyOwner;
+	private List<PropertyImage> propertyImages;
 	
 	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
+		propertyImages = propertyOwner.getImages();
 		initializeComponents();
 	}
 
@@ -33,21 +45,21 @@ public class HomePanel extends JPanel {
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 		
-		JLabel lblPropertyName = new JLabel("Propery Name");
+		lblPropertyName = new JLabel("");
 		lblPropertyName.setForeground(new Color(71, 71, 71));
 		lblPropertyName.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblPropertyName.setBorder(null);
-		lblPropertyName.setBounds(125, 71, 193, 37);
+		lblPropertyName.setBounds(125, 71, 308, 37);
 		this.add(lblPropertyName);
 		
-		JLabel lblPropertyAddress = new JLabel("Propery Address");
+		lblPropertyAddress = new JLabel("Propery Address");
 		lblPropertyAddress.setForeground(new Color(71, 71, 71));
 		lblPropertyAddress.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblPropertyAddress.setBorder(null);
-		lblPropertyAddress.setBounds(125, 107, 250, 37);
+		lblPropertyAddress.setBounds(125, 107, 570, 37);
 		this.add(lblPropertyAddress);
 		
-		JLabel lblSmallImage = new JLabel("");
+		lblSmallImage = new JLabel("");
 		lblSmallImage.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblSmallImage.setBounds(25, 65, 86, 91);
 		this.add(lblSmallImage);
@@ -58,6 +70,10 @@ public class HomePanel extends JPanel {
 		
 		table = new JTable(dtm);
 		scrollPane.setViewportView(table);
+		Object[] object = {"Room type", "Number of rooms", "Price per night"};
+		dtm.addColumn(object[0]);
+		dtm.addColumn(object[1]);
+		dtm.addColumn(object[2]);
 		
 		JLabel arrowLeft = new JLabel("");
 		arrowLeft.setHorizontalAlignment(SwingConstants.LEFT);
@@ -89,8 +105,37 @@ public class HomePanel extends JPanel {
 		lblImage3.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblImage3.setBounds(475, 467, 152, 152);
 		this.add(lblImage3);
+		
+		addLabelsValues();
+		fillRoomTypeTable();
 	}
 	
+	private void addLabelsValues() {
+		lblPropertyName.setText(propertyOwner.getProperty().getName());
+		Address a = propertyOwner.getAddress();
+		String countryName = propertyOwner.getCountry().getName();
+		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
+		lblPropertyAddress.setText(addressText);
+		String imageUrl = propertyImages.get(0).getImage();
+		File f = new File(imageUrl);
+		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
+		lblSmallImage.setIcon(icon);
+	}
 	
+	private Icon resizeImage(File selectedFile, int width, int height) {
+		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
+		Image img = myImage.getImage();
+		Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		ImageIcon image = new ImageIcon(newImg);
+		return image;
+	}
+
+	private void fillRoomTypeTable() {
+		dtm.setRowCount(0);
+		Set<RoomType> roomType = propertyOwner.getRoom().keySet();
+		for (RoomType type : roomType) {
+			dtm.addRow(new Object[] {type.getRoomType(), type.getNumberOfRooms(), type.getPricePerNight()});
+		}
+	}
 
 }
