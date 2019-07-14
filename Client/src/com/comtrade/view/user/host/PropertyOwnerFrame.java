@@ -9,8 +9,9 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.login.IProxy;
 
 import javax.swing.JLabel;
 
@@ -34,7 +35,7 @@ import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
 
-public class PropertyOwnerFrame extends JFrame {
+public class PropertyOwnerFrame extends JFrame implements IProxy {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -53,7 +54,7 @@ public class PropertyOwnerFrame extends JFrame {
 	
 	//--
 	private User user;
-	private PropertyWrapper propertyOwner;
+	private UserWrapper propertyOwner;
 	
 //
 //	/**
@@ -78,7 +79,7 @@ public class PropertyOwnerFrame extends JFrame {
 	 */
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
-		propertyOwner = new PropertyWrapper();
+		propertyOwner = new UserWrapper();
 		propertyOwner.setUser(user);
 		initializeComponents();
 	}
@@ -94,7 +95,7 @@ public class PropertyOwnerFrame extends JFrame {
 		
 		createSidePanel();
 		
-		returnPropertyForUser(user);
+		returnPropertyForUser();
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
@@ -348,10 +349,10 @@ public class PropertyOwnerFrame extends JFrame {
 		
 	}
 	
-	private void returnPropertyForUser(User user) {
+	private void returnPropertyForUser() {
 		try {
 			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyOwner);
-			propertyOwner = (PropertyWrapper) transferClass.getServerResponse();
+			propertyOwner = (UserWrapper) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
@@ -364,5 +365,11 @@ public class PropertyOwnerFrame extends JFrame {
 			}
 		}
 		
+	}
+
+	@Override
+	public void login(User user) {
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 }

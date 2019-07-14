@@ -197,4 +197,8 @@ public class User implements GeneralDomain, Serializable {
 		return generatedSecuredPasswordHash;
 	}
 
+	public boolean checkPassword(String password, String hash_password) {
+		return BCrypt.checkpw(password, hash_password);
+	}
+
 }

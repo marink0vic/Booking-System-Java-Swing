@@ -11,7 +11,7 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerBL;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -78,9 +78,24 @@ public class ClientThread extends Thread {
 			sendResponse(transfer);
 			break;
 		}
+		case LOGIN_USER:
+		{
+			User user = (User) transferClass.getClientRequest();
+			try {
+				user = ControllerBL.getController().loginUser(user);
+				if (user == null) 
+					transfer.setMessageResponse("Entered information does not exist in the database");
+				transfer.setServerResponse(user);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while login user to database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		}
 		case SAVE_ALL_PROPERTY_INFO:
 		{
-			PropertyWrapper propertyWraper = (PropertyWrapper) transferClass.getClientRequest();
+			UserWrapper propertyWraper = (UserWrapper) transferClass.getClientRequest();
 			try {
 				User user = ControllerBL.getController().saveProperty(propertyWraper);
 				transfer.setServerResponse(user);
@@ -92,9 +107,9 @@ public class ClientThread extends Thread {
 			break;
 		} case RETURN_PROPERTY_FOR_OWNER:
 		{
-			PropertyWrapper propertyOwner = (PropertyWrapper) transferClass.getClientRequest();
+			UserWrapper propertyOwner = (UserWrapper) transferClass.getClientRequest();
 			try {
-				PropertyWrapper propertyWrapper = ControllerBL.getController().returnPropertyForOwner(propertyOwner);
+				UserWrapper propertyWrapper = ControllerBL.getController().returnPropertyForOwner(propertyOwner);
 				transfer.setServerResponse(propertyWrapper);
 			} catch (SQLException e) {
 				transfer.setMessageResponse("Problem occurred while retrieving property information");

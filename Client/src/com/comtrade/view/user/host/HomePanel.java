@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomType;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 
 public class HomePanel extends JPanel {
 
@@ -31,10 +31,10 @@ public class HomePanel extends JPanel {
 	private JLabel lblPropertyAddress;
 	private JLabel lblSmallImage;
 	private DefaultTableModel dtm = new DefaultTableModel();
-	private PropertyWrapper propertyOwner;
+	private UserWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
 	
-	public HomePanel(PropertyWrapper propertyOwner) {
+	public HomePanel(UserWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
 		propertyImages = propertyOwner.getImages();
 		initializeComponents();
@@ -49,19 +49,19 @@ public class HomePanel extends JPanel {
 		lblPropertyName.setForeground(new Color(71, 71, 71));
 		lblPropertyName.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblPropertyName.setBorder(null);
-		lblPropertyName.setBounds(125, 71, 308, 37);
+		lblPropertyName.setBounds(168, 71, 308, 37);
 		this.add(lblPropertyName);
 		
 		lblPropertyAddress = new JLabel("Propery Address");
 		lblPropertyAddress.setForeground(new Color(71, 71, 71));
 		lblPropertyAddress.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblPropertyAddress.setBorder(null);
-		lblPropertyAddress.setBounds(125, 107, 570, 37);
+		lblPropertyAddress.setBounds(168, 107, 570, 37);
 		this.add(lblPropertyAddress);
 		
 		lblSmallImage = new JLabel("");
-		lblSmallImage.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblSmallImage.setBounds(25, 65, 86, 91);
+		lblSmallImage.setBorder(null);
+		lblSmallImage.setBounds(26, 57, 112, 98);
 		this.add(lblSmallImage);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -92,17 +92,17 @@ public class HomePanel extends JPanel {
 		this.add(arrowRight);
 		
 		JLabel lblImage1 = new JLabel("");
-		lblImage1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblImage1.setBorder(null);
 		lblImage1.setBounds(93, 467, 152, 152);
 		this.add(lblImage1);
 		
 		JLabel lblImage2 = new JLabel("");
-		lblImage2.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblImage2.setBorder(null);
 		lblImage2.setBounds(281, 467, 152, 152);
 		this.add(lblImage2);
 		
 		JLabel lblImage3 = new JLabel("");
-		lblImage3.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblImage3.setBorder(null);
 		lblImage3.setBounds(475, 467, 152, 152);
 		this.add(lblImage3);
 		

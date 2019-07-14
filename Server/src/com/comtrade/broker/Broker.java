@@ -1,8 +1,10 @@
 package com.comtrade.broker;
 
+import java.nio.channels.ByteChannel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +21,8 @@ import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.domain.User;
+import com.comtrade.dto.UserWrapper;
 
 public class Broker implements IBroker {
 
@@ -70,10 +73,38 @@ public class Broker implements IBroker {
 		GeneralDomain newDomain = domain.returnLastInsertedObject(resultSet);
 		return newDomain;
 	}
+	
+	@Override
+	public User login(User user) throws SQLException {
+		String sql = "SELECT * FROM " + user.returnTableName() + " WHERE username = ?";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		preparedStatement.setString(1, user.getUsername());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		if (resultSet.next()) {
+			String hash = resultSet.getString("password");
+			if (user.checkPassword(user.getPassword(), hash)) {
+				int userId = resultSet.getInt("id_user");
+				int countryId = resultSet.getInt("country_id");
+				String firstName = resultSet.getString("first_name");
+				String lastName = resultSet.getString("last_name");
+				String email = resultSet.getString("email");
+				String username = resultSet.getString("username");
+				String profilePicture = resultSet.getString("profile_picture");
+				String status = resultSet.getString("status");
+				LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
+				
+				User u = new User(countryId, firstName, lastName, email, username, null, date, status);
+				u.setProfilePicture(profilePicture);
+				u.setIdUser(userId);
+				return u;
+			}
+		}
+		return null;
+	}
 
 
 	@Override
-	public PropertyWrapper returnPropertyForOwner(PropertyWrapper owner) throws SQLException {
+	public UserWrapper returnPropertyForOwner(UserWrapper owner) throws SQLException {
 		setPropertyAddress(owner);
 		setRoomAndRoomInfo(owner);
 		setPropertyImages(owner);
@@ -82,7 +113,7 @@ public class Broker implements IBroker {
 		return owner;
 	}	
 
-	private void setPropertyAddress(PropertyWrapper owner) throws SQLException {
+	private void setPropertyAddress(UserWrapper owner) throws SQLException {
 		String sql = "SELECT * FROM property JOIN address "
 				+ "ON property.id_address = address.id_address "
 				+ "WHERE property.id_user = " + owner.getUser().getIdUser();
@@ -120,7 +151,7 @@ public class Broker implements IBroker {
 		
 	}
 
-	private void setRoomAndRoomInfo(PropertyWrapper owner) throws SQLException {
+	private void setRoomAndRoomInfo(UserWrapper owner) throws SQLException {
 		String sql = "SELECT * FROM room_type JOIN room_info ON room_type.id_room_info = room_info.id_room"
 					+ " WHERE room_type.id_property = " + owner.getProperty().getIdProperty();
 		
@@ -152,7 +183,7 @@ public class Broker implements IBroker {
 		owner.setRoom(room);
 	}
 	
-	private void setPropertyImages(PropertyWrapper owner) throws SQLException {
+	private void setPropertyImages(UserWrapper owner) throws SQLException {
 		
 		String sql = "SELECT * FROM property_images WHERE id_property = " + owner.getProperty().getIdProperty();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
@@ -172,7 +203,7 @@ public class Broker implements IBroker {
 		owner.setImages(propertyImages);
 	}
 	
-	private void setPayments(PropertyWrapper owner, int idProperty) throws SQLException {
+	private void setPayments(UserWrapper owner, int idProperty) throws SQLException {
 		String sql = "SELECT * FROM payment_type" + " "
 				+ "JOIN payment_property ON payment_property.id_payment = payment_type.id_card_type" + " "
 				+ "JOIN property ON property.id_property = payment_property.id_property" + " "
@@ -197,7 +228,7 @@ public class Broker implements IBroker {
 		owner.setPaymentList(payments);
 	}
 	
-	private void setCountry(PropertyWrapper owner, int id_country) throws SQLException {
+	private void setCountry(UserWrapper owner, int id_country) throws SQLException {
 		String sql = "SELECT * FROM country WHERE id_country = " + id_country;
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();

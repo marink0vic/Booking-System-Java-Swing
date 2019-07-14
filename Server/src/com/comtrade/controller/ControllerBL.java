@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -13,6 +13,7 @@ import com.comtrade.sysoperation.country.ReturnCountriesSO;
 import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;
 import com.comtrade.sysoperation.property.ReturnUserPropertySO;
 import com.comtrade.sysoperation.property.SavePropertySO;
+import com.comtrade.sysoperation.user.LoginUserSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
 
 public class ControllerBL {
@@ -54,16 +55,24 @@ public class ControllerBL {
 		return  genericClass.getDomain();
 	}
 
-	public User saveProperty(PropertyWrapper propertyWraper) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
+	public User saveProperty(UserWrapper propertyWraper) throws SQLException {
+		GeneralSystemOperation<UserWrapper> sysOperation = new SavePropertySO();
 		sysOperation.executeSystemOperation(propertyWraper);
 		return propertyWraper.getUser();
 	}
 
-	public PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyOwner) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new ReturnUserPropertySO();
+	public UserWrapper returnPropertyForOwner(UserWrapper propertyOwner) throws SQLException {
+		GeneralSystemOperation<UserWrapper> sysOperation = new ReturnUserPropertySO();
 		sysOperation.executeSystemOperation(propertyOwner);
 		return propertyOwner;
+	}
+
+	public User loginUser(User user) throws SQLException {
+		GenericClass<User> domainUser = new GenericClass<>(user);
+		domainUser.setDomain(user);
+		GeneralSystemOperation<GenericClass<User>> sysOperation = new LoginUserSO();
+		sysOperation.executeSystemOperation(domainUser);
+		return domainUser.getDomain();
 	}
 
 }
