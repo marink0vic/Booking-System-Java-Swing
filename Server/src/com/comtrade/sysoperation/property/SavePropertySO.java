@@ -20,15 +20,15 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
-public class SavePropertySO extends GeneralSystemOperation<UserWrapper> {
+public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	
 	private IBroker ib = new Broker();
 
 	@Override
-	protected void executeSpecificOperation(UserWrapper wrapper) throws SQLException {
+	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
 		User user = wrapper.getUser();
 		Address address = saveAddress(wrapper.getAddress());
 

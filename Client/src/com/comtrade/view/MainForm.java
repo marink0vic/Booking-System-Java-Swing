@@ -106,7 +106,7 @@ public class MainForm extends JFrame {
 				User user = new User();
 				user.setPassword(password);
 				user.setUsername(username);
-				IProxy proxy = new ProxyLogin();
+				IProxy proxy = new ProxyLogin(MainForm.this);
 				proxy.login(user);
 			}
 		});

@@ -16,6 +16,16 @@ public class Country implements GeneralDomain, Serializable {
 	private String name;
 	private String image;
 	private LocalDateTime created;
+	
+	public Country() {
+		
+	}
+	
+	public Country(int idCountry, String name, String image) {
+		this.idCountry = idCountry;
+		this.name = name;
+		this.image = image;
+	}
 
 	public int getIdCountry() {
 		return idCountry;

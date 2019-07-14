@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 
 public interface IBroker {
 
@@ -13,6 +13,6 @@ public interface IBroker {
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	List<GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException;
-	UserWrapper returnPropertyForOwner(UserWrapper owner) throws SQLException;
+	PropertyWrapper returnPropertyForOwner(PropertyWrapper owner) throws SQLException;
 	User login(User user) throws SQLException;
 }

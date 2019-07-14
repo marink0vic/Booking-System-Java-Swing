@@ -30,7 +30,7 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
 
@@ -184,11 +184,11 @@ public class PaymentPanel extends JPanel {
 	}
 	
 	private void registerProperty(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
-		UserWrapper propertyWrapper = new UserWrapper(user, address, property, room, images, paymentList);
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		try {
 			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
 			User returnedUser =  (User) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedUser);
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(user);
 			propertyOwner.setLocationRelativeTo(null);
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();

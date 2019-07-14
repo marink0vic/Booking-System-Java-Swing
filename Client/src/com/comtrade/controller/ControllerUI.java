@@ -7,7 +7,7 @@ import com.comtrade.communication.Communication;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {
@@ -43,14 +43,14 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveProperty(UserWrapper propertyWrapper) throws ClassNotFoundException, IOException {
+	public TransferClass saveProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(propertyWrapper);
 		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass returnPropertyForOwner(UserWrapper propertyOwner) throws ClassNotFoundException, IOException {
+	public TransferClass returnPropertyForOwner(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(propertyOwner);
 		transferClass.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);

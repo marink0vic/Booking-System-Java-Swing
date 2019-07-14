@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomType;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 
 public class HomePanel extends JPanel {
 
@@ -31,10 +31,10 @@ public class HomePanel extends JPanel {
 	private JLabel lblPropertyAddress;
 	private JLabel lblSmallImage;
 	private DefaultTableModel dtm = new DefaultTableModel();
-	private UserWrapper propertyOwner;
+	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
 	
-	public HomePanel(UserWrapper propertyOwner) {
+	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
 		propertyImages = propertyOwner.getImages();
 		initializeComponents();

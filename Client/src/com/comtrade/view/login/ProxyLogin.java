@@ -7,9 +7,19 @@ import javax.swing.JOptionPane;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.MainForm;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
 
 public class ProxyLogin implements IProxy {
+	
+	private MainForm mainForm;
+	public ProxyLogin() {
+		
+	}
+	
+	public ProxyLogin(MainForm main) {
+		this.mainForm = main;
+	}
 
 	@Override
 	public void login(User user) {
@@ -32,6 +42,7 @@ public class ProxyLogin implements IProxy {
 			} else {
 				JOptionPane.showMessageDialog(null, "Something went wrong");
 			}
+			mainForm.dispose();
 		} else {
 			JOptionPane.showMessageDialog(null, transferClass.getMessageResponse());
 		}

@@ -16,7 +16,7 @@ public class User implements GeneralDomain, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private int idUser;
-	private int idCountry;
+	private Country country;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -31,10 +31,10 @@ public class User implements GeneralDomain, Serializable {
 		
 	}
 
-	public User(int idCountry, String firstName, String lastName, String email, String username, String password,
+	public User(Country country, String firstName, String lastName, String email, String username, String password,
 			LocalDate dateOfBirth, String status) {
 		super();
-		this.idCountry = idCountry;
+		this.country = country;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -52,12 +52,12 @@ public class User implements GeneralDomain, Serializable {
 		this.idUser = idUser;
 	}
 
-	public int getIdCountry() {
-		return idCountry;
+	public Country getCountry() {
+		return country;
 	}
 
-	public void setIdCountry(int idCountry) {
-		this.idCountry = idCountry;
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public String getFirstName() {
@@ -151,7 +151,7 @@ public class User implements GeneralDomain, Serializable {
 	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idCountry);
+		preparedStatement.setInt(index.next(), country.getIdCountry());
 		preparedStatement.setString(index.next(), firstName);
 		preparedStatement.setString(index.next(), lastName);
 		preparedStatement.setString(index.next(), email);
@@ -177,17 +177,15 @@ public class User implements GeneralDomain, Serializable {
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		User user = new User();
 		if (resultSet.next()) {
-			user.setIdUser(resultSet.getInt(1));
-			user.setIdCountry(resultSet.getInt(2));
-			user.setFirstName(resultSet.getString(3));
-			user.setLastName(resultSet.getString(4));
-			user.setEmail(resultSet.getString(5));
-			user.setUsername(resultSet.getString(6));
-			user.setPassword(resultSet.getString(7));
-			java.sql.Date date = resultSet.getDate(8);
+			user.setIdUser(resultSet.getInt("id_user"));
+			user.setFirstName(resultSet.getString("first_name"));
+			user.setLastName(resultSet.getString("last_name"));
+			user.setEmail(resultSet.getString("email"));
+			user.setUsername(resultSet.getString("username"));
+			java.sql.Date date = resultSet.getDate("date_of_birth");
 		    user.setDateOfBirth(date.toLocalDate());
-		    user.setProfilePicture(resultSet.getString(9));
-		    user.setStatus(resultSet.getString(10));
+		    user.setProfilePicture(resultSet.getString("profile_picture"));
+		    user.setStatus(resultSet.getString("status"));
 		    return user;
 		}
 		return null;

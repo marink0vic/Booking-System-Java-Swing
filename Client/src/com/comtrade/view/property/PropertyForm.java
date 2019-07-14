@@ -7,7 +7,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
@@ -22,7 +21,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
 import java.awt.Cursor;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

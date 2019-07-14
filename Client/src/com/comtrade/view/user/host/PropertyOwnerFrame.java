@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
 
@@ -54,7 +54,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	
 	//--
 	private User user;
-	private UserWrapper propertyOwner;
+	private PropertyWrapper propertyOwner;
 	
 //
 //	/**
@@ -79,7 +79,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	 */
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
-		propertyOwner = new UserWrapper();
+		propertyOwner = new PropertyWrapper();
 		propertyOwner.setUser(user);
 		initializeComponents();
 	}
@@ -352,7 +352,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private void returnPropertyForUser() {
 		try {
 			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyOwner);
-			propertyOwner = (UserWrapper) transferClass.getServerResponse();
+			propertyOwner = (PropertyWrapper) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
