@@ -13,6 +13,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private int idRoom;
+	private int idRoomType;
 	private int numOfBads;
 	private boolean kitchen;
 	private boolean tv;
@@ -39,6 +40,14 @@ public class RoomInfo implements GeneralDomain, Serializable {
 
 	public void setIdRoom(int idRoom) {
 		this.idRoom = idRoom;
+	}
+
+	public int getIdRoomType() {
+		return idRoomType;
+	}
+
+	public void setIdRoomType(int idRoomType) {
+		this.idRoomType = idRoomType;
 	}
 
 	public int getNumOfBads() {
@@ -96,18 +105,19 @@ public class RoomInfo implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnNames() {
-		return " (num_of_bads, kitchen, tv, air_conditioning, wifi, created) VALUES ";
+		return " (id_room_type, num_of_bads, kitchen, tv, air_conditioning, wifi, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?)";
+		return "(?,?,?,?,?,?,?)";
 	}
 
 	@Override
 	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		preparedStatement.setInt(index.next(), idRoomType);
 		preparedStatement.setInt(index.next(), numOfBads);
 		preparedStatement.setBoolean(index.next(), kitchen);
 		preparedStatement.setBoolean(index.next(), tv);
@@ -132,6 +142,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 		RoomInfo room = new RoomInfo();
 		if (resultSet.next()) {
 			room.idRoom = resultSet.getInt("id_room");
+			room.idRoomType = resultSet.getInt("id_room_type");
 			room.numOfBads = resultSet.getInt("num_of_bads");
 			room.kitchen = resultSet.getBoolean("kitchen");
 			room.tv = resultSet.getBoolean("tv");

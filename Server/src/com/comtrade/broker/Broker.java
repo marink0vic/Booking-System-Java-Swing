@@ -156,13 +156,22 @@ public class Broker implements IBroker {
 	}
 
 	private void setRoomAndRoomInfo(PropertyWrapper owner) throws SQLException {
-		String sql = "SELECT * FROM room_type JOIN room_info ON room_type.id_room_info = room_info.id_room"
+		String sql = "SELECT * FROM room_type JOIN room_info ON room_type.id_room_type = room_info.id_room_type"
 					+ " WHERE room_type.id_property = " + owner.getProperty().getIdProperty();
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 		Map<RoomType, RoomInfo> room = new LinkedHashMap<>();
 		while (resultSet.next()) {
+			int idRoomType = resultSet.getInt("id_room_type");
+			int idProperty = owner.getProperty().getIdProperty();
+			String type = resultSet.getString("type");
+			int numOfRooms = resultSet.getInt("num_of_rooms");	
+			double pricePerNight = resultSet.getDouble("price_per_night");
+			RoomType rType = new RoomType(type, numOfRooms, pricePerNight);
+			rType.setIdRoomType(idRoomType);
+			rType.setIdProperty(idProperty);
+			
 			int idRoomInfo = resultSet.getInt("id_room");
 			int numOfBads = resultSet.getInt("num_of_bads");
 			boolean kitchen = resultSet.getBoolean("kitchen");
@@ -171,16 +180,7 @@ public class Broker implements IBroker {
 			boolean wifi = resultSet.getBoolean("wifi");
 			RoomInfo rInfo = new RoomInfo(numOfBads, kitchen, tv, airConditioning, wifi);
 			rInfo.setIdRoom(idRoomInfo);
-			
-			int idRoomType = resultSet.getInt("id_room_type");
-			int idProperty = owner.getProperty().getIdProperty();
-			String type = resultSet.getString("type");
-			int numOfRooms = resultSet.getInt("num_of_rooms");	
-			double pricePerNight = resultSet.getDouble("price_per_night");
-			RoomType rType = new RoomType(type, numOfRooms, pricePerNight);
-			rType.setIdRoomInfo(idRoomInfo);
-			rType.setIdRoomType(idRoomType);
-			rType.setIdProperty(idProperty);
+			rInfo.setIdRoomType(idRoomType);
 			
 			room.put(rType, rInfo);
 		}
