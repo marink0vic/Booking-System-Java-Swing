@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +44,6 @@ public class RoomPanel extends JPanel {
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, RoomInfo> room;
-	private JLabel lblRoomsInfo;
 	private JLabel lblPropertyImages;
 	private ImagesPanel imagesPanel;
 	
@@ -53,11 +51,10 @@ public class RoomPanel extends JPanel {
 	 * Create the panel.
 	 */
 	
-	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, RoomInfo> room, JLabel lblRoomsInfo, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
+	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, RoomInfo> room, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
 		this.room = room;
-		this.lblRoomsInfo = lblRoomsInfo;
 		this.lblPropertyImages = lblPropertyImages;
 		this.imagesPanel = imagesPanel;
 		initializeComponents();
@@ -158,7 +155,7 @@ public class RoomPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Niste uneli podatke za sve sobe");
 				} else {
 					switchPanel(imagesPanel);
-					updateUI(lblRoomsInfo, lblPropertyImages);	
+					updateUI(lblPropertyImages);	
 				}
 			}
 		});
@@ -209,8 +206,7 @@ public class RoomPanel extends JPanel {
 		layeredPane.revalidate();
 	}
 
-	private void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
+	private void updateUI(JLabel label) {
+		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 }

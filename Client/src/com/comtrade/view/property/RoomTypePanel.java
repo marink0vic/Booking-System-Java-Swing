@@ -49,17 +49,15 @@ public class RoomTypePanel extends JPanel {
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
 	private RoomPanel roomPanel;
-	private JLabel lblRoomtype;
 	private JLabel lblRoomsInfo;
 
 	/**
 	 * Create the panel.
 	 */
-	public RoomTypePanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, RoomPanel roomPanel, JLabel lblRoomtype, JLabel lblRoomsInfo) {
+	public RoomTypePanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, RoomPanel roomPanel, JLabel lblRoomsInfo) {
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
 		this.roomPanel = roomPanel;
-		this.lblRoomtype = lblRoomtype;
 		this.lblRoomsInfo = lblRoomsInfo;
 		initializeComponents();
 	}
@@ -203,7 +201,7 @@ public class RoomTypePanel extends JPanel {
 		btnContinueNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switchPanel(roomPanel);
-				updateUI(lblRoomtype,lblRoomsInfo);
+				updateUI(lblRoomsInfo);
 				setHeaderValue();
 			}
 		});
@@ -275,9 +273,8 @@ public class RoomTypePanel extends JPanel {
 		layeredPane.revalidate();
 	}
 
-	private void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
+	private void updateUI(JLabel label) {
+		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 
 }

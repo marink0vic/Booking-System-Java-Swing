@@ -95,11 +95,11 @@ public class PropertyForm extends JFrame {
 		
 		//--- panels
 		paymentPanel = new PaymentPanel(user, address, property, room, propertyImageFiles);
-		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, paymentPanel, lblPropertyImages, lblPayment);
-		roomPanel = new RoomPanel(layeredPane, listOfTypes, room, lblRoomsInfo, lblPropertyImages, imagesPanel);
-		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomtype, lblRoomsInfo);
-		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblPropertyInfo, lblRoomtype);
-		addressPanel = new AddressPanel(layeredPane, basicInfoPanel,lblAddress,lblPropertyInfo, address, countries);
+		imagesPanel = new ImagesPanel(layeredPane, propertyImageFiles, paymentPanel, lblPayment);
+		roomPanel = new RoomPanel(layeredPane, listOfTypes, room, lblPropertyImages, imagesPanel);
+		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomsInfo);
+		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblRoomtype);
+		addressPanel = new AddressPanel(layeredPane, basicInfoPanel, lblPropertyInfo, address, countries);
 		
 		basicInfoPanel.setUser(user);
 		basicInfoPanel.setProperty(property);
@@ -127,7 +127,7 @@ public class PropertyForm extends JFrame {
 		lblAddress.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAddress.setForeground(new Color(255, 255, 255));
 		lblAddress.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblAddress.setBounds(57, 36, 158, 59);
+		lblAddress.setBounds(57, 36, 178, 59);
 		navigationPanel.add(lblAddress);
 		
 		lblPropertyInfo = new JLabel("Property info");
@@ -135,7 +135,7 @@ public class PropertyForm extends JFrame {
 		lblPropertyInfo.setForeground(Color.WHITE);
 		lblPropertyInfo.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblPropertyInfo.setBorder(null);
-		lblPropertyInfo.setBounds(241, 35, 172, 60);
+		lblPropertyInfo.setBounds(232, 35, 203, 60);
 		navigationPanel.add(lblPropertyInfo);
 		
 		lblRoomtype = new JLabel("RoomType");
@@ -143,7 +143,7 @@ public class PropertyForm extends JFrame {
 		lblRoomtype.setForeground(Color.WHITE);
 		lblRoomtype.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblRoomtype.setBorder(null);
-		lblRoomtype.setBounds(447, 35, 166, 60);
+		lblRoomtype.setBounds(434, 35, 197, 60);
 		navigationPanel.add(lblRoomtype);
 		
 		lblRoomsInfo = new JLabel("Rooms info");
@@ -151,7 +151,7 @@ public class PropertyForm extends JFrame {
 		lblRoomsInfo.setForeground(Color.WHITE);
 		lblRoomsInfo.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblRoomsInfo.setBorder(null);
-		lblRoomsInfo.setBounds(643, 35, 158, 60);
+		lblRoomsInfo.setBounds(629, 35, 203, 60);
 		navigationPanel.add(lblRoomsInfo);
 		
 		lblPropertyImages = new JLabel("Property images");
@@ -159,7 +159,7 @@ public class PropertyForm extends JFrame {
 		lblPropertyImages.setForeground(Color.WHITE);
 		lblPropertyImages.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblPropertyImages.setBorder(null);
-		lblPropertyImages.setBounds(837, 35, 203, 60);
+		lblPropertyImages.setBounds(830, 35, 221, 60);
 		navigationPanel.add(lblPropertyImages);
 		
 		lblPayment = new JLabel("Payment");
@@ -167,7 +167,7 @@ public class PropertyForm extends JFrame {
 		lblPayment.setForeground(Color.WHITE);
 		lblPayment.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblPayment.setBorder(null);
-		lblPayment.setBounds(1070, 36, 144, 59);
+		lblPayment.setBounds(1045, 36, 169, 59);
 		navigationPanel.add(lblPayment);
 	}
 	

@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -22,10 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
-import com.comtrade.transfer.TransferClass;
 
 public class AddressPanel extends JPanel {
 
@@ -42,16 +39,14 @@ public class AddressPanel extends JPanel {
 	private List<Country> countries;
 	private JLayeredPane layeredPane;
 	private BasicInfoPanel basicInfoPanel;
-	private JLabel lblAddress;
 	private JLabel lblPropertyInfo;
 	private Address address;
 	
 	
 	
-	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblAddress, JLabel lblPropertyInfo, Address address, List<Country> countries) {
+	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblPropertyInfo, Address address, List<Country> countries) {
 		this.layeredPane = layeredPane;
 		this.basicInfoPanel = basicInfoPanel;
-		this.lblAddress = lblAddress;
 		this.lblPropertyInfo = lblPropertyInfo;
 		this.address = address;
 		this.countries = countries;
@@ -144,7 +139,7 @@ public class AddressPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createAddress();
-				updateUI(lblAddress, lblPropertyInfo);
+				updateUI(lblPropertyInfo);
 				switchPanel(basicInfoPanel);
 			}
 		});
@@ -190,9 +185,8 @@ public class AddressPanel extends JPanel {
 		layeredPane.revalidate();
 	}
 
-	private void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));// TODO Auto-generated method stub
+	private void updateUI(JLabel label) {
+		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 	
 	private void fillComboCountires() {

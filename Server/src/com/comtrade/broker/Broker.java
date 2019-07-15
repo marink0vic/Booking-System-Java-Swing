@@ -1,6 +1,5 @@
 package com.comtrade.broker;
 
-import java.nio.channels.ByteChannel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

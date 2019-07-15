@@ -47,15 +47,13 @@ public class ImagesPanel extends JPanel {
 	private JLayeredPane layeredPane;
 	private List<PropertyImage> propertyImageFiles;
 	private PaymentPanel paymentPanel;
-	private JLabel lblPropertyImages;
 	private JLabel lblPayment;
 	
 
-	public ImagesPanel(JLayeredPane layeredPane, List<PropertyImage> propertyImageFiles, PaymentPanel paymentPanel, JLabel lblPropertyImages, JLabel lblPayment) {
+	public ImagesPanel(JLayeredPane layeredPane, List<PropertyImage> propertyImageFiles, PaymentPanel paymentPanel, JLabel lblPayment) {
 		this.layeredPane = layeredPane;
 		this.propertyImageFiles = propertyImageFiles;
 		this.paymentPanel = paymentPanel;
-		this.lblPropertyImages = lblPropertyImages;
 		this.lblPayment = lblPayment;
 		initializeComponents();
 	}
@@ -131,7 +129,7 @@ public class ImagesPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switchPanel(paymentPanel);
-				updateUI(lblPropertyImages,lblPayment);
+				updateUI(lblPayment);
 			}
 		});
 		btnContinue.addMouseListener(new MouseAdapter() {
@@ -177,9 +175,8 @@ public class ImagesPanel extends JPanel {
 		layeredPane.revalidate();
 	}
 
-	private void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
+	private void updateUI(JLabel label) {
+		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 	
 	class LabelRenderer implements TableCellRenderer {

@@ -38,7 +38,6 @@ public class BasicInfoPanel extends JPanel {
 	//-----
 	private JLayeredPane layeredPane;
 	private RoomTypePanel roomTypePanel;
-	private JLabel lblPropertyInfo;
 	private JLabel lblRoomtype;
 	private JSpinner ratingSpinner;
 	private JTextArea textArea;
@@ -47,10 +46,9 @@ public class BasicInfoPanel extends JPanel {
 	private Property property;
 	
 	
-	public BasicInfoPanel(JLayeredPane layeredPane, RoomTypePanel roomTypePanel, JLabel lblPropertyInfo, JLabel lblRoomtype) {
+	public BasicInfoPanel(JLayeredPane layeredPane, RoomTypePanel roomTypePanel, JLabel lblRoomtype) {
 		this.layeredPane = layeredPane;
 		this.roomTypePanel = roomTypePanel;
-		this.lblPropertyInfo = lblPropertyInfo;
 		this.lblRoomtype = lblRoomtype;
 		initializeComponents();
 	}
@@ -147,7 +145,7 @@ public class BasicInfoPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				createProperty();
-				updateUI(lblPropertyInfo, lblRoomtype);
+				updateUI(lblRoomtype);
 				switchPanel(roomTypePanel);
 			}
 		});
@@ -184,9 +182,8 @@ public class BasicInfoPanel extends JPanel {
 		layeredPane.revalidate();
 	}
 
-	protected void updateUI(JLabel label1, JLabel label2) {
-		label1.setBorder(null);
-		label2.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
+	protected void updateUI(JLabel label) {
+		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
 
 
