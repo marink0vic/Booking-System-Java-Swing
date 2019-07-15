@@ -1,12 +1,13 @@
 package com.comtrade.dto;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.comtrade.domain.Address;
+import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
@@ -25,6 +26,16 @@ public class PropertyWrapper implements Serializable, Generic {
 	private Map<RoomType, RoomInfo> room;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList = new ArrayList<>();
+	private Country country;
+	
+	public PropertyWrapper() {
+		address = new Address();
+		property = new Property();
+		room = new LinkedHashMap<>();
+		images = new ArrayList<>();
+		paymentList = new ArrayList<>();
+		country = new Country();
+	}
 	
 	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
 		this.user = user;
@@ -81,6 +92,14 @@ public class PropertyWrapper implements Serializable, Generic {
 
 	public void setPaymentList(List<PaymentType> paymentList) {
 		this.paymentList = paymentList;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 	
 }

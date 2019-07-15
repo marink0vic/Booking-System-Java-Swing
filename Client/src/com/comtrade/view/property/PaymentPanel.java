@@ -188,7 +188,7 @@ public class PaymentPanel extends JPanel {
 		try {
 			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
 			User returnedUser =  (User) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedUser);
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(user);
 			propertyOwner.setLocationRelativeTo(null);
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();

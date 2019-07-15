@@ -50,12 +50,24 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass returnPropertyForOwner(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(propertyOwner);
+		transferClass.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);
+		return sendAndReturn(transferClass);
+	}
+	
+	public TransferClass returnUser(User user) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(user);
+		transferClass.setOperation(Operations.LOGIN_USER);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
-
-
 
 }

@@ -8,6 +8,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+
+import com.comtrade.domain.User;
+import com.comtrade.view.login.IProxy;
+import com.comtrade.view.login.ProxyLogin;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -94,6 +99,17 @@ public class MainForm extends JFrame {
 		loginPanel.add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String username = tfUsernane.getText();
+				String password = String.copyValueOf(passwordField.getPassword());
+				User user = new User();
+				user.setPassword(password);
+				user.setUsername(username);
+				IProxy proxy = new ProxyLogin(MainForm.this);
+				proxy.login(user);
+			}
+		});
 		btnLogin.setContentAreaFilled(false);
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override

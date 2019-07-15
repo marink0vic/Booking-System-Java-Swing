@@ -4,18 +4,20 @@ import com.comtrade.domain.GeneralDomain;
 
 public class GenericClass<T extends GeneralDomain> implements Generic {
 
-	private GeneralDomain T;
+	private T domain;
 
-	public GenericClass(GeneralDomain t) {
-		T = t;
+	public GenericClass(T domain) {
+		this.domain = domain;
 	}
 
-	public GeneralDomain getDomain() {
-		return T;
+	public T getDomain() {
+		return domain;
 	}
 
-	public void setDomain(GeneralDomain t) {
-		T = t;
+	public void setDomain(T domain) {
+		this.domain = domain;
 	}
+
+	
 	
 }

@@ -48,6 +48,7 @@ public class RegisterForm extends JFrame {
 	private JComboBox<Integer> comboDay;
 	private JComboBox<String> comboCountries;
 	private List<Country> countries;
+	private Country userCountry;
 	private int idCountry;
 	private int year;
 	private Month month;
@@ -59,6 +60,7 @@ public class RegisterForm extends JFrame {
 	 */
 	public RegisterForm(String STATUS) {
 		this.STATUS = STATUS;
+		userCountry = new Country();
 		initializeComponents();
 	}
 
@@ -212,8 +214,8 @@ public class RegisterForm extends JFrame {
 				try {
 					TransferClass transferClass = ControllerUI.getController().saveUser(user);
 					savedUser = (User) transferClass.getServerResponse();
+					savedUser.setCountry(userCountry);
 				} catch (ClassNotFoundException | IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if (savedUser != null) {
@@ -263,7 +265,7 @@ public class RegisterForm extends JFrame {
 		String username = tfUsername.getText();
 		String password = String.copyValueOf(passwordField.getPassword());
 		LocalDate dateOfBirth = LocalDate.of(year, month, day);
-		return new User(idCountry, firstName, lastName, email, username, password, dateOfBirth, STATUS);
+		return new User(userCountry, firstName, lastName, email, username, password, dateOfBirth, STATUS);
 	}
 
 	private void fillComboYear() {
@@ -305,12 +307,16 @@ public class RegisterForm extends JFrame {
 	}
 	
 	private void setCountryImage(String countryName) {
-		for (Country country : countries) {
-			if (country.getName().equals(countryName)) {
-				idCountry = country.getIdCountry();
-				File file = new File(country.getImage());
+		for (Country c : countries) {
+			if (c.getName().equals(countryName)) {
+				idCountry = c.getIdCountry();
+				File file = new File(c.getImage());
 				ImageIcon im = new ImageIcon(file.toString());
 				lblImage.setIcon(im);
+				
+				userCountry.setIdCountry(idCountry);
+				userCountry.setName(countryName);
+				userCountry.setImage(c.getImage());
 				break;
 			}
 		}

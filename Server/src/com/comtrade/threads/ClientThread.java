@@ -66,13 +66,27 @@ public class ClientThread extends Thread {
 		}
 		case SAVE_USER:
 		{
-		
 			GeneralDomain user = (GeneralDomain) transferClass.getClientRequest();
 			try {
 				user = ControllerBL.getController().saveUser(user);
 				transfer.setServerResponse(user);
 			} catch (SQLException e) {
 				transfer.setMessageResponse("Problem occurred while saving user to database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		}
+		case LOGIN_USER:
+		{
+			User user = (User) transferClass.getClientRequest();
+			try {
+				user = ControllerBL.getController().loginUser(user);
+				if (user == null) 
+					transfer.setMessageResponse("Entered information does not exist in the database");
+				transfer.setServerResponse(user);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while login user to database");
 				e.printStackTrace();
 			}
 			sendResponse(transfer);
@@ -86,6 +100,18 @@ public class ClientThread extends Thread {
 				transfer.setServerResponse(user);
 			} catch (SQLException e) {
 				transfer.setMessageResponse("Problem occurred while saving property to database");
+				e.printStackTrace();
+			}
+			sendResponse(transfer);
+			break;
+		} case RETURN_PROPERTY_FOR_OWNER:
+		{
+			PropertyWrapper propertyOwner = (PropertyWrapper) transferClass.getClientRequest();
+			try {
+				PropertyWrapper propertyWrapper = ControllerBL.getController().returnPropertyForOwner(propertyOwner);
+				transfer.setServerResponse(propertyWrapper);
+			} catch (SQLException e) {
+				transfer.setMessageResponse("Problem occurred while retrieving property information");
 				e.printStackTrace();
 			}
 			sendResponse(transfer);
