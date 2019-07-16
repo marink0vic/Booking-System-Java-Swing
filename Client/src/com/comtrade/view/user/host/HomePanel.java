@@ -1,6 +1,7 @@
 package com.comtrade.view.user.host;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
@@ -13,8 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -25,6 +24,9 @@ import com.comtrade.dto.PropertyWrapper;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HomePanel extends JPanel {
 
@@ -37,14 +39,15 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
-	//--galery images
-	private JLabel lblImage1;
-	private JLabel lblImage2;
-	private JLabel lblImage3;
+	private Icon[] icons;
+	private JScrollPane scrollPaneImages;
+	private static final int WIDTH = 300;
+	private static final int HEIGHT = 220;
 	
 	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
 		propertyImages = propertyOwner.getImages();
+		icons = new Icon[propertyImages.size()];
 		initializeComponents();
 	}
 
@@ -73,7 +76,7 @@ public class HomePanel extends JPanel {
 		this.add(lblSmallImage);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(25, 207, 749, 224);
+		scrollPane.setBounds(25, 207, 749, 190);
 		this.add(scrollPane);
 		
 		table = new JTable(dtm);
@@ -88,70 +91,81 @@ public class HomePanel extends JPanel {
 		dtm.addColumn(object[1]);
 		dtm.addColumn(object[2]);
 		
-		lblImage1 = new JLabel("");
-		lblImage1.setBorder(null);
-		lblImage1.setBounds(26, 467, 152, 152);
-		this.add(lblImage1);
-		
-		lblImage2 = new JLabel("");
-		lblImage2.setBorder(null);
-		lblImage2.setBounds(227, 467, 152, 152);
-		this.add(lblImage2);
-		
-		lblImage3 = new JLabel("");
-		lblImage3.setBorder(null);
-		lblImage3.setBounds(430, 467, 152, 152);
-		this.add(lblImage3);
-		
-		JButton btnImages = new JButton("Add Images");
+		JButton btnImages = new JButton("Manage photos");
+		btnImages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		btnImages.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnImages.setBounds(647, 503, 129, 84);
+				btnImages.setBounds(647, 485, 129, 84);
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				btnImages.setBounds(649, 505, 125, 79);
+				btnImages.setBounds(649, 487, 125, 79);
 			}
 		});
-		btnImages.setBounds(649, 505, 125, 79);
+		btnImages.setBounds(649, 487, 125, 79);
 		btnImages.setForeground(Color.WHITE);
-		btnImages.setFont(new Font("Dialog", Font.BOLD, 15));
+		btnImages.setFont(new Font("Dialog", Font.BOLD, 13));
 		btnImages.setBorder(null);
 		btnImages.setBackground(new Color(9, 121, 186));
 		add(btnImages);
 		
-		addLabelsValues();
+		// adds icons from PropertyImages list
+		setIcons();
+		addAddressLabelValues();
 		fillRoomTypeTable();
-		fillGallerySlider();
-	}
-	
-	private void fillGallerySlider() {
 		
-		if (propertyImages.get(0) != null) {
-			lblImage1.setIcon(setImageIcon(propertyImages.get(0).getImage()));
+		JPanel gallery = new JPanel();
+		for (int i = 0; i < icons.length; i++) {
+			gallery.add(addGalleryPanels(gallery, icons[i]));
 		}
-		if (propertyImages.get(1) != null) {
-			lblImage2.setIcon(setImageIcon(propertyImages.get(1).getImage()));
-		}
-		if (propertyImages.get(2) != null) {
-			lblImage3.setIcon(setImageIcon(propertyImages.get(2).getImage()));
-		}
-	}
-	
-	private Icon setImageIcon(String image) {
-		File f = new File(image);
-		Icon icon = resizeImage(f, lblImage1.getWidth(), lblImage1.getHeight());
-		return icon;
+		scrollPaneImages = new JScrollPane(gallery);
+		scrollPaneImages.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneImages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPaneImages.setBounds(26, 429, 596, 201);
+		add(scrollPaneImages);
+		
 	}
 
-	private void addLabelsValues() {
+	private JPanel addGalleryPanels(JPanel panel, Icon icon) {
+        JPanel newPanel = new JPanel();
+        JLabel lbl = new JLabel();
+        lbl.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        lbl.setIcon(icon);
+        newPanel.add(lbl);
+        return newPanel;
+	}
+
+	private void setIcons() {
+		for (int i = 0; i < icons.length; i++) {
+			File file = new File(propertyImages.get(i).getImage());
+			Icon icon = resizeImage(file);
+			icons[i] = icon;
+		}
+	}
+	
+	private Icon resizeImage(File selectedFile) {
+		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
+		Image img = myImage.getImage();
+		Image newImg = img.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+		ImageIcon image = new ImageIcon(newImg);
+		return image;
+	}
+
+	private void addAddressLabelValues() {
 		lblPropertyName.setText(propertyOwner.getProperty().getName());
 		Address a = propertyOwner.getAddress();
+		
 		String countryName = propertyOwner.getCountry().getName();
 		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
 		lblPropertyAddress.setText(addressText);
-		String imageUrl = propertyImages.get(0).getImage();
+		
+		String imageUrl = "./resources/images/property-default.png"; 
+		if (propertyImages.size() > 0)
+			imageUrl = propertyImages.get(0).getImage();
 		File f = new File(imageUrl);
 		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
 		lblSmallImage.setIcon(icon);
