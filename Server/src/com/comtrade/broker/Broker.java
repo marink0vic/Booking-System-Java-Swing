@@ -22,16 +22,25 @@ import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
+	
+	private DbLock dbLock = DbLock.getInstance();
 
 	@Override
-	public void save(GeneralDomain domain) throws SQLException {
+	public GeneralDomain save(GeneralDomain domain) throws SQLException {
 		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		Position index = new Position();
 		domain.fillStatementWithValues(preparedStatement, index);
-		preparedStatement.executeUpdate();
+		dbLock.lock();
+		try {
+			preparedStatement.executeUpdate();
+			return returnLastInsertedData(domain);
+		} finally {
+			dbLock.unlock();
+		}
 	}
 	
 	@Override
@@ -61,16 +70,6 @@ public class Broker implements IBroker {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		list = domain.returnList(resultSet);
 		return list;
-	}
-
-
-	@Override
-	public GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {
-		String sql = "SELECT * FROM " + domain.returnTableName() + " ORDER BY " + domain.returnIdColumnName()+" DESC LIMIT 1";
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		GeneralDomain newDomain = domain.returnLastInsertedObject(resultSet);
-		return newDomain;
 	}
 	
 	@Override
@@ -246,5 +245,13 @@ public class Broker implements IBroker {
 			country.setName(name);
 			owner.setCountry(country);
 		}
+	}
+	
+	public GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {
+		String sql = "SELECT * FROM " + domain.returnTableName() + " ORDER BY " + domain.returnIdColumnName()+" DESC LIMIT 1";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		GeneralDomain newDomain = domain.returnLastInsertedObject(resultSet);
+		return newDomain;
 	}
 }

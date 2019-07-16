@@ -15,25 +15,16 @@ import com.comtrade.view.login.IProxy;
 
 import javax.swing.JLabel;
 
-import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.LineBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
-import javax.swing.JTextArea;
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.JComboBox;
 
 public class PropertyOwnerFrame extends JFrame implements IProxy {
 
@@ -52,8 +43,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	//-----right panels
 	private HomePanel homePanelRight;
 	
-	//--
-	private User user;
 	private PropertyWrapper propertyOwner;
 	
 //
@@ -78,7 +67,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	 * Create the frame.
 	 */
 	public PropertyOwnerFrame(User user) {
-		this.user = user;
 		propertyOwner = new PropertyWrapper();
 		propertyOwner.setUser(user);
 		initializeComponents();

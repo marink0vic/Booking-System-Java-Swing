@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,19 +98,16 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	}
 
 	private int saveRoomType(RoomType r) throws SQLException {
-		ib.save(r);
-		RoomType roomType = (RoomType) ib.returnLastInsertedData(r);
+		RoomType roomType = (RoomType) ib.save(r);
 		return roomType.getIdRoomType();
 	}
 
 	private Property saveProperty(Property property) throws SQLException {
-		ib.save(property);
-		return (Property) ib.returnLastInsertedData(property);
+		return (Property) ib.save(property);
 	}
 
 	private Address saveAddress(Address address) throws SQLException {
-		ib.save(address);
-		return (Address) ib.returnLastInsertedData(address);
+		return (Address) ib.save(address);
 	}
 
 }
