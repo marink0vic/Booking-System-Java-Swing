@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLException;
-import java.util.List;
 
-import com.comtrade.constants.Operations;
-import com.comtrade.controller.ControllerBL;
-import com.comtrade.domain.GeneralDomain;
-import com.comtrade.domain.User;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.constants.DomainType;
+import com.comtrade.controller.IControllerBL;
+import com.comtrade.controller.country.ControllerBLCountry;
+import com.comtrade.controller.payment.ControllerBLPaymentType;
+import com.comtrade.controller.property.ControllerBLProperty;
+import com.comtrade.controller.user.ControllerBLUser;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -33,91 +32,39 @@ public class ClientThread extends Thread {
 		}
 	}
 
-	private void processRequest(TransferClass transferClass) {
-		Operations operation = transferClass.getOperation();
-		TransferClass transfer = new TransferClass();
+	private void processRequest(TransferClass sender) {
+		DomainType domainType = sender.getDomainType();
+		TransferClass receiver = new TransferClass();
 		
-		switch (operation) {
-		case RETURN_ALL_COUNTRIES:
+		switch (domainType) {
+		case COUNTRY:
 		{
-			List<GeneralDomain> countries;
-			try {
-				countries = ControllerBL.getController().getAllCountries();
-				transfer.setServerResponse(countries);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while returning data from database");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
+			IControllerBL controller = new ControllerBLCountry();
+			receiver = controller.executeOperation(sender);
+			sendResponse(receiver);
 			break;
 		}
-		case RETURN_ALL_PAYMENT_TYPES:
+		case PAYMENT_TYPE:
 		{
-			List<GeneralDomain> paymentTypes;
-			try {
-				paymentTypes = ControllerBL.getController().getAllPaymentTypes();
-				transfer.setServerResponse(paymentTypes);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while returning data from database");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
+			IControllerBL controller = new ControllerBLPaymentType();
+			receiver = controller.executeOperation(sender);
+			sendResponse(receiver);
 			break;
 		}
-		case SAVE_USER:
+		case USER:
 		{
-			GeneralDomain user = (GeneralDomain) transferClass.getClientRequest();
-			try {
-				user = ControllerBL.getController().saveUser(user);
-				transfer.setServerResponse(user);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while saving user to database");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
+			IControllerBL controller = new ControllerBLUser();
+			receiver = controller.executeOperation(sender);
+			sendResponse(receiver);
 			break;
 		}
-		case LOGIN_USER:
+		case PROPERTY:
 		{
-			User user = (User) transferClass.getClientRequest();
-			try {
-				user = ControllerBL.getController().loginUser(user);
-				if (user == null) 
-					transfer.setMessageResponse("Entered information does not exist in the database");
-				transfer.setServerResponse(user);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while login user to database");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
-			break;
-		}
-		case SAVE_ALL_PROPERTY_INFO:
-		{
-			PropertyWrapper propertyWraper = (PropertyWrapper) transferClass.getClientRequest();
-			try {
-				User user = ControllerBL.getController().saveProperty(propertyWraper);
-				transfer.setServerResponse(user);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while saving property to database");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
+			IControllerBL controller = new ControllerBLProperty();
+			receiver = controller.executeOperation(sender);
+			sendResponse(receiver);
 			break;
 		} 
-		case RETURN_PROPERTY_FOR_OWNER:
-		{
-			PropertyWrapper propertyOwner = (PropertyWrapper) transferClass.getClientRequest();
-			try {
-				PropertyWrapper propertyWrapper = ControllerBL.getController().returnPropertyForOwner(propertyOwner);
-				transfer.setServerResponse(propertyWrapper);
-			} catch (SQLException e) {
-				transfer.setMessageResponse("Problem occurred while retrieving property information");
-				e.printStackTrace();
-			}
-			sendResponse(transfer);
-			break;
-		}
 		default:
 			break;
 		}
