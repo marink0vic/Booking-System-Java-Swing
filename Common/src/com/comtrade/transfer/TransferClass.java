@@ -2,6 +2,7 @@ package com.comtrade.transfer;
 
 import java.io.Serializable;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 
 public class TransferClass implements Serializable {
@@ -11,6 +12,7 @@ public class TransferClass implements Serializable {
 	private Object serverResponse;
 	private String messageResponse;
 	private Operations operation;
+	private DomainType domainType;
 	
 	public Object getClientRequest() {
 		return clientRequest;
@@ -35,6 +37,12 @@ public class TransferClass implements Serializable {
 	}
 	public void setOperation(Operations operation) {
 		this.operation = operation;
+	}
+	public DomainType getDomainType() {
+		return domainType;
+	}
+	public void setDomainType(DomainType domainType) {
+		this.domainType = domainType;
 	}
 
 }

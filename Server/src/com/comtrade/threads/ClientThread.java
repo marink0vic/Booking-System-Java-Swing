@@ -104,7 +104,8 @@ public class ClientThread extends Thread {
 			}
 			sendResponse(transfer);
 			break;
-		} case RETURN_PROPERTY_FOR_OWNER:
+		} 
+		case RETURN_PROPERTY_FOR_OWNER:
 		{
 			PropertyWrapper propertyOwner = (PropertyWrapper) transferClass.getClientRequest();
 			try {
