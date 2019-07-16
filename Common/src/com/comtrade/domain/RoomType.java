@@ -14,7 +14,6 @@ public class RoomType implements GeneralDomain, Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idRoomType;
 	private int idProperty;
-	private int idRoomInfo;
 	private String roomType;
 	private int numberOfRooms;
 	private double pricePerNight;
@@ -45,14 +44,6 @@ public class RoomType implements GeneralDomain, Serializable {
 
 	public void setIdProperty(int idProperty) {
 		this.idProperty = idProperty;
-	}
-
-	public int getIdRoomInfo() {
-		return idRoomInfo;
-	}
-
-	public void setIdRoomInfo(int idRoomInfo) {
-		this.idRoomInfo = idRoomInfo;
 	}
 
 	public String getRoomType() {
@@ -94,12 +85,12 @@ public class RoomType implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnNames() {
-		return " (id_property, id_room_info, type, num_of_rooms, price_per_night, created) VALUES ";
+		return " (id_property, type, num_of_rooms, price_per_night, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?)";
+		return "(?,?,?,?,?)";
 	}
 
 	@Override
@@ -107,7 +98,6 @@ public class RoomType implements GeneralDomain, Serializable {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idProperty);
-		preparedStatement.setInt(index.next(), idRoomInfo);
 		preparedStatement.setString(index.next(), roomType);
 		preparedStatement.setInt(index.next(), numberOfRooms);
 		preparedStatement.setDouble(index.next(), pricePerNight);
@@ -132,45 +122,12 @@ public class RoomType implements GeneralDomain, Serializable {
 		if (resultSet.next()) {
 			roomType.setIdRoomType(resultSet.getInt("id_room_type"));
 			roomType.setIdProperty(resultSet.getInt("id_property"));
-			roomType.setIdProperty(resultSet.getInt("id_room_info"));
 			roomType.setRoomType(resultSet.getString("type"));
 			roomType.setNumberOfRooms(resultSet.getInt("num_of_rooms"));
 			roomType.setPricePerNight(resultSet.getDouble("price_per_night"));
 			return roomType;
 		}
 		return null;
-	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + numberOfRooms;
-		long temp;
-		temp = Double.doubleToLongBits(pricePerNight);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((roomType == null) ? 0 : roomType.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RoomType other = (RoomType) obj;
-		if (numberOfRooms != other.numberOfRooms)
-			return false;
-		if (Double.doubleToLongBits(pricePerNight) != Double.doubleToLongBits(other.pricePerNight))
-			return false;
-		if (roomType == null) {
-			if (other.roomType != null)
-				return false;
-		} else if (!roomType.equals(other.roomType))
-			return false;
-		return true;
 	}
 	
 }

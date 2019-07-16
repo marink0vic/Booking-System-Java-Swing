@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.comtrade.communication.Communication;
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
@@ -26,12 +27,14 @@ private static ControllerUI controller;
 	
 	public TransferClass returnCountriesList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
+		transferClass.setDomainType(DomainType.COUNTRY);
 		transferClass.setOperation(Operations.RETURN_ALL_COUNTRIES);
 		return sendAndReturn(transferClass);
 	}
 
 	public TransferClass saveUser(User user) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
+		transferClass.setDomainType(DomainType.USER);
 		transferClass.setOperation(Operations.SAVE_USER);
 		transferClass.setClientRequest(user);
 		return sendAndReturn(transferClass);
@@ -39,6 +42,7 @@ private static ControllerUI controller;
 	
 	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
+		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
 		transferClass.setOperation(Operations.RETURN_ALL_PAYMENT_TYPES);
 		return sendAndReturn(transferClass);
 	}
@@ -46,6 +50,7 @@ private static ControllerUI controller;
 	public TransferClass saveProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setDomainType(DomainType.PROPERTY);
 		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		return sendAndReturn(transferClass);
 	}
@@ -53,6 +58,7 @@ private static ControllerUI controller;
 	public TransferClass returnPropertyForOwner(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(propertyOwner);
+		transferClass.setDomainType(DomainType.PROPERTY);
 		transferClass.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);
 		return sendAndReturn(transferClass);
 	}
@@ -60,6 +66,7 @@ private static ControllerUI controller;
 	public TransferClass returnUser(User user) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(user);
+		transferClass.setDomainType(DomainType.USER);
 		transferClass.setOperation(Operations.LOGIN_USER);
 		return sendAndReturn(transferClass);
 	}

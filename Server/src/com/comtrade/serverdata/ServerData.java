@@ -2,6 +2,7 @@ package com.comtrade.serverdata;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.comtrade.broker.Broker;
@@ -36,16 +37,12 @@ public class ServerData {
 	}
 	
 	
-	public synchronized List<GeneralDomain> returnListOfCountries() {
-		List<GeneralDomain> copy = new ArrayList<>();
-		copy.addAll(countries);
-		return copy;
+	public List<GeneralDomain> returnListOfCountries() {
+		return Collections.unmodifiableList(countries);
 	}
 	
 	public List<GeneralDomain> returnListOfPaymentTypes() {
-		List<GeneralDomain> copy = new ArrayList<>();
-		copy.addAll(paymentTypes);
-		return copy;
+		return Collections.unmodifiableList(paymentTypes);
 	}
 	
 	private void addFullPath(List<GeneralDomain> domainList) {

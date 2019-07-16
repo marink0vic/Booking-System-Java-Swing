@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,34 +83,31 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 
 	private void saveAllRooms(Map<RoomType, RoomInfo> room, int id_property) throws SQLException {
 		for (Map.Entry<RoomType, RoomInfo> mapRoom : room.entrySet()) {
-			RoomInfo info = mapRoom.getValue();
-			info.setIdRoom(saveRoomInfo(info));
-			
 			RoomType roomType = mapRoom.getKey();
 			roomType.setIdProperty(id_property);
-			roomType.setIdRoomInfo(info.getIdRoom());
-			saveRoomType(roomType);
+			roomType.setIdRoomType(saveRoomType(roomType));
+			
+			RoomInfo info = mapRoom.getValue();
+			info.setIdRoomType(roomType.getIdRoomType());
+			saveRoomInfo(info);
 		}
 	}
 
-	private int saveRoomInfo(RoomInfo info) throws SQLException {
+	private void saveRoomInfo(RoomInfo info) throws SQLException {
 		ib.save(info);
-		RoomInfo temp = (RoomInfo) ib.returnLastInsertedData(info);
-		return temp.getIdRoom();
 	}
 
-	private void saveRoomType(RoomType r) throws SQLException {
-		ib.save(r);
+	private int saveRoomType(RoomType r) throws SQLException {
+		RoomType roomType = (RoomType) ib.save(r);
+		return roomType.getIdRoomType();
 	}
 
 	private Property saveProperty(Property property) throws SQLException {
-		ib.save(property);
-		return (Property) ib.returnLastInsertedData(property);
+		return (Property) ib.save(property);
 	}
 
 	private Address saveAddress(Address address) throws SQLException {
-		ib.save(address);
-		return (Address) ib.returnLastInsertedData(address);
+		return (Address) ib.save(address);
 	}
 
 }

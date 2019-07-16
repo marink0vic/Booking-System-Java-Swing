@@ -2,7 +2,6 @@ package com.comtrade.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +28,6 @@ public class PropertyWrapper implements Serializable, Generic {
 	private Country country;
 	
 	public PropertyWrapper() {
-		address = new Address();
-		property = new Property();
-		room = new LinkedHashMap<>();
-		images = new ArrayList<>();
-		paymentList = new ArrayList<>();
-		country = new Country();
 	}
 	
 	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
