@@ -21,6 +21,8 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.view.user.host.frames.PropertyImagesFrame;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -94,6 +96,9 @@ public class HomePanel extends JPanel {
 		JButton btnImages = new JButton("Manage photos");
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(propertyImages, propertyOwner.getProperty().getIdProperty());
+				imagesFrame.setLocationRelativeTo(null);
+				imagesFrame.setVisible(true);
 			}
 		});
 		btnImages.addMouseListener(new MouseAdapter() {
