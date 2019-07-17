@@ -7,13 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.view.user.host.HomePanel;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -36,6 +41,7 @@ public class PropertyImagesFrame extends JFrame {
 	private List<PropertyImage> imagesToDelete;
 	private int propertyId;
 	private int index;
+	private HomePanel homePanel;
 	
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -53,10 +59,12 @@ public class PropertyImagesFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param homePanel 
 	 * @param i 
 	 * @param propertyImages 
 	 */
-	public PropertyImagesFrame(List<PropertyImage> propertyImages, int propertyId) {
+	public PropertyImagesFrame(HomePanel homePanel, List<PropertyImage> propertyImages, int propertyId) {
+		this.homePanel = homePanel;
 		this.propertyImages = propertyImages;
 		this.propertyId = propertyId;
 		imagesToAdd = new ArrayList<>();
@@ -82,6 +90,32 @@ public class PropertyImagesFrame extends JFrame {
 		contentPane.add(lblImage);
 		
 		JButton btnAddNewImage = new JButton("Add new image");
+		btnAddNewImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser file = new JFileChooser();
+				file.setCurrentDirectory(new File("C:\\Users\\marko\\Desktop\\hotel_images"));
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg","png");
+				file.addChoosableFileFilter(filter);
+				int result = file.showSaveDialog(null);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					
+					File selectedFile = file.getSelectedFile();
+					PropertyImage image = new PropertyImage();
+					String path = selectedFile.getAbsolutePath();
+					homePanel.addIconToPanel(selectedFile);
+					image.setImage(path);
+					
+					propertyImages.add(image);
+					imagesToAdd.add(image);
+					
+					index = propertyImages.size() - 1;
+					setImage(index);
+					
+				} else if (result == JFileChooser.CANCEL_OPTION) {
+					System.out.println("No file select");
+				}
+			}
+		});
 		btnAddNewImage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAddNewImage.addMouseListener(new MouseAdapter() {
 			@Override
@@ -101,6 +135,20 @@ public class PropertyImagesFrame extends JFrame {
 		contentPane.add(btnAddNewImage);
 		
 		JButton btnDeleteThisImage = new JButton("Delete this image");
+		btnDeleteThisImage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (propertyImages.size() == 1) {
+					JOptionPane.showMessageDialog(null, "You cannot delete all images from gallery");
+				} else {
+					imagesToDelete.add(propertyImages.get(index));
+					propertyImages.remove(index);
+					homePanel.removeIconFromPanel(index);
+					if (index == 0) homePanel.addSmallTopIcon();
+					if (index != 0) index--;
+					setImage(index);
+				}
+			}
+		});
 		btnDeleteThisImage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnDeleteThisImage.addMouseListener(new MouseAdapter() {
 			@Override

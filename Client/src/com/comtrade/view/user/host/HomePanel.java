@@ -41,15 +41,13 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
-	private Icon[] icons;
-	private JScrollPane scrollPaneImages;
+	private JPanel gallery = new JPanel();
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 220;
 	
 	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
 		propertyImages = propertyOwner.getImages();
-		icons = new Icon[propertyImages.size()];
 		initializeComponents();
 	}
 
@@ -96,7 +94,8 @@ public class HomePanel extends JPanel {
 		JButton btnImages = new JButton("Manage photos");
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(propertyImages, propertyOwner.getProperty().getIdProperty());
+				int idProperty = propertyOwner.getProperty().getIdProperty();
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyImages, idProperty);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}
@@ -118,21 +117,33 @@ public class HomePanel extends JPanel {
 		btnImages.setBackground(new Color(9, 121, 186));
 		add(btnImages);
 		
-		// adds icons from PropertyImages list
-		setIcons();
+		addSmallTopIcon();
 		addAddressLabelValues();
 		fillRoomTypeTable();
+		addSmallGallery();
 		
-		JPanel gallery = new JPanel();
-		for (int i = 0; i < icons.length; i++) {
-			gallery.add(addGalleryPanels(gallery, icons[i]));
+	}
+	
+	public void removeIconFromPanel(int position) {
+		gallery.remove(position);
+	}
+	
+	public void addIconToPanel(File file) {
+		Icon icon = resizeImage(file, WIDTH, HEIGHT);
+		gallery.add(addGalleryPanels(gallery, icon));
+	}
+
+	private void addSmallGallery() {
+		for (int i = 0; i < propertyImages.size(); i++) {
+			File file = new File(propertyImages.get(i).getImage());
+			Icon icon = resizeImage(file, WIDTH, HEIGHT);
+			gallery.add(addGalleryPanels(gallery, icon));
 		}
-		scrollPaneImages = new JScrollPane(gallery);
+		JScrollPane scrollPaneImages = new JScrollPane(gallery);
 		scrollPaneImages.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPaneImages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPaneImages.setBounds(26, 429, 596, 201);
 		add(scrollPaneImages);
-		
 	}
 
 	private JPanel addGalleryPanels(JPanel panel, Icon icon) {
@@ -143,19 +154,11 @@ public class HomePanel extends JPanel {
         newPanel.add(lbl);
         return newPanel;
 	}
-
-	private void setIcons() {
-		for (int i = 0; i < icons.length; i++) {
-			File file = new File(propertyImages.get(i).getImage());
-			Icon icon = resizeImage(file);
-			icons[i] = icon;
-		}
-	}
 	
-	private Icon resizeImage(File selectedFile) {
+	private Icon resizeImage(File selectedFile, int width, int height) {
 		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
 		Image img = myImage.getImage();
-		Image newImg = img.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+		Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		ImageIcon image = new ImageIcon(newImg);
 		return image;
 	}
@@ -167,21 +170,15 @@ public class HomePanel extends JPanel {
 		String countryName = propertyOwner.getCountry().getName();
 		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
 		lblPropertyAddress.setText(addressText);
-		
+	}
+	
+	public void addSmallTopIcon() {
 		String imageUrl = "./resources/images/property-default.png"; 
 		if (propertyImages.size() > 0)
 			imageUrl = propertyImages.get(0).getImage();
 		File f = new File(imageUrl);
 		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
 		lblSmallImage.setIcon(icon);
-	}
-	
-	private Icon resizeImage(File selectedFile, int width, int height) {
-		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
-		Image img = myImage.getImage();
-		Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
 	}
 
 	private void fillRoomTypeTable() {
