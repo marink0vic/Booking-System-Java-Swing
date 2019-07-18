@@ -6,11 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.comtrade.constants.DomainType;
+import com.comtrade.controller.ControllerBLCountry;
+import com.comtrade.controller.ControllerBLImages;
+import com.comtrade.controller.ControllerBLPaymentType;
+import com.comtrade.controller.ControllerBLProperty;
+import com.comtrade.controller.ControllerBLUser;
 import com.comtrade.controller.IControllerBL;
-import com.comtrade.controller.country.ControllerBLCountry;
-import com.comtrade.controller.payment.ControllerBLPaymentType;
-import com.comtrade.controller.property.ControllerBLProperty;
-import com.comtrade.controller.user.ControllerBLUser;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -25,9 +26,11 @@ public class ClientThread extends Thread {
 				TransferClass transferClass = (TransferClass) inputStream.readObject();
 				processRequest(transferClass);
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				break;
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				break;
 			}
 		}
 	}
@@ -35,40 +38,38 @@ public class ClientThread extends Thread {
 	private void processRequest(TransferClass sender) {
 		DomainType domainType = sender.getDomainType();
 		TransferClass receiver = new TransferClass();
-		
+		IControllerBL controller = null;
 		switch (domainType) {
 		case COUNTRY:
 		{
-			IControllerBL controller = new ControllerBLCountry();
-			receiver = controller.executeOperation(sender);
-			sendResponse(receiver);
+			controller = new ControllerBLCountry();
 			break;
 		}
 		case PAYMENT_TYPE:
 		{
-			IControllerBL controller = new ControllerBLPaymentType();
-			receiver = controller.executeOperation(sender);
-			sendResponse(receiver);
+			controller = new ControllerBLPaymentType();
 			break;
 		}
 		case USER:
 		{
-			IControllerBL controller = new ControllerBLUser();
-			receiver = controller.executeOperation(sender);
-			sendResponse(receiver);
+			controller = new ControllerBLUser();
 			break;
 		}
 		case PROPERTY:
 		{
-			IControllerBL controller = new ControllerBLProperty();
-			receiver = controller.executeOperation(sender);
-			sendResponse(receiver);
+			controller = new ControllerBLProperty();
 			break;
 		} 
+		case IMAGES:
+		{
+			controller = new ControllerBLImages();
+			break;
+		}
 		default:
 			break;
 		}
-		
+		receiver = controller.executeOperation(sender);
+		sendResponse(receiver);
 	}
 	
 	private void sendResponse(TransferClass transfer) {

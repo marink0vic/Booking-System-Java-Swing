@@ -94,8 +94,7 @@ public class HomePanel extends JPanel {
 		JButton btnImages = new JButton("Manage photos");
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int idProperty = propertyOwner.getProperty().getIdProperty();
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyImages, idProperty);
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyOwner);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}

@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
@@ -21,9 +22,15 @@ import java.awt.Color;
 import javax.swing.border.MatteBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 
 public class PropertyOwnerFrame extends JFrame implements IProxy {
@@ -44,36 +51,36 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private HomePanel homePanelRight;
 	
 	private PropertyWrapper propertyOwner;
-	
-//
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					PropertyOwnerFrame frame = new PropertyOwnerFrame(null);
-//					frame.setLocationRelativeTo(null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+
 
 	/**
 	 * Create the frame.
 	 */
 	public PropertyOwnerFrame(User user) {
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		propertyOwner = new PropertyWrapper();
 		propertyOwner.setUser(user);
 		initializeComponents();
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				try {
+					List<PropertyImage> newImagesForDatabase = addNewImages(propertyOwner.getImages()); 
+					if (newImagesForDatabase.size() != 0) {
+						propertyOwner.setImages(newImagesForDatabase);
+						ControllerUI.getController().saveImages(propertyOwner);	
+					}
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.exit(0);
+			}
+		});
 	}
 
 	private void initializeComponents() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 850);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -353,6 +360,15 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 			}
 		}
 		
+	}
+	
+	private List<PropertyImage> addNewImages(List<PropertyImage> images) {
+		List<PropertyImage> newImages = new ArrayList<>();
+		for (int i = images.size() - 1; i >= 0; i--) {
+			if (images.get(i).getIdImage() != 0) break;
+			newImages.add(images.get(i));
+		}
+		return newImages;
 	}
 
 	@Override

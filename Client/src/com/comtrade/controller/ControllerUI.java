@@ -7,6 +7,7 @@ import com.comtrade.communication.Communication;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.PaymentType;
+import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
@@ -35,7 +36,7 @@ private static ControllerUI controller;
 	public TransferClass saveUser(User user) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setDomainType(DomainType.USER);
-		transferClass.setOperation(Operations.SAVE_USER);
+		transferClass.setOperation(Operations.SAVE);
 		transferClass.setClientRequest(user);
 		return sendAndReturn(transferClass);
 	}
@@ -71,10 +72,19 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass saveImages(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(propertyOwner);
+		transferClass.setDomainType(DomainType.IMAGES);
+		transferClass.setOperation(Operations.SAVE);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 }

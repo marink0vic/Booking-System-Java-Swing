@@ -45,23 +45,23 @@ public class Broker implements IBroker {
 	
 	@Override
 	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
-		if (list.size() > 0) {
-			GeneralDomain domain = list.get(0);
-			StringBuilder sb = new StringBuilder();
-			sb.append("INSERT INTO ").append(domain.returnTableName()).append(domain.returnColumnNames());
-			for (int i = 0; i < list.size(); i++) {
-				sb.append(domain.returnStatementPlaceholder()).append(",");
-			}
-			
-			String sql = sb.substring(0, sb.length() - 1);
-			Position index = new Position();
-			PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-			
-			for (int i = 0; i < list.size(); i++) {
-				list.get(i).fillStatementWithValues(preparedStatement, index);
-			}
-			preparedStatement.executeUpdate();
+		if (list.size() == 0) return;
+		
+		GeneralDomain domain = list.get(0);
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO ").append(domain.returnTableName()).append(domain.returnColumnNames());
+		for (int i = 0; i < list.size(); i++) {
+			sb.append(domain.returnStatementPlaceholder()).append(",");
 		}
+		
+		String sql = sb.substring(0, sb.length() - 1);
+		Position index = new Position();
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		
+		for (int i = 0; i < list.size(); i++) {
+			list.get(i).fillStatementWithValues(preparedStatement, index);
+		}
+		preparedStatement.executeUpdate();
 	}
 	
 	@Override
@@ -249,7 +249,7 @@ public class Broker implements IBroker {
 		}
 	}
 	
-	public GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {
+	private GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {
 		String sql = "SELECT * FROM " + domain.returnTableName() + " ORDER BY " + domain.returnIdColumnName()+" DESC LIMIT 1";
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();

@@ -1,6 +1,5 @@
 package com.comtrade.view.user.host.frames;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,10 +7,14 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.HomePanel;
 
 import javax.swing.Icon;
@@ -24,11 +27,13 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 public class PropertyImagesFrame extends JFrame {
 
@@ -37,37 +42,15 @@ public class PropertyImagesFrame extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblImage;
 	private List<PropertyImage> propertyImages;
-	private List<PropertyImage> imagesToAdd;
 	private List<PropertyImage> imagesToDelete;
 	private int propertyId;
 	private int index;
 	private HomePanel homePanel;
 	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					PropertyImagesFrame frame = new PropertyImagesFrame(null, 2);
-//					frame.setLocationRelativeTo(null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	/**
-	 * Create the frame.
-	 * @param homePanel 
-	 * @param i 
-	 * @param propertyImages 
-	 */
-	public PropertyImagesFrame(HomePanel homePanel, List<PropertyImage> propertyImages, int propertyId) {
+	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner) {
 		this.homePanel = homePanel;
-		this.propertyImages = propertyImages;
-		this.propertyId = propertyId;
-		imagesToAdd = new ArrayList<>();
+		this.propertyImages = propertyOwner.getImages();
+		this.propertyId = propertyOwner.getProperty().getIdProperty();
 		imagesToDelete = new ArrayList<>();
 		initializeComponents();
 		
@@ -75,18 +58,18 @@ public class PropertyImagesFrame extends JFrame {
 
 	private void initializeComponents() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 952, 650);
+		setUndecorated(true);
+		setBounds(100, 100, 952, 677);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new LineBorder(new Color(0, 0, 0)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		lblImage = new JLabel("");
-		lblImage.setBorder(null);
+		lblImage.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblImage.setBackground(new Color(255, 255, 255));
-		lblImage.setBounds(120, 66, 699, 383);
+		lblImage.setBounds(120, 93, 699, 383);
 		contentPane.add(lblImage);
 		
 		JButton btnAddNewImage = new JButton("Add new image");
@@ -104,9 +87,9 @@ public class PropertyImagesFrame extends JFrame {
 					String path = selectedFile.getAbsolutePath();
 					homePanel.addIconToPanel(selectedFile);
 					image.setImage(path);
+					image.setIdProperty(propertyId);
 					
 					propertyImages.add(image);
-					imagesToAdd.add(image);
 					
 					index = propertyImages.size() - 1;
 					setImage(index);
@@ -120,18 +103,18 @@ public class PropertyImagesFrame extends JFrame {
 		btnAddNewImage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnAddNewImage.setBounds(118, 490, 327, 60);
+				btnAddNewImage.setBounds(118, 520, 327, 60);
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				btnAddNewImage.setBounds(120, 492, 323, 55);
+				btnAddNewImage.setBounds(120, 522, 323, 55);
 			}
 		});
 		btnAddNewImage.setForeground(Color.WHITE);
 		btnAddNewImage.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnAddNewImage.setBorder(null);
 		btnAddNewImage.setBackground(new Color(9, 121, 186));
-		btnAddNewImage.setBounds(120, 492, 323, 55);
+		btnAddNewImage.setBounds(120, 522, 323, 55);
 		contentPane.add(btnAddNewImage);
 		
 		JButton btnDeleteThisImage = new JButton("Delete this image");
@@ -140,7 +123,10 @@ public class PropertyImagesFrame extends JFrame {
 				if (propertyImages.size() == 1) {
 					JOptionPane.showMessageDialog(null, "You cannot delete all images from gallery");
 				} else {
-					imagesToDelete.add(propertyImages.get(index));
+					PropertyImage propertyImage = propertyImages.get(index);
+					if (propertyImage.getIdImage() != 0) {
+						imagesToDelete.add(propertyImage);
+					}
 					propertyImages.remove(index);
 					homePanel.removeIconFromPanel(index);
 					if (index == 0) homePanel.addSmallTopIcon();
@@ -153,18 +139,18 @@ public class PropertyImagesFrame extends JFrame {
 		btnDeleteThisImage.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnDeleteThisImage.setBounds(490, 490, 327, 60);
+				btnDeleteThisImage.setBounds(490, 520, 327, 60);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnDeleteThisImage.setBounds(492, 492, 323, 55);
+				btnDeleteThisImage.setBounds(492, 522, 323, 55);
 			}
 		});
 		btnDeleteThisImage.setForeground(Color.WHITE);
 		btnDeleteThisImage.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnDeleteThisImage.setBorder(null);
 		btnDeleteThisImage.setBackground(new Color(255, 88, 93));
-		btnDeleteThisImage.setBounds(492, 492, 323, 55);
+		btnDeleteThisImage.setBounds(492, 522, 323, 55);
 		contentPane.add(btnDeleteThisImage);
 		
 		JButton btnLeft = new JButton("");
@@ -175,7 +161,7 @@ public class PropertyImagesFrame extends JFrame {
 		});
 		btnLeft.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLeft.setBackground(new Color(230, 230, 230));
-		btnLeft.setBounds(35, 231, 63, 55);
+		btnLeft.setBounds(35, 258, 63, 55);
 		btnLeft.setBorder(null);
 		btnLeft.setIcon(returnIcon(new File("./resources/icons/arrow-left.png")));
 		contentPane.add(btnLeft);
@@ -188,14 +174,27 @@ public class PropertyImagesFrame extends JFrame {
 		});
 		btnRight.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRight.setBackground(new Color(230, 230, 230));
-		btnRight.setBounds(837, 231, 63, 55);
+		btnRight.setBounds(837, 258, 63, 55);
 		btnRight.setBorder(null);
 		btnRight.setIcon(returnIcon(new File("./resources/icons/arrow-right.png")));
 		contentPane.add(btnRight);
 		
+		JButton btnBack = new JButton("Back to home");
+		btnBack.setForeground(new Color(255, 255, 255));
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		btnBack.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnBack.setBounds(693, 41, 125, 25);
+		btnBack.setBackground(new Color(9, 121, 186));
+		btnBack.setBorder(null);
+		contentPane.add(btnBack);
+		
 		setImage(0);
 	}
-	
+
 	private void setImage(int position) {
 		File file = new File(propertyImages.get(position).getImage());
 		ImageIcon imgIcon = new ImageIcon(file.getPath());

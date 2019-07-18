@@ -4,5 +4,6 @@ public enum DomainType {
 	USER,
 	PROPERTY,
 	COUNTRY,
-	PAYMENT_TYPE
+	PAYMENT_TYPE,
+	IMAGES
 }

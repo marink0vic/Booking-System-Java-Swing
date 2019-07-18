@@ -97,7 +97,6 @@ public class PropertyImage implements GeneralDomain, Serializable {
 
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		
 		return null;
 	}
 

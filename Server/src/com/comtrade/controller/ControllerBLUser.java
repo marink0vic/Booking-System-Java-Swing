@@ -1,9 +1,8 @@
-package com.comtrade.controller.user;
+package com.comtrade.controller;
 
 import java.sql.SQLException;
 
 import com.comtrade.constants.Operations;
-import com.comtrade.controller.IControllerBL;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
 import com.comtrade.generics.GenericClass;
@@ -20,7 +19,7 @@ public class ControllerBLUser implements IControllerBL {
 		TransferClass receiver = new TransferClass();
 		
 		switch (operation) {
-		case SAVE_USER:
+		case SAVE:
 		{
 			GeneralDomain user = (GeneralDomain) sender.getClientRequest();
 			GeneralDomain returnedUser = null;

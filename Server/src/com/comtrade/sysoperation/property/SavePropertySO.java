@@ -74,10 +74,10 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 		}
 		
-		saveImagesToDataBase(propertyImages, id_property);
+		saveImagesToDataBase(propertyImages);
 	}
 
-	private void saveImagesToDataBase(List<PropertyImage> property_images, int id_property) throws SQLException {
+	private void saveImagesToDataBase(List<PropertyImage> property_images) throws SQLException {
 		ib.saveCollectionOfData(property_images);
 	}
 
