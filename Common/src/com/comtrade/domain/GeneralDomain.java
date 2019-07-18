@@ -9,6 +9,7 @@ import com.comtrade.generics.Generic;
 
 public interface GeneralDomain extends Generic {
 	
+	int returnIdNumber();
 	String returnTableName();
 	String returnColumnNames();
 	String returnStatementPlaceholder();

@@ -44,6 +44,14 @@ public class Broker implements IBroker {
 	}
 	
 	@Override
+	public void delete(GeneralDomain domain) throws SQLException {
+		String sql = "DELETE FROM " + domain.returnTableName() + " WHERE " + domain.returnIdColumnName() + " = ?";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		preparedStatement.setInt(1, domain.returnIdNumber());
+		preparedStatement.executeUpdate();
+	}
+	
+	@Override
 	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
 		if (list.size() == 0) return;
 		

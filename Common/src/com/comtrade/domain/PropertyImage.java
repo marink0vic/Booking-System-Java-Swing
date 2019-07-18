@@ -100,4 +100,9 @@ public class PropertyImage implements GeneralDomain, Serializable {
 		return null;
 	}
 
+	@Override
+	public int returnIdNumber() {
+		return IdImage;
+	}
+
 }

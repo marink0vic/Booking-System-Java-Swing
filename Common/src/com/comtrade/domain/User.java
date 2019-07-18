@@ -199,4 +199,10 @@ public class User implements GeneralDomain, Serializable {
 		return BCrypt.checkpw(password, hash_password);
 	}
 
+	@Override
+	public int returnIdNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -86,5 +86,13 @@ private static ControllerUI controller;
 		return transferClass2;
 	}
 
+	public void deleteImages(List<PropertyImage> imagesForDeletion) {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(imagesForDeletion);
+		transferClass.setDomainType(DomainType.IMAGES);
+		transferClass.setOperation(Operations.DELETE);
+		Communication.getCommunication().send(transferClass);
+	}
+
 
 }

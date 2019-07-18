@@ -104,4 +104,10 @@ public class PaymentType implements GeneralDomain, Serializable {
 		return null;
 	}
 
+	@Override
+	public int returnIdNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

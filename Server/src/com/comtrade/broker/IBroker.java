@@ -10,6 +10,7 @@ import com.comtrade.dto.PropertyWrapper;
 public interface IBroker {
 
 	GeneralDomain save(GeneralDomain domain) throws SQLException;
+	void delete(GeneralDomain domain) throws SQLException;
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	List<GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	PropertyWrapper returnPropertyForOwner(PropertyWrapper owner) throws SQLException;

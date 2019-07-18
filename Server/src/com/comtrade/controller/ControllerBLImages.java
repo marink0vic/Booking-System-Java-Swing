@@ -11,6 +11,7 @@ import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.country.ReturnCountriesSO;
+import com.comtrade.sysoperation.images.DeleteImagesSO;
 import com.comtrade.sysoperation.images.SaveImagesSO;
 import com.comtrade.transfer.TransferClass;
 
@@ -34,11 +35,28 @@ public class ControllerBLImages implements IControllerBL {
 			}
 			return receiver;
 		}
+		case DELETE:
+		{
+			@SuppressWarnings("unchecked")
+			List<PropertyImage> imagesForDeletion = (List<PropertyImage>) sender.getClientRequest();
+			try {
+				deleteImages(imagesForDeletion);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		default:
 		{
 			return null;
 		}
 		}
+	}
+
+	private void deleteImages(List<PropertyImage> imagesForDeletion) throws SQLException {
+		GenericList<PropertyImage> genericList = new GenericList<>();
+		genericList.setList(imagesForDeletion);
+		GeneralSystemOperation<GenericList<PropertyImage>> sysOperation = new DeleteImagesSO();
+		sysOperation.executeSystemOperation(genericList);
 	}
 
 	private void saveImages(PropertyWrapper propertyOwner) throws SQLException {

@@ -51,7 +51,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private HomePanel homePanelRight;
 	
 	private PropertyWrapper propertyOwner;
-
+	private List<PropertyImage> imagesForDeletion;
 
 	/**
 	 * Create the frame.
@@ -60,21 +60,26 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		propertyOwner = new PropertyWrapper();
 		propertyOwner.setUser(user);
+		imagesForDeletion = new ArrayList<>();
 		initializeComponents();
 		
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				PropertyWrapper temp = new PropertyWrapper();
 				try {
-					List<PropertyImage> newImagesForDatabase = addNewImages(propertyOwner.getImages()); 
+					List<PropertyImage> newImagesForDatabase = returnNewImages(propertyOwner.getImages()); 
 					if (newImagesForDatabase.size() != 0) {
-						propertyOwner.setImages(newImagesForDatabase);
-						ControllerUI.getController().saveImages(propertyOwner);	
+						temp.setImages(newImagesForDatabase);
+						temp.setUser(propertyOwner.getUser());
+						ControllerUI.getController().saveImages(temp);	
 					}
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				ControllerUI.getController().deleteImages(imagesForDeletion);
+				
 				System.exit(0);
 			}
 		});
@@ -97,7 +102,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		homePanelRight = new HomePanel(propertyOwner);
+		homePanelRight = new HomePanel(propertyOwner, imagesForDeletion);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
 		
@@ -362,7 +367,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 	}
 	
-	private List<PropertyImage> addNewImages(List<PropertyImage> images) {
+	private List<PropertyImage> returnNewImages(List<PropertyImage> images) {
 		List<PropertyImage> newImages = new ArrayList<>();
 		for (int i = images.size() - 1; i >= 0; i--) {
 			if (images.get(i).getIdImage() != 0) break;

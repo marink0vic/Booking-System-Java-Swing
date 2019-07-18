@@ -7,4 +7,5 @@ public enum Operations {
 	SAVE_ALL_PROPERTY_INFO, 
 	RETURN_PROPERTY_FOR_OWNER, 
 	LOGIN_USER, 
+	DELETE
 }

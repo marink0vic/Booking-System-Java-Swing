@@ -153,4 +153,10 @@ public class RoomInfo implements GeneralDomain, Serializable {
 		return null;
 	}
 
+	@Override
+	public int returnIdNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

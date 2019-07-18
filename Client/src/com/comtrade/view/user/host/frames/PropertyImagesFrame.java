@@ -42,16 +42,16 @@ public class PropertyImagesFrame extends JFrame {
 	private JPanel contentPane;
 	private JLabel lblImage;
 	private List<PropertyImage> propertyImages;
-	private List<PropertyImage> imagesToDelete;
+	private List<PropertyImage> imagesForDeletion;
 	private int propertyId;
 	private int index;
 	private HomePanel homePanel;
 	
-	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner) {
+	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner, List<PropertyImage> imagesForDeletion) {
 		this.homePanel = homePanel;
 		this.propertyImages = propertyOwner.getImages();
 		this.propertyId = propertyOwner.getProperty().getIdProperty();
-		imagesToDelete = new ArrayList<>();
+		this.imagesForDeletion = imagesForDeletion;
 		initializeComponents();
 		
 	}
@@ -125,7 +125,7 @@ public class PropertyImagesFrame extends JFrame {
 				} else {
 					PropertyImage propertyImage = propertyImages.get(index);
 					if (propertyImage.getIdImage() != 0) {
-						imagesToDelete.add(propertyImage);
+						imagesForDeletion.add(propertyImage);
 					}
 					propertyImages.remove(index);
 					homePanel.removeIconFromPanel(index);
