@@ -119,10 +119,10 @@ public class Broker implements IBroker {
 	@Override
 	public PropertyWrapper returnPropertyForOwner(PropertyWrapper owner) throws SQLException {
 		setPropertyAddress(owner);
-		setRoomAndRoomInfo(owner);
-		setPropertyImages(owner);
-		setPayments(owner, owner.getProperty().getIdProperty());
-		setCountry(owner, owner.getAddress().getIdCountry());
+		owner.setRoom(returnRoomAndRoomInfo(owner.getProperty().getIdProperty()));
+		owner.setImages(returnPropertyImages(owner.getProperty().getIdProperty()));
+		owner.setPaymentList(returnPayments(owner.getProperty().getIdProperty()));
+		owner.setCountry(returnCountry(owner.getAddress().getIdCountry()));
 		return owner;
 	}	
 
@@ -164,16 +164,16 @@ public class Broker implements IBroker {
 		
 	}
 
-	private void setRoomAndRoomInfo(PropertyWrapper owner) throws SQLException {
+	private Map<RoomType, RoomInfo> returnRoomAndRoomInfo(int id_property) throws SQLException {
 		String sql = "SELECT * FROM room_type JOIN room_info ON room_type.id_room_type = room_info.id_room_type"
-					+ " WHERE room_type.id_property = " + owner.getProperty().getIdProperty();
+					+ " WHERE room_type.id_property = " + id_property;
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 		Map<RoomType, RoomInfo> room = new LinkedHashMap<>();
 		while (resultSet.next()) {
 			int idRoomType = resultSet.getInt("id_room_type");
-			int idProperty = owner.getProperty().getIdProperty();
+			int idProperty = id_property;
 			String type = resultSet.getString("type");
 			int numOfRooms = resultSet.getInt("num_of_rooms");	
 			double pricePerNight = resultSet.getDouble("price_per_night");
@@ -193,12 +193,12 @@ public class Broker implements IBroker {
 			
 			room.put(rType, rInfo);
 		}
-		owner.setRoom(room);
+		return room;
 	}
-	
-	private void setPropertyImages(PropertyWrapper owner) throws SQLException {
+	@Override
+	public List<PropertyImage> returnPropertyImages(int id_property) throws SQLException {
 		
-		String sql = "SELECT * FROM property_images WHERE id_property = " + owner.getProperty().getIdProperty();
+		String sql = "SELECT * FROM property_images WHERE id_property = " + id_property;
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		List<PropertyImage> propertyImages = new ArrayList<>();
@@ -208,19 +208,19 @@ public class Broker implements IBroker {
 			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
 			PropertyImage propertyImage = new PropertyImage();
 			propertyImage.setIdImage(idImage);
-			propertyImage.setIdProperty(owner.getProperty().getIdProperty());
+			propertyImage.setIdProperty(id_property);
 			propertyImage.setImage(fullPath);
 			propertyImages.add(propertyImage);
 		}
 		
-		owner.setImages(propertyImages);
+		return propertyImages;
 	}
 	
-	private void setPayments(PropertyWrapper owner, int idProperty) throws SQLException {
+	private List<PaymentType> returnPayments(int id_property) throws SQLException {
 		String sql = "SELECT * FROM payment_type" + " "
 				+ "JOIN payment_property ON payment_property.id_payment = payment_type.id_card_type" + " "
 				+ "JOIN property ON property.id_property = payment_property.id_property" + " "
-				+ "WHERE property.id_property = " + idProperty; 
+				+ "WHERE property.id_property = " + id_property; 
 		
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -238,10 +238,10 @@ public class Broker implements IBroker {
 			payments.add(paymentType);
 		}
 		
-		owner.setPaymentList(payments);
+		return payments;
 	}
 	
-	private void setCountry(PropertyWrapper owner, int id_country) throws SQLException {
+	private Country returnCountry(int id_country) throws SQLException {
 		String sql = "SELECT * FROM country WHERE id_country = " + id_country;
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -253,8 +253,9 @@ public class Broker implements IBroker {
 			country.setIdCountry(idCountry);
 			country.setImage(fullPath);
 			country.setName(name);
-			owner.setCountry(country);
+			return country;
 		}
+		return null;
 	}
 	
 	private GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {

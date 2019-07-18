@@ -27,7 +27,9 @@ public class ControllerBLImages implements IControllerBL {
 		{
 			PropertyWrapper propertyOwner = (PropertyWrapper) sender.getClientRequest();
 			try {
-				saveImages(propertyOwner);
+				
+				PropertyWrapper wrapper = saveImages(propertyOwner);
+				receiver.setServerResponse(wrapper);
 				receiver.setMessageResponse("The images were successfully saved in the database");
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving images to database");
@@ -41,9 +43,12 @@ public class ControllerBLImages implements IControllerBL {
 			List<PropertyImage> imagesForDeletion = (List<PropertyImage>) sender.getClientRequest();
 			try {
 				deleteImages(imagesForDeletion);
+				receiver.setMessageResponse("The images were successfully deleted from the database");
 			} catch (SQLException e) {
+				receiver.setMessageResponse("Problem occurred while deleting images from the database");
 				e.printStackTrace();
 			}
+			return receiver;
 		}
 		default:
 		{
@@ -59,9 +64,10 @@ public class ControllerBLImages implements IControllerBL {
 		sysOperation.executeSystemOperation(genericList);
 	}
 
-	private void saveImages(PropertyWrapper propertyOwner) throws SQLException {
+	private PropertyWrapper saveImages(PropertyWrapper propertyOwner) throws SQLException {
 		GeneralSystemOperation<PropertyWrapper> sysOperation = new SaveImagesSO();
 		sysOperation.executeSystemOperation(propertyOwner);
+		return propertyOwner;
 	}
 
 }

@@ -42,14 +42,12 @@ public class HomePanel extends JPanel {
 	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
 	private JPanel gallery = new JPanel();
-	private List<PropertyImage> imagesForDeletion;
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 220;
 	
-	public HomePanel(PropertyWrapper propertyOwner, List<PropertyImage> imagesForDeletion) {
+	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
 		propertyImages = propertyOwner.getImages();
-		this.imagesForDeletion = imagesForDeletion;
 		initializeComponents();
 	}
 
@@ -96,7 +94,7 @@ public class HomePanel extends JPanel {
 		JButton btnImages = new JButton("Manage photos");
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyOwner, imagesForDeletion);
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyOwner);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}

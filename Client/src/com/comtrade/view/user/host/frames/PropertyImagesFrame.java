@@ -16,6 +16,7 @@ import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.HomePanel;
+import com.comtrade.view.user.host.PropertyOwnerFrame;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -45,13 +46,15 @@ public class PropertyImagesFrame extends JFrame {
 	private List<PropertyImage> imagesForDeletion;
 	private int propertyId;
 	private int index;
+	private User user;
 	private HomePanel homePanel;
 	
-	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner, List<PropertyImage> imagesForDeletion) {
+	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner) {
 		this.homePanel = homePanel;
 		this.propertyImages = propertyOwner.getImages();
 		this.propertyId = propertyOwner.getProperty().getIdProperty();
-		this.imagesForDeletion = imagesForDeletion;
+		user = propertyOwner.getUser();
+		imagesForDeletion = new ArrayList<>();
 		initializeComponents();
 		
 	}
@@ -183,6 +186,30 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.setForeground(new Color(255, 255, 255));
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (imagesForDeletion.size() > 0)
+					ControllerUI.getController().deleteImages(imagesForDeletion);
+				
+				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
+				if (newImagesForDatabase.size() > 0) {
+					PropertyWrapper owner = new PropertyWrapper();
+					owner.setUser(user);
+					owner.setImages(newImagesForDatabase);
+					try {
+						TransferClass transfer = ControllerUI.getController().saveImages(owner);
+						owner = (PropertyWrapper) transfer.getServerResponse();
+						
+						propertyImages.removeAll(newImagesForDatabase);
+						propertyImages.addAll(owner.getImages());
+						System.out.println(transfer.getMessageResponse());
+						
+						for (PropertyImage imag : propertyImages) {
+							System.out.println(imag.getIdImage() + " - " + imag.getImage());
+						}
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
 				dispose();
 			}
 		});
@@ -193,6 +220,15 @@ public class PropertyImagesFrame extends JFrame {
 		contentPane.add(btnBack);
 		
 		setImage(0);
+	}
+
+	protected List<PropertyImage> newImagesForDatabase() {
+		List<PropertyImage> images = new ArrayList<>();
+		for (int i = propertyImages.size() - 1; i >= 0; i--) {
+			if (propertyImages.get(i).getIdImage() != 0) break;
+			images.add(propertyImages.get(i));
+		}
+		return images;
 	}
 
 	private void setImage(int position) {
