@@ -77,14 +77,14 @@ public class Country implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		List<GeneralDomain> list = new ArrayList<>();
+	public List<Country> returnList(ResultSet resultSet) throws SQLException {
+		List<Country> list = new ArrayList<>();
 		while (resultSet.next()) {
 			int id = resultSet.getInt("id_country");
 			String name = resultSet.getString("name");
@@ -113,6 +113,24 @@ public class Country implements GeneralDomain, Serializable {
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int returnIdNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String returnColumnsForUpdate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

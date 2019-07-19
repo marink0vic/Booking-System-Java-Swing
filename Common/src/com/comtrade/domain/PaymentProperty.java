@@ -64,7 +64,7 @@ public class PaymentProperty implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idPayment);
@@ -88,6 +88,24 @@ public class PaymentProperty implements GeneralDomain, Serializable {
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int returnIdNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String returnColumnsForUpdate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,10 +1,10 @@
-package com.comtrade.controller.country;
+package com.comtrade.controller;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import com.comtrade.constants.Operations;
-import com.comtrade.controller.IControllerBL;
+import com.comtrade.domain.Country;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -21,7 +21,7 @@ public class ControllerBLCountry implements IControllerBL {
 		switch (operation) {
 		case RETURN_ALL_COUNTRIES:
 		{
-			List<GeneralDomain> countries;
+			List<Country> countries;
 			try {
 				countries = getAllCountries();
 				receiver.setServerResponse(countries);
@@ -37,9 +37,9 @@ public class ControllerBLCountry implements IControllerBL {
 		}
 	}
 
-	private List<GeneralDomain> getAllCountries() throws SQLException {
-		GenericList<GeneralDomain> genericList = new GenericList<>();
-		GeneralSystemOperation<GenericList<GeneralDomain>> sysOperation = new ReturnCountriesSO();
+	private List<Country> getAllCountries() throws SQLException {
+		GenericList<Country> genericList = new GenericList<>();
+		GeneralSystemOperation<GenericList<Country>> sysOperation = new ReturnCountriesSO();
 		sysOperation.executeSystemOperation(genericList);
 		return genericList.getList();
 	}

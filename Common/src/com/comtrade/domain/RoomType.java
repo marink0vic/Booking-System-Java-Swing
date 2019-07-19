@@ -94,7 +94,7 @@ public class RoomType implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idProperty);
@@ -106,7 +106,7 @@ public class RoomType implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
+	public List<RoomType> returnList(ResultSet resultSet) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -128,6 +128,24 @@ public class RoomType implements GeneralDomain, Serializable {
 			return roomType;
 		}
 		return null;
+	}
+
+	@Override
+	public int returnIdNumber() {
+		return idRoomType;
+	}
+
+	@Override
+	public String returnColumnsForUpdate() {
+		return "type = ?, num_of_rooms = ?, price_per_night = ?";
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setString(index.next(), roomType);
+		preparedStatement.setInt(index.next(), numberOfRooms);
+		preparedStatement.setDouble(index.next(), pricePerNight);
+		preparedStatement.setInt(index.next(), idRoomType);
 	}
 	
 }

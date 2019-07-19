@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -128,8 +129,12 @@ public class ImagesPanel extends JPanel {
 		btnContinue = new JButton("Continue");
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switchPanel(paymentPanel);
-				updateUI(lblPayment);
+				if (propertyImageFiles.size() == 0) {
+					JOptionPane.showMessageDialog(null, "You have to select at least one image");
+				} else {
+					switchPanel(paymentPanel);
+					updateUI(lblPayment);
+				}
 			}
 		});
 		btnContinue.addMouseListener(new MouseAdapter() {

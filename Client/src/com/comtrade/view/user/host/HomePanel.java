@@ -1,30 +1,38 @@
 package com.comtrade.view.user.host;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.util.List;
-import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.view.user.host.frames.PropertyImagesFrame;
+import com.comtrade.view.user.host.frames.RoomFrame;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Cursor;
 
 public class HomePanel extends JPanel {
 
@@ -35,12 +43,16 @@ public class HomePanel extends JPanel {
 	private JLabel lblPropertyAddress;
 	private JLabel lblSmallImage;
 	private DefaultTableModel dtm = new DefaultTableModel();
+	private DefaultTableModel dtmInfo = new DefaultTableModel();
 	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
-	//--galery images
-	private JLabel lblImage1;
-	private JLabel lblImage2;
-	private JLabel lblImage3;
+	private RoomType roomType;
+	private RoomInfo roomInfo;
+	private JPanel gallery = new JPanel();
+	private static final int WIDTH = 300;
+	private static final int HEIGHT = 220;
+	private JTable tableInfo;
+	private String roomTypeName = "";
 	
 	public HomePanel(PropertyWrapper propertyOwner) {
 		this.propertyOwner = propertyOwner;
@@ -73,88 +85,141 @@ public class HomePanel extends JPanel {
 		this.add(lblSmallImage);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(25, 207, 749, 224);
+		scrollPane.setBounds(25, 207, 713, 190);
 		this.add(scrollPane);
 		
 		table = new JTable(dtm);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int row = table.getSelectedRow();
+				roomTypeName = (String) dtm.getValueAt(row, 0);
+				fillRoomInfoTable();
+				table.setSelectionBackground(new Color(255, 88, 93));
+			}
+		});
 		table.setForeground(new Color(71, 71, 71));
 		table.setFont(new Font("Dialog", Font.BOLD, 17));
 		table.setRowHeight(30);
 		JTableHeader header = table.getTableHeader();
 		header.setFont(new Font("Dialog", Font.BOLD, 20));
 		scrollPane.setViewportView(table);
-		Object[] object = {"Room type", "Number of rooms", "Price per night"};
+		Object[] object = {"Room type", "Number of rooms", "Price per night", "Number of bads"};
 		dtm.addColumn(object[0]);
 		dtm.addColumn(object[1]);
 		dtm.addColumn(object[2]);
+		dtm.addColumn(object[3]);
 		
-		lblImage1 = new JLabel("");
-		lblImage1.setBorder(null);
-		lblImage1.setBounds(26, 467, 152, 152);
-		this.add(lblImage1);
+		JScrollPane scrollPaneInfo = new JScrollPane();
+		scrollPaneInfo.setBounds(760, 207, 196, 190);
+		this.add(scrollPaneInfo);
 		
-		lblImage2 = new JLabel("");
-		lblImage2.setBorder(null);
-		lblImage2.setBounds(227, 467, 152, 152);
-		this.add(lblImage2);
+		tableInfo = new JTable(dtmInfo);
+		tableInfo.setForeground(new Color(71, 71, 71));
+		tableInfo.setFont(new Font("Dialog", Font.BOLD, 17));
+		tableInfo.setRowHeight(30);
+		JTableHeader header2 = tableInfo.getTableHeader();
+		header2.setFont(new Font("Dialog", Font.BOLD, 20));
+	
+		scrollPaneInfo.setViewportView(tableInfo);
+		dtmInfo.addColumn("Info");
 		
-		lblImage3 = new JLabel("");
-		lblImage3.setBorder(null);
-		lblImage3.setBounds(430, 467, 152, 152);
-		this.add(lblImage3);
-		
-		JButton btnImages = new JButton("Add Images");
+		JButton btnImages = new JButton("Manage photos");
+		btnImages.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnImages.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyOwner);
+				imagesFrame.setLocationRelativeTo(null);
+				imagesFrame.setVisible(true);
+			}
+		});
 		btnImages.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnImages.setBounds(647, 503, 129, 84);
+				btnImages.setBounds(754, 561, 129, 68);
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				btnImages.setBounds(649, 505, 125, 79);
+				btnImages.setBounds(756, 563, 125, 63);
 			}
 		});
-		btnImages.setBounds(649, 505, 125, 79);
+		btnImages.setBounds(756, 563, 125, 63);
 		btnImages.setForeground(Color.WHITE);
-		btnImages.setFont(new Font("Dialog", Font.BOLD, 15));
+		btnImages.setFont(new Font("Dialog", Font.BOLD, 13));
 		btnImages.setBorder(null);
 		btnImages.setBackground(new Color(9, 121, 186));
 		add(btnImages);
 		
-		addLabelsValues();
-		fillRoomTypeTable();
-		fillGallerySlider();
-	}
-	
-	private void fillGallerySlider() {
+		JButton btnAddRoom = new JButton("Add room");
+		btnAddRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAddRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, "ADD");
+				roomFrame.setLocationRelativeTo(null);
+				roomFrame.setVisible(true);
+			}
+		});
+		btnAddRoom.setFont(new Font("Dialog", Font.PLAIN, 15));
+		btnAddRoom.setBackground(new Color(9, 121, 186));
+		btnAddRoom.setBounds(968, 234, 140, 37);
+		btnAddRoom.setForeground(Color.WHITE);
+		add(btnAddRoom);
 		
-		if (propertyImages.get(0) != null) {
-			lblImage1.setIcon(setImageIcon(propertyImages.get(0).getImage()));
-		}
-		if (propertyImages.get(1) != null) {
-			lblImage2.setIcon(setImageIcon(propertyImages.get(1).getImage()));
-		}
-		if (propertyImages.get(2) != null) {
-			lblImage3.setIcon(setImageIcon(propertyImages.get(2).getImage()));
-		}
+		JButton btnUpdateRoom = new JButton("Update room");
+		btnUpdateRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (roomTypeName.length() > 0) {
+					RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, roomType, roomInfo, "UPDATE");
+					roomFrame.setLocationRelativeTo(null);
+					roomFrame.setVisible(true);	
+				} else {
+					JOptionPane.showMessageDialog(null, "You have to select the room for update");
+				}
+			}
+		});
+		btnUpdateRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnUpdateRoom.setFont(new Font("Dialog", Font.PLAIN, 15));
+		btnUpdateRoom.setBackground(new Color(9, 121, 186));
+		btnUpdateRoom.setBounds(968, 305, 140, 37);
+		btnUpdateRoom.setForeground(Color.WHITE);
+		add(btnUpdateRoom);
+		
+		addSmallTopIcon();
+		addAddressLabelValues();
+		fillRoomTypeTable();
+		addSmallGallery();
+		
 	}
 	
-	private Icon setImageIcon(String image) {
-		File f = new File(image);
-		Icon icon = resizeImage(f, lblImage1.getWidth(), lblImage1.getHeight());
-		return icon;
+	public void removeIconFromPanel(int position) {
+		gallery.remove(position);
+	}
+	
+	public void addIconToPanel(File file) {
+		Icon icon = resizeImage(file, WIDTH, HEIGHT);
+		gallery.add(addGalleryPanels(gallery, icon));
 	}
 
-	private void addLabelsValues() {
-		lblPropertyName.setText(propertyOwner.getProperty().getName());
-		Address a = propertyOwner.getAddress();
-		String countryName = propertyOwner.getCountry().getName();
-		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
-		lblPropertyAddress.setText(addressText);
-		String imageUrl = propertyImages.get(0).getImage();
-		File f = new File(imageUrl);
-		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
-		lblSmallImage.setIcon(icon);
+	private void addSmallGallery() {
+		for (int i = 0; i < propertyImages.size(); i++) {
+			File file = new File(propertyImages.get(i).getImage());
+			Icon icon = resizeImage(file, WIDTH, HEIGHT);
+			gallery.add(addGalleryPanels(gallery, icon));
+		}
+		JScrollPane scrollPaneImages = new JScrollPane(gallery);
+		scrollPaneImages.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneImages.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPaneImages.setBounds(26, 429, 690, 201);
+		add(scrollPaneImages);
+	}
+
+	private JPanel addGalleryPanels(JPanel panel, Icon icon) {
+        JPanel newPanel = new JPanel();
+        JLabel lbl = new JLabel();
+        lbl.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        lbl.setIcon(icon);
+        newPanel.add(lbl);
+        return newPanel;
 	}
 	
 	private Icon resizeImage(File selectedFile, int width, int height) {
@@ -165,11 +230,45 @@ public class HomePanel extends JPanel {
 		return image;
 	}
 
-	private void fillRoomTypeTable() {
+	private void addAddressLabelValues() {
+		lblPropertyName.setText(propertyOwner.getProperty().getName());
+		Address a = propertyOwner.getAddress();
+		
+		String countryName = propertyOwner.getCountry().getName();
+		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
+		lblPropertyAddress.setText(addressText);
+	}
+	
+	public void addSmallTopIcon() {
+		String imageUrl = "./resources/images/property-default.png"; 
+		if (propertyImages.size() > 0)
+			imageUrl = propertyImages.get(0).getImage();
+		File f = new File(imageUrl);
+		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
+		lblSmallImage.setIcon(icon);
+	}
+
+	public void fillRoomTypeTable() {
 		dtm.setRowCount(0);
-		Set<RoomType> roomType = propertyOwner.getRoom().keySet();
-		for (RoomType type : roomType) {
-			dtm.addRow(new Object[] {type.getRoomType(), type.getNumberOfRooms(), type.getPricePerNight()});
+		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
+			RoomType rt = map.getKey();
+			RoomInfo ri = map.getValue();
+			dtm.addRow(new Object[] {rt.getRoomType(), rt.getNumberOfRooms(), rt.getPricePerNight(), ri.getNumOfBads()});
+		}
+	}
+	
+	private void fillRoomInfoTable() {
+		dtmInfo.setRowCount(0);
+		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
+			if (map.getKey().getRoomType().equals(roomTypeName)) {
+				roomType = map.getKey();
+				roomInfo = map.getValue();
+				for(Entry<String,Boolean> roomValue : roomInfo.roomInfoData().entrySet()) {
+					if (roomValue.getValue()) {
+						dtmInfo.addRow(new Object[] {roomValue.getKey()});
+					}
+				}
+			}
 		}
 	}
 }

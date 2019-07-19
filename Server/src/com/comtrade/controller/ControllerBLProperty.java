@@ -1,9 +1,8 @@
-package com.comtrade.controller.property;
+package com.comtrade.controller;
 
 import java.sql.SQLException;
 
 import com.comtrade.constants.Operations;
-import com.comtrade.controller.IControllerBL;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.sysoperation.GeneralSystemOperation;

@@ -3,8 +3,10 @@ package com.comtrade.constants;
 public enum Operations {
 	RETURN_ALL_COUNTRIES,
 	RETURN_ALL_PAYMENT_TYPES,
-	SAVE_USER, 
+	SAVE, 
 	SAVE_ALL_PROPERTY_INFO, 
 	RETURN_PROPERTY_FOR_OWNER, 
-	LOGIN_USER
+	LOGIN_USER, 
+	DELETE, 
+	UPDATE
 }

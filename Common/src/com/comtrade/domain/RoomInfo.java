@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoomInfo implements GeneralDomain, Serializable {
 
@@ -97,6 +99,14 @@ public class RoomInfo implements GeneralDomain, Serializable {
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
+	public Map<String, Boolean> roomInfoData() {
+		Map<String, Boolean> map = new HashMap<>();
+		map.put("Kitchen", kitchen);
+		map.put("TV", tv);
+		map.put("Wifi", wifi);
+		map.put("Air conditioning", airConditioning);
+		return map;
+	}
 
 	@Override
 	public String returnTableName() {
@@ -114,7 +124,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void fillStatementWithValues(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idRoomType);
@@ -151,6 +161,26 @@ public class RoomInfo implements GeneralDomain, Serializable {
 			return room;
 		}
 		return null;
+	}
+
+	@Override
+	public int returnIdNumber() {
+		return idRoom;
+	}
+
+	@Override
+	public String returnColumnsForUpdate() {
+		return "num_of_bads = ?, kitchen = ?, tv = ?, air_conditioning = ?, wifi = ?";
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setInt(index.next(), numOfBads);
+		preparedStatement.setBoolean(index.next(), kitchen);
+		preparedStatement.setBoolean(index.next(), tv);
+		preparedStatement.setBoolean(index.next(), airConditioning);
+		preparedStatement.setBoolean(index.next(), wifi);
+		preparedStatement.setInt(index.next(), idRoom);
 	}
 
 }
