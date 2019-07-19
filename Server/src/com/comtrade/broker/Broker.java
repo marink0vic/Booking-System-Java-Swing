@@ -28,6 +28,7 @@ public class Broker implements IBroker {
 	
 	private DbLock dbLock = DbLock.getInstance();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public GeneralDomain save(GeneralDomain domain) throws SQLException {
 		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();

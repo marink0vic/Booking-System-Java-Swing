@@ -80,12 +80,6 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
-		Communication.getCommunication().send(transferClass);
-		TransferClass transferClass2 = Communication.getCommunication().read();
-		return transferClass2;
-	}
-
 	public void deleteImages(List<PropertyImage> imagesForDeletion) {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(imagesForDeletion);
@@ -93,6 +87,21 @@ private static ControllerUI controller;
 		transferClass.setOperation(Operations.DELETE);
 		Communication.getCommunication().send(transferClass);
 	}
+	
+	public TransferClass saveRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(tempOwner);
+		transferClass.setDomainType(DomainType.ROOM);
+		transferClass.setOperation(Operations.SAVE);
+		return sendAndReturn(transferClass);
+	}
+	
+	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
+		Communication.getCommunication().send(transferClass);
+		TransferClass transferClass2 = Communication.getCommunication().read();
+		return transferClass2;
+	}
+
 
 
 }

@@ -109,12 +109,15 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		contentPane.add(headerPanel);
 		headerPanel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Booking.com");
-		lblNewLabel.setBorder(new MatteBorder(0, 0, 4, 0, (Color) new Color(255, 255, 255)));
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEADING);
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setBounds(49, 43, 230, 69);
+		lblNewLabel.setBounds(48, 58, 230, 64);
+		lblNewLabel.setText(propertyOwner.getUser().getFirstName() + " " + propertyOwner.getUser().getLastName());
+		ImageIcon myImage = new ImageIcon(propertyOwner.getUser().getCountry().getImage());
+		lblNewLabel.setIcon(myImage);
 		headerPanel.add(lblNewLabel);
 		
 		homePanelLeft = new JPanel();

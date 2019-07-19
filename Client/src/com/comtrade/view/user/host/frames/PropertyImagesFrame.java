@@ -200,11 +200,6 @@ public class PropertyImagesFrame extends JFrame {
 						
 						propertyImages.removeAll(newImagesForDatabase);
 						propertyImages.addAll(owner.getImages());
-						System.out.println(transfer.getMessageResponse());
-						
-						for (PropertyImage imag : propertyImages) {
-							System.out.println(imag.getIdImage() + " - " + imag.getImage());
-						}
 					} catch (ClassNotFoundException | IOException e) {
 						e.printStackTrace();
 					}

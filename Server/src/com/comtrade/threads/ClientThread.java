@@ -10,6 +10,7 @@ import com.comtrade.controller.ControllerBLCountry;
 import com.comtrade.controller.ControllerBLImages;
 import com.comtrade.controller.ControllerBLPaymentType;
 import com.comtrade.controller.ControllerBLProperty;
+import com.comtrade.controller.ControllerBLRoom;
 import com.comtrade.controller.ControllerBLUser;
 import com.comtrade.controller.IControllerBL;
 import com.comtrade.transfer.TransferClass;
@@ -63,6 +64,11 @@ public class ClientThread extends Thread {
 		case IMAGES:
 		{
 			controller = new ControllerBLImages();
+			break;
+		}
+		case ROOM:
+		{
+			controller = new ControllerBLRoom();
 			break;
 		}
 		default:

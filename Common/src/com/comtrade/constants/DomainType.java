@@ -5,5 +5,6 @@ public enum DomainType {
 	PROPERTY,
 	COUNTRY,
 	PAYMENT_TYPE,
-	IMAGES
+	IMAGES, 
+	ROOM
 }

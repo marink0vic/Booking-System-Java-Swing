@@ -2,9 +2,12 @@ package com.comtrade.broker;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 

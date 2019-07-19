@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoomInfo implements GeneralDomain, Serializable {
 
@@ -96,6 +98,14 @@ public class RoomInfo implements GeneralDomain, Serializable {
 
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
+	}
+	public Map<String, Boolean> roomInfoData() {
+		Map<String, Boolean> map = new HashMap<>();
+		map.put("Kitchen", kitchen);
+		map.put("TV", tv);
+		map.put("Wifi", wifi);
+		map.put("Air conditioning", airConditioning);
+		return map;
 	}
 
 	@Override
