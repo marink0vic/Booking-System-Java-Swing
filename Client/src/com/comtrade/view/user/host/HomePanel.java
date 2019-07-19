@@ -22,6 +22,7 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.host.frames.PropertyImagesFrame;
 import com.comtrade.view.user.host.frames.RoomFrame;
@@ -44,7 +45,8 @@ public class HomePanel extends JPanel {
 	private JLabel lblSmallImage;
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private DefaultTableModel dtmInfo = new DefaultTableModel();
-	private PropertyWrapper propertyOwner;
+	private PropertyWrapper propertyWrapper;
+	private User user;
 	private List<PropertyImage> propertyImages;
 	private RoomType roomType;
 	private RoomInfo roomInfo;
@@ -54,9 +56,10 @@ public class HomePanel extends JPanel {
 	private JTable tableInfo;
 	private String roomTypeName = "";
 	
-	public HomePanel(PropertyWrapper propertyOwner) {
-		this.propertyOwner = propertyOwner;
-		propertyImages = propertyOwner.getImages();
+	public HomePanel(User user, PropertyWrapper propertyWrapper) {
+		this.user = user;
+		this.propertyWrapper = propertyWrapper;
+		propertyImages = propertyWrapper.getImages();
 		initializeComponents();
 	}
 
@@ -128,7 +131,7 @@ public class HomePanel extends JPanel {
 		btnImages.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyOwner);
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, user, propertyWrapper);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}
@@ -154,7 +157,7 @@ public class HomePanel extends JPanel {
 		btnAddRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAddRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, "ADD");
+				RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyWrapper, "ADD");
 				roomFrame.setLocationRelativeTo(null);
 				roomFrame.setVisible(true);
 			}
@@ -169,7 +172,7 @@ public class HomePanel extends JPanel {
 		btnUpdateRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (roomTypeName.length() > 0) {
-					RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, roomType, roomInfo, "UPDATE");
+					RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyWrapper, roomType, roomInfo, "UPDATE");
 					roomFrame.setLocationRelativeTo(null);
 					roomFrame.setVisible(true);	
 				} else {
@@ -231,10 +234,10 @@ public class HomePanel extends JPanel {
 	}
 
 	private void addAddressLabelValues() {
-		lblPropertyName.setText(propertyOwner.getProperty().getName());
-		Address a = propertyOwner.getAddress();
+		lblPropertyName.setText(propertyWrapper.getProperty().getName());
+		Address a = propertyWrapper.getAddress();
 		
-		String countryName = propertyOwner.getCountry().getName();
+		String countryName = propertyWrapper.getCountry().getName();
 		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 
 		lblPropertyAddress.setText(addressText);
 	}
@@ -250,7 +253,7 @@ public class HomePanel extends JPanel {
 
 	public void fillRoomTypeTable() {
 		dtm.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
+		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRoom().entrySet()) {
 			RoomType rt = map.getKey();
 			RoomInfo ri = map.getValue();
 			dtm.addRow(new Object[] {rt.getRoomType(), rt.getNumberOfRooms(), rt.getPricePerNight(), ri.getNumOfBads()});
@@ -259,7 +262,7 @@ public class HomePanel extends JPanel {
 	
 	private void fillRoomInfoTable() {
 		dtmInfo.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
+		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRoom().entrySet()) {
 			if (map.getKey().getRoomType().equals(roomTypeName)) {
 				roomType = map.getKey();
 				roomInfo = map.getValue();

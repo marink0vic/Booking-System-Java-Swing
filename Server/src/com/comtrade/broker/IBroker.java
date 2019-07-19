@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -17,5 +18,6 @@ public interface IBroker {
 	List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	PropertyWrapper returnPropertyForOwner(PropertyWrapper owner) throws SQLException;
 	List<PropertyImage> returnPropertyImages(int id_property) throws SQLException;
+	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
 }

@@ -10,6 +10,7 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {
@@ -48,9 +49,9 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
+	public TransferClass saveProperty(GenericMap<User, PropertyWrapper> propertyData) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setClientRequest(propertyData);
 		transferClass.setDomainType(DomainType.PROPERTY);
 		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		return sendAndReturn(transferClass);
@@ -72,9 +73,9 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveImages(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
+	public TransferClass saveImages(GenericMap<User, PropertyWrapper> mapWrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyOwner);
+		transferClass.setClientRequest(mapWrapper);
 		transferClass.setDomainType(DomainType.IMAGES);
 		transferClass.setOperation(Operations.SAVE);
 		return sendAndReturn(transferClass);

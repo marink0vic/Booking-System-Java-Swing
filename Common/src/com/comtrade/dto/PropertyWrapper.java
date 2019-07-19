@@ -1,7 +1,6 @@
 package com.comtrade.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,19 +18,19 @@ public class PropertyWrapper implements Serializable, Generic {
 
 	
 	private static final long serialVersionUID = 1L;
-	private User user;
+	private int userID;
 	private Address address;
 	private Property property;
 	private Map<RoomType, RoomInfo> room;
 	private List<PropertyImage> images; 
-	private List<PaymentType> paymentList = new ArrayList<>();
+	private List<PaymentType> paymentList;
 	private Country country;
 	
 	public PropertyWrapper() {
 	}
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
-		this.user = user;
+	public PropertyWrapper(int userID, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
+		this.userID = userID;
 		this.address = address;
 		this.property = property;
 		this.room = room;
@@ -39,12 +38,12 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.paymentList = paymentList;
 	}
 
-	public User getUser() {
-		return user;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public Address getAddress() {

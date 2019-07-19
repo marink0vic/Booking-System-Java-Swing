@@ -136,7 +136,7 @@ public class Broker implements IBroker {
 	private void setPropertyAddress(PropertyWrapper owner) throws SQLException {
 		String sql = "SELECT * FROM property JOIN address "
 				+ "ON property.id_address = address.id_address "
-				+ "WHERE property.id_user = " + owner.getUser().getIdUser();
+				+ "WHERE property.id_user = " + owner.getUserID();
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
@@ -152,7 +152,7 @@ public class Broker implements IBroker {
 			double longitude = resultSet.getDouble("longitude");
 			String description = resultSet.getString("description");
 	
-			Property property = new Property(owner.getUser().getIdUser(), idAddress, type, name, phone, rating, description);
+			Property property = new Property(owner.getUserID(), idAddress, type, name, phone, rating, description);
 			property.setIdProperty(idProperty);
 			property.setLatitude(latitude);
 			property.setLongitude(longitude);
@@ -222,8 +222,8 @@ public class Broker implements IBroker {
 		
 		return propertyImages;
 	}
-	
-	private List<PaymentType> returnPayments(int id_property) throws SQLException {
+	@Override
+	public List<PaymentType> returnPayments(int id_property) throws SQLException {
 		String sql = "SELECT * FROM payment_type" + " "
 				+ "JOIN payment_property ON payment_property.id_payment = payment_type.id_card_type" + " "
 				+ "JOIN property ON property.id_property = payment_property.id_property" + " "
