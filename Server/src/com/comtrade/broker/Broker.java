@@ -28,13 +28,12 @@ public class Broker implements IBroker {
 	
 	private DbLock dbLock = DbLock.getInstance();
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public GeneralDomain save(GeneralDomain domain) throws SQLException {
 		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		Position index = new Position();
-		domain.fillStatementWithValues(preparedStatement, index);
+		domain.preparedStatementInsert(preparedStatement, index);
 		dbLock.lock();
 		try {
 			preparedStatement.executeUpdate();
@@ -42,6 +41,15 @@ public class Broker implements IBroker {
 		} finally {
 			dbLock.unlock();
 		}
+	}
+	
+	@Override
+	public void update(GeneralDomain domain) throws SQLException {
+		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
+		Position index = new Position();
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		domain.preparedStatementUpdate(preparedStatement, index);
+		preparedStatement.executeUpdate();
 	}
 	
 	@Override
@@ -68,19 +76,17 @@ public class Broker implements IBroker {
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		
 		for (int i = 0; i < list.size(); i++) {
-			list.get(i).fillStatementWithValues(preparedStatement, index);
+			list.get(i).preparedStatementInsert(preparedStatement, index);
 		}
 		preparedStatement.executeUpdate();
 	}
 	
 	@Override
-	public List<GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException {
+	public List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException {
 		String sql = "SELECT * FROM " + domain.returnTableName();
-		List<GeneralDomain> list = new ArrayList<>();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		list = domain.returnList(resultSet);
-		return list;
+		return domain.returnList(resultSet);
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.PaymentType;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;
@@ -20,7 +21,7 @@ public class ControllerBLPaymentType implements IControllerBL {
 		switch (operation) {
 		case RETURN_ALL_PAYMENT_TYPES:
 		{
-			List<GeneralDomain> paymentTypes;
+			List<PaymentType> paymentTypes;
 			try {
 				paymentTypes = getAllPaymentTypes();
 				receiver.setServerResponse(paymentTypes);
@@ -36,9 +37,9 @@ public class ControllerBLPaymentType implements IControllerBL {
 		}
 	}
 
-	private List<GeneralDomain> getAllPaymentTypes() throws SQLException {
-		GenericList<GeneralDomain> genericList = new GenericList<>();
-		GeneralSystemOperation<GenericList<GeneralDomain>> sysOperation = new ReturnPaymentTypesSO();
+	private List<PaymentType> getAllPaymentTypes() throws SQLException {
+		GenericList<PaymentType> genericList = new GenericList<>();
+		GeneralSystemOperation<GenericList<PaymentType>> sysOperation = new ReturnPaymentTypesSO();
 		sysOperation.executeSystemOperation(genericList);
 		return genericList.getList();
 	}

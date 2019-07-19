@@ -6,13 +6,12 @@ import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -47,6 +46,8 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtmInfo = new DefaultTableModel();
 	private PropertyWrapper propertyOwner;
 	private List<PropertyImage> propertyImages;
+	private RoomType roomType;
+	private RoomInfo roomInfo;
 	private JPanel gallery = new JPanel();
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 220;
@@ -153,7 +154,7 @@ public class HomePanel extends JPanel {
 		btnAddRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAddRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner);
+				RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, "ADD");
 				roomFrame.setLocationRelativeTo(null);
 				roomFrame.setVisible(true);
 			}
@@ -165,6 +166,17 @@ public class HomePanel extends JPanel {
 		add(btnAddRoom);
 		
 		JButton btnUpdateRoom = new JButton("Update room");
+		btnUpdateRoom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (roomTypeName.length() > 0) {
+					RoomFrame roomFrame = new RoomFrame(HomePanel.this, propertyOwner, roomType, roomInfo, "UPDATE");
+					roomFrame.setLocationRelativeTo(null);
+					roomFrame.setVisible(true);	
+				} else {
+					JOptionPane.showMessageDialog(null, "You have to select the room for update");
+				}
+			}
+		});
 		btnUpdateRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnUpdateRoom.setFont(new Font("Dialog", Font.PLAIN, 15));
 		btnUpdateRoom.setBackground(new Color(9, 121, 186));
@@ -249,8 +261,9 @@ public class HomePanel extends JPanel {
 		dtmInfo.setRowCount(0);
 		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
 			if (map.getKey().getRoomType().equals(roomTypeName)) {
-				RoomInfo rInfo = map.getValue();
-				for(Entry<String,Boolean> roomValue : rInfo.roomInfoData().entrySet()) {
+				roomType = map.getKey();
+				roomInfo = map.getValue();
+				for(Entry<String,Boolean> roomValue : roomInfo.roomInfoData().entrySet()) {
 					if (roomValue.getValue()) {
 						dtmInfo.addRow(new Object[] {roomValue.getKey()});
 					}

@@ -46,14 +46,14 @@ public class PropertyImagesFrame extends JFrame {
 	private List<PropertyImage> imagesForDeletion;
 	private int propertyId;
 	private int index;
-	private User user;
 	private HomePanel homePanel;
+	private PropertyWrapper propertyOwner;
 	
 	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner) {
 		this.homePanel = homePanel;
+		this.propertyOwner = propertyOwner;
 		this.propertyImages = propertyOwner.getImages();
 		this.propertyId = propertyOwner.getProperty().getIdProperty();
-		user = propertyOwner.getUser();
 		imagesForDeletion = new ArrayList<>();
 		initializeComponents();
 		
@@ -192,14 +192,13 @@ public class PropertyImagesFrame extends JFrame {
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
 				if (newImagesForDatabase.size() > 0) {
 					PropertyWrapper owner = new PropertyWrapper();
-					owner.setUser(user);
+					owner.setUser(propertyOwner.getUser());
 					owner.setImages(newImagesForDatabase);
 					try {
 						TransferClass transfer = ControllerUI.getController().saveImages(owner);
 						owner = (PropertyWrapper) transfer.getServerResponse();
-						
-						propertyImages.removeAll(newImagesForDatabase);
-						propertyImages.addAll(owner.getImages());
+						propertyOwner.setImages(owner.getImages());
+						propertyImages = propertyOwner.getImages();
 					} catch (ClassNotFoundException | IOException e) {
 						e.printStackTrace();
 					}

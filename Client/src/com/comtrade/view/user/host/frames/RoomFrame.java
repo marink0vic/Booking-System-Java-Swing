@@ -48,23 +48,36 @@ public class RoomFrame extends JFrame {
 	private JCheckBox cbTv;
 	private JCheckBox cbWifi;
 	private JCheckBox cbAir;
+	
 	private PropertyWrapper propertyOwner;
 	private HomePanel panel;
-
+	private String action;
+	private RoomType roomType;
+	private RoomInfo roomInfo;
 
 	/**
 	 * Create the frame.
 	 */
-	public RoomFrame(HomePanel panel, PropertyWrapper propertyOwner) {
+	public RoomFrame(HomePanel panel, PropertyWrapper propertyOwner, String action) {
 		this.panel = panel;
 		this.propertyOwner = propertyOwner;
 		constantsRoomTypes = new ArrayList<>();
+		this.action = action;
 		initializeComponents();
 		
 	}
 
+	public RoomFrame(HomePanel homePanel, PropertyWrapper propertyOwner, RoomType roomType, RoomInfo roomInfo, String action) {
+		this.panel = homePanel;
+		this.propertyOwner = propertyOwner;
+		this.roomType = roomType;
+		this.roomInfo = roomInfo;
+		this.action = action;
+		constantsRoomTypes = new ArrayList<>();
+		initializeComponents();
+	}
+
 	private void initializeComponents() {
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1282, 650);
 		contentPane = new JPanel();
@@ -110,45 +123,50 @@ public class RoomFrame extends JFrame {
 		tfPrice.setBounds(412, 262, 299, 55);
 		contentPane.add(tfPrice);
 		
-		JButton btnAddNewRoom = new JButton("Add new room");
-		btnAddNewRoom.addActionListener(new ActionListener() {
+		JButton btnAction = new JButton("");
+		btnAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				RoomType type = createRoomType();
 				RoomInfo info = createRoomInfo();
 				PropertyWrapper tempOwner = new PropertyWrapper();
 				Map<RoomType, RoomInfo> room = new HashMap<>();
-				room.put(type, info);
-				tempOwner.setRoom(room);
+				TransferClass transferClass = new TransferClass();
 				
-				try {
-					TransferClass transferClass = ControllerUI.getController().saveRoom(tempOwner);
-					tempOwner = (PropertyWrapper) transferClass.getServerResponse();
-					System.out.println(transferClass.getServerResponse());
-				} catch (ClassNotFoundException | IOException e1) {
-					e1.printStackTrace();
+				if (action.equals("ADD")) {
+					room.put(type, info);
+					tempOwner.setRoom(room);
+					addNewRoom(transferClass, tempOwner);
+				} else if (action.equals("UPDATE")) {
+					updateRoomType();
+					updateRoomInfo();
+					room.put(roomType, roomInfo);
+					tempOwner.setRoom(room);
+					updateRoom(transferClass, tempOwner);
 				}
 				
-				propertyOwner.getRoom().putAll(tempOwner.getRoom());
 				panel.fillRoomTypeTable();
 				dispose();
 			}
 		});
-		btnAddNewRoom.addMouseListener(new MouseAdapter() {
+		btnAction.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnAddNewRoom.setBounds(489, 428, 285, 60);
+				btnAction.setBounds(489, 428, 285, 60);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnAddNewRoom.setBounds(491, 430, 281, 55);
+				btnAction.setBounds(491, 430, 281, 55);
 			}
 		});
-		btnAddNewRoom.setForeground(Color.WHITE);
-		btnAddNewRoom.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAddNewRoom.setBorder(null);
-		btnAddNewRoom.setBackground(new Color(255, 88, 93));
-		btnAddNewRoom.setBounds(491, 430, 281, 55);
-		contentPane.add(btnAddNewRoom);
+		btnAction.setForeground(Color.WHITE);
+		btnAction.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnAction.setBorder(null);
+		btnAction.setBackground(new Color(255, 88, 93));
+		btnAction.setBounds(491, 430, 281, 55);
+		if (action.equals("ADD")) btnAction.setText("Add new room");
+		if (action.equals("UPDATE")) btnAction.setText("Update room");
+		contentPane.add(btnAction);
 		
 		JLabel lblNumOfBads = new JLabel("Number of bads");
 		lblNumOfBads.setForeground(new Color(71, 71, 71));
@@ -192,6 +210,38 @@ public class RoomFrame extends JFrame {
 		
 		fillConstantsList();
 		fillCombo();
+		if (action.equals("UPDATE")) fiilInputWithWalues();
+	}
+
+	private void updateRoom(TransferClass transferClass, PropertyWrapper tempOwner) {
+		try {
+			transferClass = ControllerUI.getController().updateRoom(tempOwner);
+			System.out.println(transferClass.getMessageResponse());
+		} catch (ClassNotFoundException | IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void addNewRoom(TransferClass transferClass, PropertyWrapper tempOwner) {
+		try {
+			transferClass = ControllerUI.getController().saveRoom(tempOwner);
+			tempOwner = (PropertyWrapper) transferClass.getServerResponse();
+		} catch (ClassNotFoundException | IOException e1) {
+			e1.printStackTrace();
+		}
+		propertyOwner.getRoom().putAll(tempOwner.getRoom());
+	}
+
+	private void fiilInputWithWalues() {
+		comboRoomType.addItem(RoomTypeConstants.valueOf(roomType.getRoomType()));
+		spinnerRoom.setValue(roomType.getNumberOfRooms());
+		tfPrice.setText(String.valueOf(roomType.getPricePerNight()));
+		
+		spinnerBads.setValue(roomInfo.getNumOfBads());
+		if (roomInfo.isKitchen())  cbKitchen.setSelected(true);
+		if (roomInfo.isTv()) cbTv.setSelected(true);
+		if (roomInfo.isAirConditioning()) cbAir.setSelected(true);
+		if (roomInfo.isWifi()) cbWifi.setSelected(true);
 	}
 
 	private void fillConstantsList() {
@@ -228,6 +278,13 @@ public class RoomFrame extends JFrame {
 		return type;
 	}
 	
+	private void updateRoomType() {
+		RoomType temp = createRoomType();
+		roomType.setRoomType(temp.getRoomType());
+		roomType.setNumberOfRooms(temp.getNumberOfRooms());
+		roomType.setPricePerNight(temp.getPricePerNight());
+	}
+	
 	private RoomInfo createRoomInfo() {
 		int numOfBads = (Integer) spinnerBads.getValue();
 		boolean kitchen = cbKitchen.isSelected();
@@ -236,4 +293,14 @@ public class RoomFrame extends JFrame {
 		boolean wifi = cbWifi.isSelected();
 		return new RoomInfo(numOfBads, kitchen, tv, airConditioning, wifi);
 	}
+	
+	private void updateRoomInfo() {
+		RoomInfo temp = createRoomInfo();
+		roomInfo.setNumOfBads(temp.getNumOfBads());
+		roomInfo.setKitchen(temp.isKitchen());
+		roomInfo.setTv(temp.isTv());
+		roomInfo.setAirConditioning(temp.isAirConditioning());
+		roomInfo.setWifi(temp.isWifi());
+	}
+	
 }

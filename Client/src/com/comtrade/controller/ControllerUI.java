@@ -96,11 +96,20 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass updateRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(tempOwner);
+		transferClass.setDomainType(DomainType.ROOM);
+		transferClass.setOperation(Operations.UPDATE);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 
 
