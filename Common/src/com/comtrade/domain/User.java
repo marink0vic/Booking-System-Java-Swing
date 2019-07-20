@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import crypt.BCrypt;
@@ -164,8 +165,22 @@ public class User implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		return null;
+	public List<User> returnList(ResultSet resultSet) throws SQLException {
+		List<User> users = new ArrayList<>();
+		while (resultSet.next()) {
+			int id = resultSet.getInt("id_user");
+			String firstName = resultSet.getString("first_name");
+			String lastName = resultSet.getString("last_name");
+			String email = resultSet.getString("email");
+			String username = resultSet.getString("username");
+			LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
+			String profilePicture = resultSet.getString("profile_picture");
+			String status = resultSet.getString("status");
+			User user = new User(null, firstName, lastName, email, username, profilePicture, date, status);
+			user.setIdUser(id);
+			users.add(user);
+		}
+		return users;
 	}
 
 	@Override

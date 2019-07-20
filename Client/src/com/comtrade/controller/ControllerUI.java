@@ -30,7 +30,7 @@ private static ControllerUI controller;
 	public TransferClass returnCountriesList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setDomainType(DomainType.COUNTRY);
-		transferClass.setOperation(Operations.RETURN_ALL_COUNTRIES);
+		transferClass.setOperation(Operations.RETURN_ALL);
 		return sendAndReturn(transferClass);
 	}
 
@@ -45,7 +45,7 @@ private static ControllerUI controller;
 	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
-		transferClass.setOperation(Operations.RETURN_ALL_PAYMENT_TYPES);
+		transferClass.setOperation(Operations.RETURN_ALL);
 		return sendAndReturn(transferClass);
 	}
 	
@@ -105,11 +105,20 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass returnAllProperties() throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(transferClass);
+		transferClass.setDomainType(DomainType.PROPERTY);
+		transferClass.setOperation(Operations.RETURN_ALL);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 
 

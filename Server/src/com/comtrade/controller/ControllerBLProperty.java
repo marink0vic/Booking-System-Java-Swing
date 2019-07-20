@@ -1,12 +1,14 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
+import com.comtrade.sysoperation.property.ReturnAllPropertiesSO;
 import com.comtrade.sysoperation.property.ReturnUserPropertySO;
 import com.comtrade.sysoperation.property.SavePropertySO;
 import com.comtrade.transfer.TransferClass;
@@ -44,10 +46,29 @@ public class ControllerBLProperty implements IControllerBL {
 			}
 			return receiver;
 		}
+		case RETURN_ALL:
+		{
+			try {
+				Map<User, PropertyWrapper> property = returnAllProperties();
+				receiver.setMessageResponse("All properties loaded from database");
+				receiver.setServerResponse(property);
+			} catch (SQLException e) {
+				receiver.setMessageResponse("Problem occurred while retrieving property information");
+				e.printStackTrace();
+			}
+			return receiver;
+		}
 
 		default:
 			return null;
 		}
+	}
+
+	private Map<User, PropertyWrapper> returnAllProperties() throws SQLException {
+		GenericMap<User, PropertyWrapper> genericMap = new GenericMap<>();
+		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new ReturnAllPropertiesSO();
+		sysOperation.executeSystemOperation(genericMap);
+		return genericMap.getMap();
 	}
 
 	private PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyWrapper) throws SQLException {

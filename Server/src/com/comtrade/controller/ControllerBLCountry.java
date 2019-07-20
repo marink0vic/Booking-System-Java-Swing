@@ -19,7 +19,7 @@ public class ControllerBLCountry implements IControllerBL {
 		TransferClass receiver = new TransferClass();
 		
 		switch (operation) {
-		case RETURN_ALL_COUNTRIES:
+		case RETURN_ALL:
 		{
 			List<Country> countries;
 			try {
