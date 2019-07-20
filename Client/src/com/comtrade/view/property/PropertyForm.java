@@ -100,10 +100,11 @@ public class PropertyForm extends JFrame {
 		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblRoomtype);
 		addressPanel = new AddressPanel(layeredPane, basicInfoPanel, lblPropertyInfo, address, countries);
-		
+	
 		basicInfoPanel.setUser(user);
 		basicInfoPanel.setProperty(property);
 		paymentPanel.setPropertyForm(this);
+		paymentPanel.setCountry(addressPanel.getCountry());
 		
 		layeredPane.add(addressPanel, "name_96510051729800");
 		layeredPane.add(basicInfoPanel, "name_100717019548000");

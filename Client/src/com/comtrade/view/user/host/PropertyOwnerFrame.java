@@ -80,7 +80,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		createSidePanel();
 		
-		returnPropertyForUser();
+		if (propertyWrapper.getProperty() == null)returnPropertyForUser();
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);

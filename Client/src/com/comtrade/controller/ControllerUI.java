@@ -81,12 +81,12 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public void deleteImages(List<PropertyImage> imagesForDeletion) {
+	public void deleteImages(List<PropertyImage> imagesForDeletion) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(imagesForDeletion);
 		transferClass.setDomainType(DomainType.IMAGES);
 		transferClass.setOperation(Operations.DELETE);
-		Communication.getCommunication().send(transferClass);
+		sendAndReturn(transferClass);
 	}
 	
 	public TransferClass saveRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {

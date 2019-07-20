@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
+import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
@@ -64,6 +65,7 @@ public class PaymentPanel extends JPanel {
 	private Map<RoomType, RoomInfo> room;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
+	private Country country;
 
 	
 	public PaymentPanel(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images) {
@@ -73,6 +75,10 @@ public class PaymentPanel extends JPanel {
 		this.room = room;
 		this.images = images;
 		initializeComponents();
+	}
+	
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public void setPropertyForm(PropertyForm propertyForm) {
@@ -187,6 +193,7 @@ public class PaymentPanel extends JPanel {
 	private void registerProperty() {
 		GenericMap<User, PropertyWrapper> propertyData = new GenericMap<>();
 		PropertyWrapper propertyWrapper = new PropertyWrapper(user.getIdUser(), address, property, room, images, paymentList);
+		propertyWrapper.setCountry(country);
 		propertyData.put(user, propertyWrapper);
 		try {
 			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyData);
@@ -196,7 +203,6 @@ public class PaymentPanel extends JPanel {
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

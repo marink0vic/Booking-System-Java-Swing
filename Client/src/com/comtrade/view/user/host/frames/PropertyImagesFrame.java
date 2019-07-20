@@ -188,8 +188,13 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.setForeground(new Color(255, 255, 255));
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (imagesForDeletion.size() > 0)
-					ControllerUI.getController().deleteImages(imagesForDeletion);
+				if (imagesForDeletion.size() > 0) {
+					try {
+						ControllerUI.getController().deleteImages(imagesForDeletion);
+					} catch (ClassNotFoundException | IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
 				if (newImagesForDatabase.size() > 0) {
