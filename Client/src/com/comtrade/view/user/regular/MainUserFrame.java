@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +21,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
@@ -37,6 +41,12 @@ import javax.swing.JTextField;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainUserFrame extends JFrame {
 
@@ -50,6 +60,14 @@ public class MainUserFrame extends JFrame {
 	private JLabel lblLeft;
 	private JLabel lblMiddle;
 	private JLabel lblRight;
+	private JLabel lblSmallLeft;
+	private JLabel lblSmallMiddle;
+	private JLabel lblSmallRight;
+	private JLabel lblImage;
+	private JLabel lblPropertyName;
+	private JLabel lblStreet;
+	private JButton btnReserve;
+	private JLabel lblRating;
 
 	/**
 	 * Launch the application.
@@ -81,9 +99,12 @@ public class MainUserFrame extends JFrame {
 		setBounds(100, 100, 1500, 979);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new LineBorder(new Color(169, 169, 169)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		loadAllProperties();
+		sortPropertiesBasedOnRating();
 		
 		JPanel header = new JPanel();
 		header.setBounds(0, 0, 1482, 69);
@@ -97,6 +118,13 @@ public class MainUserFrame extends JFrame {
 		lblLogo.setBounds(50, 13, 184, 43);
 		header.add(lblLogo);
 		
+		setSearchPanel();
+		setTopDestinationsLabels();
+		listAllProperties();
+	
+	}
+	
+	private void setSearchPanel() {
 		JPanel searchPanel = new JPanel();
 		searchPanel.setBounds(0, 69, 1482, 135);
 		searchPanel.setBackground(new Color(250, 250, 250));
@@ -153,93 +181,215 @@ public class MainUserFrame extends JFrame {
 		lblCheckout.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblCheckout.setBounds(861, 22, 98, 16);
 		searchPanel.add(lblCheckout);
-		
+	}
+	
+	private void setTopDestinationsLabels() {
 		JLabel lblTopDestinations = new JLabel("Top rated destinations");
 		lblTopDestinations.setForeground(new Color(71, 71, 71));
 		lblTopDestinations.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblTopDestinations.setBounds(262, 236, 430, 43);
 		contentPane.add(lblTopDestinations);
 		
+		lblSmallLeft = new JLabel("");
+		lblSmallLeft.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblSmallLeft.setOpaque(true);
+		lblSmallLeft.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSmallLeft.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblSmallLeft.setBackground(new Color(0, 0, 0, 150));
+		lblSmallLeft.setForeground(new Color(255, 255, 255));
+		lblSmallLeft.setBounds(262, 423, 302, 89);
+		contentPane.add(lblSmallLeft);
+		
+		lblSmallMiddle = new JLabel("");
+		lblSmallMiddle.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblSmallMiddle.setOpaque(true);
+		lblSmallMiddle.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSmallMiddle.setForeground(Color.WHITE);
+		lblSmallMiddle.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblSmallMiddle.setBackground(new Color(0, 0, 0, 150));
+		lblSmallMiddle.setBounds(586, 423, 302, 89);
+		contentPane.add(lblSmallMiddle);
+		
+		lblSmallRight = new JLabel("");
+		lblSmallRight.setHorizontalTextPosition(SwingConstants.LEFT);
+		lblSmallRight.setOpaque(true);
+		lblSmallRight.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSmallRight.setForeground(Color.WHITE);
+		lblSmallRight.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblSmallRight.setBackground(new Color(0, 0, 0, 150));
+		lblSmallRight.setBounds(909, 423, 302, 89);
+		contentPane.add(lblSmallRight);
+		
 		lblLeft = new JLabel("");
-		lblLeft.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblLeft.setOpaque(true);
+		lblLeft.setBorder(null);
 		lblLeft.setBounds(262, 302, 302, 210);
 		contentPane.add(lblLeft);
 		
 		lblMiddle = new JLabel("");
-		lblMiddle.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblMiddle.setOpaque(true);
+		lblMiddle.setBorder(null);
 		lblMiddle.setBounds(586, 302, 302, 210);
 		contentPane.add(lblMiddle);
 		
 		lblRight = new JLabel("");
-		lblRight.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblRight.setOpaque(true);
+		lblRight.setBorder(null);
 		lblRight.setBounds(909, 302, 302, 210);
 		contentPane.add(lblRight);
 		
+		setTopDestinationIcons();
+		setSmallLabelsText();
+	}
+	
+	private void listAllProperties() {
+		JPanel gridPanel = new JPanel();
+		gridPanel.setLayout(new GridLayout(-1, 1));
+		gridPanel.setBackground(new Color(255, 255, 255));
+		gridPanel.setBounds(261, 562, 950, 320);
+	    gridPanel.setAutoscrolls(true);
+	    
+	    
+	    JScrollPane scrollPane = new JScrollPane(gridPanel);
+	    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    scrollPane.setBounds(261, 562, 950, 320);
+	    
+		JPanel container = new JPanel(new BorderLayout());
+		container.setBorder(null);
+		container.setBounds(261, 562, 950, 320);
+		container.add(scrollPane, BorderLayout.CENTER);
+		contentPane.add(container);
+		
+		for (PropertyWrapper property : listOfProperties) {
+            JPanel scrollPanel = setScrollProperty(property);
+            gridPanel.add(scrollPanel);
+        }
+	  
+	}
+
+	private JPanel setScrollProperty(PropertyWrapper property) {
 		JPanel testPanel = new JPanel();
-		testPanel.setBounds(261, 562, 950, 320);
+		testPanel.setBorder(new LineBorder(new Color(112, 128, 144)));
+		testPanel.setOpaque(false);
+		//testPanel.setBounds(261, 562, 950, 320);
+		testPanel.setPreferredSize(new Dimension(950, 320));
 		contentPane.add(testPanel);
 		testPanel.setLayout(null);
 		
+		lblImage = new JLabel("");
+		lblImage.setBackground(new Color(135, 206, 235));
+		lblImage.setOpaque(true);
+		lblImage.setBounds(12, 13, 282, 294);
+		String icon = property.getImages().get(0).getImage();
+		lblImage.setIcon(resizeImage(icon, lblImage.getWidth(), lblImage.getHeight()));
+		testPanel.add(lblImage);
 		
+		lblPropertyName = new JLabel("");
+		lblPropertyName.setBorder(null);
+		lblPropertyName.setForeground(new Color(71, 71, 71));
+		lblPropertyName.setFont(new Font("Dialog", Font.BOLD, 22));
+		lblPropertyName.setBackground(new Color(255, 255, 255));
+		lblPropertyName.setBounds(330, 25, 351, 46);
+		lblPropertyName.setText(property.getProperty().getName());
+		testPanel.add(lblPropertyName);
 		
-//		JPanel p2 = new JPanel();
-//        p2.setLayout(new GridLayout(-1, 1));
-//        p2.setBackground(new Color(255, 255, 255));
-//        p2.setBounds(0, 0, 950, 280);
-//        p2.setAutoscrolls(true);
-//
-//        JScrollPane scrollPane = new JScrollPane(p2);
-//        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        scrollPane.setBounds(0, 0, 955, 320);
-//		
-//		JPanel container = new JPanel(new BorderLayout());
-//		container.setBounds(263, 571, 950, 320);
-//		container.add(scrollPane, BorderLayout.CENTER);
-//		contentPane.add(container);
-//		
-//		for (int i = 0; i < 10; i++) {
-//
-//            JPanel sp1 = new JPanel();
-//            sp1.setLayout(null);
-//            sp1.setBackground(Color.WHITE);
-//            sp1.setPreferredSize(new Dimension(950, 280));
-//            sp1.setBorder(new MatteBorder(2, 0, 2, 0, (Color) new Color(105, 105, 105)));
-//
-//            p2.add(sp1);
-//
-//        }
-//        
+		lblStreet = new JLabel("this is street text");
+		lblStreet.setForeground(new Color(71, 71, 71));
+		lblStreet.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblStreet.setBorder(null);
+		lblStreet.setBackground(Color.WHITE);
+		lblStreet.setBounds(330, 59, 351, 46);
+		lblStreet.setText(property.getAddress().getStreet() + ", " + property.getAddress().getCity());
+		testPanel.add(lblStreet);
 		
-		loadAllProperties();
-		setTopDestinationPanels();
+		JTextArea txtAreaDescription = new JTextArea();
+		txtAreaDescription.setForeground(new Color(71, 71, 71));
+		txtAreaDescription.setFont(new Font("Dialog", Font.PLAIN, 15));
+		txtAreaDescription.setBounds(330, 118, 489, 92);
+		txtAreaDescription.setText(property.getProperty().getDescription());
+		txtAreaDescription.setLineWrap(true);
+		txtAreaDescription.setWrapStyleWord(true);
+		testPanel.add(txtAreaDescription);
+		
+		btnReserve = new JButton("Book");
+		btnReserve.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(property.getProperty().getName());
+			}
+		});
+		btnReserve.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnReserve.setBounds(328, 239, 199, 58);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnReserve.setBounds(330, 241, 195, 53);
+			}
+		});
+		btnReserve.setBorder(null);
+		btnReserve.setForeground(new Color(255, 255, 255));
+		btnReserve.setBackground(new Color(9, 121, 186));
+		btnReserve.setFont(new Font("Dialog", Font.BOLD, 15));
+		btnReserve.setBounds(330, 241, 195, 53);
+		testPanel.add(btnReserve);
+		
+		lblRating = new JLabel("10");
+		lblRating.setOpaque(true);
+		lblRating.setForeground(new Color(255, 255, 255));
+		lblRating.setBackground(new Color(9, 121, 186));
+		lblRating.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRating.setFont(new Font("Dialog", Font.BOLD, 20));
+		lblRating.setBounds(866, 26, 56, 53);
+		testPanel.add(lblRating);
+		
+		return testPanel;
 	}
-	
-//	private void addPropertiesToPanel() {
-//		for (Map.Entry<User, PropertyWrapper> entry : propertyMap.entrySet()) {
-//			PropertyWrapper tempWrapper = entry.getValue();
-//			container.add(createPropertyPanel(tempWrapper));
-//		}
-//	}
 
-	private JPanel createPropertyPanel(PropertyWrapper tempWrapper) {
-		return null;
-	}
-
-	private void setTopDestinationPanels() {
-		sortPropertiesBasedOnRating();
+	private void setTopDestinationIcons() {
 		JLabel[] labels = {lblLeft, lblMiddle, lblRight};
 		String imgPath;
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < labels.length; i++) {
 			imgPath = listOfProperties.get(i).getImages().get(0).getImage();
-			labels[i].setIcon(resizeImage(imgPath));
+			labels[i].setIcon(resizeImage(imgPath, lblLeft.getWidth(), lblLeft.getHeight()));
+		}
+	}
+	private void setSmallLabelsText() {
+		JLabel[] labels = {lblSmallLeft, lblSmallMiddle, lblSmallRight};
+		for (int i = 0; i < labels.length; i++) {
+			PropertyWrapper pw = listOfProperties.get(i);
+			String cityName = pw.getAddress().getCity();
+			String propertyName = pw.getProperty().getName();
+			double avgPrice = avgPropertyPrice(pw.getRoom());
+			
+			String text = "<html>"
+			+cityName + ", "+propertyName + "<br>"
+			+"$"+String.format("%.2f", avgPrice) + "/night average"
+			+"</html>";
+			
+			labels[i].setText(text);
 		}
 	}
 	
-	private Icon resizeImage(String imgPath) {
+	private double avgPropertyPrice(Map<RoomType, RoomInfo> room) {
+		Set<RoomType> roomType = room.keySet();
+		Iterator<RoomType> iterator = roomType.iterator();
+		double price = 0.0;
+		int roomCount = 0;
+		while (iterator.hasNext()) {
+			RoomType rType = iterator.next();
+			price += rType.getPricePerNight();
+			roomCount++;
+		}
+		return price / roomCount;
+	}
+
+	private Icon resizeImage(String imgPath, int width, int height) {
 		File file = new File(imgPath);
 		Image image = new ImageIcon(file.getPath()).getImage();
-		Image newImage = image.getScaledInstance(lblLeft.getWidth(), lblLeft.getHeight(), Image.SCALE_SMOOTH);
+		Image newImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		return new ImageIcon(newImage);
 	}
 
@@ -262,5 +412,4 @@ public class MainUserFrame extends JFrame {
 			e.printStackTrace();
 		}
 	}
-	
 }
