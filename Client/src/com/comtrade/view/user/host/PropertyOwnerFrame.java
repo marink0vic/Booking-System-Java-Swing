@@ -62,6 +62,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		initializeComponents();
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
 		propertyWrapper = new PropertyWrapper();

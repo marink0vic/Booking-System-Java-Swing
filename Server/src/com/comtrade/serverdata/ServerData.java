@@ -5,19 +5,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.Country;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.generics.Generic;
-import com.comtrade.generics.GenericList;
 
 public class ServerData {
 	private List<Country> countries;
