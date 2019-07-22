@@ -10,6 +10,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.property.PropertyForm;
+import com.comtrade.view.user.regular.UserHomeFrame;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -225,7 +226,10 @@ public class RegisterForm extends JFrame {
 						propertyForm.setVisible(true);
 						dispose();
 					} else {
-						JOptionPane.showMessageDialog(null, "You are regular user");
+						UserHomeFrame mainUserFrame = new UserHomeFrame();
+						mainUserFrame.setLocationRelativeTo(null);
+						mainUserFrame.setVisible(true);
+						dispose();
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "<html>Something went wrong with your information"

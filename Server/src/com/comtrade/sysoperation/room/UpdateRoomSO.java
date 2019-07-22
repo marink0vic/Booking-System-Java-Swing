@@ -14,7 +14,7 @@ public class UpdateRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
-		Map.Entry<RoomType,RoomInfo> temp = wrapper.getRoom().entrySet().iterator().next();
+		Map.Entry<RoomType,RoomInfo> temp = wrapper.getRooms().entrySet().iterator().next();
 		IBroker iBroker = new Broker();
 		iBroker.update(temp.getKey());
 		iBroker.update(temp.getValue());

@@ -10,9 +10,9 @@ import com.comtrade.sysoperation.GeneralSystemOperation;
 public class ReturnUserPropertySO extends GeneralSystemOperation<PropertyWrapper> {
 
 	@Override
-	protected void executeSpecificOperation(PropertyWrapper owner) throws SQLException {
+	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
 		IBroker iBroker = new Broker();
-		owner = iBroker.returnPropertyForOwner(owner);
+		iBroker.insertPropertyForOwner(wrapper);
 	}
 
 }

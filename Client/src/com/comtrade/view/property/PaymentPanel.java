@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
+import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
@@ -31,6 +32,7 @@ import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
 
@@ -63,6 +65,7 @@ public class PaymentPanel extends JPanel {
 	private Map<RoomType, RoomInfo> room;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
+	private Country country;
 
 	
 	public PaymentPanel(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images) {
@@ -72,6 +75,10 @@ public class PaymentPanel extends JPanel {
 		this.room = room;
 		this.images = images;
 		initializeComponents();
+	}
+	
+	public void setCountry(Country country) {
+		this.country = country;
 	}
 
 	public void setPropertyForm(PropertyForm propertyForm) {
@@ -157,7 +164,7 @@ public class PaymentPanel extends JPanel {
 		btnFinishRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				preparePaymentList();
-				registerProperty(user, address, property, room, images, paymentList);
+				registerProperty();
 			}
 		});
 		btnFinishRegistration.addMouseListener(new MouseAdapter() {
@@ -183,17 +190,19 @@ public class PaymentPanel extends JPanel {
 		fillLabels();
 	}
 	
-	private void registerProperty(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
-		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
+	private void registerProperty() {
+		GenericMap<User, PropertyWrapper> propertyData = new GenericMap<>();
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user.getIdUser(), address, property, room, images, paymentList);
+		propertyWrapper.setCountry(country);
+		propertyData.put(user, propertyWrapper);
 		try {
-			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
-			User returnedUser =  (User) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedUser);
+			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyData);
+			PropertyWrapper returnedProperty =  (PropertyWrapper) transferClass.getServerResponse();
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(user, returnedProperty);
 			propertyOwner.setLocationRelativeTo(null);
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

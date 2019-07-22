@@ -1,11 +1,14 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
+import com.comtrade.sysoperation.property.ReturnAllPropertiesSO;
 import com.comtrade.sysoperation.property.ReturnUserPropertySO;
 import com.comtrade.sysoperation.property.SavePropertySO;
 import com.comtrade.transfer.TransferClass;
@@ -20,10 +23,11 @@ public class ControllerBLProperty implements IControllerBL {
 		switch (operation) {
 		case SAVE_ALL_PROPERTY_INFO:
 		{
-			PropertyWrapper propertyWraper = (PropertyWrapper) sender.getClientRequest();
+			@SuppressWarnings("unchecked")
+			GenericMap<User, PropertyWrapper> propertyData = (GenericMap<User, PropertyWrapper>) sender.getClientRequest();
 			try {
-				User user = saveProperty(propertyWraper);
-				receiver.setServerResponse(user);
+				PropertyWrapper owner = saveProperty(propertyData);
+				receiver.setServerResponse(owner);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving property to database");
 				e.printStackTrace();
@@ -32,10 +36,22 @@ public class ControllerBLProperty implements IControllerBL {
 		}
 		case RETURN_PROPERTY_FOR_OWNER:
 		{
-			PropertyWrapper propertyOwner = (PropertyWrapper) sender.getClientRequest();
+			PropertyWrapper propertyWrapper = (PropertyWrapper) sender.getClientRequest();
 			try {
-				PropertyWrapper propertyWrapper = returnPropertyForOwner(propertyOwner);
+				propertyWrapper = returnPropertyForOwner(propertyWrapper);
 				receiver.setServerResponse(propertyWrapper);
+			} catch (SQLException e) {
+				receiver.setMessageResponse("Problem occurred while retrieving property information");
+				e.printStackTrace();
+			}
+			return receiver;
+		}
+		case RETURN_ALL:
+		{
+			try {
+				Map<User, PropertyWrapper> property = returnAllProperties();
+				receiver.setMessageResponse("All properties loaded from database");
+				receiver.setServerResponse(property);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while retrieving property information");
 				e.printStackTrace();
@@ -48,16 +64,23 @@ public class ControllerBLProperty implements IControllerBL {
 		}
 	}
 
-	private PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyOwner) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new ReturnUserPropertySO();
-		sysOperation.executeSystemOperation(propertyOwner);
-		return propertyOwner;
+	private Map<User, PropertyWrapper> returnAllProperties() throws SQLException {
+		GenericMap<User, PropertyWrapper> genericMap = new GenericMap<>();
+		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new ReturnAllPropertiesSO();
+		sysOperation.executeSystemOperation(genericMap);
+		return genericMap.getMap();
 	}
 
-	private User saveProperty(PropertyWrapper propertyWraper) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
-		sysOperation.executeSystemOperation(propertyWraper);
-		return propertyWraper.getUser();
+	private PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyWrapper) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new ReturnUserPropertySO();
+		sysOperation.executeSystemOperation(propertyWrapper);
+		return propertyWrapper;
+	}
+
+	private PropertyWrapper saveProperty(GenericMap<User, PropertyWrapper> propertyData) throws SQLException {
+		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new SavePropertySO();
+		sysOperation.executeSystemOperation(propertyData);
+		return propertyData.getValue(propertyData.getKey());
 	}
 
 }

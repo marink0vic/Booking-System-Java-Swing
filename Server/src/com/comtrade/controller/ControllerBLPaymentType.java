@@ -19,7 +19,7 @@ public class ControllerBLPaymentType implements IControllerBL {
 		TransferClass receiver = new TransferClass();
 		
 		switch (operation) {
-		case RETURN_ALL_PAYMENT_TYPES:
+		case RETURN_ALL:
 		{
 			List<PaymentType> paymentTypes;
 			try {

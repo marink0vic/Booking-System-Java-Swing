@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import crypt.BCrypt;
@@ -164,8 +165,22 @@ public class User implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		return null;
+	public List<User> returnList(ResultSet resultSet) throws SQLException {
+		List<User> users = new ArrayList<>();
+		while (resultSet.next()) {
+			int id = resultSet.getInt("id_user");
+			String firstName = resultSet.getString("first_name");
+			String lastName = resultSet.getString("last_name");
+			String email = resultSet.getString("email");
+			String username = resultSet.getString("username");
+			LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
+			String profilePicture = resultSet.getString("profile_picture");
+			String status = resultSet.getString("status");
+			User user = new User(null, firstName, lastName, email, username, profilePicture, date, status);
+			user.setIdUser(id);
+			users.add(user);
+		}
+		return users;
 	}
 
 	@Override
@@ -215,6 +230,46 @@ public class User implements GeneralDomain, Serializable {
 	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + idUser;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (dateOfBirth == null) {
+			if (other.dateOfBirth != null)
+				return false;
+		} else if (!dateOfBirth.equals(other.dateOfBirth))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (idUser != other.idUser)
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
 	}
 
 }

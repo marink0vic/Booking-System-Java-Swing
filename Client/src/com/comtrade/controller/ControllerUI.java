@@ -10,6 +10,7 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {
@@ -29,7 +30,7 @@ private static ControllerUI controller;
 	public TransferClass returnCountriesList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setDomainType(DomainType.COUNTRY);
-		transferClass.setOperation(Operations.RETURN_ALL_COUNTRIES);
+		transferClass.setOperation(Operations.RETURN_ALL);
 		return sendAndReturn(transferClass);
 	}
 
@@ -44,13 +45,13 @@ private static ControllerUI controller;
 	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
-		transferClass.setOperation(Operations.RETURN_ALL_PAYMENT_TYPES);
+		transferClass.setOperation(Operations.RETURN_ALL);
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
+	public TransferClass saveProperty(GenericMap<User, PropertyWrapper> propertyData) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setClientRequest(propertyData);
 		transferClass.setDomainType(DomainType.PROPERTY);
 		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		return sendAndReturn(transferClass);
@@ -72,20 +73,20 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveImages(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
+	public TransferClass saveImages(GenericMap<User, PropertyWrapper> mapWrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyOwner);
+		transferClass.setClientRequest(mapWrapper);
 		transferClass.setDomainType(DomainType.IMAGES);
 		transferClass.setOperation(Operations.SAVE);
 		return sendAndReturn(transferClass);
 	}
 	
-	public void deleteImages(List<PropertyImage> imagesForDeletion) {
+	public void deleteImages(List<PropertyImage> imagesForDeletion) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(imagesForDeletion);
 		transferClass.setDomainType(DomainType.IMAGES);
 		transferClass.setOperation(Operations.DELETE);
-		Communication.getCommunication().send(transferClass);
+		sendAndReturn(transferClass);
 	}
 	
 	public TransferClass saveRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
@@ -104,11 +105,20 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
+	public TransferClass returnAllProperties() throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(transferClass);
+		transferClass.setDomainType(DomainType.PROPERTY);
+		transferClass.setOperation(Operations.RETURN_ALL);
+		return sendAndReturn(transferClass);
+	}
+	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
 
 
 

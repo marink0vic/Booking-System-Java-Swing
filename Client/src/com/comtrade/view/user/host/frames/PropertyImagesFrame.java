@@ -14,9 +14,9 @@ import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.HomePanel;
-import com.comtrade.view.user.host.PropertyOwnerFrame;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -47,13 +47,15 @@ public class PropertyImagesFrame extends JFrame {
 	private int propertyId;
 	private int index;
 	private HomePanel homePanel;
-	private PropertyWrapper propertyOwner;
+	private User user;
+	private PropertyWrapper propertyWrapper;
 	
-	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyOwner) {
+	public PropertyImagesFrame(HomePanel homePanel, User user, PropertyWrapper propertyWrapper) {
 		this.homePanel = homePanel;
-		this.propertyOwner = propertyOwner;
-		this.propertyImages = propertyOwner.getImages();
-		this.propertyId = propertyOwner.getProperty().getIdProperty();
+		this.user = user;
+		this.propertyWrapper = propertyWrapper;
+		this.propertyImages = propertyWrapper.getImages();
+		this.propertyId = propertyWrapper.getProperty().getIdProperty();
 		imagesForDeletion = new ArrayList<>();
 		initializeComponents();
 		
@@ -186,19 +188,28 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.setForeground(new Color(255, 255, 255));
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (imagesForDeletion.size() > 0)
-					ControllerUI.getController().deleteImages(imagesForDeletion);
+				if (imagesForDeletion.size() > 0) {
+					try {
+						ControllerUI.getController().deleteImages(imagesForDeletion);
+					} catch (ClassNotFoundException | IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 				
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
 				if (newImagesForDatabase.size() > 0) {
 					PropertyWrapper owner = new PropertyWrapper();
-					owner.setUser(propertyOwner.getUser());
 					owner.setImages(newImagesForDatabase);
+					
+					GenericMap<User, PropertyWrapper> mapWrapper = new GenericMap<>();
+					mapWrapper.put(user, owner);
+					
+					
 					try {
-						TransferClass transfer = ControllerUI.getController().saveImages(owner);
+						TransferClass transfer = ControllerUI.getController().saveImages(mapWrapper);
 						owner = (PropertyWrapper) transfer.getServerResponse();
-						propertyOwner.setImages(owner.getImages());
-						propertyImages = propertyOwner.getImages();
+						propertyWrapper.setImages(owner.getImages());
+						propertyImages = propertyWrapper.getImages();
 					} catch (ClassNotFoundException | IOException e) {
 						e.printStackTrace();
 					}

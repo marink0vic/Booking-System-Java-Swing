@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,41 +21,51 @@ import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
-public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
+public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, PropertyWrapper>> {
 	
 	private IBroker ib = new Broker();
 
 	@Override
-	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
-		User user = wrapper.getUser();
+	protected void executeSpecificOperation(GenericMap<User, PropertyWrapper> mapWrapper) throws SQLException {
+		User user = mapWrapper.getKey();
+		PropertyWrapper wrapper = mapWrapper.getValue(user);
+		
 		Address address = saveAddress(wrapper.getAddress());
+		wrapper.setAddress(address);
 
 		Property property = wrapper.getProperty();
 		property.setIdAddress(address.getIdAddress());
 		property = saveProperty(property);
+		wrapper.setProperty(property);
 		
-		Map<RoomType, RoomInfo> room = wrapper.getRoom();
-		saveAllRooms(room, property.getIdProperty());
+		
+		Map<RoomType, RoomInfo> room = wrapper.getRooms();
+		room = saveAllRooms(room, property.getIdProperty());
+		wrapper.setRooms(room);
 		
 		List<PropertyImage> imageFiles = wrapper.getImages();
-		saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());
+		imageFiles = saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());
+		wrapper.setImages(imageFiles);
 		
 		List<PaymentType> payments = wrapper.getPaymentList();
-		savePropertyPayments(payments, property.getIdProperty());
+		payments = savePropertyPayments(payments, property.getIdProperty());
+		wrapper.setPaymentList(payments);
 	}
 
-	private void savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
+	private List<PaymentType> savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
 		List<PaymentProperty> paymentProperty = new ArrayList<>();
 		for (PaymentType type : payments) {
 			PaymentProperty pp = new PaymentProperty(type.getId_payment(), id_property);
 			paymentProperty.add(pp);
 		}
 		ib.saveCollectionOfData(paymentProperty);
+		return ib.returnPayments(id_property);
 	}
 
-	private void saveAllImages(List<PropertyImage> image_files, int id_property, String username) throws SQLException {
+	private List<PropertyImage> saveAllImages(List<PropertyImage> image_files, int id_property, String username) throws SQLException {
 		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + id_property;
 		File folderToSave = new File(pathToSave);
 		
@@ -75,31 +86,34 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		}
 		
 		saveImagesToDataBase(propertyImages);
+		return ib.returnPropertyImages(id_property);
 	}
 
 	private void saveImagesToDataBase(List<PropertyImage> property_images) throws SQLException {
 		ib.saveCollectionOfData(property_images);
 	}
 
-	private void saveAllRooms(Map<RoomType, RoomInfo> room, int id_property) throws SQLException {
+	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int id_property) throws SQLException {
+		Map<RoomType, RoomInfo> map = new LinkedHashMap<>();
 		for (Map.Entry<RoomType, RoomInfo> mapRoom : room.entrySet()) {
 			RoomType roomType = mapRoom.getKey();
 			roomType.setIdProperty(id_property);
-			roomType.setIdRoomType(saveRoomType(roomType));
+			roomType = saveRoomType(roomType);
 			
 			RoomInfo info = mapRoom.getValue();
 			info.setIdRoomType(roomType.getIdRoomType());
-			saveRoomInfo(info);
+			info = saveRoomInfo(info);
+			map.put(roomType, info);
 		}
+		return map;
 	}
 
-	private void saveRoomInfo(RoomInfo info) throws SQLException {
-		ib.save(info);
+	private RoomInfo saveRoomInfo(RoomInfo info) throws SQLException {
+		return (RoomInfo) ib.save(info);
 	}
 
-	private int saveRoomType(RoomType r) throws SQLException {
-		RoomType roomType = (RoomType) ib.save(r);
-		return roomType.getIdRoomType();
+	private RoomType saveRoomType(RoomType r) throws SQLException {
+		return (RoomType) ib.save(r);
 	}
 
 	private Property saveProperty(Property property) throws SQLException {

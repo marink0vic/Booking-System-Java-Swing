@@ -41,7 +41,7 @@ public class AddressPanel extends JPanel {
 	private BasicInfoPanel basicInfoPanel;
 	private JLabel lblPropertyInfo;
 	private Address address;
-	
+	private Country propertyCountry;
 	
 	
 	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblPropertyInfo, Address address, List<Country> countries) {
@@ -51,6 +51,10 @@ public class AddressPanel extends JPanel {
 		this.address = address;
 		this.countries = countries;
 		initializeComponents();
+	}
+	
+	public Country getCountry() {
+		return propertyCountry;
 	}
 
 
@@ -203,6 +207,8 @@ public class AddressPanel extends JPanel {
 		for (Country country : countries) {
 			if (country.getName().equals(countryName)) {
 				idCountry = country.getIdCountry();
+				propertyCountry = country;
+				
 				File file = new File(country.getImage());
 				Image im = new ImageIcon(file.toString()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
 				ImageIcon imIcon = new ImageIcon(im);

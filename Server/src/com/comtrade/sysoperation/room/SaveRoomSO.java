@@ -15,7 +15,7 @@ public class SaveRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
-		Map.Entry<RoomType,RoomInfo> temp = wrapper.getRoom().entrySet().iterator().next();
+		Map.Entry<RoomType,RoomInfo> temp = wrapper.getRooms().entrySet().iterator().next();
 		RoomType type = temp.getKey();
 		RoomInfo info = temp.getValue();
 		
@@ -26,7 +26,7 @@ public class SaveRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 		
 		Map<RoomType, RoomInfo> room = new HashMap<>();
 		room.put(type, info);
-		wrapper.setRoom(room);
+		wrapper.setRooms(room);
 	}
 
 }

@@ -50,19 +50,30 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	//-----right panels
 	private HomePanel homePanelRight;
 	
-	private PropertyWrapper propertyOwner;
+	private PropertyWrapper propertyWrapper;
+	private User user;
 
 	/**
 	 * Create the frame.
 	 */
+	public PropertyOwnerFrame(User user, PropertyWrapper propertyWrapper) {
+		this.user = user;
+		this.propertyWrapper = propertyWrapper;
+		initializeComponents();
+	}
+	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public PropertyOwnerFrame(User user) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		propertyOwner = new PropertyWrapper();
-		propertyOwner.setUser(user);
+		this.user = user;
+		propertyWrapper = new PropertyWrapper();
+		propertyWrapper.setUserID(user.getIdUser());
 		initializeComponents();
 	}
 
 	private void initializeComponents() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 850);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -72,14 +83,14 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		createSidePanel();
 		
-		returnPropertyForUser();
+		if (propertyWrapper.getProperty() == null)returnPropertyForUser();
 		
 		JLayeredPane layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		homePanelRight = new HomePanel(propertyOwner);
+		homePanelRight = new HomePanel(user, propertyWrapper);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
 		
@@ -115,8 +126,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setBounds(48, 58, 230, 64);
-		lblNewLabel.setText(propertyOwner.getUser().getFirstName() + " " + propertyOwner.getUser().getLastName());
-		ImageIcon myImage = new ImageIcon(propertyOwner.getUser().getCountry().getImage());
+		lblNewLabel.setText(user.getFirstName() + " " + user.getLastName());
+		ImageIcon myImage = new ImageIcon(user.getCountry().getImage());
 		lblNewLabel.setIcon(myImage);
 		headerPanel.add(lblNewLabel);
 		
@@ -331,8 +342,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	
 	private void returnPropertyForUser() {
 		try {
-			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyOwner);
-			propertyOwner = (PropertyWrapper) transferClass.getServerResponse();
+			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyWrapper);
+			propertyWrapper = (PropertyWrapper) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
@@ -345,15 +356,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 			}
 		}
 		
-	}
-	
-	private List<PropertyImage> returnNewImages(List<PropertyImage> images) {
-		List<PropertyImage> newImages = new ArrayList<>();
-		for (int i = images.size() - 1; i >= 0; i--) {
-			if (images.get(i).getIdImage() != 0) break;
-			newImages.add(images.get(i));
-		}
-		return newImages;
 	}
 
 	@Override

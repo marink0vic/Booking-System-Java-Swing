@@ -1,7 +1,6 @@
 package com.comtrade.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,39 +11,38 @@ import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
 import com.comtrade.domain.RoomType;
-import com.comtrade.domain.User;
 import com.comtrade.generics.Generic;
 
 public class PropertyWrapper implements Serializable, Generic {
 
 	
 	private static final long serialVersionUID = 1L;
-	private User user;
+	private int userID;
 	private Address address;
 	private Property property;
-	private Map<RoomType, RoomInfo> room;
+	private Map<RoomType, RoomInfo> rooms;
 	private List<PropertyImage> images; 
-	private List<PaymentType> paymentList = new ArrayList<>();
+	private List<PaymentType> paymentList;
 	private Country country;
 	
 	public PropertyWrapper() {
 	}
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images, List<PaymentType> paymentList) {
-		this.user = user;
+	public PropertyWrapper(int userID, Address address, Property property, Map<RoomType, RoomInfo> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
+		this.userID = userID;
 		this.address = address;
 		this.property = property;
-		this.room = room;
+		this.rooms = rooms;
 		this.images = images;
 		this.paymentList = paymentList;
 	}
 
-	public User getUser() {
-		return user;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public Address getAddress() {
@@ -63,12 +61,12 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.property = property;
 	}
 
-	public Map<RoomType, RoomInfo> getRoom() {
-		return room;
+	public Map<RoomType, RoomInfo> getRooms() {
+		return rooms;
 	}
 
-	public void setRoom(Map<RoomType, RoomInfo> room) {
-		this.room = room;
+	public void setRooms(Map<RoomType, RoomInfo> rooms) {
+		this.rooms = rooms;
 	}
 
 	public List<PropertyImage> getImages() {

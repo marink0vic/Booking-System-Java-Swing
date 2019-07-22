@@ -6,9 +6,11 @@ import java.util.List;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
+import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.country.ReturnCountriesSO;
 import com.comtrade.sysoperation.images.DeleteImagesSO;
@@ -25,10 +27,11 @@ public class ControllerBLImages implements IControllerBL {
 		switch (operation) {
 		case SAVE:
 		{
-			PropertyWrapper propertyOwner = (PropertyWrapper) sender.getClientRequest();
+			@SuppressWarnings("unchecked")
+			GenericMap<User, PropertyWrapper> mapWrapper = (GenericMap<User, PropertyWrapper>) sender.getClientRequest();
 			try {
 				
-				PropertyWrapper wrapper = saveImages(propertyOwner);
+				PropertyWrapper wrapper = saveImages(mapWrapper);
 				receiver.setServerResponse(wrapper);
 				receiver.setMessageResponse("The images were successfully saved in the database");
 			} catch (SQLException e) {
@@ -64,10 +67,10 @@ public class ControllerBLImages implements IControllerBL {
 		sysOperation.executeSystemOperation(genericList);
 	}
 
-	private PropertyWrapper saveImages(PropertyWrapper propertyOwner) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new SaveImagesSO();
-		sysOperation.executeSystemOperation(propertyOwner);
-		return propertyOwner;
+	private PropertyWrapper saveImages(GenericMap<User, PropertyWrapper> mapWrapper) throws SQLException {
+		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new SaveImagesSO();
+		sysOperation.executeSystemOperation(mapWrapper);
+		return mapWrapper.getValue(mapWrapper.getKey());
 	}
 
 }
