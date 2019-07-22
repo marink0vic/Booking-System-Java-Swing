@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.RoomInfo;
@@ -98,10 +99,10 @@ public class HomePanel extends JPanel {
 				int row = table.getSelectedRow();
 				roomTypeName = (String) dtm.getValueAt(row, 0);
 				fillRoomInfoTable();
-				table.setSelectionBackground(new Color(255, 88, 93));
+				table.setSelectionBackground(ColorConstants.RED);
 			}
 		});
-		table.setForeground(new Color(71, 71, 71));
+		table.setForeground(ColorConstants.GRAY);
 		table.setFont(new Font("Dialog", Font.BOLD, 17));
 		table.setRowHeight(30);
 		JTableHeader header = table.getTableHeader();
@@ -253,7 +254,7 @@ public class HomePanel extends JPanel {
 
 	public void fillRoomTypeTable() {
 		dtm.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRoom().entrySet()) {
+		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRooms().entrySet()) {
 			RoomType rt = map.getKey();
 			RoomInfo ri = map.getValue();
 			dtm.addRow(new Object[] {rt.getRoomType(), rt.getNumberOfRooms(), rt.getPricePerNight(), ri.getNumOfBads()});
@@ -262,7 +263,7 @@ public class HomePanel extends JPanel {
 	
 	private void fillRoomInfoTable() {
 		dtmInfo.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRoom().entrySet()) {
+		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRooms().entrySet()) {
 			if (map.getKey().getRoomType().equals(roomTypeName)) {
 				roomType = map.getKey();
 				roomInfo = map.getValue();

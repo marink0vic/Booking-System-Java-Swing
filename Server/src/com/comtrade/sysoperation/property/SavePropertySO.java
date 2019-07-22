@@ -42,9 +42,9 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		wrapper.setProperty(property);
 		
 		
-		Map<RoomType, RoomInfo> room = wrapper.getRoom();
+		Map<RoomType, RoomInfo> room = wrapper.getRooms();
 		room = saveAllRooms(room, property.getIdProperty());
-		wrapper.setRoom(room);
+		wrapper.setRooms(room);
 		
 		List<PropertyImage> imageFiles = wrapper.getImages();
 		imageFiles = saveAllImages(imageFiles, property.getIdProperty(), user.getUsername());

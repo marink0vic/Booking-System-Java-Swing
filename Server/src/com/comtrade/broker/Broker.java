@@ -126,7 +126,7 @@ public class Broker implements IBroker {
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
-		wrapper.setRoom(returnRoomAndRoomInfo(wrapper.getProperty().getIdProperty()));
+		wrapper.setRooms(returnRoomAndRoomInfo(wrapper.getProperty().getIdProperty()));
 		wrapper.setImages(returnPropertyImages(wrapper.getProperty().getIdProperty()));
 		wrapper.setPaymentList(returnPayments(wrapper.getProperty().getIdProperty()));
 		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));

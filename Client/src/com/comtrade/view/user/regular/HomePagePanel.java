@@ -187,7 +187,7 @@ public class HomePagePanel extends JPanel {
 			PropertyWrapper pw = listOfProperties.get(i);
 			String cityName = pw.getAddress().getCity();
 			String propertyName = pw.getProperty().getName();
-			double avgPrice = avgPropertyPrice(pw.getRoom());
+			double avgPrice = avgPropertyPrice(pw.getRooms());
 			
 			String text = "<html>"
 			+cityName + ", "+propertyName + "<br>"

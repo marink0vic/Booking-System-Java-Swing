@@ -41,10 +41,10 @@ public class ServerData {
 		countries = (List<Country>) iBroker.returnAllData(new Country());
 		paymentTypes = (List<PaymentType>) iBroker.returnAllData(new PaymentType());
 		allUsers = (List<User>) iBroker.returnAllData(new User());
+		addAllProperties();
 		
 		Connection.getConnection().closeConnection();
 		
-		addAllProperties();
 		addFullCountryImagePath();
 		addFullPaymentImagePath();
 	}	

@@ -7,16 +7,22 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
 import java.awt.Color;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Map;
+
 
 public class SelectedPropertyFrame extends JFrame {
 
@@ -26,18 +32,19 @@ public class SelectedPropertyFrame extends JFrame {
 	private HeaderPanel headerPanel;
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
+	private RoomsPricesPanel roomPricesPanel;
 	//--
 	private PropertyWrapper propertyWrapper;
 	private JLabel lblInfo;
 	private JLabel lblRoomPrices;
 	private JLabel lblGuestReviews;
 	//---
-	private JPanel roomPricesPanel;
-	
+	private Map<RoomType, RoomInfo> rooms;
 
 	
 	public SelectedPropertyFrame(PropertyWrapper propertyWrapper) {
 		this.propertyWrapper = propertyWrapper;
+		this.rooms = propertyWrapper.getRooms();
 		initializeComponents();
 	}
 
@@ -63,9 +70,9 @@ public class SelectedPropertyFrame extends JFrame {
 		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
-		roomPricesPanel = new JPanel();
+		roomPricesPanel = new RoomsPricesPanel(rooms);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
-		roomPricesPanel.setLayout(null);
+		
 	}
 
 	private void addPropertyNavigationLabels() {
@@ -107,7 +114,7 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.add(lblGuestReviews);
 	}
 	
-	protected void updateUI(JLabel label) {
+	private void updateUI(JLabel label) {
 		JLabel[] navLabels = {lblInfo, lblRoomPrices, lblGuestReviews};
 		for (int i = 0; i < navLabels.length; i++) {
 			if (label == navLabels[i]) {
@@ -125,4 +132,12 @@ public class SelectedPropertyFrame extends JFrame {
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}
+	
+	
+	
+	
+
+	
+	
+	
 }

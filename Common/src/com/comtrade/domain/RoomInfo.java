@@ -99,6 +99,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
+	
 	public Map<String, Boolean> roomInfoData() {
 		Map<String, Boolean> map = new HashMap<>();
 		map.put("Kitchen", kitchen);

@@ -135,13 +135,13 @@ public class RoomFrame extends JFrame {
 				
 				if (action.equals("ADD")) {
 					room.put(type, info);
-					tempOwner.setRoom(room);
+					tempOwner.setRooms(room);
 					addNewRoom(transferClass, tempOwner);
 				} else if (action.equals("UPDATE")) {
 					updateRoomType();
 					updateRoomInfo();
 					room.put(roomType, roomInfo);
-					tempOwner.setRoom(room);
+					tempOwner.setRooms(room);
 					updateRoom(transferClass, tempOwner);
 				}
 				
@@ -229,7 +229,7 @@ public class RoomFrame extends JFrame {
 		} catch (ClassNotFoundException | IOException e1) {
 			e1.printStackTrace();
 		}
-		propertyOwner.getRoom().putAll(tempOwner.getRoom());
+		propertyOwner.getRooms().putAll(tempOwner.getRooms());
 	}
 
 	private void fiilInputWithWalues() {
@@ -261,7 +261,7 @@ public class RoomFrame extends JFrame {
 	}
 
 	private boolean containsRoom(String name) {
-		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRoom().entrySet()) {
+		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRooms().entrySet()) {
 			String roomTypeName = map.getKey().getRoomType();
 			if (roomTypeName.equals(name)) return true;
 		}
