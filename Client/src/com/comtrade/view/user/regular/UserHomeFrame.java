@@ -29,6 +29,7 @@ public class UserHomeFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private HeaderPanel headerPanel;
 	private JLayeredPane layeredPane;
 	private HomePagePanel homePagePanel;
 	private SearchPagePanel searchPagePanel;
@@ -50,7 +51,6 @@ public class UserHomeFrame extends JFrame {
 				try {
 					UserHomeFrame frame = new UserHomeFrame();
 					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -75,17 +75,9 @@ public class UserHomeFrame extends JFrame {
 		contentPane.setBorder(new LineBorder(new Color(169, 169, 169)));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		JPanel header = new JPanel();
-		header.setBounds(0, 0, 1482, 69);
-		header.setBackground(new Color(95, 139, 161));
-		contentPane.add(header);
-		header.setLayout(null);
 		
-		JLabel lblLogo = new JLabel("Booking.com");
-		lblLogo.setFont(new Font("Dialog", Font.BOLD, 26));
-		lblLogo.setForeground(new Color(255, 255, 255));
-		lblLogo.setBounds(50, 13, 184, 43);
-		header.add(lblLogo);
+		headerPanel = new HeaderPanel();
+		contentPane.add(headerPanel);
 		
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
@@ -147,7 +139,8 @@ public class UserHomeFrame extends JFrame {
 			}
 		});
 		btnSearch.setFont(new Font("Dialog", Font.BOLD, 15));
-		btnSearch.setForeground(new Color(71, 71, 71));
+		btnSearch.setForeground(new Color(255, 255, 255));
+		btnSearch.setBackground(new Color(9, 121, 186));
 		btnSearch.setBounds(1075, 50, 138, 56);
 		searchPanel.add(btnSearch);
 		

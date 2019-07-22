@@ -1,6 +1,7 @@
 package com.comtrade.serverdata;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -40,13 +41,12 @@ public class ServerData {
 		countries = (List<Country>) iBroker.returnAllData(new Country());
 		paymentTypes = (List<PaymentType>) iBroker.returnAllData(new PaymentType());
 		allUsers = (List<User>) iBroker.returnAllData(new User());
-		addAllProperties();
+		
 		Connection.getConnection().closeConnection();
 		
+		addAllProperties();
 		addFullCountryImagePath();
 		addFullPaymentImagePath();
-		
-		System.out.println("All data successfully loaded");
 	}	
 
 	public List<Country> returnListOfCountries() {

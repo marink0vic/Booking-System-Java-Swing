@@ -8,8 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.List;
 
@@ -22,9 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
 
 public class SearchPagePanel extends JPanel {
 
@@ -59,13 +58,15 @@ public class SearchPagePanel extends JPanel {
 	    
 	    
 	    JScrollPane scrollPane = new JScrollPane(gridPanel);
+	    scrollPane.setBorder(null);
 	    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    scrollPane.setBounds(261, 562, 950, 320);
 	    
 		JPanel container = new JPanel(new BorderLayout());
-		container.setBorder(new LineBorder(new Color(0, 0, 0)));
-		container.setBounds(12, 13, 950, 702);
+		container.setBackground(new Color(255, 255, 255));
+		container.setBorder(null);
+		container.setBounds(12, 0, 950, 715);
 		container.add(scrollPane, BorderLayout.CENTER);
 		this.add(container);
 		
@@ -78,7 +79,7 @@ public class SearchPagePanel extends JPanel {
 
 	private JPanel setScrollProperty(PropertyWrapper property) {
 		JPanel testPanel = new JPanel();
-		testPanel.setBorder(new LineBorder(new Color(112, 128, 144)));
+		testPanel.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(171, 171, 171)));
 		testPanel.setOpaque(false);
 		testPanel.setPreferredSize(new Dimension(950, 320));
 		this.add(testPanel);
@@ -122,10 +123,11 @@ public class SearchPagePanel extends JPanel {
 		btnReserve = new JButton("Book");
 		btnReserve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(property.getProperty().getName());
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(property);
+				reservationFrame.setVisible(true);
+				reservationFrame.setLocationRelativeTo(null);
 			}
 		});
-		btnReserve.setBorder(null);
 		btnReserve.setForeground(new Color(255, 255, 255));
 		btnReserve.setBackground(new Color(9, 121, 186));
 		btnReserve.setFont(new Font("Dialog", Font.BOLD, 15));
