@@ -23,8 +23,7 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		
 	}
 	
-	public BookedRoom(int idBooking, int idRoomType, int numberOfRooms, String status) {
-		this.idBooking = idBooking;
+	public BookedRoom(int idRoomType, int numberOfRooms, String status) {
 		this.idRoomType = idRoomType;
 		this.numberOfRooms = numberOfRooms;
 		this.status = status;

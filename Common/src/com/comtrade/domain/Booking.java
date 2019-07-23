@@ -194,4 +194,10 @@ public class Booking implements GeneralDomain, Serializable {
 		return booking;
 	}
 
+	@Override
+	public String toString() {
+		return "Booking [idUser=" + idUser + ", idProperty=" + idProperty + ", checkIn=" + checkIn + ", checkOut="
+				+ checkOut + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
+				+ ", priceForStay=" + priceForStay + "]";
+	}
 }

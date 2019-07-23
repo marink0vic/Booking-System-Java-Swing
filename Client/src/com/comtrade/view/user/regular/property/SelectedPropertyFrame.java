@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
 import com.comtrade.view.user.regular.HomePagePanel;
@@ -23,6 +24,7 @@ import javax.swing.border.MatteBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.util.Map;
 
 
@@ -37,17 +39,21 @@ public class SelectedPropertyFrame extends JFrame {
 	private RoomsPricesPanel roomPricesPanel;
 	private HomePagePanel homePagePanel;
 	//--
-	private PropertyWrapper propertyWrapper;
 	private JLabel lblInfo;
 	private JLabel lblRoomPrices;
 	private JLabel lblGuestReviews;
-	//---
-	private Map<RoomType, Room> rooms;
+	//--
+	private PropertyWrapper propertyWrapper;
+	private User user;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
 
 	
-	public SelectedPropertyFrame(PropertyWrapper propertyWrapper) {
+	public SelectedPropertyFrame(PropertyWrapper propertyWrapper, User user, LocalDate checkIn, LocalDate checkOut) {
+		this.user = user;
 		this.propertyWrapper = propertyWrapper;
-		this.rooms = propertyWrapper.getRooms();
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
 		initializeComponents();
 	}
 
@@ -73,7 +79,7 @@ public class SelectedPropertyFrame extends JFrame {
 		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
-		roomPricesPanel = new RoomsPricesPanel(rooms);
+		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
 	}

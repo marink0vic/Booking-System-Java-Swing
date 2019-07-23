@@ -7,10 +7,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -21,17 +25,32 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.Transaction;
+import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
 
 public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Map<RoomType, Room> rooms;
+	private User user;
+	private PropertyWrapper propertyWrapper;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
+	private int period;
+	
+	private double fullPrice;
+	//----
 	private JPanel roomInfoPanel;
 	private JLabel lblNewLabel;
 	private JLabel lblAvailableRooms;
@@ -51,8 +70,14 @@ public class RoomsPricesPanel extends JPanel {
 	private JLabel lblNumberOfRooms;
 	private JSpinner spinnerRoomCount;
 
-	public RoomsPricesPanel(Map<RoomType, Room> rooms) {
-		this.rooms = rooms;
+	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut) {
+		this.user = user;
+		this.propertyWrapper = propertyWrapper;
+		this.rooms = propertyWrapper.getRooms();
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		Period p = Period.between(checkIn, checkOut);
+		period = p.getDays();
 		initializeComponents();
 	}
 
@@ -87,7 +112,7 @@ public class RoomsPricesPanel extends JPanel {
 		lblAvailableRooms.setBounds(266, 17, 199, 40);
 		roomInfoPanel.add(lblAvailableRooms);
 		
-		lblPricePerNight = new JLabel("Price for 10 nights");
+		lblPricePerNight = new JLabel("Price for "+ period +" nights");
 		lblPricePerNight.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPricePerNight.setForeground(Color.WHITE);
 		lblPricePerNight.setFont(new Font("Dialog", Font.BOLD, 17));
@@ -153,14 +178,15 @@ public class RoomsPricesPanel extends JPanel {
 		this.add(container);
 		
 		for (Map.Entry<RoomType, Room> entry : rooms.entrySet()) {
-			RoomType key = entry.getKey();
+			RoomType roomType = entry.getKey();
 			Room value = entry.getValue();
-			JPanel scrollPanel = addRoomPanelToScrollPane(key, value);
+			JPanel scrollPanel = addRoomPanelToScrollPane(roomType, value);
             gridPanel.add(scrollPanel);
 		}
 	}
 	
-	private JPanel addRoomPanelToScrollPane(RoomType key, Room value) {
+	private JPanel addRoomPanelToScrollPane(RoomType roomType, Room room) {
+		double priceForPeriod;
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setPreferredSize(new Dimension(975, 456));
@@ -168,14 +194,14 @@ public class RoomsPricesPanel extends JPanel {
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
-		lblRoomType = new JLabel(key.getRoomType());
+		lblRoomType = new JLabel(roomType.getRoomType());
 		lblRoomType.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRoomType.setForeground(ColorConstants.GRAY);
 		lblRoomType.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblRoomType.setBounds(12, 29, 203, 54);
 		panel_1.add(lblRoomType);
 		
-		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + key.getNumberOfRooms());
+		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + roomType.getNumberOfRooms());
 		lblRoomsAvaiable.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRoomsAvaiable.setForeground(new Color(71, 71, 71));
 		lblRoomsAvaiable.setFont(new Font("Dialog", Font.PLAIN, 16));
@@ -195,10 +221,10 @@ public class RoomsPricesPanel extends JPanel {
 		header.setFont(new Font("Dialog", Font.PLAIN, 17));
 		scrollPane.setViewportView(table);
 		dtm.addColumn("Room info");
-		fillInfoTable(dtm, value);
+		fillInfoTable(dtm, room);
 		
 		lblAdultsNum = new JLabel("Number of adults");
-		lblAdultsNum.setForeground(new Color(71, 71, 71));
+		lblAdultsNum.setForeground(ColorConstants.GRAY);
 		lblAdultsNum.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblAdultsNum.setBounds(265, 29, 133, 54);
 		panel_1.add(lblAdultsNum);
@@ -208,19 +234,26 @@ public class RoomsPricesPanel extends JPanel {
 		spinnerAdults.setBounds(410, 37, 58, 43);
 		panel_1.add(spinnerAdults);
 		
-		JLabel lblChildrenUnder = new JLabel("Children under 12");
-		lblChildrenUnder.setForeground(new Color(71, 71, 71));
+		JLabel lblChildrenUnder = new JLabel("Number of children");
+		lblChildrenUnder.setForeground(ColorConstants.GRAY);
 		lblChildrenUnder.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblChildrenUnder.setBounds(265, 110, 133, 54);
 		panel_1.add(lblChildrenUnder);
+		
+		JLabel numberOfBads = new JLabel("Number of bads:    " + room.getNumOfBads());
+		numberOfBads.setForeground(ColorConstants.GRAY);
+		numberOfBads.setFont(new Font("Dialog", Font.PLAIN, 16));
+		numberOfBads.setBounds(265, 191, 180, 54);
+		panel_1.add(numberOfBads);
 		
 		SpinnerModel sm1 = new SpinnerNumberModel(0, 0, 10, 1);
 		JSpinner spinnerChildren = new JSpinner(sm1);
 		spinnerChildren.setBounds(410, 118, 58, 43);
 		panel_1.add(spinnerChildren);
 		
-		String price =  String.format("%.2f", key.getPricePerNight() * 12);
-		JLabel lblPrice = new JLabel(price + "$");
+		priceForPeriod = roomType.getPricePerNight() * period;
+		String strPrice =  String.format("%.2f", priceForPeriod);
+		JLabel lblPrice = new JLabel(strPrice + "$");
 		lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrice.setForeground(ColorConstants.GRAY);
 		lblPrice.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -258,7 +291,16 @@ public class RoomsPricesPanel extends JPanel {
 		lblNumberOfRooms.setBounds(709, 13, 117, 54);
 		panel_1.add(lblNumberOfRooms);
 		
-		SpinnerModel sm2 = new SpinnerNumberModel(1, 1, 10, 1);
+		SpinnerModel sm2 = new SpinnerNumberModel(1, 1, roomType.getNumberOfRooms(), 1);
+		sm2.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				int roomCount = (Integer) sm2.getValue();
+				fullPrice = priceForPeriod * roomCount;
+				String strPrice =  String.format("%.2f", fullPrice);
+				lblPrice.setText(strPrice + "$");
+			}
+		});
 		spinnerRoomCount = new JSpinner(sm2);
 		spinnerRoomCount.setBounds(740, 74, 58, 43);
 		panel_1.add(spinnerRoomCount);
@@ -266,7 +308,23 @@ public class RoomsPricesPanel extends JPanel {
 		JButton btnReserve = new JButton("reserve");
 		btnReserve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int peopleCount = (Integer) spinnerAdults.getValue() + (Integer) spinnerChildren.getValue();
+				int numOfSeclectedRooms = (Integer) sm2.getValue();
+				int bedCount = room.getNumOfBads() * numOfSeclectedRooms;
 				
+				if (peopleCount > bedCount) {
+					JOptionPane.showMessageDialog(null, "You selected more guests than number of bads");
+				} else {
+					int idProperty = propertyWrapper.getProperty().getIdProperty();
+					int numOFAdults = (Integer) spinnerAdults.getValue();
+					int numOfChilren = (Integer) spinnerChildren.getValue();
+					
+					Booking booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut, numOFAdults, numOfChilren, fullPrice);
+					BookedRoom bookedRoom = new BookedRoom(roomType.getIdRoomType(), numOfSeclectedRooms, "RESERVED");
+					Transaction transaction = new Transaction(user.getIdUser(), idProperty,LocalDate.now(), LocalTime.now());
+					transaction.setAmount(fullPrice);
+					transaction.setSiteFees(fullPrice);
+				}
 			}
 		});
 		btnReserve.setForeground(new Color(255, 255, 255));
@@ -277,7 +335,7 @@ public class RoomsPricesPanel extends JPanel {
 		
 		return panel_1;
 	}
-	
+
 	private void fillInfoTable(DefaultTableModel dtm, Room info) {
 		dtm.setRowCount(0);
 		for (Map.Entry<String, Boolean> entry : info.roomInfoData().entrySet()) {

@@ -88,7 +88,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		homePagePanel = new HomePagePanel(listOfProperties);
 		layeredPane.add(homePagePanel, "name_536942772642600");
 		
-		searchPagePanel = new SearchPagePanel(listOfProperties);
+		searchPagePanel = new SearchPagePanel(listOfProperties, user);
 		layeredPane.add(searchPagePanel, "name_538271889712300");
 		
 		
@@ -122,6 +122,8 @@ public class UserHomeFrame extends JFrame implements IProxy {
 					if (checkIn.isEqual(checkOut)) {
 						JOptionPane.showMessageDialog(null, "You cannot enter the same dates");
 					} else {
+						searchPagePanel.setCheckIn(checkIn);
+						searchPagePanel.setCheckOut(checkOut);
 						switchPanel(searchPagePanel);
 					}
 				} else {

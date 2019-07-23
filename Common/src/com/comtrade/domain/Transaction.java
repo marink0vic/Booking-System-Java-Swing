@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -20,19 +19,19 @@ public class Transaction implements GeneralDomain, Serializable {
 	private LocalDate transferDate;
 	private LocalTime transferTime;
 	private double amount;
-	private double siteFees = 0.1;
+	private double siteFees;
+	private transient final int percentSite = 10;
+	private transient final int percentProperty = 90;
 	
 	public Transaction() {
 		
 	}
 	
-	public Transaction(int idSender, int idReceiver, int idBooking, LocalDate transferDate, LocalTime transferTime, double amount) {
+	public Transaction(int idSender, int idReceiver, LocalDate transferDate, LocalTime transferTime) {
 		this.idSender = idSender;
 		this.idReceiver = idReceiver;
-		this.idBooking = idBooking;
 		this.transferDate = transferDate;
 		this.transferTime = transferTime;
-		this.amount = amount;
 	}
 
 	public int getIdTransaction() {
@@ -88,15 +87,15 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 
 	public void setAmount(double amount) {
-		this.amount = amount;
+		this.amount = (amount / 100) * percentProperty;
 	}
 
 	public double getSiteFees() {
 		return siteFees;
 	}
 
-	public void setSiteFees(double siteFees) {
-		this.siteFees = siteFees;
+	public void setSiteFees(double amount) {
+		this.siteFees = (amount / 100) * percentSite;
 	}
 
 	@Override
@@ -157,6 +156,12 @@ public class Transaction implements GeneralDomain, Serializable {
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [idSender=" + idSender + ", idReceiver=" + idReceiver + ", transferDate=" + transferDate
+				+ ", transferTime=" + transferTime + ", amount=" + amount + ", siteFees=" + siteFees + "]";
 	}
 
 }
