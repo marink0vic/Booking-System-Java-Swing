@@ -9,6 +9,7 @@ import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.MainForm;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
+import com.comtrade.view.user.regular.UserHomeFrame;
 
 public class ProxyLogin implements IProxy {
 	
@@ -38,7 +39,8 @@ public class ProxyLogin implements IProxy {
 				proxy = new PropertyOwnerFrame(user);
 				proxy.login(user);
 			} else if (user.getStatus().equals("USER")) {
-				JOptionPane.showMessageDialog(null, "You are regular user");
+				proxy = new UserHomeFrame(user);
+				proxy.login(user);
 			} else {
 				JOptionPane.showMessageDialog(null, "Something went wrong");
 			}

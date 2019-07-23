@@ -20,12 +20,14 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.login.IProxy;
+
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class UserHomeFrame extends JFrame {
+public class UserHomeFrame extends JFrame implements IProxy {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -36,6 +38,7 @@ public class UserHomeFrame extends JFrame {
 	
 	private Map<User, PropertyWrapper> propertyMap;
 	private List<PropertyWrapper> listOfProperties;
+	private User user;
 	private JTextField tfSearch;
 	private JTextField tfStartDate;
 	private JTextField tfEndDate;
@@ -49,7 +52,7 @@ public class UserHomeFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UserHomeFrame frame = new UserHomeFrame();
+					UserHomeFrame frame = new UserHomeFrame(null);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -62,7 +65,8 @@ public class UserHomeFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UserHomeFrame() {
+	public UserHomeFrame(User user) {
+		this.user = user;
 		initializeComponents();
 		propertyMap = new HashMap<>();
 	}
@@ -188,5 +192,11 @@ public class UserHomeFrame extends JFrame {
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void login(User user) {
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 }

@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 
@@ -205,7 +205,7 @@ public class HomePagePanel extends JPanel {
 		return new ImageIcon(newImage);
 	}
 	
-	private double avgPropertyPrice(Map<RoomType, RoomInfo> room) {
+	private double avgPropertyPrice(Map<RoomType, Room> room) {
 		Set<RoomType> roomType = room.keySet();
 		Iterator<RoomType> iterator = roomType.iterator();
 		double price = 0.0;

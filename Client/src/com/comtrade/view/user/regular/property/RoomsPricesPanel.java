@@ -25,13 +25,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 
 public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Map<RoomType, RoomInfo> rooms;
+	private Map<RoomType, Room> rooms;
 	private JPanel roomInfoPanel;
 	private JLabel lblNewLabel;
 	private JLabel lblAvailableRooms;
@@ -51,7 +51,7 @@ public class RoomsPricesPanel extends JPanel {
 	private JLabel lblNumberOfRooms;
 	private JSpinner spinnerRoomCount;
 
-	public RoomsPricesPanel(Map<RoomType, RoomInfo> rooms) {
+	public RoomsPricesPanel(Map<RoomType, Room> rooms) {
 		this.rooms = rooms;
 		initializeComponents();
 	}
@@ -152,15 +152,15 @@ public class RoomsPricesPanel extends JPanel {
 		container.add(scrollPane, BorderLayout.CENTER);
 		this.add(container);
 		
-		for (Map.Entry<RoomType, RoomInfo> entry : rooms.entrySet()) {
+		for (Map.Entry<RoomType, Room> entry : rooms.entrySet()) {
 			RoomType key = entry.getKey();
-			RoomInfo value = entry.getValue();
+			Room value = entry.getValue();
 			JPanel scrollPanel = addRoomPanelToScrollPane(key, value);
             gridPanel.add(scrollPanel);
 		}
 	}
 	
-	private JPanel addRoomPanelToScrollPane(RoomType key, RoomInfo value) {
+	private JPanel addRoomPanelToScrollPane(RoomType key, Room value) {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setPreferredSize(new Dimension(975, 456));
@@ -278,7 +278,7 @@ public class RoomsPricesPanel extends JPanel {
 		return panel_1;
 	}
 	
-	private void fillInfoTable(DefaultTableModel dtm, RoomInfo info) {
+	private void fillInfoTable(DefaultTableModel dtm, Room info) {
 		dtm.setRowCount(0);
 		for (Map.Entry<String, Boolean> entry : info.roomInfoData().entrySet()) {
 			Boolean value = entry.getValue();

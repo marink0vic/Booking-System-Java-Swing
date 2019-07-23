@@ -16,7 +16,7 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.controller.ControllerUI;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
@@ -53,7 +53,7 @@ public class RoomFrame extends JFrame {
 	private HomePanel panel;
 	private String action;
 	private RoomType roomType;
-	private RoomInfo roomInfo;
+	private Room roomInfo;
 
 	/**
 	 * Create the frame.
@@ -67,7 +67,7 @@ public class RoomFrame extends JFrame {
 		
 	}
 
-	public RoomFrame(HomePanel homePanel, PropertyWrapper propertyOwner, RoomType roomType, RoomInfo roomInfo, String action) {
+	public RoomFrame(HomePanel homePanel, PropertyWrapper propertyOwner, RoomType roomType, Room roomInfo, String action) {
 		this.panel = homePanel;
 		this.propertyOwner = propertyOwner;
 		this.roomType = roomType;
@@ -128,9 +128,9 @@ public class RoomFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				RoomType type = createRoomType();
-				RoomInfo info = createRoomInfo();
+				Room info = createRoomInfo();
 				PropertyWrapper tempOwner = new PropertyWrapper();
-				Map<RoomType, RoomInfo> room = new HashMap<>();
+				Map<RoomType, Room> room = new HashMap<>();
 				TransferClass transferClass = new TransferClass();
 				
 				if (action.equals("ADD")) {
@@ -261,7 +261,7 @@ public class RoomFrame extends JFrame {
 	}
 
 	private boolean containsRoom(String name) {
-		for (Entry<RoomType, RoomInfo> map : propertyOwner.getRooms().entrySet()) {
+		for (Entry<RoomType, Room> map : propertyOwner.getRooms().entrySet()) {
 			String roomTypeName = map.getKey().getRoomType();
 			if (roomTypeName.equals(name)) return true;
 		}
@@ -285,17 +285,17 @@ public class RoomFrame extends JFrame {
 		roomType.setPricePerNight(temp.getPricePerNight());
 	}
 	
-	private RoomInfo createRoomInfo() {
+	private Room createRoomInfo() {
 		int numOfBads = (Integer) spinnerBads.getValue();
 		boolean kitchen = cbKitchen.isSelected();
 		boolean tv = cbTv.isSelected();
 		boolean airConditioning = cbAir.isSelected();
 		boolean wifi = cbWifi.isSelected();
-		return new RoomInfo(numOfBads, kitchen, tv, airConditioning, wifi);
+		return new Room(numOfBads, kitchen, tv, airConditioning, wifi);
 	}
 	
 	private void updateRoomInfo() {
-		RoomInfo temp = createRoomInfo();
+		Room temp = createRoomInfo();
 		roomInfo.setNumOfBads(temp.getNumOfBads());
 		roomInfo.setKitchen(temp.isKitchen());
 		roomInfo.setTv(temp.isTv());

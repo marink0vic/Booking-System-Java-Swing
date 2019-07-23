@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
@@ -39,7 +39,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private JLabel lblRoomPrices;
 	private JLabel lblGuestReviews;
 	//---
-	private Map<RoomType, RoomInfo> rooms;
+	private Map<RoomType, Room> rooms;
 
 	
 	public SelectedPropertyFrame(PropertyWrapper propertyWrapper) {

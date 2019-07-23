@@ -9,7 +9,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.generics.Generic;
 
@@ -20,7 +20,7 @@ public class PropertyWrapper implements Serializable, Generic {
 	private int userID;
 	private Address address;
 	private Property property;
-	private Map<RoomType, RoomInfo> rooms;
+	private Map<RoomType, Room> rooms;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
 	private Country country;
@@ -28,7 +28,7 @@ public class PropertyWrapper implements Serializable, Generic {
 	public PropertyWrapper() {
 	}
 	
-	public PropertyWrapper(int userID, Address address, Property property, Map<RoomType, RoomInfo> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(int userID, Address address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
 		this.userID = userID;
 		this.address = address;
 		this.property = property;
@@ -61,11 +61,11 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.property = property;
 	}
 
-	public Map<RoomType, RoomInfo> getRooms() {
+	public Map<RoomType, Room> getRooms() {
 		return rooms;
 	}
 
-	public void setRooms(Map<RoomType, RoomInfo> rooms) {
+	public void setRooms(Map<RoomType, Room> rooms) {
 		this.rooms = rooms;
 	}
 

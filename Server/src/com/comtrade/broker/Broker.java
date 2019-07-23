@@ -18,7 +18,7 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Position;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -170,13 +170,13 @@ public class Broker implements IBroker {
 		
 	}
 
-	private Map<RoomType, RoomInfo> returnRoomAndRoomInfo(int id_property) throws SQLException {
-		String sql = "SELECT * FROM room_type JOIN room_info ON room_type.id_room_type = room_info.id_room_type"
+	private Map<RoomType, Room> returnRoomAndRoomInfo(int id_property) throws SQLException {
+		String sql = "SELECT * FROM room_type JOIN room ON room_type.id_room_type = room.id_room_type"
 					+ " WHERE room_type.id_property = " + id_property;
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
-		Map<RoomType, RoomInfo> room = new LinkedHashMap<>();
+		Map<RoomType, Room> room = new LinkedHashMap<>();
 		while (resultSet.next()) {
 			int idRoomType = resultSet.getInt("id_room_type");
 			int idProperty = id_property;
@@ -193,7 +193,7 @@ public class Broker implements IBroker {
 			boolean tv = resultSet.getBoolean("tv");
 			boolean airConditioning = resultSet.getBoolean("air_conditioning");
 			boolean wifi = resultSet.getBoolean("wifi");
-			RoomInfo rInfo = new RoomInfo(numOfBads, kitchen, tv, airConditioning, wifi);
+			Room rInfo = new Room(numOfBads, kitchen, tv, airConditioning, wifi);
 			rInfo.setIdRoom(idRoomInfo);
 			rInfo.setIdRoomType(idRoomType);
 			

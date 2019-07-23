@@ -226,7 +226,7 @@ public class RegisterForm extends JFrame {
 						propertyForm.setVisible(true);
 						dispose();
 					} else {
-						UserHomeFrame mainUserFrame = new UserHomeFrame();
+						UserHomeFrame mainUserFrame = new UserHomeFrame(savedUser);
 						mainUserFrame.setLocationRelativeTo(null);
 						mainUserFrame.setVisible(true);
 						dispose();

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -14,7 +14,7 @@ public class UpdateRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
-		Map.Entry<RoomType,RoomInfo> temp = wrapper.getRooms().entrySet().iterator().next();
+		Map.Entry<RoomType,Room> temp = wrapper.getRooms().entrySet().iterator().next();
 		IBroker iBroker = new Broker();
 		iBroker.update(temp.getKey());
 		iBroker.update(temp.getValue());

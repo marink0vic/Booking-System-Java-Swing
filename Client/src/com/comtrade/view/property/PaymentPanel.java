@@ -28,7 +28,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -62,13 +62,13 @@ public class PaymentPanel extends JPanel {
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, RoomInfo> room;
+	private Map<RoomType, Room> room;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
 	private Country country;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images) {
+	public PaymentPanel(User user, Address address, Property property, Map<RoomType, Room> room, List<PropertyImage> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
