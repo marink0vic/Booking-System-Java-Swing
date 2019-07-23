@@ -20,20 +20,19 @@ public class Transaction implements GeneralDomain, Serializable {
 	private LocalDate transferDate;
 	private LocalTime transferTime;
 	private double amount;
-	private double siteFees;
+	private double siteFees = 0.1;
 	
 	public Transaction() {
 		
 	}
 	
-	public Transaction(int idSender, int idReceiver, int idBooking, LocalDate transferDate, LocalTime transferTime, double amount, double siteFees) {
+	public Transaction(int idSender, int idReceiver, int idBooking, LocalDate transferDate, LocalTime transferTime, double amount) {
 		this.idSender = idSender;
 		this.idReceiver = idReceiver;
 		this.idBooking = idBooking;
 		this.transferDate = transferDate;
 		this.transferTime = transferTime;
 		this.amount = amount;
-		this.siteFees = siteFees;
 	}
 
 	public int getIdTransaction() {

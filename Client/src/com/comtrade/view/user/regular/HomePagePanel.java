@@ -114,7 +114,7 @@ public class HomePagePanel extends JPanel {
 	}
 	
 	private void setBottomDestinationLabels() {
-		lblRecomended = new JLabel("Recomended destinations");
+		lblRecomended = new JLabel("Most visited destinations");
 		lblRecomended.setForeground(new Color(71, 71, 71));
 		lblRecomended.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblRecomended.setBounds(12, 340, 430, 43);

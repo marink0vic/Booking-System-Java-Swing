@@ -11,6 +11,8 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
+import com.comtrade.view.user.regular.HomePagePanel;
+
 import java.awt.Color;
 
 import javax.swing.JLabel;
@@ -33,6 +35,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
+	private HomePagePanel homePagePanel;
 	//--
 	private PropertyWrapper propertyWrapper;
 	private JLabel lblInfo;
