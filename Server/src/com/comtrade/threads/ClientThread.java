@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import com.comtrade.constants.DomainType;
+import com.comtrade.controller.ControllerBLBooking;
 import com.comtrade.controller.ControllerBLCountry;
 import com.comtrade.controller.ControllerBLImages;
 import com.comtrade.controller.ControllerBLPaymentType;
@@ -71,6 +72,9 @@ public class ClientThread extends Thread {
 			controller = new ControllerBLRoom();
 			break;
 		}
+		case BOOKING:
+			controller = new ControllerBLBooking();
+			break;
 		default:
 			break;
 		}

@@ -128,10 +128,20 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
+		if (resultSet.next()) {
+			int id = resultSet.getInt("id_booked_room");
+			int idBooking = resultSet.getInt("id_booking");
+			int idRoomType = resultSet.getInt("id_room_type");
+			int numOfRooms = resultSet.getInt("number_of_rooms");
+			String status = resultSet.getString("status");
+			BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, status);
+			bookedRoom.idBooking = idBooking;
+			bookedRoom.idBookedRoom = id;
+			return bookedRoom;
+		}
 		return null;
 	}
 

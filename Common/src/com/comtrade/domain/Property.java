@@ -171,24 +171,7 @@ public class Property implements GeneralDomain, Serializable {
 		return "id_property";
 	}
 
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Property property = new Property();
-		if (resultSet.next()) {
-			property.idProperty = resultSet.getInt("id_property");
-			property.idUser = resultSet.getInt("id_user");
-			property.idAddress = resultSet.getInt("id_address");
-			property.type = resultSet.getString("type");
-			property.name = resultSet.getString("name");
-			property.phoneNumner = resultSet.getString("phone_number");
-			property.rating = resultSet.getInt("rating");
-			property.latitude = resultSet.getDouble("latitude");
-			property.longitude = resultSet.getDouble("longitude");
-			property.description = resultSet.getString("description");
-			return property;
-		}
-		return null;
-	}
+
 
 	@Override
 	public int returnIdNumber() {
@@ -241,6 +224,24 @@ public class Property implements GeneralDomain, Serializable {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
+		Property property = new Property();
+		if (resultSet.next()) {
+			property.idProperty = resultSet.getInt("id_property");
+			property.idUser = resultSet.getInt("id_user");
+			property.idAddress = resultSet.getInt("id_address");
+			property.type = resultSet.getString("type");
+			property.name = resultSet.getString("name");
+			property.phoneNumner = resultSet.getString("phone_number");
+			property.rating = resultSet.getInt("rating");
+			property.latitude = resultSet.getDouble("latitude");
+			property.longitude = resultSet.getDouble("longitude");
+			property.description = resultSet.getString("description");
+			return property;
+		}
+		return null;
+	}
 
 }

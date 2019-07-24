@@ -145,7 +145,6 @@ public class Transaction implements GeneralDomain, Serializable {
 		preparedStatement.setDouble(index.next(), amount);
 		preparedStatement.setDouble(index.next(), siteFees);
 	}
-
 	@Override
 	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
 		// TODO Auto-generated method stub
@@ -154,7 +153,6 @@ public class Transaction implements GeneralDomain, Serializable {
 
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -7,9 +7,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -31,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Room;
@@ -38,6 +43,7 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
 
 public class RoomsPricesPanel extends JPanel {
 
@@ -321,9 +327,17 @@ public class RoomsPricesPanel extends JPanel {
 					
 					Booking booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut, numOFAdults, numOfChilren, fullPrice);
 					BookedRoom bookedRoom = new BookedRoom(roomType.getIdRoomType(), numOfSeclectedRooms, "RESERVED");
-					Transaction transaction = new Transaction(user.getIdUser(), idProperty,LocalDate.now(), LocalTime.now());
+					Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
 					transaction.setAmount(fullPrice);
 					transaction.setSiteFees(fullPrice);
+					
+					PropertyWrapper propertyWrapper = createWrapper(booking, bookedRoom, transaction);
+					try {
+						TransferClass transferClass = ControllerUI.getController().saveBooking(propertyWrapper);
+						System.out.println(transferClass.getMessageResponse());
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -334,6 +348,18 @@ public class RoomsPricesPanel extends JPanel {
 		panel_1.add(btnReserve);
 		
 		return panel_1;
+	}
+	
+	private PropertyWrapper createWrapper(Booking booking, BookedRoom bookedRoom, Transaction transaction) {
+		PropertyWrapper propertyWrapper = new PropertyWrapper();
+		Map<Booking, BookedRoom> reservation = new HashMap<>();
+		reservation.put(booking, bookedRoom);
+		propertyWrapper.setBookings(reservation);
+		
+		List<Transaction> transactions = new ArrayList<>();
+		transactions.add(transaction);
+		propertyWrapper.setTranactions(transactions);
+		return propertyWrapper;
 	}
 
 	private void fillInfoTable(DefaultTableModel dtm, Room info) {

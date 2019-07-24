@@ -115,20 +115,6 @@ public class Address implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Address address = new Address();
-		if (resultSet.next()) {
-			address.idAddress = resultSet.getInt("id_address");
-			address.idCountry = resultSet.getInt("id_country");
-			address.street = resultSet.getString("street");
-			address.number = resultSet.getInt("number");
-			address.city = resultSet.getString("city");
-			address.zipCode = resultSet.getInt("post_or_zipcode");
-			return address;
-		}
-		return null;
-	}
-	@Override
 	public int returnIdNumber() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -142,6 +128,20 @@ public class Address implements GeneralDomain, Serializable {
 	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
+		Address address = new Address();
+		if (resultSet.next()) {
+			address.idAddress = resultSet.getInt("id_address");
+			address.idCountry = resultSet.getInt("id_country");
+			address.street = resultSet.getString("street");
+			address.number = resultSet.getInt("number");
+			address.city = resultSet.getString("city");
+			address.zipCode = resultSet.getInt("post_or_zipcode");
+			return address;
+		}
+		return null;
 	}
 
 }

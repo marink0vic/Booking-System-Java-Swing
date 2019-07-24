@@ -268,7 +268,6 @@ public class Broker implements IBroker {
 		String sql = "SELECT * FROM " + domain.returnTableName() + " ORDER BY " + domain.returnIdColumnName()+" DESC LIMIT 1";
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		GeneralDomain newDomain = domain.returnLastInsertedObject(resultSet);
-		return newDomain;
+		return domain.returnLastInsertedObject(resultSet);
 	}
 }

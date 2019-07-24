@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.comtrade.domain.Address;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.Transaction;
 import com.comtrade.generics.Generic;
 
 public class PropertyWrapper implements Serializable, Generic {
@@ -23,6 +26,8 @@ public class PropertyWrapper implements Serializable, Generic {
 	private Map<RoomType, Room> rooms;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
+	private List<Transaction> tranactions;
+	private Map<Booking, BookedRoom> bookings;
 	private Country country;
 	
 	public PropertyWrapper() {
@@ -91,6 +96,22 @@ public class PropertyWrapper implements Serializable, Generic {
 
 	public void setCountry(Country country) {
 		this.country = country;
+	}
+
+	public List<Transaction> getTranactions() {
+		return tranactions;
+	}
+
+	public void setTranactions(List<Transaction> tranactions) {
+		this.tranactions = tranactions;
+	}
+
+	public Map<Booking, BookedRoom> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(Map<Booking, BookedRoom> bookings) {
+		this.bookings = bookings;
 	}
 	
 }
