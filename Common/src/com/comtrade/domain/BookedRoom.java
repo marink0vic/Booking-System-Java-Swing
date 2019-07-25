@@ -16,18 +16,25 @@ public class BookedRoom implements GeneralDomain, Serializable {
 	private int idBooking;
 	private int idRoomType;
 	private int numberOfRooms;
+	private int numberOfAdults;
+	private int numberOfChildren;
 	private String status;
 	private LocalDateTime created;
 	
 	public BookedRoom() {
 		
 	}
-	
-	public BookedRoom(int idRoomType, int numberOfRooms, String status) {
+
+	public BookedRoom(int idRoomType, int numberOfRooms, int numberOfAdults, int numberOfChildren, String status) {
+		super();
 		this.idRoomType = idRoomType;
 		this.numberOfRooms = numberOfRooms;
+		this.numberOfAdults = numberOfAdults;
+		this.numberOfChildren = numberOfChildren;
 		this.status = status;
 	}
+
+
 
 	public int getIdBookedRoom() {
 		return idBookedRoom;
@@ -61,6 +68,22 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		this.numberOfRooms = numberOfRooms;
 	}
 
+	public int getNumberOfAdults() {
+		return numberOfAdults;
+	}
+
+	public void setNumberOfAdults(int numberOfAdults) {
+		this.numberOfAdults = numberOfAdults;
+	}
+
+	public int getNumberOfChildren() {
+		return numberOfChildren;
+	}
+
+	public void setNumberOfChildren(int numberOfChildren) {
+		this.numberOfChildren = numberOfChildren;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -89,12 +112,12 @@ public class BookedRoom implements GeneralDomain, Serializable {
 	
 	@Override
 	public String returnColumnNames() {
-		return " (id_booking, id_room_type, number_of_rooms, status, created) VALUES ";
+		return " (id_booking, id_room_type, number_of_rooms, number_of_adults, number_of_children, status, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?)";
+		return "(?,?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -119,6 +142,8 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		preparedStatement.setInt(index.next(), idBooking);
 		preparedStatement.setInt(index.next(), idRoomType);
 		preparedStatement.setInt(index.next(), numberOfRooms);
+		preparedStatement.setInt(index.next(), numberOfAdults);
+		preparedStatement.setInt(index.next(), numberOfChildren);
 		preparedStatement.setString(index.next(), status);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
@@ -136,13 +161,21 @@ public class BookedRoom implements GeneralDomain, Serializable {
 			int idBooking = resultSet.getInt("id_booking");
 			int idRoomType = resultSet.getInt("id_room_type");
 			int numOfRooms = resultSet.getInt("number_of_rooms");
+			int numOfAdults = resultSet.getInt("number_of_adults");
+			int numOfChildren = resultSet.getInt("number_of_children");
 			String status = resultSet.getString("status");
-			BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, status);
+			BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, status);
 			bookedRoom.idBooking = idBooking;
 			bookedRoom.idBookedRoom = id;
 			return bookedRoom;
 		}
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "BookedRoom [idRoomType=" + idRoomType + ", numberOfRooms=" + numberOfRooms + ", numberOfAdults="
+				+ numberOfAdults + ", numberOfChildren=" + numberOfChildren + "]";
 	}
 
 }

@@ -12,7 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,13 +51,15 @@ public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Map<RoomType, Room> rooms;
+	private int idProperty;
 	private User user;
-	private PropertyWrapper propertyWrapper;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
 	private int period;
-	
-	private double fullPrice;
+	private Map<Booking, List<BookedRoom>> reservation;
+	private List<BookedRoom> bookedRooms;
+	private double[] pricesPerRoom;
+	private Booking booking;
 	//----
 	private JPanel roomInfoPanel;
 	private JLabel lblNewLabel;
@@ -78,17 +82,21 @@ public class RoomsPricesPanel extends JPanel {
 
 	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut) {
 		this.user = user;
-		this.propertyWrapper = propertyWrapper;
+		this.idProperty = propertyWrapper.getProperty().getIdProperty();
 		this.rooms = propertyWrapper.getRooms();
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut);
+		reservation = new HashMap<>();
+		bookedRooms = new ArrayList<>();
+		pricesPerRoom = new double[rooms.size()];
 		Period p = Period.between(checkIn, checkOut);
 		period = p.getDays();
 		initializeComponents();
 	}
 
 	private void initializeComponents() {
-		this.setBounds(252, 165, 975, 767);
+		this.setBounds(252, 165, 1150, 767);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 		loadTopSectionPanel();
@@ -154,7 +162,7 @@ public class RoomsPricesPanel extends JPanel {
 		separator_7.setBounds(837, 17, 1, 40);
 		roomInfoPanel.add(separator_7);
 		
-		lblConfirm = new JLabel("Confirm");
+		lblConfirm = new JLabel("Reservation");
 		lblConfirm.setHorizontalAlignment(SwingConstants.CENTER);
 		lblConfirm.setForeground(Color.WHITE);
 		lblConfirm.setFont(new Font("Dialog", Font.BOLD, 17));
@@ -183,15 +191,48 @@ public class RoomsPricesPanel extends JPanel {
 		container.add(scrollPane, BorderLayout.CENTER);
 		this.add(container);
 		
+		int i = 0;
 		for (Map.Entry<RoomType, Room> entry : rooms.entrySet()) {
 			RoomType roomType = entry.getKey();
 			Room value = entry.getValue();
-			JPanel scrollPanel = addRoomPanelToScrollPane(roomType, value);
+			JPanel scrollPanel = addRoomPanelToScrollPane(roomType, value, i);
             gridPanel.add(scrollPanel);
+            i++;
 		}
+		
+		JButton btnConfirmBooking = new JButton("Complete");
+		btnConfirmBooking.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int choice = JOptionPane.showConfirmDialog(null, "Confirm booking", "Cansel booking",
+						JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				if (choice == JOptionPane.YES_OPTION) {
+					double fullPrice = Arrays.stream(pricesPerRoom).sum();
+					booking.setPriceForStay(fullPrice);
+					reservation.put(booking, bookedRooms);
+					Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
+					transaction.setAmount(fullPrice);
+					transaction.setSiteFees(fullPrice);
+					
+					System.out.println("reservation complete");
+				}
+			}
+		});
+		btnConfirmBooking.setForeground(new Color(255, 255, 255));
+		btnConfirmBooking.setBackground(ColorConstants.BLUE);
+		btnConfirmBooking.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnConfirmBooking.setBounds(1001, 319, 137, 108);
+		add(btnConfirmBooking);
+		
+		JLabel lblFinalComplete = new JLabel("Confirm reservation");
+		lblFinalComplete.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lblFinalComplete.setForeground(ColorConstants.GRAY);
+		lblFinalComplete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFinalComplete.setBounds(987, 274, 151, 32);
+		add(lblFinalComplete);
 	}
 	
-	private JPanel addRoomPanelToScrollPane(RoomType roomType, Room room) {
+	private JPanel addRoomPanelToScrollPane(RoomType room_type, Room room, int price_index) {
 		double priceForPeriod;
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
@@ -200,14 +241,14 @@ public class RoomsPricesPanel extends JPanel {
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		
-		lblRoomType = new JLabel(roomType.getRoomType());
+		lblRoomType = new JLabel(room_type.getRoomType());
 		lblRoomType.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRoomType.setForeground(ColorConstants.GRAY);
 		lblRoomType.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblRoomType.setBounds(12, 29, 203, 54);
 		panel_1.add(lblRoomType);
 		
-		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + roomType.getNumberOfRooms());
+		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + room_type.getNumberOfRooms());
 		lblRoomsAvaiable.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRoomsAvaiable.setForeground(new Color(71, 71, 71));
 		lblRoomsAvaiable.setFont(new Font("Dialog", Font.PLAIN, 16));
@@ -257,7 +298,7 @@ public class RoomsPricesPanel extends JPanel {
 		spinnerChildren.setBounds(410, 118, 58, 43);
 		panel_1.add(spinnerChildren);
 		
-		priceForPeriod = roomType.getPricePerNight() * period;
+		priceForPeriod = room_type.getPricePerNight() * period;
 		String strPrice =  String.format("%.2f", priceForPeriod);
 		JLabel lblPrice = new JLabel(strPrice + "$");
 		lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
@@ -297,13 +338,15 @@ public class RoomsPricesPanel extends JPanel {
 		lblNumberOfRooms.setBounds(709, 13, 117, 54);
 		panel_1.add(lblNumberOfRooms);
 		
-		SpinnerModel sm2 = new SpinnerNumberModel(1, 1, roomType.getNumberOfRooms(), 1);
+		SpinnerModel sm2 = new SpinnerNumberModel(0, 0, room_type.getNumberOfRooms(), 1);
 		sm2.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int roomCount = (Integer) sm2.getValue();
-				fullPrice = priceForPeriod * roomCount;
-				String strPrice =  String.format("%.2f", fullPrice);
+				if (roomCount != 0) {
+					pricesPerRoom[price_index] = priceForPeriod * roomCount;
+				}
+				String strPrice =  String.format("%.2f", pricesPerRoom[price_index]);
 				lblPrice.setText(strPrice + "$");
 			}
 		});
@@ -311,55 +354,73 @@ public class RoomsPricesPanel extends JPanel {
 		spinnerRoomCount.setBounds(740, 74, 58, 43);
 		panel_1.add(spinnerRoomCount);
 		
-		JButton btnReserve = new JButton("reserve");
-		btnReserve.addActionListener(new ActionListener() {
+		JButton addReservation = new JButton("Add");
+		addReservation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int peopleCount = (Integer) spinnerAdults.getValue() + (Integer) spinnerChildren.getValue();
 				int numOfSeclectedRooms = (Integer) sm2.getValue();
-				int bedCount = room.getNumOfBads() * numOfSeclectedRooms;
-				
-				if (peopleCount > bedCount) {
-					JOptionPane.showMessageDialog(null, "You selected more guests than number of bads");
+				int bedCount = room.getNumOfBads();
+				if (numOfSeclectedRooms == 0) {
+					JOptionPane.showMessageDialog(null, "If the room is vacant, you have to choose number of rooms");
 				} else {
-					int idProperty = propertyWrapper.getProperty().getIdProperty();
-					int numOFAdults = (Integer) spinnerAdults.getValue();
-					int numOfChilren = (Integer) spinnerChildren.getValue();
-					
-					Booking booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut, numOFAdults, numOfChilren, fullPrice);
-					BookedRoom bookedRoom = new BookedRoom(roomType.getIdRoomType(), numOfSeclectedRooms, "RESERVED");
-					Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
-					transaction.setAmount(fullPrice);
-					transaction.setSiteFees(fullPrice);
-					
-					PropertyWrapper propertyWrapper = createWrapper(booking, bookedRoom, transaction);
-					try {
-						TransferClass transferClass = ControllerUI.getController().saveBooking(propertyWrapper);
-						System.out.println(transferClass.getMessageResponse());
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
+					bedCount = room.getNumOfBads() * numOfSeclectedRooms;
+					if (peopleCount > bedCount) {
+						JOptionPane.showMessageDialog(null, "You selected more guests than number of bads");
+					} else {
+						int numOFAdults = (Integer) spinnerAdults.getValue();
+						int numOfChilren = (Integer) spinnerChildren.getValue();
+						BookedRoom bookedRoom = new BookedRoom(room_type.getIdRoomType(), numOfSeclectedRooms, numOFAdults, numOfChilren, "RESERVED");
+						addToReservation(bookedRoom,room_type.getIdRoomType());
 					}
 				}
+				
 			}
 		});
-		btnReserve.setForeground(new Color(255, 255, 255));
-		btnReserve.setBackground(ColorConstants.BLUE);
-		btnReserve.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnReserve.setBounds(855, 49, 97, 61);
-		panel_1.add(btnReserve);
+		addReservation.setForeground(new Color(255, 255, 255));
+		addReservation.setBackground(ColorConstants.BLUE);
+		addReservation.setFont(new Font("Dialog", Font.BOLD, 14));
+		addReservation.setBounds(855, 49, 97, 61);
+		panel_1.add(addReservation);
+		
+		
+		JButton removeReservation = new JButton("Remove");
+		removeReservation.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				removeFromReservation(room_type.getIdRoomType());
+			}
+		});
+		removeReservation.setForeground(new Color(255, 255, 255));
+		removeReservation.setBackground(ColorConstants.RED);
+		removeReservation.setFont(new Font("Dialog", Font.BOLD, 14));
+		removeReservation.setBounds(855, 130, 97, 61);
+		panel_1.add(removeReservation);
 		
 		return panel_1;
 	}
 	
-	private PropertyWrapper createWrapper(Booking booking, BookedRoom bookedRoom, Transaction transaction) {
-		PropertyWrapper propertyWrapper = new PropertyWrapper();
-		Map<Booking, BookedRoom> reservation = new HashMap<>();
-		reservation.put(booking, bookedRoom);
-		propertyWrapper.setBookings(reservation);
-		
-		List<Transaction> transactions = new ArrayList<>();
-		transactions.add(transaction);
-		propertyWrapper.setTranactions(transactions);
-		return propertyWrapper;
+
+	protected void removeFromReservation(int id_room) {
+		for (int i = 0; i < bookedRooms.size(); i++) {
+			if (bookedRooms.get(i).getIdRoomType() == id_room) {
+				JOptionPane.showMessageDialog(null, "Selected room removed from reservation");
+				bookedRooms.remove(i);
+			}
+		}
+	}
+
+	protected void addToReservation(BookedRoom booked_room, int room_id) {
+		System.out.println(bookedRooms.size());
+		for (int i = 0; i < bookedRooms.size(); i++) {
+			if (bookedRooms.get(i).getIdRoomType() == room_id) {
+				bookedRooms.remove(i);
+				bookedRooms.add(booked_room);
+				JOptionPane.showMessageDialog(null, "Room updated");
+				return;
+			}
+		}
+		bookedRooms.add(booked_room);
+		JOptionPane.showMessageDialog(null, "Room added to reservation");
 	}
 
 	private void fillInfoTable(DefaultTableModel dtm, Room info) {

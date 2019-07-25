@@ -27,7 +27,7 @@ public class PropertyWrapper implements Serializable, Generic {
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
 	private List<Transaction> tranactions;
-	private Map<Booking, BookedRoom> bookings;
+	private Map<Booking, List<BookedRoom>> bookings;
 	private Country country;
 	
 	public PropertyWrapper() {
@@ -106,12 +106,13 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.tranactions = tranactions;
 	}
 
-	public Map<Booking, BookedRoom> getBookings() {
+	public Map<Booking, List<BookedRoom>> getBookings() {
 		return bookings;
 	}
 
-	public void setBookings(Map<Booking, BookedRoom> bookings) {
+	public void setBookings(Map<Booking, List<BookedRoom>> bookings) {
 		this.bookings = bookings;
 	}
+
 	
 }

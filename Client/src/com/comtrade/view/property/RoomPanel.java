@@ -187,8 +187,10 @@ public class RoomPanel extends JPanel {
 		RoomType roomType = listOfTypes.get(tempRoomTypePosition);
 		room.put(roomType, r);
 		tempRoomTypePosition++;
-		if (tempRoomTypePosition != listOfTypes.size()) lblHeaderText.setText(headerText + listOfTypes.get(tempRoomTypePosition).getRoomType());
-		else lblHeaderText.setText("You entered all your rooms");
+		if (tempRoomTypePosition != listOfTypes.size()) 
+			lblHeaderText.setText(headerText + listOfTypes.get(tempRoomTypePosition).getRoomType());
+		else 
+			lblHeaderText.setText("You entered all your rooms");
 	}
 	
 	private void clearInputs() {

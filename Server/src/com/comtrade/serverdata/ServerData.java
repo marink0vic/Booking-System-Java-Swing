@@ -15,6 +15,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericList;
 
 public class ServerData {
 	private List<Country> countries;
@@ -37,7 +38,6 @@ public class ServerData {
 	public void loadData() throws SQLException {
 		
 		Connection.getConnection().openConnection();
-		
 		countries = (List<Country>) iBroker.returnAllData(new Country());
 		paymentTypes = (List<PaymentType>) iBroker.returnAllData(new PaymentType());
 		allUsers = (List<User>) iBroker.returnAllData(new User());
@@ -68,6 +68,8 @@ public class ServerData {
 				temp.setUserID(user.getIdUser());
 				iBroker.insertPropertyForOwner(temp);
 				propertyMap.put(user, temp);
+			} else if (user.getStatus().equals("USER")) {
+				
 			}
 		}
 	}

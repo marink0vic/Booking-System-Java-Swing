@@ -72,7 +72,7 @@ public class SelectedPropertyFrame extends JFrame {
 		addPropertyNavigationLabels();
 		
 		layeredPane = new JLayeredPane();
-		layeredPane.setBounds(252, 165, 975, 767);
+		layeredPane.setBounds(252, 165, 1150, 767);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.Address;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
@@ -122,14 +125,15 @@ public class Broker implements IBroker {
 		return null;
 	}
 
-
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
-		wrapper.setRooms(returnRoomAndRoomInfo(wrapper.getProperty().getIdProperty()));
-		wrapper.setImages(returnPropertyImages(wrapper.getProperty().getIdProperty()));
-		wrapper.setPaymentList(returnPayments(wrapper.getProperty().getIdProperty()));
+		int idProperty = wrapper.getProperty().getIdProperty();
+		wrapper.setRooms(returnRoomAndRoomInfo(idProperty));
+		wrapper.setImages(returnPropertyImages(idProperty));
+		wrapper.setPaymentList(returnPayments(idProperty));
 		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
+		//wrapper.setBookings(returnBookings(idProperty));
 	}	
 
 	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
@@ -201,6 +205,22 @@ public class Broker implements IBroker {
 		}
 		return room;
 	}
+	
+	private Map<Booking, BookedRoom> returnBookings(int id_property) throws SQLException {
+		Map<Booking, BookedRoom> bookings = new HashMap<>();
+		String sql = "SELECT * FROM bookings JOIN booked_room ON booked_room.id_booking = bookings.id_booking WHERE id_property = ?";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		preparedStatement.setInt(1, id_property);
+		ResultSet rs = preparedStatement.executeQuery();
+		while (rs.next()) {
+			//id_user	id_property	check_in	check_out	number_of_adults	number_of_children	price_for_stay
+			int idBooking = rs.getInt("id_booking");
+			int idUser = rs.getInt("id_user");
+			
+		}
+		return null;
+	}
+	
 	@Override
 	public List<PropertyImage> returnPropertyImages(int id_property) throws SQLException {
 		
@@ -221,6 +241,7 @@ public class Broker implements IBroker {
 		
 		return propertyImages;
 	}
+	
 	@Override
 	public List<PaymentType> returnPayments(int id_property) throws SQLException {
 		String sql = "SELECT * FROM payment_type" + " "
@@ -270,4 +291,6 @@ public class Broker implements IBroker {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		return domain.returnLastInsertedObject(resultSet);
 	}
+
+	
 }

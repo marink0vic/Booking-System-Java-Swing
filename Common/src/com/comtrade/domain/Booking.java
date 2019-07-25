@@ -19,8 +19,6 @@ public class Booking implements GeneralDomain, Serializable {
 	private int idProperty;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
-	private int numberOfAdults;
-	private int numberOfChildren;
 	private double priceForStay;
 	private LocalDateTime created;
 	
@@ -28,14 +26,11 @@ public class Booking implements GeneralDomain, Serializable {
 		
 	}
 
-	public Booking(int idUser, int idProperty, LocalDate checkIn, LocalDate checkOut, int numberOfAdults, int numberOfChildren, double priceForStay) {
+	public Booking(int idUser, int idProperty, LocalDate checkIn, LocalDate checkOut) {
 		this.idUser = idUser;
 		this.idProperty = idProperty;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		this.numberOfAdults = numberOfAdults;
-		this.numberOfChildren = numberOfChildren;
-		this.priceForStay = priceForStay;
 	}
 
 	public int getIdBooking() {
@@ -78,22 +73,6 @@ public class Booking implements GeneralDomain, Serializable {
 		this.checkOut = checkOut;
 	}
 
-	public int getNumberOfAdults() {
-		return numberOfAdults;
-	}
-
-	public void setNumberOfAdults(int numberOfAdults) {
-		this.numberOfAdults = numberOfAdults;
-	}
-
-	public int getNumberOfChildren() {
-		return numberOfChildren;
-	}
-
-	public void setNumberOfChildren(int numberOfChildren) {
-		this.numberOfChildren = numberOfChildren;
-	}
-
 	public double getPriceForStay() {
 		return priceForStay;
 	}
@@ -122,12 +101,12 @@ public class Booking implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnNames() {
-		return " (id_user, id_property, check_in, check_out, number_of_adults, number_of_children, price_for_stay, created) VALUES ";
+		return " (id_user, id_property, check_in, check_out, price_for_stay, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?,?,?)";
+		return "(?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -155,8 +134,6 @@ public class Booking implements GeneralDomain, Serializable {
 		preparedStatement.setInt(index.next(), idProperty);
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkIn));
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkOut));
-		preparedStatement.setInt(index.next(), numberOfAdults);
-		preparedStatement.setInt(index.next(), numberOfChildren);
 		preparedStatement.setDouble(index.next(), priceForStay);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
@@ -186,18 +163,10 @@ public class Booking implements GeneralDomain, Serializable {
 		int idProperty = resultSet.getInt("id_property");
 		LocalDate checkIn = resultSet.getDate("check_in").toLocalDate();
 		LocalDate checkOut = resultSet.getDate("check_out").toLocalDate();
-		int numOfAdults = resultSet.getInt("number_of_adults");
-		int numOfChildren = resultSet.getInt("number_of_children");
 		double priceForStay = resultSet.getDouble("price_for_stay");
-		Booking booking = new Booking(idUser, idProperty, checkIn, checkOut, numOfAdults, numOfChildren, priceForStay);
+		Booking booking = new Booking(idUser, idProperty, checkIn, checkOut);
 		booking.idBooking = id;
+		booking.priceForStay = priceForStay;
 		return booking;
-	}
-
-	@Override
-	public String toString() {
-		return "Booking [idUser=" + idUser + ", idProperty=" + idProperty + ", checkIn=" + checkIn + ", checkOut="
-				+ checkOut + ", numberOfAdults=" + numberOfAdults + ", numberOfChildren=" + numberOfChildren
-				+ ", priceForStay=" + priceForStay + "]";
 	}
 }

@@ -2,6 +2,7 @@ package com.comtrade.sysoperation.booking;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.comtrade.broker.Broker;
@@ -17,11 +18,11 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private IBroker iBroker = new Broker();
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
-		Map.Entry<Booking, BookedRoom> entry = wrapper.getBookings().entrySet().iterator().next();
+		Map.Entry<Booking, List<BookedRoom>> entry = wrapper.getBookings().entrySet().iterator().next();
 		Transaction transaction = wrapper.getTranactions().remove(0);
 		
-		Map<Booking, BookedRoom> savedBooking = saveBooking(entry.getKey(), entry.getValue(), transaction);
-		wrapper.setBookings(savedBooking);
+//		Map<Booking, BookedRoom> savedBooking = saveBooking(entry.getKey(), entry.getValue(), transaction);
+//		wrapper.setBookings(savedBooking);
 		
 	}
 	private Map<Booking, BookedRoom> saveBooking(Booking booking, BookedRoom room, Transaction transaction) throws SQLException {
