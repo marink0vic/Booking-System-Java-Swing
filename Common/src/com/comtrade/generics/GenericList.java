@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.comtrade.domain.GeneralDomain;
 
-public class GenericList<E extends GeneralDomain> implements Generic {
+public class GenericList<E extends Generic> implements Generic {
 	
 	private List<E> list;
 	

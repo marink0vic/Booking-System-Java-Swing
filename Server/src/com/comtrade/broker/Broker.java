@@ -133,13 +133,13 @@ public class Broker implements IBroker {
 		wrapper.setImages(returnPropertyImages(idProperty));
 		wrapper.setPaymentList(returnPayments(idProperty));
 		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
-		//wrapper.setBookings(returnBookings(idProperty));
+		wrapper.setBookings(returnBookings(new Property(), wrapper.getProperty().getIdProperty()));
 	}	
 
 	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
 		String sql = "SELECT * FROM property JOIN address "
 				+ "ON property.id_address = address.id_address "
-				+ "WHERE property.id_user = " + wrapper.getUserID();
+				+ "WHERE property.id_user = " + wrapper.getUser().getIdUser();
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
@@ -155,7 +155,7 @@ public class Broker implements IBroker {
 			double longitude = resultSet.getDouble("longitude");
 			String description = resultSet.getString("description");
 	
-			Property property = new Property(wrapper.getUserID(), idAddress, type, name, phone, rating, description);
+			Property property = new Property(wrapper.getUser().getIdUser(), idAddress, type, name, phone, rating, description);
 			property.setIdProperty(idProperty);
 			property.setLatitude(latitude);
 			property.setLongitude(longitude);
@@ -206,19 +206,31 @@ public class Broker implements IBroker {
 		return room;
 	}
 	
-	private Map<Booking, BookedRoom> returnBookings(int id_property) throws SQLException {
-		Map<Booking, BookedRoom> bookings = new HashMap<>();
-		String sql = "SELECT * FROM bookings JOIN booked_room ON booked_room.id_booking = bookings.id_booking WHERE id_property = ?";
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		preparedStatement.setInt(1, id_property);
-		ResultSet rs = preparedStatement.executeQuery();
-		while (rs.next()) {
-			//id_user	id_property	check_in	check_out	number_of_adults	number_of_children	price_for_stay
-			int idBooking = rs.getInt("id_booking");
-			int idUser = rs.getInt("id_user");
+	public Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
+		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
+				+ " WHERE " + domain.returnIdColumnName() + " = ?";
+		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ps.setInt(1, key);
+		ResultSet resultSet = ps.executeQuery();
+		
+		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
+		while (resultSet.next()) {
+			Booking booking = new Booking();
+			booking = booking.createBooking(resultSet);
 			
+			BookedRoom br = new BookedRoom();
+			br = br.createBookedRoom(resultSet);
+			
+			if (bookings.containsKey(booking)) {
+				bookings.get(booking).add(br);
+			} else {
+				List<BookedRoom> rooms = new ArrayList<>();
+				rooms.add(br);
+				bookings.put(booking, rooms);
+			}
 		}
-		return null;
+		return bookings;
+		
 	}
 	
 	@Override
@@ -290,6 +302,15 @@ public class Broker implements IBroker {
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		return domain.returnLastInsertedObject(resultSet);
+	}
+
+	@Override
+	public List<User> returnUsers(User user, String status) throws SQLException {
+		String sql = "SELECT * FROM user WHERE status = ?";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		preparedStatement.setString(1,status);
+		ResultSet resultSet = preparedStatement.executeQuery();
+		return user.returnList(resultSet);
 	}
 
 	

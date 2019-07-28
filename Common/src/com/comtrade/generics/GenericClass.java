@@ -1,8 +1,7 @@
 package com.comtrade.generics;
 
-import com.comtrade.domain.GeneralDomain;
 
-public class GenericClass<T extends GeneralDomain> implements Generic {
+public class GenericClass<T extends Generic> implements Generic {
 
 	private T domain;
 

@@ -191,14 +191,12 @@ public class PaymentPanel extends JPanel {
 	}
 	
 	private void registerProperty() {
-		GenericMap<User, PropertyWrapper> propertyData = new GenericMap<>();
-		PropertyWrapper propertyWrapper = new PropertyWrapper(user.getIdUser(), address, property, room, images, paymentList);
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		propertyWrapper.setCountry(country);
-		propertyData.put(user, propertyWrapper);
 		try {
-			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyData);
+			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
 			PropertyWrapper returnedProperty =  (PropertyWrapper) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(user, returnedProperty);
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedProperty);
 			propertyOwner.setLocationRelativeTo(null);
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();

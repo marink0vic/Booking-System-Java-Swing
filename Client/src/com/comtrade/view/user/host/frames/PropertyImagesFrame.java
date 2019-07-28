@@ -47,12 +47,10 @@ public class PropertyImagesFrame extends JFrame {
 	private int propertyId;
 	private int index;
 	private HomePanel homePanel;
-	private User user;
 	private PropertyWrapper propertyWrapper;
 	
-	public PropertyImagesFrame(HomePanel homePanel, User user, PropertyWrapper propertyWrapper) {
+	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyWrapper) {
 		this.homePanel = homePanel;
-		this.user = user;
 		this.propertyWrapper = propertyWrapper;
 		this.propertyImages = propertyWrapper.getImages();
 		this.propertyId = propertyWrapper.getProperty().getIdProperty();
@@ -198,17 +196,14 @@ public class PropertyImagesFrame extends JFrame {
 				
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
 				if (newImagesForDatabase.size() > 0) {
-					PropertyWrapper owner = new PropertyWrapper();
-					owner.setImages(newImagesForDatabase);
-					
-					GenericMap<User, PropertyWrapper> mapWrapper = new GenericMap<>();
-					mapWrapper.put(user, owner);
-					
+					PropertyWrapper wrapper = new PropertyWrapper();
+					wrapper.setImages(newImagesForDatabase);
+					wrapper.setUser(propertyWrapper.getUser());
 					
 					try {
-						TransferClass transfer = ControllerUI.getController().saveImages(mapWrapper);
-						owner = (PropertyWrapper) transfer.getServerResponse();
-						propertyWrapper.setImages(owner.getImages());
+						TransferClass transfer = ControllerUI.getController().saveImages(wrapper);
+						wrapper = (PropertyWrapper) transfer.getServerResponse();
+						propertyWrapper.setImages(wrapper.getImages());
 						propertyImages = propertyWrapper.getImages();
 					} catch (ClassNotFoundException | IOException e) {
 						e.printStackTrace();

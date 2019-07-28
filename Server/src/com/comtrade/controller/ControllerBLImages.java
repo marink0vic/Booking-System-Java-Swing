@@ -27,11 +27,10 @@ public class ControllerBLImages implements IControllerBL {
 		switch (operation) {
 		case SAVE:
 		{
-			@SuppressWarnings("unchecked")
-			GenericMap<User, PropertyWrapper> mapWrapper = (GenericMap<User, PropertyWrapper>) sender.getClientRequest();
+			PropertyWrapper wrapper = (PropertyWrapper) sender.getClientRequest();
 			try {
 				
-				PropertyWrapper wrapper = saveImages(mapWrapper);
+				wrapper  = saveImages(wrapper);
 				receiver.setServerResponse(wrapper);
 				receiver.setMessageResponse("The images were successfully saved in the database");
 			} catch (SQLException e) {
@@ -67,10 +66,10 @@ public class ControllerBLImages implements IControllerBL {
 		sysOperation.executeSystemOperation(genericList);
 	}
 
-	private PropertyWrapper saveImages(GenericMap<User, PropertyWrapper> mapWrapper) throws SQLException {
-		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new SaveImagesSO();
-		sysOperation.executeSystemOperation(mapWrapper);
-		return mapWrapper.getValue(mapWrapper.getKey());
+	private PropertyWrapper saveImages(PropertyWrapper wrapper) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new SaveImagesSO();
+		sysOperation.executeSystemOperation(wrapper);
+		return wrapper;
 	}
 
 }

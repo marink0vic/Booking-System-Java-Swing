@@ -22,16 +22,16 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericMap;
+import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
-public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, PropertyWrapper>> {
+public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	
 	private IBroker ib = new Broker();
 
 	@Override
-	protected void executeSpecificOperation(GenericMap<User, PropertyWrapper> mapWrapper) throws SQLException {
-		User user = mapWrapper.getKey();
-		PropertyWrapper wrapper = mapWrapper.getValue(user);
+	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
+		User user = wrapper.getUser();
 		
 		Address address = saveAddress(wrapper.getAddress());
 		wrapper.setAddress(address);
@@ -53,6 +53,8 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		List<PaymentType> payments = wrapper.getPaymentList();
 		payments = savePropertyPayments(payments, property.getIdProperty());
 		wrapper.setPaymentList(payments);
+		
+		ServerData.getInstance().addNewProperty(wrapper);
 	}
 
 	private List<PaymentType> savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {

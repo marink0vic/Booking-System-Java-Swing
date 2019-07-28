@@ -20,4 +20,5 @@ public interface IBroker {
 	List<PropertyImage> returnPropertyImages(int id_property) throws SQLException;
 	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
+	List<User> returnUsers(User user, String status) throws SQLException;
 }

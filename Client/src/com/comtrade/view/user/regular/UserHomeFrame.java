@@ -47,7 +47,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private HomePagePanel homePagePanel;
 	private SearchPagePanel searchPagePanel;
 	
-	private Map<User, PropertyWrapper> propertyMap;
 	private List<PropertyWrapper> listOfProperties;
 	private User user;
 	private JTextField tfSearch;
@@ -60,7 +59,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	public UserHomeFrame(User user) {
 		this.user = user;
 		initializeComponents();
-		propertyMap = new HashMap<>();
 	}
 
 	private void initializeComponents() {
@@ -77,7 +75,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		headerPanel = new HeaderPanel();
+		headerPanel = new HeaderPanel(user);
 		contentPane.add(headerPanel);
 		
 		loadAllProperties();
@@ -199,8 +197,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private void loadAllProperties() {
 		try {
 			TransferClass transferClass = ControllerUI.getController().returnAllProperties();
-			propertyMap = (Map<User, PropertyWrapper>) transferClass.getServerResponse();
-			listOfProperties = new ArrayList<>(propertyMap.values());
+			listOfProperties = (List<PropertyWrapper>) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}

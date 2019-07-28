@@ -2,10 +2,13 @@ package com.comtrade.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.comtrade.communication.Communication;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
@@ -49,9 +52,9 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveProperty(GenericMap<User, PropertyWrapper> propertyData) throws ClassNotFoundException, IOException {
+	public TransferClass saveProperty(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyData);
+		transferClass.setClientRequest(propertyOwner);
 		transferClass.setDomainType(DomainType.PROPERTY);
 		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		return sendAndReturn(transferClass);
@@ -73,9 +76,9 @@ private static ControllerUI controller;
 		return sendAndReturn(transferClass);
 	}
 	
-	public TransferClass saveImages(GenericMap<User, PropertyWrapper> mapWrapper) throws ClassNotFoundException, IOException {
+	public TransferClass saveImages(PropertyWrapper wrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(mapWrapper);
+		transferClass.setClientRequest(wrapper);
 		transferClass.setDomainType(DomainType.IMAGES);
 		transferClass.setOperation(Operations.SAVE);
 		return sendAndReturn(transferClass);
@@ -120,16 +123,17 @@ private static ControllerUI controller;
 		transferClass.setOperation(Operations.SAVE);
 		return sendAndReturn(transferClass);
 	}
+	public TransferClass returnBookingsForProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setDomainType(DomainType.BOOKING);
+		transferClass.setOperation(Operations.RETURN_BOOKING_FOR_PROPERTY);
+		return sendAndReturn(transferClass);
+	}
 	
 	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
 		Communication.getCommunication().send(transferClass);
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
-
-
-
-
-
-
 }

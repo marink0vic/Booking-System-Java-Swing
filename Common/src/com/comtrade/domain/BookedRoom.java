@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookedRoom implements GeneralDomain, Serializable {
@@ -150,26 +151,34 @@ public class BookedRoom implements GeneralDomain, Serializable {
 
 	@Override
 	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<BookedRoom> bookedRooms = new ArrayList<>();
+		while (resultSet.next()) {
+			BookedRoom br = createBookedRoom(resultSet);
+			bookedRooms.add(br);
+		}
+		return bookedRooms;
 	}
 	
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		if (resultSet.next()) {
-			int id = resultSet.getInt("id_booked_room");
-			int idBooking = resultSet.getInt("id_booking");
-			int idRoomType = resultSet.getInt("id_room_type");
-			int numOfRooms = resultSet.getInt("number_of_rooms");
-			int numOfAdults = resultSet.getInt("number_of_adults");
-			int numOfChildren = resultSet.getInt("number_of_children");
-			String status = resultSet.getString("status");
-			BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, status);
-			bookedRoom.idBooking = idBooking;
-			bookedRoom.idBookedRoom = id;
-			return bookedRoom;
+			return createBookedRoom(resultSet);
 		}
 		return null;
+	}
+	
+	public BookedRoom createBookedRoom(ResultSet resultSet) throws SQLException {
+		int id = resultSet.getInt("id_booked_room");
+		int idBooking = resultSet.getInt("id_booking");
+		int idRoomType = resultSet.getInt("id_room_type");
+		int numOfRooms = resultSet.getInt("number_of_rooms");
+		int numOfAdults = resultSet.getInt("number_of_adults");
+		int numOfChildren = resultSet.getInt("number_of_children");
+		String status = resultSet.getString("status");
+		BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, status);
+		bookedRoom.idBooking = idBooking;
+		bookedRoom.idBookedRoom = id;
+		return bookedRoom;
 	}
 
 	@Override

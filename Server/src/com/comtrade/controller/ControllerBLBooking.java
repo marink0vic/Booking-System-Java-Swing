@@ -4,7 +4,9 @@ import java.sql.SQLException;
 
 import com.comtrade.constants.Operations;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericClass;
 import com.comtrade.sysoperation.GeneralSystemOperation;
+import com.comtrade.sysoperation.booking.ReturnBookingsForPropertySO;
 import com.comtrade.sysoperation.booking.SaveBookingSO;
 import com.comtrade.transfer.TransferClass;
 
@@ -14,8 +16,10 @@ public class ControllerBLBooking implements IControllerBL {
 	public TransferClass executeOperation(TransferClass sender) {
 		TransferClass receiver = new TransferClass();
 		Operations operation = sender.getOperation();
+		
 		switch (operation) {
 		case SAVE:
+		{
 			PropertyWrapper propertyWrapper = (PropertyWrapper) sender.getClientRequest();
 			PropertyWrapper savedBooking;
 			try {
@@ -23,10 +27,26 @@ public class ControllerBLBooking implements IControllerBL {
 				receiver.setServerResponse(savedBooking);
 				receiver.setMessageResponse("Booking saved");
 			} catch (SQLException e) {
-				receiver.setMessageResponse("Something went wrong");
+				receiver.setMessageResponse(e.getMessage());
 				e.printStackTrace();
 			}
 			return receiver;
+		}
+		case RETURN_BOOKING_FOR_PROPERTY:
+		{
+			PropertyWrapper propertyWrapper = (PropertyWrapper) sender.getClientRequest();
+			PropertyWrapper newBookings;
+			
+			try {
+				newBookings = returnBookingsForPropety(propertyWrapper);
+				receiver.setServerResponse(newBookings);
+				receiver.setMessageResponse("bookings list updated");
+			} catch (SQLException e) {
+				receiver.setMessageResponse("Could not retrive bookings");
+				e.printStackTrace();
+			}
+			return receiver;
+		}
 
 		default:
 			return null;
@@ -34,9 +54,20 @@ public class ControllerBLBooking implements IControllerBL {
 		
 	}
 
+	private PropertyWrapper returnBookingsForPropety(PropertyWrapper propertyWrapper) throws SQLException {
+		GenericClass<PropertyWrapper> generic  = new GenericClass<>(propertyWrapper);
+		GeneralSystemOperation<GenericClass<PropertyWrapper>> sysOperation = new ReturnBookingsForPropertySO();
+		sysOperation.executeSystemOperation(generic);
+		return generic.getDomain();
+	}
+
 	private PropertyWrapper saveBooking(PropertyWrapper propertyWrapper) throws SQLException {
 		GeneralSystemOperation<PropertyWrapper> sysOperation = new SaveBookingSO();
-		sysOperation.executeSystemOperation(propertyWrapper);
+		try {
+			sysOperation.executeSystemOperation(propertyWrapper);
+		} catch (SQLException e) {
+			throw new SQLException("Something went wrong, please check room availability");
+		}
 		return propertyWrapper;
 	}
 

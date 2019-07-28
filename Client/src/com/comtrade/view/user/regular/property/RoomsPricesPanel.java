@@ -14,7 +14,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,16 +49,18 @@ import com.comtrade.transfer.TransferClass;
 public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private SelectedPropertyFrame frame;
 	private Map<RoomType, Room> rooms;
 	private int idProperty;
 	private User user;
-	private LocalDate checkIn;
-	private LocalDate checkOut;
 	private int period;
-	private Map<Booking, List<BookedRoom>> reservation;
+	private Map<Booking, List<BookedRoom>> bookingsFromDatabase;
+	private Map<Booking, List<BookedRoom>> reservations;
 	private List<BookedRoom> bookedRooms;
 	private double[] pricesPerRoom;
 	private Booking booking;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
 	//----
 	private JPanel roomInfoPanel;
 	private JLabel lblNewLabel;
@@ -84,15 +85,21 @@ public class RoomsPricesPanel extends JPanel {
 		this.user = user;
 		this.idProperty = propertyWrapper.getProperty().getIdProperty();
 		this.rooms = propertyWrapper.getRooms();
+		this.booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut);
+		this.reservations = new HashMap<>();
+		this.bookedRooms = new ArrayList<>();
+		this.bookingsFromDatabase = propertyWrapper.getBookings();
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut);
-		reservation = new HashMap<>();
-		bookedRooms = new ArrayList<>();
-		pricesPerRoom = new double[rooms.size()];
+		
+		this.pricesPerRoom = new double[rooms.size()];
 		Period p = Period.between(checkIn, checkOut);
-		period = p.getDays();
+		this.period = p.getDays();
 		initializeComponents();
+	}
+	
+	public void setPropertyFrame(SelectedPropertyFrame frame) {
+		this.frame = frame;
 	}
 
 	private void initializeComponents() {
@@ -171,7 +178,7 @@ public class RoomsPricesPanel extends JPanel {
 		roomInfoPanel.add(lblConfirm);
 	}
 
-	private void loadRoomScrollPane() {
+	protected void loadRoomScrollPane() {
 		JPanel gridPanel = new JPanel();
 		gridPanel.setLayout(new GridLayout(-1, 1));
 		gridPanel.setBackground(new Color(255, 255, 255));
@@ -209,12 +216,25 @@ public class RoomsPricesPanel extends JPanel {
 				if (choice == JOptionPane.YES_OPTION) {
 					double fullPrice = Arrays.stream(pricesPerRoom).sum();
 					booking.setPriceForStay(fullPrice);
-					reservation.put(booking, bookedRooms);
 					Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
 					transaction.setAmount(fullPrice);
 					transaction.setSiteFees(fullPrice);
 					
-					System.out.println("reservation complete");
+					PropertyWrapper wrapper = new PropertyWrapper();
+					reservations.put(booking, bookedRooms);
+					wrapper.setBookings(reservations);
+					List<Transaction> list = new ArrayList<>();
+					list.add(transaction);
+					wrapper.setTransactions(list);
+					wrapper.setRooms(rooms);
+					
+					try {
+						TransferClass transferClass = ControllerUI.getController().saveBooking(wrapper);
+						System.out.println(transferClass.getMessageResponse());
+					} catch (ClassNotFoundException | IOException e1) {
+						e1.printStackTrace();
+					}
+					frame.dispose();
 				}
 			}
 		});
@@ -233,6 +253,7 @@ public class RoomsPricesPanel extends JPanel {
 	}
 	
 	private JPanel addRoomPanelToScrollPane(RoomType room_type, Room room, int price_index) {
+		int freeRooms = returnAvailableRooms(room_type);
 		double priceForPeriod;
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
@@ -248,7 +269,7 @@ public class RoomsPricesPanel extends JPanel {
 		lblRoomType.setBounds(12, 29, 203, 54);
 		panel_1.add(lblRoomType);
 		
-		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + room_type.getNumberOfRooms());
+		lblRoomsAvaiable = new JLabel("Rooms avaiable: " + freeRooms);
 		lblRoomsAvaiable.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRoomsAvaiable.setForeground(new Color(71, 71, 71));
 		lblRoomsAvaiable.setFont(new Font("Dialog", Font.PLAIN, 16));
@@ -276,7 +297,7 @@ public class RoomsPricesPanel extends JPanel {
 		lblAdultsNum.setBounds(265, 29, 133, 54);
 		panel_1.add(lblAdultsNum);
 		
-		SpinnerModel sm = new SpinnerNumberModel(1, 1, 10, 1);
+		SpinnerModel sm = new SpinnerNumberModel(1, 1, 50, 1);
 		JSpinner spinnerAdults = new JSpinner(sm);
 		spinnerAdults.setBounds(410, 37, 58, 43);
 		panel_1.add(spinnerAdults);
@@ -293,7 +314,7 @@ public class RoomsPricesPanel extends JPanel {
 		numberOfBads.setBounds(265, 191, 180, 54);
 		panel_1.add(numberOfBads);
 		
-		SpinnerModel sm1 = new SpinnerNumberModel(0, 0, 10, 1);
+		SpinnerModel sm1 = new SpinnerNumberModel(0, 0, 50, 1);
 		JSpinner spinnerChildren = new JSpinner(sm1);
 		spinnerChildren.setBounds(410, 118, 58, 43);
 		panel_1.add(spinnerChildren);
@@ -338,7 +359,7 @@ public class RoomsPricesPanel extends JPanel {
 		lblNumberOfRooms.setBounds(709, 13, 117, 54);
 		panel_1.add(lblNumberOfRooms);
 		
-		SpinnerModel sm2 = new SpinnerNumberModel(0, 0, room_type.getNumberOfRooms(), 1);
+		SpinnerModel sm2 = new SpinnerNumberModel(0, 0, freeRooms, 1);
 		sm2.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -396,9 +417,28 @@ public class RoomsPricesPanel extends JPanel {
 		removeReservation.setBounds(855, 130, 97, 61);
 		panel_1.add(removeReservation);
 		
+		
+		
 		return panel_1;
 	}
 	
+
+	private int returnAvailableRooms(RoomType room_type) {
+		int freeRooms = 0;
+		for (Map.Entry<Booking, List<BookedRoom>> entry : bookingsFromDatabase.entrySet()) {
+			Booking b = entry.getKey();
+			if (checkIn.isAfter(b.getCheckOut()) || checkOut.isBefore(b.getCheckIn())) {
+				continue;
+			} else {
+				for (BookedRoom br : entry.getValue()) {
+					if (br.getIdRoomType() == room_type.getIdRoomType()) {
+						freeRooms += br.getNumberOfRooms();
+					}
+				}
+			}
+		}
+		return room_type.getNumberOfRooms() - freeRooms;
+	}
 
 	protected void removeFromReservation(int id_room) {
 		for (int i = 0; i < bookedRooms.size(); i++) {
@@ -410,7 +450,6 @@ public class RoomsPricesPanel extends JPanel {
 	}
 
 	protected void addToReservation(BookedRoom booked_room, int room_id) {
-		System.out.println(bookedRooms.size());
 		for (int i = 0; i < bookedRooms.size(); i++) {
 			if (bookedRooms.get(i).getIdRoomType() == room_id) {
 				bookedRooms.remove(i);
@@ -432,4 +471,6 @@ public class RoomsPricesPanel extends JPanel {
 			}
 		}
 	}
+
+	
 }

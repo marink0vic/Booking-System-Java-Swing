@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import org.omg.IOP.TransactionService;
+
 import com.comtrade.domain.Address;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
@@ -14,27 +16,28 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
+import com.comtrade.domain.User;
 import com.comtrade.generics.Generic;
 
 public class PropertyWrapper implements Serializable, Generic {
 
 	
 	private static final long serialVersionUID = 1L;
-	private int userID;
+	private User user;
 	private Address address;
 	private Property property;
 	private Map<RoomType, Room> rooms;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
-	private List<Transaction> tranactions;
+	private List<Transaction> transactions;
 	private Map<Booking, List<BookedRoom>> bookings;
 	private Country country;
 	
 	public PropertyWrapper() {
 	}
 	
-	public PropertyWrapper(int userID, Address address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
-		this.userID = userID;
+	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
+		this.user = user;
 		this.address = address;
 		this.property = property;
 		this.rooms = rooms;
@@ -42,12 +45,12 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.paymentList = paymentList;
 	}
 
-	public int getUserID() {
-		return userID;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Address getAddress() {
@@ -98,12 +101,12 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.country = country;
 	}
 
-	public List<Transaction> getTranactions() {
-		return tranactions;
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 
-	public void setTranactions(List<Transaction> tranactions) {
-		this.tranactions = tranactions;
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
 	}
 
 	public Map<Booking, List<BookedRoom>> getBookings() {
@@ -113,6 +116,13 @@ public class PropertyWrapper implements Serializable, Generic {
 	public void setBookings(Map<Booking, List<BookedRoom>> bookings) {
 		this.bookings = bookings;
 	}
-
+	//------
+	public void addNewBooking(Booking booking, List<BookedRoom> bookedRoom) {
+		bookings.put(booking, bookedRoom);
+	}
 	
+	public void addNewTransaction(Transaction transaction) {
+		transactions.add(transaction);
+	}
+
 }

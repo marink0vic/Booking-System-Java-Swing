@@ -157,7 +157,7 @@ public class Booking implements GeneralDomain, Serializable {
 		return null;
 	}
 	
-	private Booking createBooking (ResultSet resultSet) throws SQLException {
+	public Booking createBooking (ResultSet resultSet) throws SQLException {
 		int id = resultSet.getInt("id_booking");
 		int idUser = resultSet.getInt("id_user");
 		int idProperty = resultSet.getInt("id_property");
@@ -169,4 +169,34 @@ public class Booking implements GeneralDomain, Serializable {
 		booking.priceForStay = priceForStay;
 		return booking;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idBooking;
+		result = prime * result + idProperty;
+		result = prime * result + idUser;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Booking other = (Booking) obj;
+		if (idBooking != other.idBooking)
+			return false;
+		if (idProperty != other.idProperty)
+			return false;
+		if (idUser != other.idUser)
+			return false;
+		return true;
+	}
+	
+	
 }

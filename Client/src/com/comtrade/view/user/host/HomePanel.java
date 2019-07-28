@@ -47,7 +47,7 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private DefaultTableModel dtmInfo = new DefaultTableModel();
 	private PropertyWrapper propertyWrapper;
-	private User user;
+	//private User user;
 	private List<PropertyImage> propertyImages;
 	private RoomType roomType;
 	private Room roomInfo;
@@ -57,8 +57,7 @@ public class HomePanel extends JPanel {
 	private JTable tableInfo;
 	private String roomTypeName = "";
 	
-	public HomePanel(User user, PropertyWrapper propertyWrapper) {
-		this.user = user;
+	public HomePanel(PropertyWrapper propertyWrapper) {
 		this.propertyWrapper = propertyWrapper;
 		propertyImages = propertyWrapper.getImages();
 		initializeComponents();
@@ -132,7 +131,7 @@ public class HomePanel extends JPanel {
 		btnImages.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, user, propertyWrapper);
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyWrapper);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}

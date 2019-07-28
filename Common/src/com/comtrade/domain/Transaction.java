@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction implements GeneralDomain, Serializable {
@@ -87,7 +89,9 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 
 	public void setAmount(double amount) {
-		this.amount = (amount / 100) * percentProperty;
+		double d = (amount / 100) * percentProperty;
+		DecimalFormat df = new DecimalFormat("#.####");
+		this.amount = Double.parseDouble(df.format(d));
 	}
 
 	public double getSiteFees() {
@@ -95,7 +99,9 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 
 	public void setSiteFees(double amount) {
-		this.siteFees = (amount / 100) * percentSite;
+		double d = (amount / 100) * percentSite;
+		DecimalFormat df = new DecimalFormat("#.####");
+		this.siteFees = Double.parseDouble(df.format(d));
 	}
 
 	@Override
@@ -147,10 +153,27 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 	@Override
 	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Transaction> transactions = new ArrayList<>();
+		while (resultSet.next()) {
+			int id = resultSet.getInt("id_transaction");
+			int idSender = resultSet.getInt("id_sender");
+			int idReceiver = resultSet.getInt("id_receiver");
+			int bookingId = resultSet.getInt("id_booking");
+			LocalDate ld = resultSet.getDate("transfer_date").toLocalDate();
+			LocalTime lt = resultSet.getTime("transfer_time").toLocalTime();
+			double amount = resultSet.getDouble("amount");
+			double siteFees = resultSet.getDouble("site_fees");
+			
+			Transaction t = new Transaction(idSender, idReceiver, ld, lt);
+			t.setAmount(amount);
+			t.setSiteFees(siteFees);
+			t.setIdBooking(bookingId);
+			t.setIdTransaction(id);
+			transactions.add(t);
+		}
+		return transactions;
 	}
-
+//id_transaction	id_sender	id_receiver	id_booking	transfer_date	transfer_time	amount	site_fees
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
 		return null;
