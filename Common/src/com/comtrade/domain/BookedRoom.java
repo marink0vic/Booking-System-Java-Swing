@@ -19,20 +19,20 @@ public class BookedRoom implements GeneralDomain, Serializable {
 	private int numberOfRooms;
 	private int numberOfAdults;
 	private int numberOfChildren;
-	private String status;
+	private double priceForRoom;
 	private LocalDateTime created;
 	
 	public BookedRoom() {
 		
 	}
 
-	public BookedRoom(int idRoomType, int numberOfRooms, int numberOfAdults, int numberOfChildren, String status) {
+	public BookedRoom(int idRoomType, int numberOfRooms, int numberOfAdults, int numberOfChildren, double priceForRoom) {
 		super();
 		this.idRoomType = idRoomType;
 		this.numberOfRooms = numberOfRooms;
 		this.numberOfAdults = numberOfAdults;
 		this.numberOfChildren = numberOfChildren;
-		this.status = status;
+		this.priceForRoom  = priceForRoom;
 	}
 
 
@@ -85,12 +85,12 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		this.numberOfChildren = numberOfChildren;
 	}
 
-	public String getStatus() {
-		return status;
+	public double getPriceForRoom() {
+		return priceForRoom;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setPriceForRoom(double priceForRoom) {
+		this.priceForRoom = priceForRoom;
 	}
 
 	public LocalDateTime getCreated() {
@@ -113,7 +113,7 @@ public class BookedRoom implements GeneralDomain, Serializable {
 	
 	@Override
 	public String returnColumnNames() {
-		return " (id_booking, id_room_type, number_of_rooms, number_of_adults, number_of_children, status, created) VALUES ";
+		return " (id_booking, id_room_type, number_of_rooms, number_of_adults, number_of_children, price_for_room, created) VALUES ";
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class BookedRoom implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnsForUpdate() {
-		return "status = ?";
+		return null;
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class BookedRoom implements GeneralDomain, Serializable {
 
 	@Override
 	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		preparedStatement.setString(index.next(), status);
+		
 	}
 	
 	@Override
@@ -145,7 +145,7 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		preparedStatement.setInt(index.next(), numberOfRooms);
 		preparedStatement.setInt(index.next(), numberOfAdults);
 		preparedStatement.setInt(index.next(), numberOfChildren);
-		preparedStatement.setString(index.next(), status);
+		preparedStatement.setDouble(index.next(), priceForRoom);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
 
@@ -174,8 +174,8 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		int numOfRooms = resultSet.getInt("number_of_rooms");
 		int numOfAdults = resultSet.getInt("number_of_adults");
 		int numOfChildren = resultSet.getInt("number_of_children");
-		String status = resultSet.getString("status");
-		BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, status);
+		double price = resultSet.getDouble("price_for_room");
+		BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, price);
 		bookedRoom.idBooking = idBooking;
 		bookedRoom.idBookedRoom = id;
 		return bookedRoom;

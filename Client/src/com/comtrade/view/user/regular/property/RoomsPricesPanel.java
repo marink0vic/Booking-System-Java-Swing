@@ -45,6 +45,7 @@ import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.user.regular.RegistrationInfoFrame;
 
 public class RoomsPricesPanel extends JPanel {
 
@@ -230,11 +231,19 @@ public class RoomsPricesPanel extends JPanel {
 					
 					try {
 						TransferClass transferClass = ControllerUI.getController().saveBooking(wrapper);
-						System.out.println(transferClass.getMessageResponse());
+						if (transferClass.getServerResponse() == null) {
+							JOptionPane.showMessageDialog(null, transferClass.getMessageResponse());
+						}
+						else {
+							wrapper = (PropertyWrapper) transferClass.getServerResponse();
+							RegistrationInfoFrame registrationInfo = new RegistrationInfoFrame(wrapper, rooms.keySet());
+							registrationInfo.setLocationRelativeTo(null);
+							registrationInfo.setVisible(true);
+							frame.dispose();
+						}
 					} catch (ClassNotFoundException | IOException e1) {
 						e1.printStackTrace();
 					}
-					frame.dispose();
 				}
 			}
 		});
@@ -390,7 +399,8 @@ public class RoomsPricesPanel extends JPanel {
 					} else {
 						int numOFAdults = (Integer) spinnerAdults.getValue();
 						int numOfChilren = (Integer) spinnerChildren.getValue();
-						BookedRoom bookedRoom = new BookedRoom(room_type.getIdRoomType(), numOfSeclectedRooms, numOFAdults, numOfChilren, "RESERVED");
+						double price = pricesPerRoom[price_index];
+						BookedRoom bookedRoom = new BookedRoom(room_type.getIdRoomType(), numOfSeclectedRooms, numOFAdults, numOfChilren, price);
 						addToReservation(bookedRoom,room_type.getIdRoomType());
 					}
 				}

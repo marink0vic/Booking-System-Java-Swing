@@ -27,6 +27,7 @@ public class ControllerBLBooking implements IControllerBL {
 				receiver.setServerResponse(savedBooking);
 				receiver.setMessageResponse("Booking saved");
 			} catch (SQLException e) {
+				receiver.setServerResponse(null);
 				receiver.setMessageResponse(e.getMessage());
 				e.printStackTrace();
 			}
