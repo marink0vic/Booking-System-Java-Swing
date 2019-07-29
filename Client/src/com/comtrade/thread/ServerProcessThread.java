@@ -50,6 +50,11 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processImagesFromServer(transfer);
 			break;
 		}
+		case ROOM:
+		{
+			ControllerUI.getController().processRoomsFromServer(transfer);
+			break;
+		}
 			
 
 		default:

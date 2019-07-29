@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.awt.Color;
 import javax.swing.JComboBox;
+
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Room;
@@ -214,21 +217,19 @@ public class RoomFrame extends JFrame {
 	}
 
 	private void updateRoom(TransferClass transferClass, PropertyWrapper tempOwner) {
-		try {
-			transferClass = ControllerUI.getController().updateRoom(tempOwner);
-			System.out.println(transferClass.getMessageResponse());
-		} catch (ClassNotFoundException | IOException e1) {
-			e1.printStackTrace();
-		}
+		transferClass.setClientRequest(tempOwner);
+		transferClass.setDomainType(DomainType.ROOM);
+		transferClass.setOperation(Operations.UPDATE);
+		ControllerUI.getController().sendToServer(transferClass);
 	}
 
 	private void addNewRoom(TransferClass transferClass, PropertyWrapper tempOwner) {
-		try {
-			transferClass = ControllerUI.getController().saveRoom(tempOwner);
-			tempOwner = (PropertyWrapper) transferClass.getServerResponse();
-		} catch (ClassNotFoundException | IOException e1) {
-			e1.printStackTrace();
-		}
+		transferClass.setClientRequest(tempOwner);
+		transferClass.setDomainType(DomainType.ROOM);
+		transferClass.setOperation(Operations.SAVE);
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		tempOwner = ControllerUI.getController().getPropertyWrapper();
 		propertyOwner.getRooms().putAll(tempOwner.getRooms());
 	}
 

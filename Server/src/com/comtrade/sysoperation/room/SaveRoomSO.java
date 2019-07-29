@@ -9,6 +9,7 @@ import com.comtrade.broker.IBroker;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
 public class SaveRoomSO extends GeneralSystemOperation<PropertyWrapper> {
@@ -27,6 +28,13 @@ public class SaveRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 		Map<RoomType, Room> room = new HashMap<>();
 		room.put(type, info);
 		wrapper.setRooms(room);
+		
+		for (PropertyWrapper pw : ServerData.getInstance().returnAllProperties()) {
+			if (pw.getProperty().getIdProperty() == type.getIdProperty()) {
+				pw.addNewRoom(type, info);
+				break;
+			}
+		}
 	}
 
 }

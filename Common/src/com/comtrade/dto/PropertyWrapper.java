@@ -124,5 +124,9 @@ public class PropertyWrapper implements Serializable, Generic {
 	public void addNewTransaction(Transaction transaction) {
 		transactions.add(transaction);
 	}
+	
+	public void addNewRoom(RoomType type, Room room) {
+		rooms.put(type, room);
+	}
 
 }

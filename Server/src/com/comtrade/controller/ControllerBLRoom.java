@@ -2,6 +2,7 @@ package com.comtrade.controller;
 
 import java.sql.SQLException;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -23,6 +24,8 @@ public class ControllerBLRoom implements IControllerBL {
 			try {
 				propertyOwner = saveRoom(propertyOwner);
 				receiver.setServerResponse(propertyOwner);
+				receiver.setDomainType(DomainType.ROOM);
+				receiver.setOperation(Operations.SAVE);
 				receiver.setMessageResponse("New room type added to database");
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Something went wrong");
@@ -36,6 +39,8 @@ public class ControllerBLRoom implements IControllerBL {
 			try {
 				updateRoom(propertyOwner);
 				receiver.setMessageResponse("Room updated");
+				receiver.setDomainType(DomainType.ROOM);
+				receiver.setOperation(Operations.UPDATE);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Something went wrong");
 				e.printStackTrace();

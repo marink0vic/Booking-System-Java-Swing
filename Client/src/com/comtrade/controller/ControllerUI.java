@@ -59,7 +59,9 @@ public class ControllerUI {
 				e.printStackTrace();
 			}
 		}
-		return propertyWrapper;
+		PropertyWrapper temp = propertyWrapper;
+		propertyWrapper = null;
+		return temp;
 	}
 
 	public List<Country> getCountryImages() {
@@ -90,22 +92,6 @@ public class ControllerUI {
 		Communication.getCommunication().send(transferClass);
 	}
 	
-	
-	public TransferClass saveRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(tempOwner);
-		transferClass.setDomainType(DomainType.ROOM);
-		transferClass.setOperation(Operations.SAVE);
-		return sendAndReturn(transferClass);
-	}
-	
-	public TransferClass updateRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(tempOwner);
-		transferClass.setDomainType(DomainType.ROOM);
-		transferClass.setOperation(Operations.UPDATE);
-		return sendAndReturn(transferClass);
-	}
 	
 	public TransferClass returnAllProperties() throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
@@ -203,6 +189,21 @@ public class ControllerUI {
 			break;
 		}
 		case SAVE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
+
+		default:
+			break;
+		}
+	}
+
+	public void processRoomsFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case SAVE:
+		case UPDATE:
 		{
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
 			break;
