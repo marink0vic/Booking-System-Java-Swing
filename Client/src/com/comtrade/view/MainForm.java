@@ -10,6 +10,7 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 
 import com.comtrade.domain.User;
+import com.comtrade.thread.ServerProcessThread;
 import com.comtrade.view.login.IProxy;
 import com.comtrade.view.login.ProxyLogin;
 
@@ -243,5 +244,9 @@ public class MainForm extends JFrame {
 		btnHost.setBorder(new LineBorder(new Color(255, 255, 255), 2));
 		btnHost.setBounds(371, 172, 231, 55);
 		panel_2.add(btnHost);
+		
+		ServerProcessThread serverProcess = new ServerProcessThread();
+		Thread thread = new Thread(serverProcess);
+		thread.start();
 	}
 }
