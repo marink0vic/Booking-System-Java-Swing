@@ -3,6 +3,7 @@ package com.comtrade.controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
@@ -32,6 +33,8 @@ public class ControllerBLImages implements IControllerBL {
 				
 				wrapper  = saveImages(wrapper);
 				receiver.setServerResponse(wrapper);
+				receiver.setDomainType(DomainType.IMAGES);
+				receiver.setOperation(Operations.SAVE);
 				receiver.setMessageResponse("The images were successfully saved in the database");
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving images to database");
@@ -46,6 +49,8 @@ public class ControllerBLImages implements IControllerBL {
 			try {
 				deleteImages(imagesForDeletion);
 				receiver.setMessageResponse("The images were successfully deleted from the database");
+				receiver.setDomainType(DomainType.IMAGES);
+				receiver.setOperation(Operations.DELETE);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while deleting images from the database");
 				e.printStackTrace();

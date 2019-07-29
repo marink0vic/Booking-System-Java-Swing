@@ -90,21 +90,6 @@ public class ControllerUI {
 		Communication.getCommunication().send(transferClass);
 	}
 	
-	public TransferClass saveImages(PropertyWrapper wrapper) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(wrapper);
-		transferClass.setDomainType(DomainType.IMAGES);
-		transferClass.setOperation(Operations.SAVE);
-		return sendAndReturn(transferClass);
-	}
-	
-	public void deleteImages(List<PropertyImage> imagesForDeletion) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(imagesForDeletion);
-		transferClass.setDomainType(DomainType.IMAGES);
-		transferClass.setOperation(Operations.DELETE);
-		sendAndReturn(transferClass);
-	}
 	
 	public TransferClass saveRoom(PropertyWrapper tempOwner) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
@@ -199,6 +184,25 @@ public class ControllerUI {
 		switch (operation) {
 		case SAVE_ALL_PROPERTY_INFO:
 		case RETURN_PROPERTY_FOR_OWNER:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
+
+		default:
+			break;
+		}
+	}
+
+	public void processImagesFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case DELETE:
+		{
+			transfer.getServerResponse();
+			break;
+		}
+		case SAVE:
 		{
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
 			break;

@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
@@ -187,11 +189,11 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (imagesForDeletion.size() > 0) {
-					try {
-						ControllerUI.getController().deleteImages(imagesForDeletion);
-					} catch (ClassNotFoundException | IOException e1) {
-						e1.printStackTrace();
-					}
+					TransferClass transferClass = new TransferClass();
+					transferClass.setClientRequest(imagesForDeletion);
+					transferClass.setDomainType(DomainType.IMAGES);
+					transferClass.setOperation(Operations.DELETE);
+					ControllerUI.getController().sendToServer(transferClass);
 				}
 				
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
@@ -200,14 +202,15 @@ public class PropertyImagesFrame extends JFrame {
 					wrapper.setImages(newImagesForDatabase);
 					wrapper.setUser(propertyWrapper.getUser());
 					
-					try {
-						TransferClass transfer = ControllerUI.getController().saveImages(wrapper);
-						wrapper = (PropertyWrapper) transfer.getServerResponse();
-						propertyWrapper.setImages(wrapper.getImages());
-						propertyImages = propertyWrapper.getImages();
-					} catch (ClassNotFoundException | IOException e) {
-						e.printStackTrace();
-					}
+					TransferClass transferClass = new TransferClass();
+					transferClass.setClientRequest(wrapper);
+					transferClass.setDomainType(DomainType.IMAGES);
+					transferClass.setOperation(Operations.SAVE);
+					ControllerUI.getController().sendToServer(transferClass);
+					
+					wrapper = ControllerUI.getController().getPropertyWrapper();
+					propertyWrapper.setImages(wrapper.getImages());
+					propertyImages = propertyWrapper.getImages();
 				}
 				
 				dispose();

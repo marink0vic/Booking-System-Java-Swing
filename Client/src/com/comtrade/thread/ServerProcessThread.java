@@ -45,6 +45,11 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processPropertyFromServer(transfer);
 			break;
 		}
+		case IMAGES:
+		{
+			ControllerUI.getController().processImagesFromServer(transfer);
+			break;
+		}
 			
 
 		default:
