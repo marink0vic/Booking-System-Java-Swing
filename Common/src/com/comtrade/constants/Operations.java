@@ -7,5 +7,6 @@ public enum Operations {
 	LOGIN_USER, 
 	DELETE, 
 	UPDATE, 
-	RETURN_ALL
+	RETURN_ALL, 
+	RETURN_BOOKING_FOR_PROPERTY
 }

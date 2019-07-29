@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -22,6 +23,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
 
@@ -30,14 +32,18 @@ public class SearchPagePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private List<PropertyWrapper> listOfProperties;
+	private User user;
 	private JLabel lblImage;
 	private JLabel lblPropertyName;
 	private JLabel lblStreet;
 	private JButton btnReserve;
 	private JLabel lblRating;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
 	
-	public SearchPagePanel(List<PropertyWrapper> listOfProperties) {
+	public SearchPagePanel(List<PropertyWrapper> listOfProperties, User user) {
 		this.listOfProperties = listOfProperties;
+		this.user = user;
 		initializeComponents();
 	}
 	
@@ -47,6 +53,14 @@ public class SearchPagePanel extends JPanel {
 		this.setLayout(null);
 		
 		listAllProperties();
+	}
+	
+	public void setCheckIn(LocalDate checkIn) {
+		this.checkIn = checkIn;
+	}
+
+	public void setCheckOut(LocalDate checkOut) {
+		this.checkOut = checkOut;
 	}
 
 	private void listAllProperties() {
@@ -123,7 +137,7 @@ public class SearchPagePanel extends JPanel {
 		btnReserve = new JButton("Book");
 		btnReserve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(property);
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(property, user, checkIn, checkOut);
 				reservationFrame.setVisible(true);
 				reservationFrame.setLocationRelativeTo(null);
 			}

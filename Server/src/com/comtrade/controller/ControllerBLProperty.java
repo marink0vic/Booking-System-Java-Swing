@@ -1,11 +1,14 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericClass;
+import com.comtrade.generics.GenericList;
 import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.property.ReturnAllPropertiesSO;
@@ -23,8 +26,7 @@ public class ControllerBLProperty implements IControllerBL {
 		switch (operation) {
 		case SAVE_ALL_PROPERTY_INFO:
 		{
-			@SuppressWarnings("unchecked")
-			GenericMap<User, PropertyWrapper> propertyData = (GenericMap<User, PropertyWrapper>) sender.getClientRequest();
+			PropertyWrapper propertyData = (PropertyWrapper) sender.getClientRequest();
 			try {
 				PropertyWrapper owner = saveProperty(propertyData);
 				receiver.setServerResponse(owner);
@@ -49,7 +51,7 @@ public class ControllerBLProperty implements IControllerBL {
 		case RETURN_ALL:
 		{
 			try {
-				Map<User, PropertyWrapper> property = returnAllProperties();
+				List<PropertyWrapper> property = returnAllProperties();
 				receiver.setMessageResponse("All properties loaded from database");
 				receiver.setServerResponse(property);
 			} catch (SQLException e) {
@@ -64,23 +66,24 @@ public class ControllerBLProperty implements IControllerBL {
 		}
 	}
 
-	private Map<User, PropertyWrapper> returnAllProperties() throws SQLException {
-		GenericMap<User, PropertyWrapper> genericMap = new GenericMap<>();
-		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new ReturnAllPropertiesSO();
-		sysOperation.executeSystemOperation(genericMap);
-		return genericMap.getMap();
+	private List<PropertyWrapper> returnAllProperties() throws SQLException {
+		GenericList<PropertyWrapper> genericList = new GenericList<>();
+		GeneralSystemOperation<GenericList<PropertyWrapper>> sysOperation = new ReturnAllPropertiesSO();
+		sysOperation.executeSystemOperation(genericList);
+		return genericList.getList();
 	}
 
 	private PropertyWrapper returnPropertyForOwner(PropertyWrapper propertyWrapper) throws SQLException {
-		GeneralSystemOperation<PropertyWrapper> sysOperation = new ReturnUserPropertySO();
-		sysOperation.executeSystemOperation(propertyWrapper);
-		return propertyWrapper;
+		GenericClass<PropertyWrapper> genericClass = new GenericClass<>(propertyWrapper);
+		GeneralSystemOperation<GenericClass<PropertyWrapper>> sysOperation = new ReturnUserPropertySO();
+		sysOperation.executeSystemOperation(genericClass);
+		return genericClass.getDomain();
 	}
 
-	private PropertyWrapper saveProperty(GenericMap<User, PropertyWrapper> propertyData) throws SQLException {
-		GeneralSystemOperation<GenericMap<User, PropertyWrapper>> sysOperation = new SavePropertySO();
+	private PropertyWrapper saveProperty(PropertyWrapper propertyData) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
 		sysOperation.executeSystemOperation(propertyData);
-		return propertyData.getValue(propertyData.getKey());
+		return propertyData;
 	}
 
 }

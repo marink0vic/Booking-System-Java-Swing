@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,16 +21,24 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.login.IProxy;
+
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import com.toedter.calendar.JDateChooser;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class UserHomeFrame extends JFrame {
+public class UserHomeFrame extends JFrame implements IProxy {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -34,37 +47,18 @@ public class UserHomeFrame extends JFrame {
 	private HomePagePanel homePagePanel;
 	private SearchPagePanel searchPagePanel;
 	
-	private Map<User, PropertyWrapper> propertyMap;
 	private List<PropertyWrapper> listOfProperties;
+	private User user;
 	private JTextField tfSearch;
-	private JTextField tfStartDate;
-	private JTextField tfEndDate;
-	//---
+	private JDateChooser dateCheckIn;
+	private JDateChooser dateCheckOut;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
+	private JLabel lblBackToHome;
 	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UserHomeFrame frame = new UserHomeFrame();
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public UserHomeFrame() {
+	public UserHomeFrame(User user) {
+		this.user = user;
 		initializeComponents();
-		propertyMap = new HashMap<>();
 	}
 
 	private void initializeComponents() {
@@ -76,23 +70,23 @@ public class UserHomeFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		headerPanel = new HeaderPanel();
+		layeredPane = new JLayeredPane();
+		layeredPane.setBounds(252, 204, 975, 728);
+		contentPane.add(layeredPane);
+		layeredPane.setLayout(new CardLayout(0, 0));
+		
+		headerPanel = new HeaderPanel(user);
 		contentPane.add(headerPanel);
 		
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
 		setSearchPanel();
 		
-		layeredPane = new JLayeredPane();
-		layeredPane.setBounds(252, 204, 975, 728);
-		contentPane.add(layeredPane);
-		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		homePagePanel = new HomePagePanel(listOfProperties);
 		layeredPane.add(homePagePanel, "name_536942772642600");
 		
-		
-		searchPagePanel = new SearchPagePanel(listOfProperties);
+		searchPagePanel = new SearchPagePanel(listOfProperties, user);
 		layeredPane.add(searchPagePanel, "name_538271889712300");
 		
 		
@@ -106,36 +100,34 @@ public class UserHomeFrame extends JFrame {
 		contentPane.add(searchPanel);
 		
 		tfSearch = new JTextField();
-		tfSearch.setBorder(new LineBorder(new Color(171, 171, 171)));
+		tfSearch.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		tfSearch.setOpaque(false);
-		tfSearch.setForeground(new Color(71, 71, 71));
+		tfSearch.setForeground(ColorConstants.GRAY);
 		tfSearch.setFont(new Font("Dialog", Font.PLAIN, 18));
 		tfSearch.setBounds(263, 50, 353, 56);
 		searchPanel.add(tfSearch);
 		tfSearch.setColumns(10);
 		
-		tfStartDate = new JTextField();
-		tfStartDate.setOpaque(false);
-		tfStartDate.setForeground(new Color(71, 71, 71));
-		tfStartDate.setFont(new Font("Dialog", Font.PLAIN, 18));
-		tfStartDate.setColumns(10);
-		tfStartDate.setBorder(new LineBorder(new Color(171, 171, 171)));
-		tfStartDate.setBounds(645, 50, 191, 56);
-		searchPanel.add(tfStartDate);
-		
-		tfEndDate = new JTextField();
-		tfEndDate.setOpaque(false);
-		tfEndDate.setForeground(new Color(71, 71, 71));
-		tfEndDate.setFont(new Font("Dialog", Font.PLAIN, 18));
-		tfEndDate.setColumns(10);
-		tfEndDate.setBorder(new LineBorder(new Color(171, 171, 171)));
-		tfEndDate.setBounds(861, 50, 191, 56);
-		searchPanel.add(tfEndDate);
-		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanel(searchPagePanel);
+				DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+				if (dateCheckIn.getDate() != null && dateCheckOut.getDate() != null) {
+					String in = date.format(dateCheckIn.getDate());
+					String out = date.format(dateCheckOut.getDate());
+					checkIn = LocalDate.parse(in);
+					checkOut = LocalDate.parse(out);
+					if (checkIn.isEqual(checkOut)) {
+						JOptionPane.showMessageDialog(null, "You cannot enter the same dates");
+					} else {
+						searchPagePanel.setCheckIn(checkIn);
+						searchPagePanel.setCheckOut(checkOut);
+						switchPanel(searchPagePanel);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "You cannot leave empty date fields");
+				}
+				
 			}
 		});
 		btnSearch.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -161,6 +153,28 @@ public class UserHomeFrame extends JFrame {
 		lblCheckout.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblCheckout.setBounds(861, 22, 98, 16);
 		searchPanel.add(lblCheckout);
+		
+		dateCheckOut = new JDateChooser();
+		dateCheckOut.setForeground(ColorConstants.GRAY);
+		dateCheckOut.setFont(new Font("Dialog", Font.BOLD, 16));
+		dateCheckOut.setBounds(861, 50, 191, 56);
+		searchPanel.add(dateCheckOut);
+		
+		dateCheckIn = new JDateChooser();
+		dateCheckIn.getDateEditor().addPropertyChangeListener(
+			new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				dateCheckOut.setCalendar(null);
+				dateCheckOut.setMinSelectableDate(dateCheckIn.getDate());
+			 }
+		});
+		dateCheckIn.setMinSelectableDate(new Date());
+		dateCheckIn.setForeground(ColorConstants.GRAY);
+		dateCheckIn.setFont(new Font("Dialog", Font.BOLD, 16));
+		dateCheckIn.setBounds(643, 50, 191, 56);
+		searchPanel.add(dateCheckIn);
+		
 	}
 
 	protected void switchPanel(JPanel panel) {
@@ -183,10 +197,15 @@ public class UserHomeFrame extends JFrame {
 	private void loadAllProperties() {
 		try {
 			TransferClass transferClass = ControllerUI.getController().returnAllProperties();
-			propertyMap = (Map<User, PropertyWrapper>) transferClass.getServerResponse();
-			listOfProperties = new ArrayList<>(propertyMap.values());
+			listOfProperties = (List<PropertyWrapper>) transferClass.getServerResponse();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void login(User user) {
+		setLocationRelativeTo(null);
+		setVisible(true);
 	}
 }

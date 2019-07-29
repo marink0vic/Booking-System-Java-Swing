@@ -17,21 +17,21 @@ import com.comtrade.domain.PaymentProperty;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericMap;
+import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
-public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, PropertyWrapper>> {
+public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	
 	private IBroker ib = new Broker();
 
 	@Override
-	protected void executeSpecificOperation(GenericMap<User, PropertyWrapper> mapWrapper) throws SQLException {
-		User user = mapWrapper.getKey();
-		PropertyWrapper wrapper = mapWrapper.getValue(user);
+	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
+		User user = wrapper.getUser();
 		
 		Address address = saveAddress(wrapper.getAddress());
 		wrapper.setAddress(address);
@@ -42,7 +42,7 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		wrapper.setProperty(property);
 		
 		
-		Map<RoomType, RoomInfo> room = wrapper.getRooms();
+		Map<RoomType, Room> room = wrapper.getRooms();
 		room = saveAllRooms(room, property.getIdProperty());
 		wrapper.setRooms(room);
 		
@@ -53,6 +53,8 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		List<PaymentType> payments = wrapper.getPaymentList();
 		payments = savePropertyPayments(payments, property.getIdProperty());
 		wrapper.setPaymentList(payments);
+		
+		ServerData.getInstance().addNewProperty(wrapper);
 	}
 
 	private List<PaymentType> savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
@@ -93,14 +95,14 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		ib.saveCollectionOfData(property_images);
 	}
 
-	private Map<RoomType, RoomInfo> saveAllRooms(Map<RoomType, RoomInfo> room, int id_property) throws SQLException {
-		Map<RoomType, RoomInfo> map = new LinkedHashMap<>();
-		for (Map.Entry<RoomType, RoomInfo> mapRoom : room.entrySet()) {
+	private Map<RoomType, Room> saveAllRooms(Map<RoomType, Room> room, int id_property) throws SQLException {
+		Map<RoomType, Room> map = new LinkedHashMap<>();
+		for (Map.Entry<RoomType, Room> mapRoom : room.entrySet()) {
 			RoomType roomType = mapRoom.getKey();
 			roomType.setIdProperty(id_property);
 			roomType = saveRoomType(roomType);
 			
-			RoomInfo info = mapRoom.getValue();
+			Room info = mapRoom.getValue();
 			info.setIdRoomType(roomType.getIdRoomType());
 			info = saveRoomInfo(info);
 			map.put(roomType, info);
@@ -108,8 +110,8 @@ public class SavePropertySO extends GeneralSystemOperation<GenericMap<User, Prop
 		return map;
 	}
 
-	private RoomInfo saveRoomInfo(RoomInfo info) throws SQLException {
-		return (RoomInfo) ib.save(info);
+	private Room saveRoomInfo(Room info) throws SQLException {
+		return (Room) ib.save(info);
 	}
 
 	private RoomType saveRoomType(RoomType r) throws SQLException {

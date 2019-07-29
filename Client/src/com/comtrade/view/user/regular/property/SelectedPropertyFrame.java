@@ -7,11 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.Property;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.regular.HeaderPanel;
+import com.comtrade.view.user.regular.HomePagePanel;
+
 import java.awt.Color;
+import java.awt.Cursor;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -21,6 +28,8 @@ import javax.swing.border.MatteBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Map;
 
 
@@ -33,18 +42,23 @@ public class SelectedPropertyFrame extends JFrame {
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
+	private HomePagePanel homePagePanel;
 	//--
-	private PropertyWrapper propertyWrapper;
 	private JLabel lblInfo;
 	private JLabel lblRoomPrices;
 	private JLabel lblGuestReviews;
-	//---
-	private Map<RoomType, RoomInfo> rooms;
+	//--
+	private PropertyWrapper propertyWrapper;
+	private User user;
+	private LocalDate checkIn;
+	private LocalDate checkOut;
 
 	
-	public SelectedPropertyFrame(PropertyWrapper propertyWrapper) {
+	public SelectedPropertyFrame(PropertyWrapper propertyWrapper, User user, LocalDate checkIn, LocalDate checkOut) {
+		this.user = user;
 		this.propertyWrapper = propertyWrapper;
-		this.rooms = propertyWrapper.getRooms();
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
 		initializeComponents();
 	}
 
@@ -57,21 +71,22 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		headerPanel = new HeaderPanel();
+		headerPanel = new HeaderPanel(user);
 		contentPane.add(headerPanel);
 		
 		addPropertyNavigationLabels();
 		
 		layeredPane = new JLayeredPane();
-		layeredPane.setBounds(252, 165, 975, 767);
+		layeredPane.setBounds(252, 165, 1150, 767);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
-		roomPricesPanel = new RoomsPricesPanel(rooms);
-		layeredPane.add(roomPricesPanel, "name_604263933603500");
+//		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
+//		roomPricesPanel.setPropertyFrame(this);
+//		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
 	}
 
@@ -89,12 +104,25 @@ public class SelectedPropertyFrame extends JFrame {
 		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInfo.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblInfo.setBounds(352, 101, 253, 43);
+		lblInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		contentPane.add(lblInfo);
 		
 		lblRoomPrices = new JLabel("ROOM & PRICES");
 		lblRoomPrices.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				PropertyWrapper tempWrapper = new PropertyWrapper();
+				tempWrapper.setProperty(propertyWrapper.getProperty());
+				try {
+					TransferClass transfer = ControllerUI.getController().returnBookingsForProperty(tempWrapper);
+					tempWrapper = (PropertyWrapper) transfer.getServerResponse();
+				} catch (ClassNotFoundException | IOException e1) {
+					e1.printStackTrace();
+				}
+				propertyWrapper.setBookings(tempWrapper.getBookings());
+				roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
+				roomPricesPanel.setPropertyFrame(SelectedPropertyFrame.this);
+				layeredPane.add(roomPricesPanel, "name_604263933603500");
 				switchPanel(roomPricesPanel);
 				updateUI(lblRoomPrices);
 			}
@@ -104,6 +132,7 @@ public class SelectedPropertyFrame extends JFrame {
 		lblRoomPrices.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblRoomPrices.setBorder(new MatteBorder(0, 0, 0, 2, (Color) ColorConstants.LIGHT_GRAY));
 		lblRoomPrices.setBounds(604, 101, 253, 43);
+		lblRoomPrices.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		contentPane.add(lblRoomPrices);
 		
 		lblGuestReviews = new JLabel("GUEST REVIEWS");
@@ -111,6 +140,7 @@ public class SelectedPropertyFrame extends JFrame {
 		lblGuestReviews.setForeground(ColorConstants.GRAY);
 		lblGuestReviews.setFont(new Font("Dialog", Font.BOLD, 18));
 		lblGuestReviews.setBounds(856, 101, 253, 43);
+		lblGuestReviews.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		contentPane.add(lblGuestReviews);
 	}
 	

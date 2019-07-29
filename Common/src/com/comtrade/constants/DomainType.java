@@ -6,5 +6,6 @@ public enum DomainType {
 	COUNTRY,
 	PAYMENT_TYPE,
 	IMAGES, 
-	ROOM
+	ROOM, 
+	BOOKING
 }

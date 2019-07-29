@@ -7,26 +7,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.omg.IOP.TransactionService;
+
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
+import com.comtrade.domain.Property;
+import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.generics.GenericList;
 
 public class ServerData {
 	private List<Country> countries;
 	private List<PaymentType> paymentTypes;
-	private List<User> allUsers;
-	private Map<User, PropertyWrapper> propertyMap;
+	private List<User> superUsers;
+	private List<User> regularUsers;
+	private List<PropertyWrapper> properties;
+	private List<Transaction> transactions;
 	private IBroker iBroker;
 	private static final ServerData serverData = new ServerData();
 	
 	private ServerData() {
 		iBroker = new Broker();
-		propertyMap = new HashMap<>();
+		properties = new ArrayList<>();
+		transactions = new ArrayList<>();
 	}
 	
 	public static ServerData getInstance() {
@@ -40,7 +50,9 @@ public class ServerData {
 		
 		countries = (List<Country>) iBroker.returnAllData(new Country());
 		paymentTypes = (List<PaymentType>) iBroker.returnAllData(new PaymentType());
-		allUsers = (List<User>) iBroker.returnAllData(new User());
+		superUsers = iBroker.returnUsers(new User(), "SUPER_USER");
+		regularUsers = iBroker.returnUsers(new User(), "USER");
+		transactions = (List<Transaction>) iBroker.returnAllData(new Transaction());
 		addAllProperties();
 		
 		Connection.getConnection().closeConnection();
@@ -57,20 +69,46 @@ public class ServerData {
 		return Collections.unmodifiableList(paymentTypes);
 	}
 	
-	public Map<User, PropertyWrapper> returnAllProperties() {
-		return Collections.unmodifiableMap(propertyMap);
+	public List<PropertyWrapper> returnAllProperties() {
+		return properties;
+	}
+	
+	public void addNewProperty(PropertyWrapper property) {
+		properties.add(property);
+	}
+	
+	public void addNewTransaction(Transaction transaction) {
+		transactions.add(transaction);
+	}
+	
+	public Map<Booking, List<BookedRoom>> returnBookingsForProperty(Property property) {
+		for (PropertyWrapper pw : properties) {
+			if (pw.getProperty().getIdProperty() == property.getIdProperty()) {
+				return pw.getBookings();
+			}
+		}
+		return null;
 	}
 	
 	private void addAllProperties() throws SQLException {
-		for (User user : allUsers) {
-			if (user.getStatus().equals("SUPER_USER")) {
-				PropertyWrapper temp = new PropertyWrapper();
-				temp.setUserID(user.getIdUser());
-				iBroker.insertPropertyForOwner(temp);
-				propertyMap.put(user, temp);
-			}
+		for (User user : superUsers) {
+			PropertyWrapper temp = new PropertyWrapper();
+			temp.setUser(user);
+			iBroker.insertPropertyForOwner(temp);
+			temp.setTransactions(addAllTransactions(temp.getProperty()));
+			properties.add(temp);
 		}
 	}
+	private List<Transaction> addAllTransactions(Property temp) {
+		List<Transaction> list = new ArrayList<>();
+		for (Transaction transaction : transactions) {
+			if(transaction.getIdReceiver() == temp.getIdProperty()) {
+				list.add(transaction);
+			}
+		}
+		return list;
+	}
+
 	private void addFullCountryImagePath() {
 		for (Country country : countries) {
 			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + country.getImage();

@@ -56,8 +56,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	/**
 	 * Create the frame.
 	 */
-	public PropertyOwnerFrame(User user, PropertyWrapper propertyWrapper) {
-		this.user = user;
+	public PropertyOwnerFrame(PropertyWrapper propertyWrapper) {
+		this.user = propertyWrapper.getUser();
 		this.propertyWrapper = propertyWrapper;
 		initializeComponents();
 	}
@@ -68,7 +68,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
 		propertyWrapper = new PropertyWrapper();
-		propertyWrapper.setUserID(user.getIdUser());
+		propertyWrapper.setUser(user);
 		initializeComponents();
 	}
 
@@ -90,7 +90,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		homePanelRight = new HomePanel(user, propertyWrapper);
+		homePanelRight = new HomePanel(propertyWrapper);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
 		

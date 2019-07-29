@@ -21,7 +21,7 @@ import javax.swing.table.JTableHeader;
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -47,18 +47,17 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private DefaultTableModel dtmInfo = new DefaultTableModel();
 	private PropertyWrapper propertyWrapper;
-	private User user;
+	//private User user;
 	private List<PropertyImage> propertyImages;
 	private RoomType roomType;
-	private RoomInfo roomInfo;
+	private Room roomInfo;
 	private JPanel gallery = new JPanel();
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 220;
 	private JTable tableInfo;
 	private String roomTypeName = "";
 	
-	public HomePanel(User user, PropertyWrapper propertyWrapper) {
-		this.user = user;
+	public HomePanel(PropertyWrapper propertyWrapper) {
 		this.propertyWrapper = propertyWrapper;
 		propertyImages = propertyWrapper.getImages();
 		initializeComponents();
@@ -132,7 +131,7 @@ public class HomePanel extends JPanel {
 		btnImages.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnImages.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, user, propertyWrapper);
+				PropertyImagesFrame imagesFrame = new PropertyImagesFrame(HomePanel.this, propertyWrapper);
 				imagesFrame.setLocationRelativeTo(null);
 				imagesFrame.setVisible(true);
 			}
@@ -254,16 +253,16 @@ public class HomePanel extends JPanel {
 
 	public void fillRoomTypeTable() {
 		dtm.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRooms().entrySet()) {
+		for (Entry<RoomType, Room> map : propertyWrapper.getRooms().entrySet()) {
 			RoomType rt = map.getKey();
-			RoomInfo ri = map.getValue();
+			Room ri = map.getValue();
 			dtm.addRow(new Object[] {rt.getRoomType(), rt.getNumberOfRooms(), rt.getPricePerNight(), ri.getNumOfBads()});
 		}
 	}
 	
 	private void fillRoomInfoTable() {
 		dtmInfo.setRowCount(0);
-		for (Entry<RoomType, RoomInfo> map : propertyWrapper.getRooms().entrySet()) {
+		for (Entry<RoomType, Room> map : propertyWrapper.getRooms().entrySet()) {
 			if (map.getKey().getRoomType().equals(roomTypeName)) {
 				roomType = map.getKey();
 				roomInfo = map.getValue();

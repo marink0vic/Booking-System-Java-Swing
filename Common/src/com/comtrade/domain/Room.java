@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RoomInfo implements GeneralDomain, Serializable {
+public class Room implements GeneralDomain, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -23,11 +23,11 @@ public class RoomInfo implements GeneralDomain, Serializable {
 	private boolean wifi;
 	private LocalDateTime created;
 	
-	public RoomInfo() {
+	public Room() {
 		
 	}
 
-	public RoomInfo(int numOfBads, boolean kitchen, boolean tv, boolean airConditioning, boolean wifi) {
+	public Room(int numOfBads, boolean kitchen, boolean tv, boolean airConditioning, boolean wifi) {
 		super();
 		this.numOfBads = numOfBads;
 		this.kitchen = kitchen;
@@ -111,7 +111,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnTableName() {
-		return "room_info";
+		return "room";
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class RoomInfo implements GeneralDomain, Serializable {
 
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		RoomInfo room = new RoomInfo();
+		Room room = new Room();
 		if (resultSet.next()) {
 			room.idRoom = resultSet.getInt("id_room");
 			room.idRoomType = resultSet.getInt("id_room_type");

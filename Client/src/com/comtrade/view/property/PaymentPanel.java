@@ -28,7 +28,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.RoomInfo;
+import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -62,13 +62,13 @@ public class PaymentPanel extends JPanel {
 	private User user;
 	private Address address;
 	private Property property;
-	private Map<RoomType, RoomInfo> room;
+	private Map<RoomType, Room> room;
 	private List<PropertyImage> images; 
 	private List<PaymentType> paymentList;
 	private Country country;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, RoomInfo> room, List<PropertyImage> images) {
+	public PaymentPanel(User user, Address address, Property property, Map<RoomType, Room> room, List<PropertyImage> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
@@ -191,14 +191,12 @@ public class PaymentPanel extends JPanel {
 	}
 	
 	private void registerProperty() {
-		GenericMap<User, PropertyWrapper> propertyData = new GenericMap<>();
-		PropertyWrapper propertyWrapper = new PropertyWrapper(user.getIdUser(), address, property, room, images, paymentList);
+		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		propertyWrapper.setCountry(country);
-		propertyData.put(user, propertyWrapper);
 		try {
-			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyData);
+			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
 			PropertyWrapper returnedProperty =  (PropertyWrapper) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(user, returnedProperty);
+			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedProperty);
 			propertyOwner.setLocationRelativeTo(null);
 			propertyOwner.setVisible(true);
 			propertyForm.dispose();
