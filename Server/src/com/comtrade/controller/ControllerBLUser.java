@@ -41,6 +41,8 @@ public class ControllerBLUser implements IControllerBL {
 			User returnedUser = null;
 			try {
 				returnedUser = loginUser(user);
+				receiver.setDomainType(DomainType.USER);
+				receiver.setOperation(Operations.LOGIN_USER);
 				if (returnedUser == null) {
 					receiver.setMessageResponse("Entered information does not exist in the database");
 				}

@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
@@ -341,12 +343,13 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	}
 	
 	private void returnPropertyForUser() {
-		try {
-			TransferClass transferClass = ControllerUI.getController().returnPropertyForOwner(propertyWrapper);
-			propertyWrapper = (PropertyWrapper) transferClass.getServerResponse();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(propertyWrapper);
+		transferClass.setDomainType(DomainType.PROPERTY);
+		transferClass.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		propertyWrapper = ControllerUI.getController().getPropertyWrapper();
 	}
 
 	private void changeSelectedBackgroundColor(boolean[] activePanel, int index) {

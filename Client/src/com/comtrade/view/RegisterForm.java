@@ -212,16 +212,15 @@ public class RegisterForm extends JFrame {
 		JButton btnSignIn = new JButton("Sign in");
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				User user = createUser();
+				User userForDatabase = createUser();
 				TransferClass transferClass = new TransferClass();
-				transferClass.setClientRequest(user);
+				transferClass.setClientRequest(userForDatabase);
 				transferClass.setDomainType(DomainType.USER);
 				transferClass.setOperation(Operations.SAVE);
+				
 				ControllerUI.getController().sendToServer(transferClass);
 				
-				User savedUser = ControllerUI.getController().getUser();
-				savedUser.setCountry(userCountry);
-				
+				User user = ControllerUI.getController().getUser();
 				if (user != null) {
 					if (STATUS.equals("SUPER_USER")) {
 						user.setCountry(userCountry);

@@ -40,6 +40,11 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processPaymentTypeFromServer(transfer);
 			break;
 		}
+		case PROPERTY:
+		{
+			ControllerUI.getController().processPropertyFromServer(transfer);
+			break;
+		}
 			
 
 		default:

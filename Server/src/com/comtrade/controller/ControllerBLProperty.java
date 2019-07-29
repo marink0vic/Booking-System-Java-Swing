@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -30,6 +31,8 @@ public class ControllerBLProperty implements IControllerBL {
 			try {
 				PropertyWrapper owner = saveProperty(propertyData);
 				receiver.setServerResponse(owner);
+				receiver.setDomainType(DomainType.PROPERTY);
+				receiver.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving property to database");
 				e.printStackTrace();
@@ -42,6 +45,8 @@ public class ControllerBLProperty implements IControllerBL {
 			try {
 				propertyWrapper = returnPropertyForOwner(propertyWrapper);
 				receiver.setServerResponse(propertyWrapper);
+				receiver.setDomainType(DomainType.PROPERTY);
+				receiver.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while retrieving property information");
 				e.printStackTrace();

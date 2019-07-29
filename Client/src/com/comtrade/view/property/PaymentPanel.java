@@ -195,16 +195,18 @@ public class PaymentPanel extends JPanel {
 	private void registerProperty() {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		propertyWrapper.setCountry(country);
-		try {
-			TransferClass transferClass = ControllerUI.getController().saveProperty(propertyWrapper);
-			PropertyWrapper returnedProperty =  (PropertyWrapper) transferClass.getServerResponse();
-			PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedProperty);
-			propertyOwner.setLocationRelativeTo(null);
-			propertyOwner.setVisible(true);
-			propertyForm.dispose();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transfer = new TransferClass();
+		transfer.setClientRequest(propertyWrapper);
+		transfer.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
+		transfer.setDomainType(DomainType.PROPERTY);
+		ControllerUI.getController().sendToServer(transfer);
+		
+		PropertyWrapper returnedProperty = ControllerUI.getController().getPropertyWrapper();
+		PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedProperty);
+		propertyOwner.setLocationRelativeTo(null);
+		propertyOwner.setVisible(true);
+		propertyForm.dispose();
+		
 	}
 
 

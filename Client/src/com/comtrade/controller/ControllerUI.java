@@ -23,6 +23,7 @@ public class ControllerUI {
 	private List<Country> countryImages;
 	private List<PaymentType> payments;
 	private User user;
+	private PropertyWrapper propertyWrapper;
 	
 	private ControllerUI() {
 		
@@ -47,6 +48,18 @@ public class ControllerUI {
 			if (counter == 4) break;
 		}
 		return user;
+	}
+	
+	public PropertyWrapper getPropertyWrapper() {
+		while (propertyWrapper == null) {
+			System.out.println("waiting for property wrapper");
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return propertyWrapper;
 	}
 
 	public List<Country> getCountryImages() {
@@ -75,37 +88,6 @@ public class ControllerUI {
 
 	public void sendToServer(TransferClass transferClass) {
 		Communication.getCommunication().send(transferClass);
-	}
-	
-//	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
-//		TransferClass transferClass = new TransferClass();
-//		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
-//		transferClass.setOperation(Operations.RETURN_ALL);
-//		return sendAndReturn(transferClass);
-//	}
-	
-	public TransferClass saveProperty(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyOwner);
-		transferClass.setDomainType(DomainType.PROPERTY);
-		transferClass.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
-		return sendAndReturn(transferClass);
-	}
-	
-	public TransferClass returnPropertyForOwner(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyOwner);
-		transferClass.setDomainType(DomainType.PROPERTY);
-		transferClass.setOperation(Operations.RETURN_PROPERTY_FOR_OWNER);
-		return sendAndReturn(transferClass);
-	}
-	
-	public TransferClass returnUser(User user) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(user);
-		transferClass.setDomainType(DomainType.USER);
-		transferClass.setOperation(Operations.LOGIN_USER);
-		return sendAndReturn(transferClass);
 	}
 	
 	public TransferClass saveImages(PropertyWrapper wrapper) throws ClassNotFoundException, IOException {
@@ -188,6 +170,7 @@ public class ControllerUI {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
 		case SAVE:
+		case LOGIN_USER:
 		{
 			user = (User) transfer.getServerResponse();
 			break;
@@ -209,8 +192,21 @@ public class ControllerUI {
 		default:
 			break;
 		}
-		
-		
+	}
+
+	public void processPropertyFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case SAVE_ALL_PROPERTY_INFO:
+		case RETURN_PROPERTY_FOR_OWNER:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
+
+		default:
+			break;
+		}
 	}
 
 	

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
@@ -25,13 +27,14 @@ public class ProxyLogin implements IProxy {
 	@Override
 	public void login(User user) {
 		IProxy proxy;
-		TransferClass transferClass = null;
-		try {
-			transferClass = ControllerUI.getController().returnUser(user);
-			user = (User) transferClass.getServerResponse();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(user);
+		transferClass.setDomainType(DomainType.USER);
+		transferClass.setOperation(Operations.LOGIN_USER);
+		
+		ControllerUI.getController().sendToServer(transferClass);
+		user = ControllerUI.getController().getUser();
+		
 		if (user != null) {
 			if (user.getStatus().equals("ADMIN")) {
 				JOptionPane.showMessageDialog(null, "You are admin");
