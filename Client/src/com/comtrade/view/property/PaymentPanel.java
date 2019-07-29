@@ -22,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Country;
@@ -243,16 +245,13 @@ public class PaymentPanel extends JPanel {
 		labelList.add(lbl6);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void returnPaymentImagesFromDB() {
-		try {
-			TransferClass transferClass = ControllerUI.getController().returnPaymentList();
-			paymentList = (List<PaymentType>) transferClass.getServerResponse();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transferClass = new TransferClass();
+		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
+		transferClass.setOperation(Operations.RETURN_ALL);
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		paymentList = ControllerUI.getController().getPayments();
 	}
 
 }

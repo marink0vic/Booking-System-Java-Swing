@@ -3,6 +3,7 @@ package com.comtrade.controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.GeneralDomain;
@@ -25,6 +26,8 @@ public class ControllerBLCountry implements IControllerBL {
 			try {
 				countries = getAllCountries();
 				receiver.setServerResponse(countries);
+				receiver.setDomainType(DomainType.COUNTRY);
+				receiver.setOperation(Operations.RETURN_ALL);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while returning data from database");
 				e.printStackTrace();

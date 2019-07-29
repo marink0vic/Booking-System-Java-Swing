@@ -3,6 +3,7 @@ package com.comtrade.controller;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
@@ -25,6 +26,8 @@ public class ControllerBLPaymentType implements IControllerBL {
 			try {
 				paymentTypes = getAllPaymentTypes();
 				receiver.setServerResponse(paymentTypes);
+				receiver.setDomainType(DomainType.PAYMENT_TYPE);
+				receiver.setOperation(Operations.RETURN_ALL);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while returning data from database");
 				e.printStackTrace();

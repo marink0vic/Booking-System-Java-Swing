@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.User;
@@ -211,22 +213,25 @@ public class RegisterForm extends JFrame {
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				User user = createUser();
-				User savedUser = null;
-				try {
-					TransferClass transferClass = ControllerUI.getController().saveUser(user);
-					savedUser = (User) transferClass.getServerResponse();
-					savedUser.setCountry(userCountry);
-				} catch (ClassNotFoundException | IOException e1) {
-					e1.printStackTrace();
-				}
-				if (savedUser != null) {
+				TransferClass transferClass = new TransferClass();
+				transferClass.setClientRequest(user);
+				transferClass.setDomainType(DomainType.USER);
+				transferClass.setOperation(Operations.SAVE);
+				ControllerUI.getController().sendToServer(transferClass);
+				
+				User savedUser = ControllerUI.getController().getUser();
+				savedUser.setCountry(userCountry);
+				
+				if (user != null) {
 					if (STATUS.equals("SUPER_USER")) {
-						PropertyForm propertyForm = new PropertyForm(savedUser, countries);
+						user.setCountry(userCountry);
+						PropertyForm propertyForm = new PropertyForm(user, countries);
 						propertyForm.setLocationRelativeTo(null);
 						propertyForm.setVisible(true);
 						dispose();
 					} else {
-						UserHomeFrame mainUserFrame = new UserHomeFrame(savedUser);
+						user.setCountry(userCountry);
+						UserHomeFrame mainUserFrame = new UserHomeFrame(user);
 						mainUserFrame.setLocationRelativeTo(null);
 						mainUserFrame.setVisible(true);
 						dispose();
@@ -298,15 +303,13 @@ public class RegisterForm extends JFrame {
 		lblImage.setIcon(im);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void uploadCountryImagesFromDB() {
-		TransferClass transferClass = null;
-		try {
-			transferClass = ControllerUI.getController().returnCountriesList();
-			countries = (List<Country>) transferClass.getServerResponse();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transferClass = new TransferClass();
+		transferClass.setDomainType(DomainType.COUNTRY);
+		transferClass.setOperation(Operations.RETURN_ALL);
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		countries = ControllerUI.getController().getCountryImages();
 		fillComboCountires();
 	}
 	

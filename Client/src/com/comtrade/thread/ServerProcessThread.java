@@ -2,6 +2,7 @@ package com.comtrade.thread;
 
 import com.comtrade.communication.Communication;
 import com.comtrade.constants.DomainType;
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.transfer.TransferClass;
 
 public class ServerProcessThread implements Runnable {
@@ -23,7 +24,27 @@ public class ServerProcessThread implements Runnable {
 
 	private void processInformation(TransferClass transfer) {
 		DomainType domain = transfer.getDomainType();
-		
+		switch (domain) {
+		case COUNTRY:
+		{
+			ControllerUI.getController().processCountryFromServer(transfer);
+			break;
+		}
+		case USER:
+		{
+			ControllerUI.getController().processUserFromServer(transfer);
+			break;
+		}
+		case PAYMENT_TYPE:
+		{
+			ControllerUI.getController().processPaymentTypeFromServer(transfer);
+			break;
+		}
+			
+
+		default:
+			break;
+		}
 	}
 
 }

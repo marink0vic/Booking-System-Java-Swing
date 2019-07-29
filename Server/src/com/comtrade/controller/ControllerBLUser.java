@@ -2,6 +2,7 @@ package com.comtrade.controller;
 
 import java.sql.SQLException;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
@@ -26,6 +27,8 @@ public class ControllerBLUser implements IControllerBL {
 			try {
 				returnedUser = saveUser(user);
 				receiver.setServerResponse(returnedUser);
+				receiver.setDomainType(DomainType.USER);
+				receiver.setOperation(Operations.SAVE);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving user to database");
 				e.printStackTrace();

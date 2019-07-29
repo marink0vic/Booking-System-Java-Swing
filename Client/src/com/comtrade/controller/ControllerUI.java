@@ -9,6 +9,7 @@ import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
@@ -18,7 +19,10 @@ import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {
 
-private static ControllerUI controller;
+	private static ControllerUI controller;
+	private List<Country> countryImages;
+	private List<PaymentType> payments;
+	private User user;
 	
 	private ControllerUI() {
 		
@@ -29,28 +33,56 @@ private static ControllerUI controller;
 			controller = new ControllerUI();
 		return controller;
 	}
-	
-	public TransferClass returnCountriesList() throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setDomainType(DomainType.COUNTRY);
-		transferClass.setOperation(Operations.RETURN_ALL);
-		return sendAndReturn(transferClass);
+
+	public User getUser() {
+		int counter = 0;
+		while (user == null) {
+			System.out.println("waiting for user " + counter);
+			counter++;
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (counter == 4) break;
+		}
+		return user;
 	}
 
-	public TransferClass saveUser(User user) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setDomainType(DomainType.USER);
-		transferClass.setOperation(Operations.SAVE);
-		transferClass.setClientRequest(user);
-		return sendAndReturn(transferClass);
+	public List<Country> getCountryImages() {
+		while (countryImages == null) {
+			System.out.println("Waiting for countries");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		return countryImages;
 	}
 	
-	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
-		transferClass.setOperation(Operations.RETURN_ALL);
-		return sendAndReturn(transferClass);
+	public List<PaymentType> getPayments() {
+		while (payments == null) {
+			System.out.println("waiting for payments");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				
+			}
+		}
+		return payments;
 	}
+
+	public void sendToServer(TransferClass transferClass) {
+		Communication.getCommunication().send(transferClass);
+	}
+	
+//	public TransferClass returnPaymentList() throws ClassNotFoundException, IOException {
+//		TransferClass transferClass = new TransferClass();
+//		transferClass.setDomainType(DomainType.PAYMENT_TYPE);
+//		transferClass.setOperation(Operations.RETURN_ALL);
+//		return sendAndReturn(transferClass);
+//	}
 	
 	public TransferClass saveProperty(PropertyWrapper propertyOwner) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
@@ -136,4 +168,50 @@ private static ControllerUI controller;
 		TransferClass transferClass2 = Communication.getCommunication().read();
 		return transferClass2;
 	}
+
+	@SuppressWarnings("unchecked")
+	public void processCountryFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case RETURN_ALL:
+		{
+			countryImages = (List<Country>) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+		
+	}
+
+	public void processUserFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case SAVE:
+		{
+			user = (User) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void processPaymentTypeFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case RETURN_ALL:
+		{
+			payments = (List<PaymentType>) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+		
+		
+	}
+
+	
 }
