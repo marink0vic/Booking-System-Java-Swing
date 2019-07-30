@@ -15,6 +15,7 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 
@@ -30,6 +31,7 @@ public class ControllerUI {
 	
 	private Map<Booking, List<BookedRoom>> bookedRooms;
 	private PropertyWrapper hostReservationInfo;
+	private UserWrapper userWrapper;
 	
 	private ControllerUI() {
 		bookedRooms = new HashMap<>();
@@ -56,6 +58,18 @@ public class ControllerUI {
 		return user;
 	}
 	
+	public UserWrapper getUserWrapper() {
+		while (userWrapper == null) {
+			System.out.println("Waiting for user bookings");
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return userWrapper;
+	}
+
 	public PropertyWrapper getPropertyWrapper() {
 		int counter = 0;
 		while (propertyWrapper == null) {
@@ -125,20 +139,6 @@ public class ControllerUI {
 	public void sendToServer(TransferClass transferClass) {
 		Communication.getCommunication().send(transferClass);
 	}
-	
-	public TransferClass returnBookingsForProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyWrapper);
-		transferClass.setDomainType(DomainType.BOOKING);
-		transferClass.setOperation(Operations.RETURN_BOOKING_FOR_PROPERTY);
-		return sendAndReturn(transferClass);
-	}
-	
-	private TransferClass sendAndReturn(TransferClass transferClass) throws ClassNotFoundException, IOException {
-		Communication.getCommunication().send(transferClass);
-		TransferClass transferClass2 = Communication.getCommunication().read();
-		return transferClass2;
-	}
 
 	@SuppressWarnings("unchecked")
 	public void processCountryFromServer(TransferClass transfer) {
@@ -162,6 +162,11 @@ public class ControllerUI {
 		case LOGIN_USER:
 		{
 			user = (User) transfer.getServerResponse();
+			break;
+		}
+		case RETURN_BOOKING_FOR_USER:
+		{
+			userWrapper = (UserWrapper) transfer.getServerResponse();
 			break;
 		}
 		default:
@@ -247,13 +252,13 @@ public class ControllerUI {
 			messageResponse = transfer.getMessageResponse();
 			break;
 		}
-		case USER_RESERVATION:
+		case NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS:
 		{
 			Map<Booking, List<BookedRoom>> temp = (Map<Booking, List<BookedRoom>>) transfer.getServerResponse();
 			bookedRooms.putAll(temp);
 			break;
 		}
-		case HOST_RESERVATION:
+		case NOTIFY_HOST_WTIH_NEW_BOOKING:
 		{
 			hostReservationInfo = (PropertyWrapper) transfer.getServerResponse();
 			break;

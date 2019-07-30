@@ -13,6 +13,7 @@ import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
+import com.comtrade.constants.UserType;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
@@ -21,6 +22,7 @@ import com.comtrade.domain.Property;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericList;
 
 public class ServerData {
@@ -30,6 +32,7 @@ public class ServerData {
 	private List<User> regularUsers;
 	private List<PropertyWrapper> properties;
 	private List<Transaction> transactions;
+	private List<UserWrapper> userBookings;
 	private IBroker iBroker;
 	private static final ServerData serverData = new ServerData();
 	
@@ -37,6 +40,7 @@ public class ServerData {
 		iBroker = new Broker();
 		properties = new ArrayList<>();
 		transactions = new ArrayList<>();
+		userBookings = new ArrayList<>();
 	}
 	
 	public static ServerData getInstance() {
@@ -50,10 +54,11 @@ public class ServerData {
 		
 		countries = (List<Country>) iBroker.returnAllData(new Country());
 		paymentTypes = (List<PaymentType>) iBroker.returnAllData(new PaymentType());
-		superUsers = iBroker.returnUsers(new User(), "SUPER_USER");
-		regularUsers = iBroker.returnUsers(new User(), "USER");
+		superUsers = iBroker.returnUsers(new User(), UserType.SUPER_USER.getAccess());
+		regularUsers = iBroker.returnUsers(new User(), UserType.USER.getAccess());
 		transactions = (List<Transaction>) iBroker.returnAllData(new Transaction());
 		addAllProperties();
+		addAllUserBookings();
 		
 		Connection.getConnection().closeConnection();
 		
@@ -73,6 +78,10 @@ public class ServerData {
 		return properties;
 	}
 	
+	public List<UserWrapper> getUserBookings() {
+		return userBookings;
+	}
+
 	public void addNewProperty(PropertyWrapper property) {
 		properties.add(property);
 	}
@@ -97,6 +106,15 @@ public class ServerData {
 			iBroker.insertPropertyForOwner(temp);
 			temp.setTransactions(addAllTransactions(temp.getProperty()));
 			properties.add(temp);
+		}
+	}
+	
+	private void addAllUserBookings() throws SQLException {
+		for (User user : regularUsers) {
+			UserWrapper temp = new UserWrapper();
+			temp.setUser(user);
+			iBroker.insertBookingsForUser(temp);
+			userBookings.add(temp);
 		}
 	}
 	private List<Transaction> addAllTransactions(Property temp) {

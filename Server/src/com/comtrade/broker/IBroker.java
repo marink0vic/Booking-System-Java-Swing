@@ -8,6 +8,7 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 
 public interface IBroker {
 
@@ -21,4 +22,5 @@ public interface IBroker {
 	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
 	List<User> returnUsers(User user, String status) throws SQLException;
+	void insertBookingsForUser(UserWrapper wrapper) throws SQLException;
 }

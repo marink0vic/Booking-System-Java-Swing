@@ -25,6 +25,7 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
@@ -125,6 +126,12 @@ public class Broker implements IBroker {
 		return null;
 	}
 
+
+	@Override
+	public void insertBookingsForUser(UserWrapper wrapper) throws SQLException {
+		wrapper.setBookings(returnBookings(new User(), wrapper.getUser().getIdUser()));
+	}
+
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
@@ -206,7 +213,7 @@ public class Broker implements IBroker {
 		return room;
 	}
 	
-	public Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
+	private Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
 		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
 				+ " WHERE " + domain.returnIdColumnName() + " = ?";
 		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);

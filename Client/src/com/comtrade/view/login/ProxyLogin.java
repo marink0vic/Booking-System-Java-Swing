@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
+import com.comtrade.constants.UserType;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
@@ -36,12 +37,12 @@ public class ProxyLogin implements IProxy {
 		user = ControllerUI.getController().getUser();
 		
 		if (user != null) {
-			if (user.getStatus().equals("ADMIN")) {
+			if (user.getStatus().equals(UserType.ADMIN.getAccess())) {
 				JOptionPane.showMessageDialog(null, "You are admin");
-			} else if (user.getStatus().equals("SUPER_USER")) {
+			} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {
 				proxy = new PropertyOwnerFrame(user);
 				proxy.login(user);
-			} else if (user.getStatus().equals("USER")) {
+			} else if (user.getStatus().equals(UserType.USER.getAccess())) {
 				proxy = new UserHomeFrame(user);
 				proxy.login(user);
 			} else {

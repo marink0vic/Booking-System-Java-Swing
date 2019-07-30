@@ -6,11 +6,13 @@ import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.user.LoginUserSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
+import com.comtrade.sysoperation.user.UserBookingSO;
 import com.comtrade.threads.ClientThread;
 import com.comtrade.transfer.TransferClass;
 
@@ -66,6 +68,21 @@ public class ControllerBLUser implements IControllerBL {
 			}
 			return receiver;
 		}
+		case RETURN_BOOKING_FOR_USER:
+		{
+			UserWrapper userWrapper = (UserWrapper) sender.getClientRequest();
+			UserWrapper returnedWrapper = null;
+			try {
+				returnedWrapper = returnBookingsForUser(userWrapper);
+				receiver.setServerResponse(returnedWrapper);
+				receiver.setDomainType(DomainType.USER);
+				receiver.setOperation(Operations.RETURN_BOOKING_FOR_USER);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return receiver;
+		}
 		default:
 			return null;
 		}
@@ -85,6 +102,13 @@ public class ControllerBLUser implements IControllerBL {
 		GeneralSystemOperation<GenericClass<GeneralDomain>> sysOperation = new SaveUserSO();
 		sysOperation.executeSystemOperation(genericClass);
 		return  (T) genericClass.getDomain();
+	}
+	
+	private UserWrapper returnBookingsForUser(UserWrapper user_wrapper) throws SQLException {
+		GenericClass<UserWrapper> genericClass = new GenericClass<UserWrapper>(user_wrapper);
+		GeneralSystemOperation<GenericClass<UserWrapper>> sysOperation = new UserBookingSO();
+		sysOperation.executeSystemOperation(genericClass);
+		return genericClass.getDomain();
 	}
 
 }
