@@ -120,21 +120,12 @@ public class BookedRoom implements GeneralDomain, Serializable {
 	public String returnStatementPlaceholder() {
 		return "(?,?,?,?,?,?,?)";
 	}
-
-	@Override
-	public String returnColumnsForUpdate() {
-		return null;
-	}
-
+	
 	@Override
 	public String returnIdColumnName() {
 		return "id_booked_room";
 	}
 
-	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		
-	}
 	
 	@Override
 	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {

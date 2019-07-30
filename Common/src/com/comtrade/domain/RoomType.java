@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class RoomType implements GeneralDomain, Serializable {
+public class RoomType implements DomainUpdate, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;

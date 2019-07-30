@@ -3,6 +3,7 @@ package com.comtrade.broker;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
@@ -14,7 +15,7 @@ public interface IBroker {
 
 	GeneralDomain save(GeneralDomain domain) throws SQLException;
 	void delete(GeneralDomain domain) throws SQLException;
-	void update(GeneralDomain domain) throws SQLException;
+	void update(DomainUpdate domain) throws SQLException;
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException;

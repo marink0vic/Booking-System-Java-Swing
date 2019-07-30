@@ -16,6 +16,7 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Position;
@@ -48,7 +49,7 @@ public class Broker implements IBroker {
 	}
 	
 	@Override
-	public void update(GeneralDomain domain) throws SQLException {
+	public void update(DomainUpdate domain) throws SQLException {
 		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
 		Position index = new Position();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
