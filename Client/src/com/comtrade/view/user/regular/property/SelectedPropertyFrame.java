@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
@@ -30,6 +32,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -84,9 +89,9 @@ public class SelectedPropertyFrame extends JFrame {
 		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
-//		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
-//		roomPricesPanel.setPropertyFrame(this);
-//		layeredPane.add(roomPricesPanel, "name_604263933603500");
+		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
+		roomPricesPanel.setPropertyFrame(this);
+		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
 	}
 
@@ -111,18 +116,10 @@ public class SelectedPropertyFrame extends JFrame {
 		lblRoomPrices.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				PropertyWrapper tempWrapper = new PropertyWrapper();
-				tempWrapper.setProperty(propertyWrapper.getProperty());
-				try {
-					TransferClass transfer = ControllerUI.getController().returnBookingsForProperty(tempWrapper);
-					tempWrapper = (PropertyWrapper) transfer.getServerResponse();
-				} catch (ClassNotFoundException | IOException e1) {
-					e1.printStackTrace();
-				}
-				propertyWrapper.setBookings(tempWrapper.getBookings());
-				roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
-				roomPricesPanel.setPropertyFrame(SelectedPropertyFrame.this);
-				layeredPane.add(roomPricesPanel, "name_604263933603500");
+				Map<Booking, List<BookedRoom>> recentBookingsFomDB = ControllerUI.getController().getBookedRooms();
+				Map<Booking, List<BookedRoom>> newBookings = addNewBookings(recentBookingsFomDB);
+				roomPricesPanel.getBookingsFromDatabase().putAll(newBookings);
+				roomPricesPanel.loadRoomScrollPane();
 				switchPanel(roomPricesPanel);
 				updateUI(lblRoomPrices);
 			}
@@ -144,6 +141,22 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.add(lblGuestReviews);
 	}
 	
+	protected Map<Booking, List<BookedRoom>> addNewBookings(Map<Booking, List<BookedRoom>> recentBookings) {
+		Map<Booking, List<BookedRoom>> newBookings = new HashMap<>();
+		Iterator<Map.Entry<Booking, List<BookedRoom>>> iterator = recentBookings.entrySet().iterator();
+		
+		while (iterator.hasNext()) {
+			Map.Entry<Booking, List<BookedRoom>> entry = iterator.next();
+			Booking b = entry.getKey();
+			if (b.getIdProperty() == propertyWrapper.getProperty().getIdProperty()) {
+				propertyWrapper.addNewBooking(b, entry.getValue());
+				newBookings.put(b, entry.getValue());
+				iterator.remove();
+			}
+		}
+		return newBookings;
+	}
+
 	private void updateUI(JLabel label) {
 		JLabel[] navLabels = {lblInfo, lblRoomPrices, lblGuestReviews};
 		for (int i = 0; i < navLabels.length; i++) {

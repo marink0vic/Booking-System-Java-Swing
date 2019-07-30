@@ -36,6 +36,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
@@ -54,6 +56,7 @@ public class RoomsPricesPanel extends JPanel {
 	private Map<RoomType, Room> rooms;
 	private int idProperty;
 	private User user;
+	private User propertyOwner;
 	private int period;
 	private Map<Booking, List<BookedRoom>> bookingsFromDatabase;
 	private Map<Booking, List<BookedRoom>> reservations;
@@ -81,9 +84,11 @@ public class RoomsPricesPanel extends JPanel {
 	private JSeparator separator_6;
 	private JLabel lblNumberOfRooms;
 	private JSpinner spinnerRoomCount;
-
+	private JPanel gridPanel;
+	
 	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut) {
 		this.user = user;
+		this.propertyOwner = propertyWrapper.getUser();
 		this.idProperty = propertyWrapper.getProperty().getIdProperty();
 		this.rooms = propertyWrapper.getRooms();
 		this.booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut);
@@ -102,13 +107,17 @@ public class RoomsPricesPanel extends JPanel {
 	public void setPropertyFrame(SelectedPropertyFrame frame) {
 		this.frame = frame;
 	}
+	
+	public Map<Booking, List<BookedRoom>> getBookingsFromDatabase() {
+		return bookingsFromDatabase;
+	}
 
 	private void initializeComponents() {
 		this.setBounds(252, 165, 1150, 767);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 		loadTopSectionPanel();
-		loadRoomScrollPane();
+		loadScrollPaneBase();
 	}
 	
 	private void loadTopSectionPanel() {
@@ -178,9 +187,9 @@ public class RoomsPricesPanel extends JPanel {
 		lblConfirm.setBounds(860, 17, 93, 40);
 		roomInfoPanel.add(lblConfirm);
 	}
-
-	protected void loadRoomScrollPane() {
-		JPanel gridPanel = new JPanel();
+	
+	private void loadScrollPaneBase() {
+		gridPanel = new JPanel();
 		gridPanel.setLayout(new GridLayout(-1, 1));
 		gridPanel.setBackground(new Color(255, 255, 255));
 		gridPanel.setBounds(0, 71, 975, 700);
@@ -198,7 +207,9 @@ public class RoomsPricesPanel extends JPanel {
 		container.setBounds(0, 71, 975, 700);
 		container.add(scrollPane, BorderLayout.CENTER);
 		this.add(container);
-		
+	}
+	protected void loadRoomScrollPane() {
+		gridPanel.removeAll();
 		int i = 0;
 		for (Map.Entry<RoomType, Room> entry : rooms.entrySet()) {
 			RoomType roomType = entry.getKey();
@@ -212,38 +223,45 @@ public class RoomsPricesPanel extends JPanel {
 		btnConfirmBooking.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int choice = JOptionPane.showConfirmDialog(null, "Confirm booking", "Cansel booking",
-						JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-				if (choice == JOptionPane.YES_OPTION) {
-					double fullPrice = Arrays.stream(pricesPerRoom).sum();
-					booking.setPriceForStay(fullPrice);
-					Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
-					transaction.setAmount(fullPrice);
-					transaction.setSiteFees(fullPrice);
-					
-					PropertyWrapper wrapper = new PropertyWrapper();
-					reservations.put(booking, bookedRooms);
-					wrapper.setBookings(reservations);
-					List<Transaction> list = new ArrayList<>();
-					list.add(transaction);
-					wrapper.setTransactions(list);
-					wrapper.setRooms(rooms);
-					
-					try {
-						TransferClass transferClass = ControllerUI.getController().saveBooking(wrapper);
-						if (transferClass.getServerResponse() == null) {
-							JOptionPane.showMessageDialog(null, transferClass.getMessageResponse());
-						}
-						else {
-							wrapper = (PropertyWrapper) transferClass.getServerResponse();
+				if (bookedRooms.size() != 0) {
+					int choice = JOptionPane.showConfirmDialog(null, "Confirm booking", "Cansel booking",
+							JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					if (choice == JOptionPane.YES_OPTION) {
+						double fullPrice = Arrays.stream(pricesPerRoom).sum();
+						booking.setPriceForStay(fullPrice);
+						Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
+						transaction.setAmount(fullPrice);
+						transaction.setSiteFees(fullPrice);
+						
+						PropertyWrapper wrapper = new PropertyWrapper();
+						reservations.put(booking, bookedRooms);
+						wrapper.setBookings(reservations);
+						List<Transaction> list = new ArrayList<>();
+						list.add(transaction);
+						wrapper.setTransactions(list);
+						wrapper.setRooms(rooms);
+						wrapper.setUser(propertyOwner);
+						
+						TransferClass transferClass = new TransferClass();
+						transferClass.setClientRequest(wrapper);
+						transferClass.setDomainType(DomainType.BOOKING);
+						transferClass.setOperation(Operations.SAVE);
+						ControllerUI.getController().sendToServer(transferClass);
+						
+						wrapper = ControllerUI.getController().getPropertyWrapper();
+						String message = ControllerUI.getController().getMessageResponse();
+						
+						if (wrapper == null) {
+							JOptionPane.showMessageDialog(null, message);
+						} else {
 							RegistrationInfoFrame registrationInfo = new RegistrationInfoFrame(wrapper, rooms.keySet());
 							registrationInfo.setLocationRelativeTo(null);
 							registrationInfo.setVisible(true);
 							frame.dispose();
 						}
-					} catch (ClassNotFoundException | IOException e1) {
-						e1.printStackTrace();
 					}
+				} else {
+					JOptionPane.showMessageDialog(null, "You need to select room to complete reservation");
 				}
 			}
 		});

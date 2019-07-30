@@ -59,6 +59,8 @@ public class ControllerBLProperty implements IControllerBL {
 				List<PropertyWrapper> property = returnAllProperties();
 				receiver.setMessageResponse("All properties loaded from database");
 				receiver.setServerResponse(property);
+				receiver.setDomainType(DomainType.PROPERTY);
+				receiver.setOperation(Operations.RETURN_ALL);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while retrieving property information");
 				e.printStackTrace();

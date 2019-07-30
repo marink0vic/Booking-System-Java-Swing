@@ -29,6 +29,7 @@ public class ServerForm extends JFrame {
 			public void run() {
 				try {
 					ServerForm frame = new ServerForm();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

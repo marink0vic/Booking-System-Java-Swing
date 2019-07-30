@@ -22,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -33,6 +35,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
 import java.beans.PropertyChangeEvent;
@@ -193,14 +198,15 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private void loadAllProperties() {
-		try {
-			TransferClass transferClass = ControllerUI.getController().returnAllProperties();
-			listOfProperties = (List<PropertyWrapper>) transferClass.getServerResponse();
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(transferClass);
+		transferClass.setDomainType(DomainType.PROPERTY);
+		transferClass.setOperation(Operations.RETURN_ALL);
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		listOfProperties = ControllerUI.getController().getProperties();
 	}
 
 	@Override

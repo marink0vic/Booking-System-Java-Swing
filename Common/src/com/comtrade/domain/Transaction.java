@@ -155,34 +155,38 @@ public class Transaction implements GeneralDomain, Serializable {
 	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
 		List<Transaction> transactions = new ArrayList<>();
 		while (resultSet.next()) {
-			int id = resultSet.getInt("id_transaction");
-			int idSender = resultSet.getInt("id_sender");
-			int idReceiver = resultSet.getInt("id_receiver");
-			int bookingId = resultSet.getInt("id_booking");
-			LocalDate ld = resultSet.getDate("transfer_date").toLocalDate();
-			LocalTime lt = resultSet.getTime("transfer_time").toLocalTime();
-			double amount = resultSet.getDouble("amount");
-			double siteFees = resultSet.getDouble("site_fees");
-			
-			Transaction t = new Transaction(idSender, idReceiver, ld, lt);
-			t.setAmount(amount);
-			t.setSiteFees(siteFees);
-			t.setIdBooking(bookingId);
-			t.setIdTransaction(id);
+			Transaction t = createTransaction(resultSet);
 			transactions.add(t);
 		}
 		return transactions;
 	}
-//id_transaction	id_sender	id_receiver	id_booking	transfer_date	transfer_time	amount	site_fees
+	
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		return null;
+		Transaction transaction = new Transaction();
+		if (resultSet.next()) {
+			transaction = createTransaction(resultSet);
+		}
+		return transaction;
 	}
 
-	@Override
-	public String toString() {
-		return "Transaction [idSender=" + idSender + ", idReceiver=" + idReceiver + ", transferDate=" + transferDate
-				+ ", transferTime=" + transferTime + ", amount=" + amount + ", siteFees=" + siteFees + "]";
+	private Transaction createTransaction(ResultSet resultSet) throws SQLException {
+		int id = resultSet.getInt("id_transaction");
+		int idSender = resultSet.getInt("id_sender");
+		int idReceiver = resultSet.getInt("id_receiver");
+		int bookingId = resultSet.getInt("id_booking");
+		LocalDate ld = resultSet.getDate("transfer_date").toLocalDate();
+		LocalTime lt = resultSet.getTime("transfer_time").toLocalTime();
+		double amount = resultSet.getDouble("amount");
+		double siteFees = resultSet.getDouble("site_fees");
+		
+		Transaction t = new Transaction(idSender, idReceiver, ld, lt);
+		t.setAmount(amount);
+		t.setSiteFees(siteFees);
+		t.setIdBooking(bookingId);
+		t.setIdTransaction(id);
+		
+		return t;
 	}
 
 }

@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
+import java.util.Map;
 
 import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerBLBooking;
 import com.comtrade.controller.ControllerBLCountry;
 import com.comtrade.controller.ControllerBLImages;
@@ -14,6 +17,10 @@ import com.comtrade.controller.ControllerBLProperty;
 import com.comtrade.controller.ControllerBLRoom;
 import com.comtrade.controller.ControllerBLUser;
 import com.comtrade.controller.IControllerBL;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
+import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.transfer.TransferClass;
 
 public class ClientThread extends Thread {
@@ -25,15 +32,17 @@ public class ClientThread extends Thread {
 		while (true) {
 			try {
 				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
-				TransferClass transferClass = (TransferClass) inputStream.readObject();
-				processRequest(transferClass);
+				try {
+					TransferClass transferClass = (TransferClass) inputStream.readObject();
+					processRequest(transferClass);
+				} catch (ClassNotFoundException e) {
+					UserActiveThreads.getActiveThreads().removeThread(this);
+					e.printStackTrace();
+				}
 			} catch (IOException e) {
 				//e.printStackTrace();
 				break;
-			} catch (ClassNotFoundException e) {
-				//e.printStackTrace();
-				break;
-			}
+			} 
 		}
 	}
 
@@ -54,7 +63,7 @@ public class ClientThread extends Thread {
 		}
 		case USER:
 		{
-			controller = new ControllerBLUser();
+			controller = new ControllerBLUser(this);
 			break;
 		}
 		case PROPERTY:
@@ -94,6 +103,22 @@ public class ClientThread extends Thread {
 
 	public void setSocket(Socket socket) {
 		this.socket = socket;
+	}
+
+	public void sendToHost(PropertyWrapper wrapper) {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.BOOKING);
+		transfer.setOperation(Operations.HOST_RESERVATION);
+		transfer.setServerResponse(wrapper);
+		sendResponse(transfer);
+	}
+
+	public void sendToUsers(Map<Booking, List<BookedRoom>> bookings) {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.BOOKING);
+		transfer.setOperation(Operations.USER_RESERVATION);
+		transfer.setServerResponse(bookings);
+		sendResponse(transfer);
 	}
 	
 

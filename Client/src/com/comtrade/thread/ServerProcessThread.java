@@ -55,6 +55,11 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processRoomsFromServer(transfer);
 			break;
 		}
+		case BOOKING:
+		{
+			ControllerUI.getController().processBookingFromServer(transfer);
+			break;
+		}
 			
 
 		default:

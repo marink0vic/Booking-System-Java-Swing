@@ -7,12 +7,20 @@ import com.comtrade.constants.Operations;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
 import com.comtrade.generics.GenericClass;
+import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.user.LoginUserSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
+import com.comtrade.threads.ClientThread;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerBLUser implements IControllerBL {
+	
+	private ClientThread clientThread;
+
+	public ControllerBLUser(ClientThread clientThread) {
+		this.clientThread = clientThread;
+	}
 
 	@Override
 	public TransferClass executeOperation(TransferClass sender) {
@@ -23,9 +31,11 @@ public class ControllerBLUser implements IControllerBL {
 		case SAVE:
 		{
 			GeneralDomain user = (GeneralDomain) sender.getClientRequest();
-			GeneralDomain returnedUser = null;
+			User returnedUser = null;
 			try {
 				returnedUser = saveUser(user);
+				UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
+				
 				receiver.setServerResponse(returnedUser);
 				receiver.setDomainType(DomainType.USER);
 				receiver.setOperation(Operations.SAVE);
@@ -33,6 +43,7 @@ public class ControllerBLUser implements IControllerBL {
 				receiver.setMessageResponse("Problem occurred while saving user to database");
 				e.printStackTrace();
 			}
+			
 			return receiver;
 		}
 		case LOGIN_USER:
@@ -45,6 +56,8 @@ public class ControllerBLUser implements IControllerBL {
 				receiver.setOperation(Operations.LOGIN_USER);
 				if (returnedUser == null) {
 					receiver.setMessageResponse("Entered information does not exist in the database");
+				} else {
+					UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
 				}
 				receiver.setServerResponse(returnedUser);
 			} catch (SQLException e) {
@@ -66,11 +79,12 @@ public class ControllerBLUser implements IControllerBL {
 		return domainUser.getDomain();
 	}
 
-	private GeneralDomain saveUser(GeneralDomain user) throws SQLException {
+	@SuppressWarnings("unchecked")
+	private <T extends GeneralDomain> T saveUser(GeneralDomain user) throws SQLException {
 		GenericClass<GeneralDomain> genericClass = new GenericClass<>(user);
 		GeneralSystemOperation<GenericClass<GeneralDomain>> sysOperation = new SaveUserSO();
 		sysOperation.executeSystemOperation(genericClass);
-		return  genericClass.getDomain();
+		return  (T) genericClass.getDomain();
 	}
 
 }

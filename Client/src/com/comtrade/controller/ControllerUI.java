@@ -1,6 +1,7 @@
 package com.comtrade.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,9 +25,14 @@ public class ControllerUI {
 	private List<PaymentType> payments;
 	private User user;
 	private PropertyWrapper propertyWrapper;
+	private List<PropertyWrapper> properties;
+	private String messageResponse;
+	
+	private Map<Booking, List<BookedRoom>> bookedRooms;
+	private PropertyWrapper hostReservationInfo;
 	
 	private ControllerUI() {
-		
+		bookedRooms = new HashMap<>();
 	}
 	
 	public static ControllerUI getController() {
@@ -45,23 +51,47 @@ public class ControllerUI {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (counter == 4) break;
+			if (counter == 3) break;
 		}
 		return user;
 	}
 	
 	public PropertyWrapper getPropertyWrapper() {
+		int counter = 0;
 		while (propertyWrapper == null) {
-			System.out.println("waiting for property wrapper");
+			System.out.println("waiting for property wrapper " + counter);
+			counter++;
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (counter == 3) break;
+		}
+		PropertyWrapper temp = propertyWrapper;
+		propertyWrapper = null;
+		return temp;
+	}
+	
+	//OBRATI PAZNJU KADA SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
+	public List<PropertyWrapper> getProperties() {
+		while (properties == null) {
+			System.out.println("Waiting for list of all properies");
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		PropertyWrapper temp = propertyWrapper;
-		propertyWrapper = null;
-		return temp;
+		return properties;
+	}
+
+	public Map<Booking, List<BookedRoom>> getBookedRooms() {
+		return bookedRooms;
+	}
+
+	public PropertyWrapper getHostReservationInfo() {
+		return hostReservationInfo;
 	}
 
 	public List<Country> getCountryImages() {
@@ -88,26 +118,14 @@ public class ControllerUI {
 		return payments;
 	}
 
+	public String getMessageResponse() {
+		return messageResponse;
+	}
+
 	public void sendToServer(TransferClass transferClass) {
 		Communication.getCommunication().send(transferClass);
 	}
 	
-	
-	public TransferClass returnAllProperties() throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(transferClass);
-		transferClass.setDomainType(DomainType.PROPERTY);
-		transferClass.setOperation(Operations.RETURN_ALL);
-		return sendAndReturn(transferClass);
-	}
-	
-	public TransferClass saveBooking(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
-		TransferClass transferClass = new TransferClass();
-		transferClass.setClientRequest(propertyWrapper);
-		transferClass.setDomainType(DomainType.BOOKING);
-		transferClass.setOperation(Operations.SAVE);
-		return sendAndReturn(transferClass);
-	}
 	public TransferClass returnBookingsForProperty(PropertyWrapper propertyWrapper) throws ClassNotFoundException, IOException {
 		TransferClass transferClass = new TransferClass();
 		transferClass.setClientRequest(propertyWrapper);
@@ -165,6 +183,7 @@ public class ControllerUI {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void processPropertyFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
@@ -174,7 +193,11 @@ public class ControllerUI {
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
 			break;
 		}
-
+		case RETURN_ALL:
+		{
+			properties = (List<PropertyWrapper>) transfer.getServerResponse();
+			break;
+		}
 		default:
 			break;
 		}
@@ -209,6 +232,32 @@ public class ControllerUI {
 			break;
 		}
 
+		default:
+			break;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void processBookingFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case SAVE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			messageResponse = transfer.getMessageResponse();
+			break;
+		}
+		case USER_RESERVATION:
+		{
+			Map<Booking, List<BookedRoom>> temp = (Map<Booking, List<BookedRoom>>) transfer.getServerResponse();
+			bookedRooms.putAll(temp);
+			break;
+		}
+		case HOST_RESERVATION:
+		{
+			hostReservationInfo = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
 		default:
 			break;
 		}

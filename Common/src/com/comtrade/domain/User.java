@@ -216,8 +216,7 @@ public class User implements GeneralDomain, Serializable {
 
 	@Override
 	public int returnIdNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return idUser;
 	}
 
 	@Override

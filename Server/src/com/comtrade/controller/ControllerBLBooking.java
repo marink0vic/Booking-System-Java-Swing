@@ -2,6 +2,7 @@ package com.comtrade.controller;
 
 import java.sql.SQLException;
 
+import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
@@ -31,6 +32,8 @@ public class ControllerBLBooking implements IControllerBL {
 				receiver.setMessageResponse(e.getMessage());
 				e.printStackTrace();
 			}
+			receiver.setDomainType(DomainType.BOOKING);
+			receiver.setOperation(Operations.SAVE);
 			return receiver;
 		}
 		case RETURN_BOOKING_FOR_PROPERTY:

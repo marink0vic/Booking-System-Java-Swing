@@ -15,9 +15,11 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.lock.DbLock;
 import com.comtrade.serverdata.ServerData;
+import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
 public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
@@ -25,6 +27,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private IBroker iBroker = new Broker();
 	private DbLock dbLock = DbLock.getInstance();
 	private ServerData server = ServerData.getInstance();
+	private UserActiveThreads activeThreads = UserActiveThreads.getActiveThreads();
 	
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
@@ -39,26 +42,39 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			if (!checkRoomAvailability(bookings, types)) {
 				throw new SQLException();
 			}
-			
+			//---saving to database
 			Booking booking = saveBooking(bookings.getKey());
 			List<BookedRoom> bookedRooms = saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
 			Transaction tr = saveTransaction(transaction);
+			wrapper.setTransactions(null);
+			//---saving to server and notify logged users
+			addToServerData(booking, bookedRooms, tr);
+			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
 			
-			server.addNewTransaction(tr);
 			
-			for (PropertyWrapper pw : server.returnAllProperties()) {
-				if (booking.getIdProperty() == pw.getProperty().getIdProperty()) {
-					pw.addNewBooking(booking, bookedRooms);
-					pw.addNewTransaction(tr);
-					break;
-				}
-			}
 		} finally {
 			dbLock.unlock();
 		}
 	}
 	
+	private void notifyUsers(User user, Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.addNewBooking(booking, bookedRooms);
+		pw.addNewTransaction(tr);
+		pw.setUser(user);
+		activeThreads.notify(pw);
+	}
+	private void addToServerData(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
+		server.addNewTransaction(tr);
+		for (PropertyWrapper pw : server.returnAllProperties()) {
+			if (booking.getIdProperty() == pw.getProperty().getIdProperty()) {
+				pw.addNewBooking(booking, bookedRooms);
+				pw.addNewTransaction(tr);
+				break;
+			}
+		}
+	}
 	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
 		Booking client = bookings.getKey();
 		List<BookedRoom> rooms = bookings.getValue();

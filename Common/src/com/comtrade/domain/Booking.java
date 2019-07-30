@@ -20,6 +20,7 @@ public class Booking implements GeneralDomain, Serializable {
 	private LocalDate checkIn;
 	private LocalDate checkOut;
 	private double priceForStay;
+	private String status;
 	private LocalDateTime created;
 	
 	public Booking() {
@@ -81,6 +82,14 @@ public class Booking implements GeneralDomain, Serializable {
 		this.priceForStay = priceForStay;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -101,12 +110,12 @@ public class Booking implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnNames() {
-		return " (id_user, id_property, check_in, check_out, price_for_stay, created) VALUES ";
+		return " (id_user, id_property, check_in, check_out, price_for_stay, status, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?)";
+		return "(?,?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -135,6 +144,7 @@ public class Booking implements GeneralDomain, Serializable {
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkIn));
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkOut));
 		preparedStatement.setDouble(index.next(), priceForStay);
+		preparedStatement.setString(index.next(), "PENDING");
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
 
@@ -163,10 +173,12 @@ public class Booking implements GeneralDomain, Serializable {
 		int idProperty = resultSet.getInt("id_property");
 		LocalDate checkIn = resultSet.getDate("check_in").toLocalDate();
 		LocalDate checkOut = resultSet.getDate("check_out").toLocalDate();
+		String status = resultSet.getString("status");
 		double priceForStay = resultSet.getDouble("price_for_stay");
 		Booking booking = new Booking(idUser, idProperty, checkIn, checkOut);
 		booking.idBooking = id;
 		booking.priceForStay = priceForStay;
+		booking.status = status;
 		return booking;
 	}
 
