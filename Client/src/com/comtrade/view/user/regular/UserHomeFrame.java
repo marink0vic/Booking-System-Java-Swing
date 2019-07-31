@@ -25,8 +25,11 @@ import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
 
@@ -54,6 +57,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	
 	private List<PropertyWrapper> listOfProperties;
 	private User user;
+	private UserWrapper userWrapper;
 	private JTextField tfSearch;
 	private JDateChooser dateCheckIn;
 	private JDateChooser dateCheckOut;
@@ -83,6 +87,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		headerPanel = new HeaderPanel(user);
 		contentPane.add(headerPanel);
 		
+		returnBookingsForUser();
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
 		setSearchPanel();
@@ -198,6 +203,18 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		});
 	}
 
+	private void returnBookingsForUser() {
+		UserWrapper userWrapper = new UserWrapper();
+		userWrapper.setUser(user);
+		
+		TransferClass transfer = new TransferClass();
+		transfer.setClientRequest(userWrapper);
+		transfer.setDomainType(DomainType.USER);
+		transfer.setOperation(Operations.RETURN_BOOKING_FOR_USER);
+		ControllerUI.getController().sendToServer(transfer);
+
+		userWrapper = ControllerUI.getController().getUserWrapper();
+	}
 	
 	private void loadAllProperties() {
 		TransferClass transferClass = new TransferClass();

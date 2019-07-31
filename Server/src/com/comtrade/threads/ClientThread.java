@@ -108,7 +108,7 @@ public class ClientThread extends Thread {
 	public void sendToHost(PropertyWrapper wrapper) {
 		TransferClass transfer = new TransferClass();
 		transfer.setDomainType(DomainType.BOOKING);
-		transfer.setOperation(Operations.HOST_RESERVATION);
+		transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_BOOKING);
 		transfer.setServerResponse(wrapper);
 		sendResponse(transfer);
 	}
@@ -116,7 +116,7 @@ public class ClientThread extends Thread {
 	public void sendToUsers(Map<Booking, List<BookedRoom>> bookings) {
 		TransferClass transfer = new TransferClass();
 		transfer.setDomainType(DomainType.BOOKING);
-		transfer.setOperation(Operations.USER_RESERVATION);
+		transfer.setOperation(Operations.NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS);
 		transfer.setServerResponse(bookings);
 		sendResponse(transfer);
 	}

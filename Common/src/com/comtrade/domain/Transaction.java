@@ -125,20 +125,8 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public String returnColumnsForUpdate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String returnIdColumnName() {
 		return "id_transaction";
-	}
-
-	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		// TODO Auto-generated method stub
-
 	}
 	
 	@Override

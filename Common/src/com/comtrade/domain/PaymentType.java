@@ -110,16 +110,4 @@ public class PaymentType implements GeneralDomain, Serializable {
 		return 0;
 	}
 
-	@Override
-	public String returnColumnsForUpdate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

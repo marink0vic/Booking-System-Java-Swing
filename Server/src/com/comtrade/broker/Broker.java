@@ -16,6 +16,7 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Position;
@@ -25,6 +26,7 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
@@ -47,7 +49,7 @@ public class Broker implements IBroker {
 	}
 	
 	@Override
-	public void update(GeneralDomain domain) throws SQLException {
+	public void update(DomainUpdate domain) throws SQLException {
 		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
 		Position index = new Position();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
@@ -123,6 +125,12 @@ public class Broker implements IBroker {
 			}
 		}
 		return null;
+	}
+
+
+	@Override
+	public void insertBookingsForUser(UserWrapper wrapper) throws SQLException {
+		wrapper.setBookings(returnBookings(new User(), wrapper.getUser().getIdUser()));
 	}
 
 	@Override
@@ -206,7 +214,7 @@ public class Broker implements IBroker {
 		return room;
 	}
 	
-	public Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
+	private Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
 		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
 				+ " WHERE " + domain.returnIdColumnName() + " = ?";
 		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);

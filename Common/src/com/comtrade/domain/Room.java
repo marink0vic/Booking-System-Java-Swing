@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Room implements GeneralDomain, Serializable {
+public class Room implements DomainUpdate, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;

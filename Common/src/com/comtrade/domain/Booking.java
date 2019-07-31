@@ -117,23 +117,11 @@ public class Booking implements GeneralDomain, Serializable {
 	public String returnStatementPlaceholder() {
 		return "(?,?,?,?,?,?,?)";
 	}
-
-	@Override
-	public String returnColumnsForUpdate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public String returnIdColumnName() {
 		return "id_booking";
 	}
 
-	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
