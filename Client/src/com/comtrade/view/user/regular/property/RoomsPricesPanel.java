@@ -47,7 +47,6 @@ import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
-import com.comtrade.view.user.regular.RegistrationInfoFrame;
 
 public class RoomsPricesPanel extends JPanel {
 
@@ -254,9 +253,6 @@ public class RoomsPricesPanel extends JPanel {
 						if (wrapper == null) {
 							JOptionPane.showMessageDialog(null, message);
 						} else {
-							RegistrationInfoFrame registrationInfo = new RegistrationInfoFrame(wrapper, rooms.keySet());
-							registrationInfo.setLocationRelativeTo(null);
-							registrationInfo.setVisible(true);
 							frame.dispose();
 						}
 					}

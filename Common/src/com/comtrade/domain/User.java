@@ -1,5 +1,6 @@
 package com.comtrade.domain;
 
+import java.awt.image.ImageFilter;
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import crypt.BCrypt;
 
-public class User implements GeneralDomain, Serializable {
+public class User implements DomainUpdate, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -159,7 +160,7 @@ public class User implements GeneralDomain, Serializable {
 		preparedStatement.setString(index.next(), username);
 		preparedStatement.setString(index.next(), hashPassword(password));
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(dateOfBirth));
-		preparedStatement.setString(index.next(), profilePicture);
+		preparedStatement.setString(index.next(), "/resources/images/users/user-icon.jpg");
 		preparedStatement.setString(index.next(), status);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
@@ -176,7 +177,8 @@ public class User implements GeneralDomain, Serializable {
 			LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
 			String profilePicture = resultSet.getString("profile_picture");
 			String status = resultSet.getString("status");
-			User user = new User(null, firstName, lastName, email, username, profilePicture, date, status);
+			User user = new User(null, firstName, lastName, email, username, null, date, status);
+			user.setProfilePicture(profilePicture);
 			user.setIdUser(id);
 			users.add(user);
 		}
@@ -205,6 +207,23 @@ public class User implements GeneralDomain, Serializable {
 		}
 		return null;
 	}
+	
+	@Override
+	public int returnIdNumber() {
+		return idUser;
+	}
+	
+	@Override
+	public String returnColumnsForUpdate() {
+		return "profile_picture = ?";
+	}
+	
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setString(index.next(), profilePicture);
+		preparedStatement.setInt(index.next(), idUser);
+	}
+	
 	private String hashPassword(String password) {
 		String generatedSecuredPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
 		return generatedSecuredPasswordHash;
@@ -214,10 +233,6 @@ public class User implements GeneralDomain, Serializable {
 		return BCrypt.checkpw(password, hash_password);
 	}
 
-	@Override
-	public int returnIdNumber() {
-		return idUser;
-	}
 
 	@Override
 	public int hashCode() {
@@ -258,5 +273,6 @@ public class User implements GeneralDomain, Serializable {
 			return false;
 		return true;
 	}
+
 
 }

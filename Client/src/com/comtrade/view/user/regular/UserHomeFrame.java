@@ -12,8 +12,11 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,6 +30,7 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.Property;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
@@ -56,6 +60,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private SearchPagePanel searchPagePanel;
 	
 	private List<PropertyWrapper> listOfProperties;
+	private Map<Integer,String> propertyNames;
 	private User user;
 	private UserWrapper userWrapper;
 	private JTextField tfSearch;
@@ -67,6 +72,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	
 	public UserHomeFrame(User user) {
 		this.user = user;
+		this.propertyNames = new HashMap<>();
 		initializeComponents();
 	}
 
@@ -84,14 +90,17 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		headerPanel = new HeaderPanel(user);
-		contentPane.add(headerPanel);
 		
 		returnBookingsForUser();
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
 		setSearchPanel();
+		addPropertyNames();
 		
+		headerPanel = HeaderPanel.getPanel();
+		headerPanel.setUserWrapper(userWrapper);
+		headerPanel.setPropertyNames(propertyNames);
+		contentPane.add(headerPanel);
 		
 		homePagePanel = new HomePagePanel(listOfProperties);
 		layeredPane.add(homePagePanel, "name_536942772642600");
@@ -204,16 +213,17 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	}
 
 	private void returnBookingsForUser() {
-		UserWrapper userWrapper = new UserWrapper();
-		userWrapper.setUser(user);
+		UserWrapper wrapper = new UserWrapper();
+		wrapper.setUser(user);
 		
 		TransferClass transfer = new TransferClass();
-		transfer.setClientRequest(userWrapper);
+		transfer.setClientRequest(wrapper);
 		transfer.setDomainType(DomainType.USER);
 		transfer.setOperation(Operations.RETURN_BOOKING_FOR_USER);
 		ControllerUI.getController().sendToServer(transfer);
 
 		userWrapper = ControllerUI.getController().getUserWrapper();
+		userWrapper.setUser(user);
 	}
 	
 	private void loadAllProperties() {
@@ -224,6 +234,13 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		ControllerUI.getController().sendToServer(transferClass);
 		
 		listOfProperties = ControllerUI.getController().getProperties();
+	}
+	
+	private void addPropertyNames() {
+		for (PropertyWrapper pw : listOfProperties) {
+			propertyNames.put(pw.getProperty().getIdProperty(), pw.getProperty().getName());
+		}
+		
 	}
 
 	@Override

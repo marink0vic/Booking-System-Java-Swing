@@ -43,7 +43,6 @@ public class SelectedPropertyFrame extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private HeaderPanel headerPanel;
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
@@ -76,8 +75,7 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		headerPanel = new HeaderPanel(user);
-		contentPane.add(headerPanel);
+		contentPane.add(HeaderPanel.getPanel());
 		
 		addPropertyNavigationLabels();
 		

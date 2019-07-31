@@ -162,12 +162,17 @@ public class ControllerUI {
 		case LOGIN_USER:
 		{
 			user = (User) transfer.getServerResponse();
+			messageResponse = transfer.getMessageResponse();
 			break;
 		}
 		case RETURN_BOOKING_FOR_USER:
 		{
 			userWrapper = (UserWrapper) transfer.getServerResponse();
 			break;
+		}
+		case UPDATE:
+		{
+			messageResponse = transfer.getMessageResponse();
 		}
 		default:
 			break;
