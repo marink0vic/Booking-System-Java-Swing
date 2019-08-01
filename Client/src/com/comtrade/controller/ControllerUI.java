@@ -1,22 +1,18 @@
 package com.comtrade.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.comtrade.communication.Communication;
-import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
-import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
-import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerUI {

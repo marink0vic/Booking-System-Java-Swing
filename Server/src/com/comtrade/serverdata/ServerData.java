@@ -103,7 +103,7 @@ public class ServerData {
 		for (User user : superUsers) {
 			PropertyWrapper temp = new PropertyWrapper();
 			temp.setUser(user);
-			iBroker.insertPropertyForOwner(temp);
+			iBroker.insertPropertyForOwner(temp); ///////********************/////
 			temp.setTransactions(addAllTransactions(temp.getProperty()));
 			properties.add(temp);
 		}
@@ -113,7 +113,7 @@ public class ServerData {
 		for (User user : regularUsers) {
 			UserWrapper temp = new UserWrapper();
 			temp.setUser(user);
-			iBroker.insertBookingsForUser(temp);
+			temp.setBookings(iBroker.insertBookings(user, user.getIdUser()));
 			userBookings.add(temp);
 		}
 	}

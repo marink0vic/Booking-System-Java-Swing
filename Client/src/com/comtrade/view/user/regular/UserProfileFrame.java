@@ -58,16 +58,15 @@ public class UserProfileFrame extends JFrame {
 	private JLabel lblNewLabel_1;
 
 	private UserProfileFrame() {
+		propertyNames = new HashMap<>();
 	}
 	
 	public void setBookings(UserWrapper userWrapper) {
 		this.user = userWrapper.getUser();
 		this.myBookings = userWrapper.getBookings();
+		setPropertyNames(myBookings.keySet());
 	}
 	
-	public void setPropertyNames(Map<Integer, String> propertyNames) {
-		this.propertyNames = addMyProperties(propertyNames);
-	}
 	public static UserProfileFrame getFrame() {
 		if (userProfile == null) {
 			userProfile = new UserProfileFrame();
@@ -193,7 +192,7 @@ public class UserProfileFrame extends JFrame {
 		int idProperty = findId(propertyName);
 		for (Map.Entry<Booking, List<BookedRoom>> entry : myBookings.entrySet()) {
 			Booking b = entry.getKey();
-			if (b.getIdProperty() == idProperty) {
+			if (b.getProperty().getIdProperty() == idProperty) {
 				for (BookedRoom br : entry.getValue()) {
 					dtm.addRow(new Object[] {
 						b.getCheckIn(),
@@ -228,15 +227,10 @@ public class UserProfileFrame extends JFrame {
 		}
 	}
 
-	private Map<Integer, String> addMyProperties(Map<Integer, String> property_names) {
-		Map<Integer,String> map = new HashMap<>();
-		Set<Booking> bookings = myBookings.keySet();
-		for (Booking b : bookings) {
-			if (property_names.containsKey(b.getIdProperty())) {
-				map.put(b.getIdProperty(), property_names.get(b.getIdProperty()));
-			}
+	private void setPropertyNames(Set<Booking> key_set) {
+		for (Booking booking : key_set) {
+			propertyNames.put(booking.getProperty().getIdProperty(), booking.getProperty().getName());
 		}
-		return map;
 	}
 	
 	private Icon setProfileImage(String path) {

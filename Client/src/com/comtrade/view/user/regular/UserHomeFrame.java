@@ -60,7 +60,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private SearchPagePanel searchPagePanel;
 	
 	private List<PropertyWrapper> listOfProperties;
-	private Map<Integer,String> propertyNames;
 	private User user;
 	private UserWrapper userWrapper;
 	private JTextField tfSearch;
@@ -72,7 +71,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	
 	public UserHomeFrame(User user) {
 		this.user = user;
-		this.propertyNames = new HashMap<>();
 		initializeComponents();
 	}
 
@@ -95,11 +93,9 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
 		setSearchPanel();
-		addPropertyNames();
 		
 		headerPanel = HeaderPanel.getPanel();
 		headerPanel.setUserWrapper(userWrapper);
-		headerPanel.setPropertyNames(propertyNames);
 		contentPane.add(headerPanel);
 		
 		homePagePanel = new HomePagePanel(listOfProperties);
@@ -109,7 +105,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		layeredPane.add(searchPagePanel, "name_538271889712300");
 		
 		UserProfileFrame.getFrame().setBookings(userWrapper);
-		UserProfileFrame.getFrame().setPropertyNames(propertyNames);
 		UserProfileFrame.getFrame().initializeComponents();
 	}
 
@@ -236,13 +231,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		ControllerUI.getController().sendToServer(transferClass);
 		
 		listOfProperties = ControllerUI.getController().getProperties();
-	}
-	
-	private void addPropertyNames() {
-		for (PropertyWrapper pw : listOfProperties) {
-			propertyNames.put(pw.getProperty().getIdProperty(), pw.getProperty().getName());
-		}
-		
 	}
 
 	@Override

@@ -45,6 +45,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 			//---saving to database
 			Booking booking = saveBooking(bookings.getKey());
+			booking.setProperty(bookings.getKey().getProperty());
 			List<BookedRoom> bookedRooms = saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
 			Transaction tr = saveTransaction(transaction);
@@ -73,7 +74,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private void addOwnerBookingOnServer(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
 		server.addNewTransaction(tr);
 		for (PropertyWrapper pw : server.returnAllProperties()) {
-			if (booking.getIdProperty() == pw.getProperty().getIdProperty()) {
+			if (booking.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
 				pw.addNewBooking(booking, bookedRooms);
 				pw.addNewTransaction(tr);
 				break;
@@ -113,7 +114,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private Map<Integer, Integer> returnReservedRoomsCount(Booking client) {
 		Map<Integer, Integer> reservedRooms = new HashMap<>();
 		for (PropertyWrapper pw : server.returnAllProperties()) {
-			if (client.getIdProperty() == pw.getProperty().getIdProperty()) {
+			if (client.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
 				for (Map.Entry<Booking, List<BookedRoom>> savedBooking : pw.getBookings().entrySet()) {
 					Booking server = savedBooking.getKey();
 					if (checkDates(client, server)) continue;

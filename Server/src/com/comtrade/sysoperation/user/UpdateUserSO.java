@@ -17,17 +17,18 @@ public class UpdateUserSO extends GeneralSystemOperation<GenericClass<User>> {
 	@Override
 	protected void executeSpecificOperation(GenericClass<User> object) throws SQLException {
 		User user = object.getDomain();
-		String imageServerPath = saveImageToFolder(user.getProfilePicture());
+		String imageServerPath = saveImageToFolder(user);
 		user.setProfilePicture(imageServerPath);
 		IBroker ib = new Broker();
 		ib.update(user);
 	}
 
-	private String saveImageToFolder(String profile_picture) {
-		// ./resources/images/users/regular/
+	private String saveImageToFolder(User user) {
 		String folder = ImageFolder.IMAGE_REGULAR_USER_FOLDER.getPath();
-		File f = new File(profile_picture);
-		File pathForDatabase = new File(folder + "/" + f.getName());
+		File f = new File(user.getProfilePicture());
+		File f2 = new File(folder + "/" + f.getName());
+		File pathForDatabase = new File(folder + "/" + user.getUsername() + ".jpg");
+		f2.renameTo(pathForDatabase);
 		String image = pathForDatabase.getPath();
 		try {
 			java.nio.file.Files.copy(f.toPath(), pathForDatabase.toPath(), StandardCopyOption.REPLACE_EXISTING);

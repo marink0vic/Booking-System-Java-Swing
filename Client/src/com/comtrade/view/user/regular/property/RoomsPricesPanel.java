@@ -96,7 +96,7 @@ public class RoomsPricesPanel extends JPanel {
 		this.propertyOwner = propertyWrapper.getUser();
 		this.property = propertyWrapper.getProperty();
 		this.rooms = propertyWrapper.getRooms();
-		this.booking = new Booking(user.getIdUser(), property.getIdProperty(), checkIn, checkOut);
+		this.booking = new Booking(user.getIdUser(), property, checkIn, checkOut);
 		this.reservations = new HashMap<>();
 		this.bookedRooms = new ArrayList<>();
 		this.bookingsFromDatabase = propertyWrapper.getBookings();

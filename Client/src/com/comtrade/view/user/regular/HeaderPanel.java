@@ -29,7 +29,6 @@ public class HeaderPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final HeaderPanel panel = new HeaderPanel();
 	private UserWrapper userWrapper;
-	private Map<Integer, String> propertyNames;
 	private JLabel lblLogedUser;
 	private JLabel imageLabel;
 	private JLabel lblNew;
@@ -54,14 +53,6 @@ public class HeaderPanel extends JPanel {
 		this.userWrapper = userWrapper;
 		setProfileNameLabel();
 		imageLabel.setIcon(setIcon());
-	}
-
-	public Map<Integer, String> getPropertyNames() {
-		return propertyNames;
-	}
-
-	public void setPropertyNames(Map<Integer, String> propertyNames) {
-		this.propertyNames = propertyNames;
 	}
 
 	private void initializeComponents() {

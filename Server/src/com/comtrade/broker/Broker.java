@@ -16,6 +16,7 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.DomainJoin;
 import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
@@ -129,8 +130,41 @@ public class Broker implements IBroker {
 
 
 	@Override
-	public void insertBookingsForUser(UserWrapper wrapper) throws SQLException {
-		wrapper.setBookings(returnBookings(new User(), wrapper.getUser().getIdUser()));
+	public Map<Booking, List<BookedRoom>> insertBookings(DomainJoin domain_join, int id_domain) throws SQLException {
+		String sql = domain_join.returnBookingJoin();
+		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ps.setInt(1, id_domain);
+		
+		ResultSet rs = ps.executeQuery();
+		return domain_join.returnJoinTables(rs);
+	}
+	
+	private Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
+		
+		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
+				+ " WHERE " + domain.returnIdColumnName() + " = ?";
+		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ps.setInt(1, key);
+		ResultSet resultSet = ps.executeQuery();
+		
+		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
+		while (resultSet.next()) {
+			Booking booking = new Booking();
+			booking = booking.createBooking(resultSet);
+			
+			BookedRoom br = new BookedRoom();
+			br = br.createBookedRoom(resultSet);
+			
+			if (bookings.containsKey(booking)) {
+				bookings.get(booking).add(br);
+			} else {
+				List<BookedRoom> rooms = new ArrayList<>();
+				rooms.add(br);
+				bookings.put(booking, rooms);
+			}
+		}
+		return bookings;
+		
 	}
 
 	@Override
@@ -212,33 +246,6 @@ public class Broker implements IBroker {
 			room.put(rType, rInfo);
 		}
 		return room;
-	}
-	
-	private Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
-		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
-				+ " WHERE " + domain.returnIdColumnName() + " = ?";
-		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ps.setInt(1, key);
-		ResultSet resultSet = ps.executeQuery();
-		
-		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
-		while (resultSet.next()) {
-			Booking booking = new Booking();
-			booking = booking.createBooking(resultSet);
-			
-			BookedRoom br = new BookedRoom();
-			br = br.createBookedRoom(resultSet);
-			
-			if (bookings.containsKey(booking)) {
-				bookings.get(booking).add(br);
-			} else {
-				List<BookedRoom> rooms = new ArrayList<>();
-				rooms.add(br);
-				bookings.put(booking, rooms);
-			}
-		}
-		return bookings;
-		
 	}
 	
 	@Override

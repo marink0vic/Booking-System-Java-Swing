@@ -147,7 +147,7 @@ public class SelectedPropertyFrame extends JFrame {
 		while (iterator.hasNext()) {
 			Map.Entry<Booking, List<BookedRoom>> entry = iterator.next();
 			Booking b = entry.getKey();
-			if (b.getIdProperty() == propertyWrapper.getProperty().getIdProperty()) {
+			if (b.getProperty().getIdProperty() == propertyWrapper.getProperty().getIdProperty()) {
 				propertyWrapper.addNewBooking(b, entry.getValue());
 				newBookings.put(b, entry.getValue());
 				iterator.remove();

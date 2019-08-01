@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Booking implements GeneralDomain, Serializable {
 
@@ -16,7 +17,7 @@ public class Booking implements GeneralDomain, Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idBooking;
 	private int idUser;
-	private int idProperty;
+	private Property property;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
 	private double priceForStay;
@@ -27,9 +28,9 @@ public class Booking implements GeneralDomain, Serializable {
 		
 	}
 
-	public Booking(int idUser, int idProperty, LocalDate checkIn, LocalDate checkOut) {
+	public Booking(int idUser, Property property, LocalDate checkIn, LocalDate checkOut) {
 		this.idUser = idUser;
-		this.idProperty = idProperty;
+		this.property = property;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 	}
@@ -48,14 +49,14 @@ public class Booking implements GeneralDomain, Serializable {
 
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
+	} 
+	
+	public Property getProperty() {
+		return property;
 	}
 
-	public int getIdProperty() {
-		return idProperty;
-	}
-
-	public void setIdProperty(int idProperty) {
-		this.idProperty = idProperty;
+	public void setProperty(Property property) {
+		this.property = property;
 	}
 
 	public LocalDate getCheckIn() {
@@ -128,7 +129,7 @@ public class Booking implements GeneralDomain, Serializable {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idUser);
-		preparedStatement.setInt(index.next(), idProperty);
+		preparedStatement.setInt(index.next(), property.getIdProperty());
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkIn));
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkOut));
 		preparedStatement.setDouble(index.next(), priceForStay);
@@ -163,7 +164,9 @@ public class Booking implements GeneralDomain, Serializable {
 		LocalDate checkOut = resultSet.getDate("check_out").toLocalDate();
 		String status = resultSet.getString("status");
 		double priceForStay = resultSet.getDouble("price_for_stay");
-		Booking booking = new Booking(idUser, idProperty, checkIn, checkOut);
+		Property p = new Property();
+		p.setIdProperty(idProperty);
+		Booking booking = new Booking(idUser, p, checkIn, checkOut);
 		booking.idBooking = id;
 		booking.priceForStay = priceForStay;
 		booking.status = status;
@@ -174,9 +177,11 @@ public class Booking implements GeneralDomain, Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((checkIn == null) ? 0 : checkIn.hashCode());
+		result = prime * result + ((checkOut == null) ? 0 : checkOut.hashCode());
 		result = prime * result + idBooking;
-		result = prime * result + idProperty;
 		result = prime * result + idUser;
+		result = prime * result + ((property == null) ? 0 : property.hashCode());
 		return result;
 	}
 
@@ -189,14 +194,27 @@ public class Booking implements GeneralDomain, Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Booking other = (Booking) obj;
-		if (idBooking != other.idBooking)
+		if (checkIn == null) {
+			if (other.checkIn != null)
+				return false;
+		} else if (!checkIn.equals(other.checkIn))
 			return false;
-		if (idProperty != other.idProperty)
+		if (checkOut == null) {
+			if (other.checkOut != null)
+				return false;
+		} else if (!checkOut.equals(other.checkOut))
+			return false;
+		if (idBooking != other.idBooking)
 			return false;
 		if (idUser != other.idUser)
 			return false;
+		if (property == null) {
+			if (other.property != null)
+				return false;
+		} else if (!property.equals(other.property))
+			return false;
 		return true;
 	}
-	
+
 	
 }
