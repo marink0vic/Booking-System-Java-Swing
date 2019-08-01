@@ -43,11 +43,11 @@ public class SelectedPropertyFrame extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private HeaderPanel headerPanel;
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
 	private HomePagePanel homePagePanel;
+	private HeaderPanel headerPanel = HeaderPanel.getPanel(); 
 	//--
 	private JLabel lblInfo;
 	private JLabel lblRoomPrices;
@@ -76,7 +76,6 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		headerPanel = new HeaderPanel(user);
 		contentPane.add(headerPanel);
 		
 		addPropertyNavigationLabels();
@@ -89,7 +88,7 @@ public class SelectedPropertyFrame extends JFrame {
 		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
-		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut);
+		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut, headerPanel);
 		roomPricesPanel.setPropertyFrame(this);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
@@ -148,7 +147,7 @@ public class SelectedPropertyFrame extends JFrame {
 		while (iterator.hasNext()) {
 			Map.Entry<Booking, List<BookedRoom>> entry = iterator.next();
 			Booking b = entry.getKey();
-			if (b.getIdProperty() == propertyWrapper.getProperty().getIdProperty()) {
+			if (b.getProperty().getIdProperty() == propertyWrapper.getProperty().getIdProperty()) {
 				propertyWrapper.addNewBooking(b, entry.getValue());
 				newBookings.put(b, entry.getValue());
 				iterator.remove();

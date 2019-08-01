@@ -12,8 +12,11 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,6 +30,7 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.Property;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
@@ -84,14 +88,15 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		headerPanel = new HeaderPanel(user);
-		contentPane.add(headerPanel);
 		
 		returnBookingsForUser();
 		loadAllProperties();
 		sortPropertiesBasedOnRating();
 		setSearchPanel();
 		
+		headerPanel = HeaderPanel.getPanel();
+		headerPanel.setUserWrapper(userWrapper);
+		contentPane.add(headerPanel);
 		
 		homePagePanel = new HomePagePanel(listOfProperties);
 		layeredPane.add(homePagePanel, "name_536942772642600");
@@ -99,7 +104,8 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		searchPagePanel = new SearchPagePanel(listOfProperties, user);
 		layeredPane.add(searchPagePanel, "name_538271889712300");
 		
-		
+		UserProfileFrame.getFrame().setBookings(userWrapper);
+		UserProfileFrame.getFrame().initializeComponents();
 	}
 
 	private void setSearchPanel() {
@@ -204,16 +210,17 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	}
 
 	private void returnBookingsForUser() {
-		UserWrapper userWrapper = new UserWrapper();
-		userWrapper.setUser(user);
+		UserWrapper wrapper = new UserWrapper();
+		wrapper.setUser(user);
 		
 		TransferClass transfer = new TransferClass();
-		transfer.setClientRequest(userWrapper);
+		transfer.setClientRequest(wrapper);
 		transfer.setDomainType(DomainType.USER);
 		transfer.setOperation(Operations.RETURN_BOOKING_FOR_USER);
 		ControllerUI.getController().sendToServer(transfer);
 
 		userWrapper = ControllerUI.getController().getUserWrapper();
+		userWrapper.setUser(user);
 	}
 	
 	private void loadAllProperties() {

@@ -17,6 +17,7 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.serverdata.UserActiveThreads;
@@ -44,12 +45,17 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 			//---saving to database
 			Booking booking = saveBooking(bookings.getKey());
+			booking.setProperty(bookings.getKey().getProperty());
 			List<BookedRoom> bookedRooms = saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
 			Transaction tr = saveTransaction(transaction);
 			wrapper.setTransactions(null);
+			Map<Booking, List<BookedRoom>> map = new HashMap<>();
+			map.put(booking, bookedRooms);
+			wrapper.setBookings(map);
 			//---saving to server and notify logged users
-			addToServerData(booking, bookedRooms, tr);
+			addOwnerBookingOnServer(booking, bookedRooms, tr);
+			addUserBookingOnServer(booking,bookedRooms);
 			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
 			
 			
@@ -65,15 +71,24 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		pw.setUser(user);
 		activeThreads.notify(pw);
 	}
-	private void addToServerData(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
+	private void addOwnerBookingOnServer(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
 		server.addNewTransaction(tr);
 		for (PropertyWrapper pw : server.returnAllProperties()) {
-			if (booking.getIdProperty() == pw.getProperty().getIdProperty()) {
+			if (booking.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
 				pw.addNewBooking(booking, bookedRooms);
 				pw.addNewTransaction(tr);
 				break;
 			}
 		}
+	}
+	private void addUserBookingOnServer(Booking booking, List<BookedRoom> bookedRooms) {
+		for (UserWrapper user : ServerData.getInstance().getUserBookings()) {
+			if (booking.getUser().getIdUser() == user.getUser().getIdUser()) {
+				user.addNewBooking(booking, bookedRooms);
+				break;
+			}
+		}
+		
 	}
 	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
 		Booking client = bookings.getKey();
@@ -99,7 +114,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private Map<Integer, Integer> returnReservedRoomsCount(Booking client) {
 		Map<Integer, Integer> reservedRooms = new HashMap<>();
 		for (PropertyWrapper pw : server.returnAllProperties()) {
-			if (client.getIdProperty() == pw.getProperty().getIdProperty()) {
+			if (client.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
 				for (Map.Entry<Booking, List<BookedRoom>> savedBooking : pw.getBookings().entrySet()) {
 					Booking server = savedBooking.getKey();
 					if (checkDates(client, server)) continue;

@@ -50,7 +50,7 @@ public class ProxyLogin implements IProxy {
 			}
 			mainForm.dispose();
 		} else {
-			JOptionPane.showMessageDialog(null, transferClass.getMessageResponse());
+			JOptionPane.showMessageDialog(null, ControllerUI.getController().getMessageResponse());
 		}
 
 	}

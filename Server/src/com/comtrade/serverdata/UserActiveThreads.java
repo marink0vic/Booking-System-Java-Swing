@@ -47,8 +47,10 @@ public class UserActiveThreads implements ActiveThreads {
 	public void removeThread(ClientThread clientThread) {
 		for (Map.Entry<User, ClientThread> entry : userThreads.entrySet()) {
 			ClientThread temp = entry.getValue();
-			if (temp == clientThread) unregister(entry.getKey());
-			return;
+			if (temp == clientThread) {
+				unregister(entry.getKey());
+				return;
+			}
 		}
 		
 		for (Map.Entry<User, ClientThread> entry : hostThreads.entrySet()) {

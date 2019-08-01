@@ -12,6 +12,7 @@ import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.user.LoginUserSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
+import com.comtrade.sysoperation.user.UpdateUserSO;
 import com.comtrade.sysoperation.user.UserBookingSO;
 import com.comtrade.threads.ClientThread;
 import com.comtrade.transfer.TransferClass;
@@ -83,11 +84,26 @@ public class ControllerBLUser implements IControllerBL {
 			}
 			return receiver;
 		}
+		case UPDATE:
+		{
+			User user = (User) sender.getClientRequest();
+			try {
+				updateUser(user);
+				receiver.setDomainType(DomainType.USER);
+				receiver.setOperation(Operations.UPDATE);
+				receiver.setMessageResponse("User updated successfully");
+			} catch (SQLException e) {
+				receiver.setMessageResponse("Update failed");
+				e.printStackTrace();
+			}
+			return receiver;
+		}
 		default:
 			return null;
 		}
 		
 	}
+
 
 	private User loginUser(User user) throws SQLException {
 		GenericClass<User> domainUser = new GenericClass<>(user);
@@ -111,4 +127,9 @@ public class ControllerBLUser implements IControllerBL {
 		return genericClass.getDomain();
 	}
 
+	private void updateUser(User user) throws SQLException {
+		GenericClass<User> domainUser = new GenericClass<>(user);
+		GeneralSystemOperation<GenericClass<User>> sysOperation = new UpdateUserSO();
+		sysOperation.executeSystemOperation(domainUser);
+	}
 }

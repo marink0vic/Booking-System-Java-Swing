@@ -2,7 +2,11 @@ package com.comtrade.broker;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
+import com.comtrade.domain.DomainJoin;
 import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
@@ -23,5 +27,5 @@ public interface IBroker {
 	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
 	List<User> returnUsers(User user, String status) throws SQLException;
-	void insertBookingsForUser(UserWrapper wrapper) throws SQLException;
+	Map<Booking, List<BookedRoom>> insertBookings(DomainJoin domain_join, int id_domain) throws SQLException;
 }

@@ -41,20 +41,22 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.Property;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
-import com.comtrade.view.user.regular.RegistrationInfoFrame;
+import com.comtrade.view.user.regular.HeaderPanel;
+import com.comtrade.view.user.regular.UserProfileFrame;
 
 public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private SelectedPropertyFrame frame;
 	private Map<RoomType, Room> rooms;
-	private int idProperty;
+	private Property property;
 	private User user;
 	private User propertyOwner;
 	private int period;
@@ -65,6 +67,9 @@ public class RoomsPricesPanel extends JPanel {
 	private Booking booking;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
+	private HeaderPanel headerPanel;
+	public static int numOfCompleteBookings = 0;
+	
 	//----
 	private JPanel roomInfoPanel;
 	private JLabel lblNewLabel;
@@ -86,17 +91,18 @@ public class RoomsPricesPanel extends JPanel {
 	private JSpinner spinnerRoomCount;
 	private JPanel gridPanel;
 	
-	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut) {
+	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut, HeaderPanel panel) {
 		this.user = user;
 		this.propertyOwner = propertyWrapper.getUser();
-		this.idProperty = propertyWrapper.getProperty().getIdProperty();
+		this.property = propertyWrapper.getProperty();
 		this.rooms = propertyWrapper.getRooms();
-		this.booking = new Booking(user.getIdUser(), idProperty, checkIn, checkOut);
+		this.booking = new Booking(user, property, checkIn, checkOut);
 		this.reservations = new HashMap<>();
 		this.bookedRooms = new ArrayList<>();
 		this.bookingsFromDatabase = propertyWrapper.getBookings();
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+		this.headerPanel = panel;
 		
 		this.pricesPerRoom = new double[rooms.size()];
 		Period p = Period.between(checkIn, checkOut);
@@ -229,7 +235,7 @@ public class RoomsPricesPanel extends JPanel {
 					if (choice == JOptionPane.YES_OPTION) {
 						double fullPrice = Arrays.stream(pricesPerRoom).sum();
 						booking.setPriceForStay(fullPrice);
-						Transaction transaction = new Transaction(user.getIdUser(), idProperty, LocalDate.now(), LocalTime.now());
+						Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
 						transaction.setAmount(fullPrice);
 						transaction.setSiteFees(fullPrice);
 						
@@ -254,11 +260,16 @@ public class RoomsPricesPanel extends JPanel {
 						if (wrapper == null) {
 							JOptionPane.showMessageDialog(null, message);
 						} else {
-							RegistrationInfoFrame registrationInfo = new RegistrationInfoFrame(wrapper, rooms.keySet());
-							registrationInfo.setLocationRelativeTo(null);
-							registrationInfo.setVisible(true);
-							frame.dispose();
+							numOfCompleteBookings++;
+							booking = wrapper.getBookings().entrySet().iterator().next().getKey();
+							UserProfileFrame.getFrame().addNewPropertyName(property.getIdProperty(), property.getName());
+							UserProfileFrame.getFrame().addNewBooking(booking, bookedRooms);
+							headerPanel.getLblNew().setBackground(ColorConstants.RED);
+							headerPanel.getLblNew().setForeground(Color.WHITE);
+							headerPanel.getLblNew().setText(String.valueOf(numOfCompleteBookings));
 						}
+						bookedRooms = new ArrayList<>();
+						pricesPerRoom = new double[rooms.size()];
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "You need to select room to complete reservation");
@@ -422,7 +433,8 @@ public class RoomsPricesPanel extends JPanel {
 						addToReservation(bookedRoom,room_type.getIdRoomType());
 					}
 				}
-				
+				sm2.setValue(0);	
+				lblPrice.setText(strPrice + "$");
 			}
 		});
 		addReservation.setForeground(new Color(255, 255, 255));
@@ -437,6 +449,7 @@ public class RoomsPricesPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				removeFromReservation(room_type.getIdRoomType());
+				pricesPerRoom[price_index] = 0.0;
 			}
 		});
 		removeReservation.setForeground(new Color(255, 255, 255));

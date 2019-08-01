@@ -8,11 +8,13 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import crypt.BCrypt;
 
-public class User implements GeneralDomain, Serializable {
+public class User implements DomainUpdate, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -159,7 +161,7 @@ public class User implements GeneralDomain, Serializable {
 		preparedStatement.setString(index.next(), username);
 		preparedStatement.setString(index.next(), hashPassword(password));
 		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(dateOfBirth));
-		preparedStatement.setString(index.next(), profilePicture);
+		preparedStatement.setString(index.next(), "/resources/images/users/user-icon.jpg");
 		preparedStatement.setString(index.next(), status);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
@@ -176,7 +178,8 @@ public class User implements GeneralDomain, Serializable {
 			LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
 			String profilePicture = resultSet.getString("profile_picture");
 			String status = resultSet.getString("status");
-			User user = new User(null, firstName, lastName, email, username, profilePicture, date, status);
+			User user = new User(null, firstName, lastName, email, username, null, date, status);
+			user.setProfilePicture(profilePicture);
 			user.setIdUser(id);
 			users.add(user);
 		}
@@ -205,6 +208,23 @@ public class User implements GeneralDomain, Serializable {
 		}
 		return null;
 	}
+	
+	@Override
+	public int returnIdNumber() {
+		return idUser;
+	}
+	
+	@Override
+	public String returnColumnsForUpdate() {
+		return "profile_picture = ?";
+	}
+	
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setString(index.next(), profilePicture);
+		preparedStatement.setInt(index.next(), idUser);
+	}
+	
 	private String hashPassword(String password) {
 		String generatedSecuredPasswordHash = BCrypt.hashpw(password, BCrypt.gensalt(12));
 		return generatedSecuredPasswordHash;
@@ -214,10 +234,6 @@ public class User implements GeneralDomain, Serializable {
 		return BCrypt.checkpw(password, hash_password);
 	}
 
-	@Override
-	public int returnIdNumber() {
-		return idUser;
-	}
 
 	@Override
 	public int hashCode() {
@@ -259,4 +275,39 @@ public class User implements GeneralDomain, Serializable {
 		return true;
 	}
 
+	@Override
+	public String returnBookingJoin() throws SQLException {
+		String join =  "SELECT * FROM bookings"
+					+ " JOIN property ON property.id_property = bookings.id_property"
+					+ " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"
+					+ " WHERE bookings.id_user = ?";
+		return join;
+	}
+
+	@Override
+	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
+		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
+		while (rs.next()) {
+			Booking booking = new Booking();
+			booking = booking.createBooking(rs);
+			
+			BookedRoom br = new BookedRoom();
+			br = br.createBookedRoom(rs);
+			
+			Property property = new Property();
+			property.setIdProperty(rs.getInt("id_property"));
+			property.setType(rs.getString("type"));
+			property.setName(rs.getString("name"));
+			booking.setProperty(property);
+			
+			if (bookings.containsKey(booking)) {
+				bookings.get(booking).add(br);
+			} else {
+				List<BookedRoom> rooms = new ArrayList<>();
+				rooms.add(br);
+				bookings.put(booking, rooms);
+			}
+		}
+		return bookings;
+	}
 }

@@ -43,6 +43,8 @@ public class UserWrapper implements Generic, Serializable {
 		this.bookings = bookings;
 	}
 	
-	
+	public void addNewBooking(Booking booking, List<BookedRoom> bookedRoom) {
+		bookings.put(booking, bookedRoom);
+	}
 
 }

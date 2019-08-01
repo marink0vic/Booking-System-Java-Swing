@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Property implements GeneralDomain, Serializable {
+public class Property implements GeneralDomain, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -228,6 +231,49 @@ public class Property implements GeneralDomain, Serializable {
 			return property;
 		}
 		return null;
+	}
+
+	@Override
+	public String returnBookingJoin() throws SQLException {
+		String join =  "SELECT * FROM bookings"
+				    + " JOIN user ON user.id_user = bookings.id_user"
+				    + " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"
+				    + " WHERE bookings.id_property = ?";
+		return join;
+	}
+
+	@Override
+	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
+		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
+		while (rs.next()) {
+			Booking booking = new Booking();
+			booking = booking.createBooking(rs);
+			
+			BookedRoom br = new BookedRoom();
+			br = br.createBookedRoom(rs);
+			
+			User user = createUser(rs);
+			booking.setUser(user);
+			
+			if (bookings.containsKey(booking)) {
+				bookings.get(booking).add(br);
+			} else {
+				List<BookedRoom> rooms = new ArrayList<>();
+				rooms.add(br);
+				bookings.put(booking, rooms);
+			}
+		}
+		return bookings;
+	}
+	
+	private User createUser(ResultSet result_set) throws SQLException {
+		User user = new User();
+		user.setIdUser(result_set.getInt("id_user"));
+		user.setFirstName(result_set.getString("first_name"));
+		user.setLastName(result_set.getString("last_name"));
+		user.setUsername(result_set.getString("username"));
+		user.setProfilePicture(result_set.getString("profile_picture"));
+		return user;
 	}
 
 }

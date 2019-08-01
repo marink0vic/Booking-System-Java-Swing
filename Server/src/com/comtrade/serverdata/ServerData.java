@@ -3,11 +3,9 @@ package com.comtrade.serverdata;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.omg.IOP.TransactionService;
 
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
@@ -23,7 +21,6 @@ import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
-import com.comtrade.generics.GenericList;
 
 public class ServerData {
 	private List<Country> countries;
@@ -113,7 +110,7 @@ public class ServerData {
 		for (User user : regularUsers) {
 			UserWrapper temp = new UserWrapper();
 			temp.setUser(user);
-			iBroker.insertBookingsForUser(temp);
+			temp.setBookings(iBroker.insertBookings(user, user.getIdUser()));
 			userBookings.add(temp);
 		}
 	}
