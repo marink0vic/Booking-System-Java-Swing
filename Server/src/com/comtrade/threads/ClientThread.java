@@ -36,10 +36,10 @@ public class ClientThread extends Thread {
 					TransferClass transferClass = (TransferClass) inputStream.readObject();
 					processRequest(transferClass);
 				} catch (ClassNotFoundException e) {
-					UserActiveThreads.getActiveThreads().removeThread(this);
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
+				UserActiveThreads.getActiveThreads().removeThread(this);
 				//e.printStackTrace();
 				break;
 			} 

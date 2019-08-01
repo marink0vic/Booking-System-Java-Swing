@@ -17,6 +17,7 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.serverdata.UserActiveThreads;
@@ -48,8 +49,12 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			transaction.setIdBooking(booking.getIdBooking());
 			Transaction tr = saveTransaction(transaction);
 			wrapper.setTransactions(null);
+			Map<Booking, List<BookedRoom>> map = new HashMap<>();
+			map.put(booking, bookedRooms);
+			wrapper.setBookings(map);
 			//---saving to server and notify logged users
-			addToServerData(booking, bookedRooms, tr);
+			addOwnerBookingOnServer(booking, bookedRooms, tr);
+			addUserBookingOnServer(booking,bookedRooms);
 			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
 			
 			
@@ -65,7 +70,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		pw.setUser(user);
 		activeThreads.notify(pw);
 	}
-	private void addToServerData(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
+	private void addOwnerBookingOnServer(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
 		server.addNewTransaction(tr);
 		for (PropertyWrapper pw : server.returnAllProperties()) {
 			if (booking.getIdProperty() == pw.getProperty().getIdProperty()) {
@@ -74,6 +79,15 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 				break;
 			}
 		}
+	}
+	private void addUserBookingOnServer(Booking booking, List<BookedRoom> bookedRooms) {
+		for (UserWrapper user : ServerData.getInstance().getUserBookings()) {
+			if (booking.getIdUser() == user.getUser().getIdUser()) {
+				user.addNewBooking(booking, bookedRooms);
+				break;
+			}
+		}
+		
 	}
 	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
 		Booking client = bookings.getKey();

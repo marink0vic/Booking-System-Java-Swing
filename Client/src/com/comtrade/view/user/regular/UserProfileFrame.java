@@ -45,6 +45,7 @@ import java.awt.Cursor;
 public class UserProfileFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static UserProfileFrame userProfile;
 	private JPanel contentPane;
 	private JComboBox<String> comboBox;
 	private User user;
@@ -56,14 +57,25 @@ public class UserProfileFrame extends JFrame {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private JLabel lblNewLabel_1;
 
-	public UserProfileFrame(UserWrapper userWrapper, Map<Integer, String> propertyNames) {
+	private UserProfileFrame() {
+	}
+	
+	public void setBookings(UserWrapper userWrapper) {
 		this.user = userWrapper.getUser();
 		this.myBookings = userWrapper.getBookings();
+	}
+	
+	public void setPropertyNames(Map<Integer, String> propertyNames) {
 		this.propertyNames = addMyProperties(propertyNames);
-		initializeComponents();
+	}
+	public static UserProfileFrame getFrame() {
+		if (userProfile == null) {
+			userProfile = new UserProfileFrame();
+		}
+		return userProfile;
 	}
 
-	private void initializeComponents() {
+	public void initializeComponents() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 849, 800);
 		contentPane = new JPanel();
@@ -165,6 +177,15 @@ public class UserProfileFrame extends JFrame {
 		
 		fillTable(propertyName);
 	}
+	
+	public void addNewPropertyName(Integer id, String name) {
+		propertyNames.put(id, name);
+		fillComboBox();
+	}
+	
+	public void addNewBooking(Booking booking, List<BookedRoom> booked_rooms) {
+		myBookings.put(booking, booked_rooms);
+	}
 
 	private void fillTable(String property_name) {
 		dtm.setRowCount(0);
@@ -198,6 +219,7 @@ public class UserProfileFrame extends JFrame {
 	}
 
 	private void fillComboBox() {
+		comboBox.removeAllItems();
 		for (Integer i : propertyNames.keySet()) {
 			if (propertyName == null) {
 				propertyName = propertyNames.get(i);

@@ -108,7 +108,9 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		searchPagePanel = new SearchPagePanel(listOfProperties, user);
 		layeredPane.add(searchPagePanel, "name_538271889712300");
 		
-		
+		UserProfileFrame.getFrame().setBookings(userWrapper);
+		UserProfileFrame.getFrame().setPropertyNames(propertyNames);
+		UserProfileFrame.getFrame().initializeComponents();
 	}
 
 	private void setSearchPanel() {
