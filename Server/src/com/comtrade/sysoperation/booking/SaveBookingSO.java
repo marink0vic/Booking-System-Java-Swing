@@ -83,7 +83,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	}
 	private void addUserBookingOnServer(Booking booking, List<BookedRoom> bookedRooms) {
 		for (UserWrapper user : ServerData.getInstance().getUserBookings()) {
-			if (booking.getIdUser() == user.getUser().getIdUser()) {
+			if (booking.getUser().getIdUser() == user.getUser().getIdUser()) {
 				user.addNewBooking(booking, bookedRooms);
 				break;
 			}

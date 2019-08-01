@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
@@ -138,34 +136,6 @@ public class Broker implements IBroker {
 		ResultSet rs = ps.executeQuery();
 		return domain_join.returnJoinTables(rs);
 	}
-	
-	private Map<Booking, List<BookedRoom>> returnBookings(GeneralDomain domain, int key) throws SQLException {
-		
-		String sql = "SELECT * FROM bookings JOIN `booked_room` ON booked_room.id_booking = bookings.id_booking"
-				+ " WHERE " + domain.returnIdColumnName() + " = ?";
-		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ps.setInt(1, key);
-		ResultSet resultSet = ps.executeQuery();
-		
-		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
-		while (resultSet.next()) {
-			Booking booking = new Booking();
-			booking = booking.createBooking(resultSet);
-			
-			BookedRoom br = new BookedRoom();
-			br = br.createBookedRoom(resultSet);
-			
-			if (bookings.containsKey(booking)) {
-				bookings.get(booking).add(br);
-			} else {
-				List<BookedRoom> rooms = new ArrayList<>();
-				rooms.add(br);
-				bookings.put(booking, rooms);
-			}
-		}
-		return bookings;
-		
-	}
 
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
@@ -175,7 +145,7 @@ public class Broker implements IBroker {
 		wrapper.setImages(returnPropertyImages(idProperty));
 		wrapper.setPaymentList(returnPayments(idProperty));
 		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
-		wrapper.setBookings(returnBookings(new Property(), wrapper.getProperty().getIdProperty()));
+		wrapper.setBookings(insertBookings(new Property(), wrapper.getProperty().getIdProperty()));
 	}	
 
 	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
