@@ -148,6 +148,30 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		mainTextHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
+		
+		ControllerUI.getController().setOwnerFrame(this);
+//		Thread thread = new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				while (true) {
+//					synchronized (this) {
+//						try {
+//							this.wait();
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					Map<Booking, List<BookedRoom>> temp = ControllerUI.getController().getHostReservationInfo().getBookings();
+//					if (temp.size() > 0) {
+//						lblNewRes.setBackground(ColorConstants.RED);
+//						lblNewRes.setText(String.valueOf(temp.size()));
+//					}
+//					reservationPanelRight.addNewBookings(temp);
+//				}
+//			}
+//		});
+//		
+//		thread.start();
 	}
 	
 	private void createSidePanel() {
@@ -433,5 +457,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	public void login(User user) {
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+
+	public void signalNewBooking(PropertyWrapper property_wrapper) {
+		Map<Booking, List<BookedRoom>> temp = property_wrapper.getBookings();
+		if (temp.size() > 0) {
+			reservationPanelRight.addNewBookings(temp);
+		}
 	}
 }

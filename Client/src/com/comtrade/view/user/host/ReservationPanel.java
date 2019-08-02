@@ -294,7 +294,8 @@ public class ReservationPanel extends JPanel {
 			Booking b = entry.getKey();
 			priceTotal += addBookedRooms(b, entry.getValue(), dtm2);
 		}
-		lblFullPrice2.setText("Full price: " + priceTotal + "$");
+		String price = String.format("%.2f", priceTotal);
+		lblFullPrice2.setText("Full price: " + price + "$");
 	}
 	
 	private void fillTable() {
@@ -314,7 +315,9 @@ public class ReservationPanel extends JPanel {
 			}
 		}
 		
-		lblFullPrice.setText("Full price: " + priceTotal + "$");
+		String price = String.format("%.2f", priceTotal);
+		
+		lblFullPrice.setText("Full price: " + price + "$");
 	}
 	
 	private double addBookedRooms(Booking b, List<BookedRoom> list, DefaultTableModel default_model) {
@@ -362,5 +365,14 @@ public class ReservationPanel extends JPanel {
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
+	}
+
+	public void addNewBookings(Map<Booking, List<BookedRoom>> temp) {
+		newBookings.putAll(temp);
+		lblNewRes.setBackground(ColorConstants.RED);
+		lblNewRes.setText(String.valueOf(newBookings.size()));
+		smallOwnerLabel.setBackground(ColorConstants.RED);
+		smallOwnerLabel.setText(String.valueOf(newBookings.size()));
+		fillNewBookingTable();
 	}
 }
