@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,7 +80,10 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private PropertyWrapper propertyWrapper;
 	private User user;
 	private Set<RoomType> roomTypes;
-
+	private  Map<Booking, List<BookedRoom>> oldBookings;
+	private  Map<Booking, List<BookedRoom>> newBookings;
+	private JLabel lblNewRes;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -102,6 +106,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private void initializeComponents() {
 		if (propertyWrapper.getProperty() == null) returnPropertyForUser();
 		this.roomTypes = propertyWrapper.getRooms().keySet();
+		oldBookings = new HashMap<>();
+		newBookings = new HashMap<>();
+		addBookingsToCorrectMap();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 850);
@@ -122,11 +129,11 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		homePanelRight = new HomePanel(propertyWrapper);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
-		JPanel AvailabolityPanelRight = new JPanel();
-		layeredPane.add(AvailabolityPanelRight, "name_89976615789600");
-		AvailabolityPanelRight.setLayout(null);
+		JPanel AvailabilityPanelRight = new JPanel();
+		layeredPane.add(AvailabilityPanelRight, "name_89976615789600");
+		AvailabilityPanelRight.setLayout(null);
 		
-		reservationPanelRight = new ReservationPanel(roomTypes, propertyWrapper.getBookings());
+		reservationPanelRight = new ReservationPanel(roomTypes, oldBookings, newBookings, lblNewRes);
 		layeredPane.add(reservationPanelRight, "name_90023259817100");
 		
 		JPanel HeaderTextPanel = new JPanel();
@@ -142,6 +149,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
 	}
+	
 	private void createSidePanel() {
 		boolean activePanel[] = {false, false, false, false, false};
 		
@@ -285,8 +293,22 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		JLabel lblReservation = new JLabel("Reservations");
 		lblReservation.setForeground(Color.WHITE);
 		lblReservation.setFont(new Font("Dialog", Font.BOLD, 17));
-		lblReservation.setBounds(130, 13, 145, 32);
+		lblReservation.setBounds(130, 13, 119, 32);
 		reservationPanel.add(lblReservation);
+		
+		lblNewRes = new JLabel("");
+		lblNewRes.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewRes.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewRes.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewRes.setOpaque(true);
+		lblNewRes.setForeground(Color.WHITE);
+		lblNewRes.setBackground(new Color(32, 40, 44));
+		lblNewRes.setBounds(260, 13, 42, 32);
+		if (newBookings.size() > 0) {
+			lblNewRes.setBackground(ColorConstants.RED);
+			lblNewRes.setText(String.valueOf(newBookings.size()));
+		}
+		reservationPanel.add(lblNewRes);
 		
 		messagePanel = new JPanel();
 		messagePanel.addMouseListener(new MouseAdapter() {
@@ -379,6 +401,17 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		ControllerUI.getController().sendToServer(transferClass);
 		
 		propertyWrapper = ControllerUI.getController().getPropertyWrapper();
+	}
+	
+	private void addBookingsToCorrectMap() {
+		for (Map.Entry<Booking, List<BookedRoom>> entry : propertyWrapper.getBookings().entrySet()) {
+			Booking b = entry.getKey();
+			if (b.getStatus().equals("PENDING")) {
+				newBookings.put(b, entry.getValue());
+			} else {
+				oldBookings.put(b, entry.getValue());
+			}
+		}
 	}
 	
 	private void changeSelectedBackgroundColor(boolean[] activePanel, int index) {
