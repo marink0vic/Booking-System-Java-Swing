@@ -302,7 +302,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		lblNewRes.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblNewRes.setOpaque(true);
 		lblNewRes.setForeground(Color.WHITE);
-		lblNewRes.setBackground(new Color(32, 40, 44));
+		lblNewRes.setBackground(null);
 		lblNewRes.setBounds(260, 13, 42, 32);
 		if (newBookings.size() > 0) {
 			lblNewRes.setBackground(ColorConstants.RED);

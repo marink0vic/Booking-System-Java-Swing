@@ -13,14 +13,13 @@ import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.dto.UserWrapper;
-
 public interface IBroker {
 
 	GeneralDomain save(GeneralDomain domain) throws SQLException;
 	void delete(GeneralDomain domain) throws SQLException;
 	void update(DomainUpdate domain) throws SQLException;
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
+	void updateCollectionOfData(List<? extends DomainUpdate> list) throws SQLException;
 	List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
 	void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException;
 	List<PropertyImage> returnPropertyImages(int id_property) throws SQLException;

@@ -169,6 +169,7 @@ public class ControllerUI {
 		case UPDATE:
 		{
 			messageResponse = transfer.getMessageResponse();
+			break;
 		}
 		default:
 			break;
@@ -251,6 +252,11 @@ public class ControllerUI {
 		{
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
 			messageResponse = transfer.getMessageResponse();
+			break;
+		}
+		case UPDATE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
 			break;
 		}
 		case NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS:

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,19 @@ public class Broker implements IBroker {
 		preparedStatement.executeUpdate();
 	}
 	
+	@Override
+	public void updateCollectionOfData(List<? extends DomainUpdate> list) throws SQLException {
+		DomainUpdate domain = list.get(0);
+		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		Position index = new Position();
+		for (DomainUpdate d : list) {
+			d.preparedStatementUpdate(preparedStatement, index);
+			preparedStatement.addBatch();
+		}
+		preparedStatement.executeBatch();
+	}
+
 	@Override
 	public void delete(GeneralDomain domain) throws SQLException {
 		String sql = "DELETE FROM " + domain.returnTableName() + " WHERE " + domain.returnIdColumnName() + " = ?";

@@ -24,9 +24,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.RoomType;
+import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingConstants;
@@ -227,14 +232,28 @@ public class ReservationPanel extends JPanel {
 		lblAddNewRes = new JButton("CONFIRM NEW BOOKINGS");
 		lblAddNewRes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				oldBookings.putAll(newBookings);
-				newBookings = new HashMap<>();
-				smallOwnerLabel.setText("");
-				smallOwnerLabel.setBackground(null);
-				lblNewRes.setText("");
-				lblNewRes.setBackground(Color.WHITE);
-				fillTable();
-				fillNewBookingTable();
+				if (newBookings.size() > 0) {
+					TransferClass transfer = new TransferClass();
+					transfer.setDomainType(DomainType.BOOKING);
+					transfer.setOperation(Operations.UPDATE);
+					PropertyWrapper pw = new PropertyWrapper();
+					pw.setBookings(newBookings);
+					transfer.setClientRequest(pw);
+					ControllerUI.getController().sendToServer(transfer);
+					
+					pw = ControllerUI.getController().getPropertyWrapper();
+					
+					oldBookings.putAll(pw.getBookings());
+					newBookings = new HashMap<>();
+					
+					smallOwnerLabel.setText("");
+					smallOwnerLabel.setBackground(null);
+					lblNewRes.setText("");
+					lblNewRes.setBackground(Color.WHITE);
+					
+					fillTable();
+					fillNewBookingTable();
+				}
 			}
 		});
 		lblAddNewRes.setForeground(new Color(255, 255, 255));

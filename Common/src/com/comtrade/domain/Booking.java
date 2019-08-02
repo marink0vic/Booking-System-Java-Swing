@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Booking implements GeneralDomain, Serializable {
+public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -181,6 +181,18 @@ public class Booking implements GeneralDomain, Serializable {
 		booking.status = status;
 		booking.setCreated(dateTime);
 		return booking;
+	}
+	
+
+	@Override
+	public String returnColumnsForUpdate() {
+		return "status = ?";
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setString(1, "ACCEPTED");
+		preparedStatement.setInt(2, idBooking);
 	}
 
 	@Override
