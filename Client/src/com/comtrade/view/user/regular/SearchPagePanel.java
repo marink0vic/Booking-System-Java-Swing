@@ -116,7 +116,7 @@ public class SearchPagePanel extends JPanel {
 		lblPropertyName.setText(property.getProperty().getName());
 		testPanel.add(lblPropertyName);
 		
-		lblStreet = new JLabel("this is street text");
+		lblStreet = new JLabel("");
 		lblStreet.setForeground(new Color(71, 71, 71));
 		lblStreet.setFont(new Font("Dialog", Font.PLAIN, 18));
 		lblStreet.setBorder(null);

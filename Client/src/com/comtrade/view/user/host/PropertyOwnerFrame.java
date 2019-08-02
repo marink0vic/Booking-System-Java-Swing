@@ -7,14 +7,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.JLabel;
 
@@ -22,24 +27,41 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
 import java.awt.CardLayout;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PropertyOwnerFrame extends JFrame implements IProxy {
 
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JLayeredPane layeredPane;
 	//---top panel
 	private JLabel mainTextHeader;
 	//---left panels
@@ -51,9 +73,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private JPanel currentPanel;
 	//-----right panels
 	private HomePanel homePanelRight;
+	private ReservationPanel reservationPanelRight;
 	
+	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
+	private Set<RoomType> roomTypes;
 
 	/**
 	 * Create the frame.
@@ -75,6 +100,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	}
 
 	private void initializeComponents() {
+		if (propertyWrapper.getProperty() == null) returnPropertyForUser();
+		this.roomTypes = propertyWrapper.getRooms().keySet();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1500, 850);
 		contentPane = new JPanel();
@@ -85,9 +113,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		createSidePanel();
 		
-		if (propertyWrapper.getProperty() == null)returnPropertyForUser();
 		
-		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
@@ -95,7 +122,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		homePanelRight = new HomePanel(propertyWrapper);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
+		JPanel AvailabolityPanelRight = new JPanel();
+		layeredPane.add(AvailabolityPanelRight, "name_89976615789600");
+		AvailabolityPanelRight.setLayout(null);
 		
+		reservationPanelRight = new ReservationPanel(roomTypes, propertyWrapper.getBookings());
+		layeredPane.add(reservationPanelRight, "name_90023259817100");
 		
 		JPanel HeaderTextPanel = new JPanel();
 		HeaderTextPanel.setBackground(new Color(95, 139, 161));
@@ -109,10 +141,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		mainTextHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
-		
-		
 	}
-
 	private void createSidePanel() {
 		boolean activePanel[] = {false, false, false, false, false};
 		
@@ -153,6 +182,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				homePanelLeft.setBackground(new Color(95, 139, 161));
 				currentPanel = homePanelLeft;
 				mainTextHeader.setText("Home");
+				switchPanel(homePanelRight);
 			}
 		});
 		homePanelLeft.setBorder(null);
@@ -236,6 +266,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				reservationPanel.setBackground(new Color(95, 139, 161));
 				currentPanel = reservationPanel;
 				mainTextHeader.setText("Reservations");
+				switchPanel(reservationPanelRight);
 			}
 		});
 		reservationPanel.setLayout(null);
@@ -338,8 +369,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		lblInances.setFont(new Font("Dialog", Font.BOLD, 17));
 		lblInances.setBounds(130, 13, 145, 32);
 		earningsPanel.add(lblInances);
-		
-		
 	}
 	
 	private void returnPropertyForUser() {
@@ -351,14 +380,20 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		propertyWrapper = ControllerUI.getController().getPropertyWrapper();
 	}
-
+	
 	private void changeSelectedBackgroundColor(boolean[] activePanel, int index) {
 		for (int i = 0; i < activePanel.length; i++) {
 			if (i != index) {
 				activePanel[i] = false;
 			}
 		}
-		
+	}
+
+	private void switchPanel(JPanel panel) {
+		layeredPane.removeAll();
+		layeredPane.add(panel);
+		layeredPane.repaint();
+		layeredPane.revalidate();
 	}
 
 	@Override

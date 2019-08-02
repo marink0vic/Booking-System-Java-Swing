@@ -49,7 +49,7 @@ public class ControllerUI {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (counter == 3) break;
+			if (counter == 4) break;
 		}
 		return user;
 	}

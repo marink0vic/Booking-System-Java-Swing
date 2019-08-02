@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,9 +167,15 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		int numOfAdults = resultSet.getInt("number_of_adults");
 		int numOfChildren = resultSet.getInt("number_of_children");
 		double price = resultSet.getDouble("price_for_room");
+		String created = resultSet.getString("created");
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
+		
 		BookedRoom bookedRoom = new BookedRoom(idRoomType, numOfRooms, numOfAdults, numOfChildren, price);
 		bookedRoom.idBooking = idBooking;
 		bookedRoom.idBookedRoom = id;
+		bookedRoom.setCreated(dateTime);
 		return bookedRoom;
 	}
 
