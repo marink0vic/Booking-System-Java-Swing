@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -228,6 +229,10 @@ public class Property implements GeneralDomain, DomainJoin, Serializable {
 			property.latitude = resultSet.getDouble("latitude");
 			property.longitude = resultSet.getDouble("longitude");
 			property.description = resultSet.getString("description");
+			String created = resultSet.getString("created");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
+			property.created = dateTime;
 			return property;
 		}
 		return null;

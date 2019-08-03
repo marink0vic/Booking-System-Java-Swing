@@ -238,6 +238,7 @@ public class RoomsPricesPanel extends JPanel {
 						Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
 						transaction.setAmount(fullPrice);
 						transaction.setSiteFees(fullPrice);
+						booking.setUser(user);
 						
 						PropertyWrapper wrapper = new PropertyWrapper();
 						reservations.put(booking, bookedRooms);

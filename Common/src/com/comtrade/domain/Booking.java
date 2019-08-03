@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Booking implements GeneralDomain, Serializable {
+public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -163,15 +164,35 @@ public class Booking implements GeneralDomain, Serializable {
 		LocalDate checkOut = resultSet.getDate("check_out").toLocalDate();
 		String status = resultSet.getString("status");
 		double priceForStay = resultSet.getDouble("price_for_stay");
+		String created = resultSet.getString("created");
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
+		
 		Property pr = new Property();
 		pr.setIdProperty(idProperty);
+		
 		User user = new User();
 		user.setIdUser(idUser);
+		
 		Booking booking = new Booking(user, pr, checkIn, checkOut);
 		booking.idBooking = id;
 		booking.priceForStay = priceForStay;
 		booking.status = status;
+		booking.setCreated(dateTime);
 		return booking;
+	}
+	
+
+	@Override
+	public String returnColumnsForUpdate() {
+		return "status = ?";
+	}
+
+	@Override
+	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+		preparedStatement.setString(1, "ACCEPTED");
+		preparedStatement.setInt(2, idBooking);
 	}
 
 	@Override

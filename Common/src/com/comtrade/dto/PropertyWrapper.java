@@ -47,6 +47,8 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.rooms = rooms;
 		this.images = images;
 		this.paymentList = paymentList;
+		bookings = new HashMap<>();
+		transactions = new ArrayList<>();
 	}
 
 	public User getUser() {

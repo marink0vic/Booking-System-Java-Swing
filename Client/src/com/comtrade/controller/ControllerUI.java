@@ -14,6 +14,7 @@ import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.user.host.PropertyOwnerFrame;
 
 public class ControllerUI {
 
@@ -26,8 +27,9 @@ public class ControllerUI {
 	private String messageResponse;
 	
 	private Map<Booking, List<BookedRoom>> bookedRooms;
-	private PropertyWrapper hostReservationInfo;
+	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
 	private UserWrapper userWrapper;
+	PropertyOwnerFrame ownerFrame;
 	
 	private ControllerUI() {
 		bookedRooms = new HashMap<>();
@@ -37,6 +39,11 @@ public class ControllerUI {
 		if (controller == null)
 			controller = new ControllerUI();
 		return controller;
+	}
+	
+
+	public void setOwnerFrame(PropertyOwnerFrame ownerFrame) {
+		this.ownerFrame = ownerFrame;
 	}
 
 	public User getUser() {
@@ -49,7 +56,7 @@ public class ControllerUI {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (counter == 3) break;
+			if (counter == 4) break;
 		}
 		return user;
 	}
@@ -169,6 +176,7 @@ public class ControllerUI {
 		case UPDATE:
 		{
 			messageResponse = transfer.getMessageResponse();
+			break;
 		}
 		default:
 			break;
@@ -253,6 +261,11 @@ public class ControllerUI {
 			messageResponse = transfer.getMessageResponse();
 			break;
 		}
+		case UPDATE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
 		case NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS:
 		{
 			Map<Booking, List<BookedRoom>> temp = (Map<Booking, List<BookedRoom>>) transfer.getServerResponse();
@@ -262,6 +275,7 @@ public class ControllerUI {
 		case NOTIFY_HOST_WTIH_NEW_BOOKING:
 		{
 			hostReservationInfo = (PropertyWrapper) transfer.getServerResponse();
+			ownerFrame.signalNewBooking(hostReservationInfo);
 			break;
 		}
 		default:

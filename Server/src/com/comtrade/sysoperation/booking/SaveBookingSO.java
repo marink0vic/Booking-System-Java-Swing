@@ -46,6 +46,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			//---saving to database
 			Booking booking = saveBooking(bookings.getKey());
 			booking.setProperty(bookings.getKey().getProperty());
+			booking.setUser(bookings.getKey().getUser());
 			List<BookedRoom> bookedRooms = saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
 			Transaction tr = saveTransaction(transaction);
@@ -54,11 +55,9 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			map.put(booking, bookedRooms);
 			wrapper.setBookings(map);
 			//---saving to server and notify logged users
+			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
 			addOwnerBookingOnServer(booking, bookedRooms, tr);
 			addUserBookingOnServer(booking,bookedRooms);
-			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
-			
-			
 		} finally {
 			dbLock.unlock();
 		}
