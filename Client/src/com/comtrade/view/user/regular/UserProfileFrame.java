@@ -56,7 +56,7 @@ public class UserProfileFrame extends JFrame {
 	String propertyName;
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private JLabel lblNewLabel_1;
-
+	
 	private UserProfileFrame() {
 		propertyNames = new HashMap<>();
 	}

@@ -297,7 +297,7 @@ public class RoomsPricesPanel extends JPanel {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setPreferredSize(new Dimension(975, 456));
-		panel_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) ColorConstants.LIGHT_GRAY));
+		panel_1.setBorder(new MatteBorder(1, 1, 1, 1, ColorConstants.LIGHT_GRAY));
 		this.add(panel_1);
 		panel_1.setLayout(null);
 		

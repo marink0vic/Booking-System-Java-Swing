@@ -1,6 +1,7 @@
 package com.comtrade.view.user.regular.property;
 
 import java.awt.CardLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -10,12 +11,8 @@ import com.comtrade.constants.ColorConstants;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.Property;
-import com.comtrade.domain.Room;
-import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.regular.HeaderPanel;
 import com.comtrade.view.user.regular.HomePagePanel;
 
@@ -30,7 +27,6 @@ import javax.swing.border.MatteBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -46,6 +42,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private JLayeredPane layeredPane;
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
+	private ReviewPropertyPanel reviewPropertyPanel;
 	private HomePagePanel homePagePanel;
 	private HeaderPanel headerPanel = HeaderPanel.getPanel(); 
 	//--
@@ -57,6 +54,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private User user;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
+	
 
 	
 	public SelectedPropertyFrame(PropertyWrapper propertyWrapper, User user, LocalDate checkIn, LocalDate checkOut) {
@@ -91,6 +89,9 @@ public class SelectedPropertyFrame extends JFrame {
 		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut, headerPanel);
 		roomPricesPanel.setPropertyFrame(this);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
+		
+		reviewPropertyPanel = new ReviewPropertyPanel(user);
+		layeredPane.add(reviewPropertyPanel, "name_194976834767000");
 		
 	}
 
@@ -132,6 +133,13 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.add(lblRoomPrices);
 		
 		lblGuestReviews = new JLabel("GUEST REVIEWS");
+		lblGuestReviews.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				switchPanel(reviewPropertyPanel);
+				updateUI(lblGuestReviews);
+			}
+		});
 		lblGuestReviews.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGuestReviews.setForeground(ColorConstants.GRAY);
 		lblGuestReviews.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -174,12 +182,4 @@ public class SelectedPropertyFrame extends JFrame {
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}
-	
-	
-	
-	
-
-	
-	
-	
 }
