@@ -76,7 +76,7 @@ public class UserProfileFrame extends JFrame {
 
 	public void initializeComponents() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 849, 800);
+		setBounds(100, 100, 1000, 800);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -87,14 +87,14 @@ public class UserProfileFrame extends JFrame {
 		lblNewLabel.setForeground(new Color(0, 0, 0));
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 30));
 		lblNewLabel.setForeground(ColorConstants.GRAY);
-		lblNewLabel.setBounds(342, 36, 273, 103);
+		lblNewLabel.setBounds(412, 36, 273, 103);
 		contentPane.add(lblNewLabel);
 		
 		lblProfileImage = new JLabel();
 		lblProfileImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProfileImage.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblProfileImage.setOpaque(true);
-		lblProfileImage.setBounds(204, 36, 117, 103);
+		lblProfileImage.setBounds(274, 36, 117, 103);
 		lblProfileImage.setIcon(setProfileImage(user.getProfilePicture()));
 		contentPane.add(lblProfileImage);
 		
@@ -107,11 +107,11 @@ public class UserProfileFrame extends JFrame {
 		});
 		comboBox.setFont(new Font("Dialog", Font.BOLD, 18));
 		comboBox.setForeground(ColorConstants.GRAY);
-		comboBox.setBounds(75, 265, 676, 71);
+		comboBox.setBounds(75, 265, 800, 71);
 		contentPane.add(comboBox);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(75, 381, 676, 278);
+		scrollPane.setBounds(75, 381, 800, 278);
 		contentPane.add(scrollPane);
 		
 		table = new JTable(dtm);
@@ -126,7 +126,7 @@ public class UserProfileFrame extends JFrame {
 		lblListOfBookings.setForeground(ColorConstants.GRAY);
 		lblListOfBookings.setFont(new Font("Dialog", Font.PLAIN, 16));
 		lblListOfBookings.setHorizontalAlignment(SwingConstants.CENTER);
-		lblListOfBookings.setBounds(217, 201, 349, 58);
+		lblListOfBookings.setBounds(267, 201, 349, 58);
 		contentPane.add(lblListOfBookings);
 		
 		lblNewLabel_1 = new JLabel("Upload photo");
@@ -161,16 +161,17 @@ public class UserProfileFrame extends JFrame {
 		});
 		lblNewLabel_1.setForeground(ColorConstants.BLUE);
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 13));
-		lblNewLabel_1.setBounds(218, 155, 89, 16);
+		lblNewLabel_1.setBounds(288, 155, 89, 16);
 		contentPane.add(lblNewLabel_1);
 		
-		Object[] o = {"Check in", "Check out", "Rooms", "Adults", "Children", "Price"};
+		Object[] o = {"Check in", "Check out", "Rooms", "Adults", "Children", "Price", "Booking ID"};
 		dtm.addColumn(o[0]);
 		dtm.addColumn(o[1]);
 		dtm.addColumn(o[2]);
 		dtm.addColumn(o[3]);
 		dtm.addColumn(o[4]);
 		dtm.addColumn(o[5]);
+		dtm.addColumn(o[6]);
 		
 		fillComboBox();
 		
@@ -200,7 +201,8 @@ public class UserProfileFrame extends JFrame {
 						br.getNumberOfRooms(), 
 						br.getNumberOfAdults(), 
 						br.getNumberOfChildren(), 
-						br.getPriceForRoom() + "$"
+						br.getPriceForRoom() + "$",
+						b.getIdBooking()
 					});
 				}
 			}

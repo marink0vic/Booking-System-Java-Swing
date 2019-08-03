@@ -20,6 +20,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.domain.Property;
 import com.comtrade.domain.User;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -30,14 +31,16 @@ public class ReviewPropertyPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private User user;
+	private Property property;
 	private JLabel lblCountryFlag;
 	private JLabel lblCountryName;
 	private JLabel lblProfilePicture;
 	private JLabel lblRating;
 	private JPanel gridPanel;
 
-	public ReviewPropertyPanel(User user) {
+	public ReviewPropertyPanel(User user, Property property) {
 		this.user = user;
+		this.property = property;
 		initializeComponents();
 	}
 	
@@ -74,7 +77,10 @@ public class ReviewPropertyPanel extends JPanel {
 		JButton btnAddReview = new JButton("ADD REVIEW");
 		btnAddReview.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				UserReviewFrame addRevFrame = UserReviewFrame.getReviewFrame();
+				addRevFrame.setProperty(property);
+				addRevFrame.setLocationRelativeTo(null);
+				addRevFrame.setVisible(true);
 			}
 		});
 		btnAddReview.setForeground(new Color(255, 255, 255));

@@ -36,6 +36,7 @@ import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
+import com.comtrade.view.user.regular.property.UserReviewFrame;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -106,6 +107,9 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		
 		UserProfileFrame.getFrame().setBookings(userWrapper);
 		UserProfileFrame.getFrame().initializeComponents();
+		
+		UserReviewFrame.getReviewFrame().setMyBookings(userWrapper.getBookings());
+		UserReviewFrame.getReviewFrame().setUser(userWrapper.getUser());
 	}
 
 	private void setSearchPanel() {

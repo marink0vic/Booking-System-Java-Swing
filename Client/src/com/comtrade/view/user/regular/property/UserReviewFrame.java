@@ -8,6 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
+import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
+import com.comtrade.domain.Property;
+import com.comtrade.domain.PropertyReview;
+import com.comtrade.domain.User;
+import com.comtrade.transfer.TransferClass;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -23,14 +32,19 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 
-public class AddReviewFrame extends JFrame {
+public class UserReviewFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	private static final UserReviewFrame frame = new UserReviewFrame();
 	private JPanel contentPane;
 	private JTextField tfBookingID;
-
+	private Map<Booking, List<BookedRoom>> myBookings;
+	private Property property;
+	private User user;
 	/**
 	 * Launch the application.
 	 */
@@ -38,7 +52,7 @@ public class AddReviewFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddReviewFrame frame = new AddReviewFrame();
+					UserReviewFrame frame = new UserReviewFrame();
 					frame.setVisible(true);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
@@ -52,7 +66,35 @@ public class AddReviewFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AddReviewFrame() {
+	private UserReviewFrame() {
+		initializeComponents();
+	}
+	
+	public static UserReviewFrame getReviewFrame() {
+		return frame;
+	}
+	
+	public Map<Booking, List<BookedRoom>> getMyBookings() {
+		return myBookings;
+	}
+
+	public void setMyBookings(Map<Booking, List<BookedRoom>> myBookings) {
+		this.myBookings = myBookings;
+	}
+
+	public Property getProperty() {
+		return property;
+	}
+
+	public void setProperty(Property property) {
+		this.property = property;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	private void initializeComponents() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 966, 362);
 		contentPane = new JPanel();
@@ -98,6 +140,8 @@ public class AddReviewFrame extends JFrame {
 		textArea.setFont(new Font("Dialog", Font.PLAIN, 16));
 		textArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		textArea.setBounds(88, 183, 509, 86);
+		textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
 		contentPane.add(textArea);
 		
 		JButton btnSubmit = new JButton("SUBMIT");
@@ -105,6 +149,22 @@ public class AddReviewFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					int bookingId = Integer.parseInt(tfBookingID.getText());
+					boolean flag = checkBookingID(bookingId);
+					if (flag) {
+						int rating = (int) spinner.getValue();
+						String description = textArea.getText();
+						int idProperty = property.getIdProperty();
+						PropertyReview propertyReview = new PropertyReview(bookingId, idProperty, user, rating, description);
+						
+						TransferClass transferClass = new TransferClass();
+						transferClass.setClientRequest(propertyReview);
+						transferClass.setDomainType(DomainType.REVIEW);
+						transferClass.setOperation(Operations.SAVE);
+						
+						ControllerUI.getController().sendToServer(transferClass);
+					} else {
+						JOptionPane.showMessageDialog(null, "You have to reserve a room in this property to leave the review");
+					}
 					
 				} catch (NumberFormatException n) {
 					JOptionPane.showMessageDialog(null, "You need to enter a number in input field");
@@ -116,5 +176,14 @@ public class AddReviewFrame extends JFrame {
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 16));
 		btnSubmit.setBounds(693, 184, 148, 85);
 		contentPane.add(btnSubmit);
+	}
+
+	private boolean checkBookingID(int booking_id) {
+		for (Booking b : myBookings.keySet()) {
+			if (b.getIdBooking() == booking_id) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
