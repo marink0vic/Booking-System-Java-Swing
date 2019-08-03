@@ -166,8 +166,7 @@ public class ReservationPanel extends JPanel {
 		
 		dateCheckIn = new JDateChooser();
 		dateCheckIn.setBounds(223, 58, 191, 56);
-		dateCheckIn.getDateEditor().addPropertyChangeListener(
-			new PropertyChangeListener() {
+		dateCheckIn.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				dateCheckOut.setMinSelectableDate(dateCheckIn.getDate());

@@ -75,7 +75,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	//-----right panels
 	private HomePanel homePanelRight;
 	private ReservationPanel reservationPanelRight;
-	
+	private AvailabilityPanel availabilityPanelRight;
 	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
@@ -83,6 +83,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> oldBookings;
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
+	
 	
 	/**
 	 * Create the frame.
@@ -129,12 +130,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		homePanelRight = new HomePanel(propertyWrapper);
 		layeredPane.add(homePanelRight, "name_148133244248700");
 		
-		JPanel AvailabilityPanelRight = new JPanel();
-		layeredPane.add(AvailabilityPanelRight, "name_89976615789600");
-		AvailabilityPanelRight.setLayout(null);
-		
 		reservationPanelRight = new ReservationPanel(roomTypes, oldBookings, newBookings, lblNewRes);
 		layeredPane.add(reservationPanelRight, "name_90023259817100");
+		
+		availabilityPanelRight = new AvailabilityPanel(roomTypes, oldBookings);
+		layeredPane.add(availabilityPanelRight, "name_89976615789600");
+		
 		
 		JPanel HeaderTextPanel = new JPanel();
 		HeaderTextPanel.setBackground(new Color(95, 139, 161));
@@ -150,30 +151,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		HeaderTextPanel.add(mainTextHeader);
 		
 		ControllerUI.getController().setOwnerFrame(this);
-//		Thread thread = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				while (true) {
-//					synchronized (this) {
-//						try {
-//							this.wait();
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					Map<Booking, List<BookedRoom>> temp = ControllerUI.getController().getHostReservationInfo().getBookings();
-//					if (temp.size() > 0) {
-//						lblNewRes.setBackground(ColorConstants.RED);
-//						lblNewRes.setText(String.valueOf(temp.size()));
-//					}
-//					reservationPanelRight.addNewBookings(temp);
-//				}
-//			}
-//		});
-//		
-//		thread.start();
 	}
-	
+
 	private void createSidePanel() {
 		boolean activePanel[] = {false, false, false, false, false};
 		
@@ -257,6 +236,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				availabilityPanel.setBackground(new Color(95, 139, 161));
 				currentPanel = availabilityPanel;
 				mainTextHeader.setText("Availability");
+				switchPanel(availabilityPanelRight);
 			}
 		});
 		availabilityPanel.setLayout(null);
