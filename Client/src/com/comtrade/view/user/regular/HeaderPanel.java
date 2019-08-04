@@ -32,7 +32,6 @@ public class HeaderPanel extends JPanel {
 	private JLabel lblLogedUser;
 	private JLabel imageLabel;
 	private JLabel lblNew;
-
 	private HeaderPanel() {
 		initializeComponents();
 	}

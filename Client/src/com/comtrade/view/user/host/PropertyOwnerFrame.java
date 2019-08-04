@@ -14,6 +14,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -24,8 +25,13 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -36,6 +42,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,9 +60,12 @@ import java.util.Set;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -78,25 +88,14 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private JPanel reservationPanel;
 	private JPanel messagePanel;
 	private JPanel earningsPanel;
+	private JPanel reviewPanel;
 	private JPanel currentPanel;
 	//-----right panels
 	private HomePanel homePanelRight;
 	private ReservationPanel reservationPanelRight;
 	private AvailabilityPanel availabilityPanelRight;
-	//------
-	//earnings panel
-	private JPanel EarningsPanelRight;
-	private JComboBox<Integer> comboYear;
-	private JComboBox<Month> comboMonth;
-	private int year;
-	private Month month;
-	private JLabel label_1;
-	private JLabel label_3;
-	private JLabel label_5;
-	private JLabel lblNightsCount;
-	private JLabel lblRoomCount;
-	private final double SITE_FEES = 0.1;
-	private final double PROPERTY_CUT = 0.9;
+	private EarningsPanel earningsPanelRight;
+	private ReviewPanel reviewPanelRight;
 	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
@@ -104,7 +103,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> oldBookings;
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
-	
+	private JLabel lblNewReviews;
+	private int reviewCount;
+	//----
 	
 	
 	/**
@@ -157,124 +158,20 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		availabilityPanelRight = new AvailabilityPanel(roomTypes, oldBookings);
 		layeredPane.add(availabilityPanelRight, "name_89976615789600");
+		//----------------------------------
 		
 		JPanel MessagePanelRight = new JPanel();
 		layeredPane.add(MessagePanelRight, "name_179496146822800");
 		MessagePanelRight.setLayout(null);
-	//-----------------------------------------------------------------------	
-		EarningsPanelRight = new JPanel();
-		EarningsPanelRight.setBackground(new Color(255, 255, 255));
-		layeredPane.add(EarningsPanelRight, "name_179515782969900");
-		EarningsPanelRight.setLayout(null);
 		
-		comboYear = new JComboBox<>();
-		comboYear.setForeground(new Color(71, 71, 71));
-		comboYear.setFont(new Font("Dialog", Font.BOLD, 17));
-		comboYear.setBounds(309, 171, 149, 45);
-		EarningsPanelRight.add(comboYear);
+		//--------------------------------------
+		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty());
+		layeredPane.add(earningsPanelRight, "name_179515782969900");
+			
+		reviewPanelRight = new ReviewPanel(propertyWrapper.getReviews());
+		layeredPane.add(reviewPanelRight, "name_270003645240700");
 		
-		comboMonth = new JComboBox<>();
-		comboMonth.setForeground(new Color(71, 71, 71));
-		comboMonth.setFont(new Font("Dialog", Font.BOLD, 17));
-		comboMonth.setBounds(493, 171, 184, 45);
-		EarningsPanelRight.add(comboMonth);
 		
-		JLabel lblCheckEarnings = new JLabel("Check your earnings for selected period");
-		lblCheckEarnings.setForeground(ColorConstants.LIGHT_GRAY);
-		lblCheckEarnings.setFont(new Font("Dialog", Font.BOLD, 18));
-		lblCheckEarnings.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCheckEarnings.setBounds(395, 87, 368, 53);
-		EarningsPanelRight.add(lblCheckEarnings);
-		
-		lblRoomCount = new JLabel("Room reserved: ");
-		lblRoomCount.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblRoomCount.setBounds(309, 276, 184, 45);
-		lblRoomCount.setForeground(ColorConstants.GRAY);
-		EarningsPanelRight.add(lblRoomCount);
-		
-		lblNightsCount = new JLabel("");
-		lblNightsCount.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNightsCount.setForeground(ColorConstants.GRAY);
-		lblNightsCount.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblNightsCount.setBounds(686, 276, 149, 45);
-		EarningsPanelRight.add(lblNightsCount);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBackground(ColorConstants.LIGHT_GRAY);
-		separator.setOpaque(true);
-		separator.setBounds(309, 334, 526, 2);
-		EarningsPanelRight.add(separator);
-		
-		JLabel lblMoneyPaid = new JLabel("Money paid: ");
-		lblMoneyPaid.setForeground(ColorConstants.GRAY);
-		lblMoneyPaid.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblMoneyPaid.setBounds(309, 364, 149, 45);
-		EarningsPanelRight.add(lblMoneyPaid);
-		
-		label_1 = new JLabel("");
-		label_1.setHorizontalAlignment(SwingConstants.TRAILING);
-		label_1.setForeground(new Color(71, 71, 71));
-		label_1.setFont(new Font("Dialog", Font.BOLD, 20));
-		label_1.setBounds(686, 364, 149, 45);
-		EarningsPanelRight.add(label_1);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setOpaque(true);
-		separator_1.setBackground(ColorConstants.LIGHT_GRAY);
-		separator_1.setBounds(309, 422, 526, 2);
-		EarningsPanelRight.add(separator_1);
-		
-		JLabel lblSiteFees = new JLabel("Site fees: ");
-		lblSiteFees.setForeground(ColorConstants.GRAY);
-		lblSiteFees.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblSiteFees.setBounds(309, 447, 149, 45);
-		EarningsPanelRight.add(lblSiteFees);
-		
-		label_3 = new JLabel("");
-		label_3.setHorizontalAlignment(SwingConstants.TRAILING);
-		label_3.setForeground(new Color(71, 71, 71));
-		label_3.setFont(new Font("Dialog", Font.BOLD, 20));
-		label_3.setBounds(686, 447, 149, 45);
-		EarningsPanelRight.add(label_3);
-		
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setOpaque(true);
-		separator_2.setBackground(ColorConstants.LIGHT_GRAY);
-		separator_2.setBounds(309, 511, 526, 2);
-		EarningsPanelRight.add(separator_2);
-		
-		JLabel lblTotalEarnings = new JLabel("Total revenue: ");
-		lblTotalEarnings.setForeground(ColorConstants.GRAY);
-		lblTotalEarnings.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblTotalEarnings.setBounds(309, 530, 149, 45);
-		EarningsPanelRight.add(lblTotalEarnings);
-		
-		label_5 = new JLabel("");
-		label_5.setHorizontalAlignment(SwingConstants.TRAILING);
-		label_5.setForeground(new Color(71, 71, 71));
-		label_5.setFont(new Font("Dialog", Font.BOLD, 20));
-		label_5.setBounds(686, 530, 149, 45);
-		EarningsPanelRight.add(label_5);
-		
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setOpaque(true);
-		separator_3.setBackground(ColorConstants.LIGHT_GRAY);
-		separator_3.setBounds(309, 588, 526, 2);
-		EarningsPanelRight.add(separator_3);
-		
-		JButton btnShow = new JButton("SHOW");
-		btnShow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				year = Integer.parseInt(comboYear.getSelectedItem().toString());
-				month = (Month) comboMonth.getSelectedItem();
-				calculateDataForMonth();
-			}
-		});
-		btnShow.setFont(new Font("Dialog", Font.BOLD, 17));
-		btnShow.setForeground(new Color(255, 255, 255));
-		btnShow.setBounds(699, 171, 136, 45);
-		btnShow.setBackground(ColorConstants.BLUE);
-		EarningsPanelRight.add(btnShow);
 		
 		//-----------------------------------------------------------
 		JPanel HeaderTextPanel = new JPanel();
@@ -289,58 +186,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		mainTextHeader.setHorizontalAlignment(SwingConstants.CENTER);
 		mainTextHeader.setBounds(338, 33, 439, 76);
 		HeaderTextPanel.add(mainTextHeader);
-		
-		
-		fillComboMonth();
-		fillComboYear();
+	
 		ControllerUI.getController().setOwnerFrame(this);
-	}
-	
-	protected void calculateDataForMonth() {
-		int roomReserved = 0;
-		double moneyPaid = 0;
-		for (Map.Entry<Booking, List<BookedRoom>> entry : oldBookings.entrySet()) {
-			Booking b = entry.getKey();
-			int y = b.getCheckIn().getYear();
-			Month m = b.getCheckIn().getMonth();
-			if (year == y && m.compareTo(month) == 0) {
-				moneyPaid += b.getPriceForStay();
-				for (BookedRoom br : entry.getValue()) {
-					roomReserved += br.getNumberOfRooms();
-				}
-			}
-		}
-		updateUI(roomReserved, moneyPaid);
-	}
-
-	private void updateUI(int room_reserved, double money_paid) {
-		lblNightsCount.setText(String.valueOf(room_reserved));
-		String moneyPaid = String.format("%.2f", money_paid);
-		label_1.setText(moneyPaid + " $");
-		double site_fees = money_paid * SITE_FEES;
-		double total = money_paid * PROPERTY_CUT;
-		String fees = String.format("%.2f", site_fees);
-		String totalEarnings = String.format("%.2f", total);
-		label_3.setText(fees + " $");
-		label_5.setText(totalEarnings + " $");
-	}
-
-	private void fillComboYear() {
-		int year = propertyWrapper.getProperty().getCreated().getYear();
-		for (int i = year; i <= Year.now().getValue() ; i++) {
-			comboYear.addItem(i);
-		}
-	}
-	
-	private void fillComboMonth() {
-		Month[] months = Month.values();
-		for (int i = 0; i < months.length; i++) {
-			comboMonth.addItem(months[i]);
-		}
 	}
 
 	private void createSidePanel() {
-		boolean activePanel[] = {false, false, false, false, false};
+		boolean activePanel[] = {false, false, false, false, false, false};
 		
 		JPanel headerPanel = new JPanel();
 		headerPanel.setBackground(new Color(32, 40, 44));
@@ -561,7 +412,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				earningsPanel.setBackground(new Color(95, 139, 161));
 				currentPanel = earningsPanel;
 				mainTextHeader.setText("Earnings");
-				switchPanel(EarningsPanelRight);
+				switchPanel(earningsPanelRight);
 			}
 		});
 		earningsPanel.setLayout(null);
@@ -582,6 +433,62 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		lblInances.setFont(new Font("Dialog", Font.BOLD, 17));
 		lblInances.setBounds(130, 13, 145, 32);
 		earningsPanel.add(lblInances);
+		
+		reviewPanel = new JPanel();
+		reviewPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (!activePanel[5])
+					reviewPanel.setBackground(new Color(46, 63, 71));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!activePanel[5])
+					reviewPanel.setBackground(new Color(32, 40, 44));
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				currentPanel.setBackground(new Color(32, 40, 44));
+				activePanel[5] = true;
+				changeSelectedBackgroundColor(activePanel, 5);
+				reviewPanel.setBackground(new Color(95, 139, 161));
+				currentPanel = reviewPanel;
+				mainTextHeader.setText("Reviews");
+				
+				lblNewReviews.setText("");
+				lblNewReviews.setBackground(null);
+				reviewCount = 0;
+				switchPanel(reviewPanelRight);
+			}
+		});
+		reviewPanel.setLayout(null);
+		reviewPanel.setBorder(null);
+		reviewPanel.setBackground(new Color(32, 40, 44));
+		reviewPanel.setBounds(0, 479, 350, 59);
+		headerPanel.add(reviewPanel);
+		
+		JLabel lblReviewIcon = new JLabel("");
+		lblReviewIcon.setBorder(null);
+		lblReviewIcon.setBounds(54, 13, 32, 32);
+		Icon iconReview = new ImageIcon("./resources/icons/review-icon.png");
+		lblReviewIcon.setIcon(iconReview);
+		reviewPanel.add(lblReviewIcon);
+		
+		JLabel lblReviews = new JLabel("Reviews");
+		lblReviews.setForeground(Color.WHITE);
+		lblReviews.setFont(new Font("Dialog", Font.BOLD, 17));
+		lblReviews.setBounds(130, 13, 91, 32);
+		reviewPanel.add(lblReviews);
+		
+		lblNewReviews = new JLabel("");
+		lblNewReviews.setOpaque(true);
+		lblNewReviews.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewReviews.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewReviews.setForeground(Color.WHITE);
+		lblNewReviews.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewReviews.setBackground(null);
+		lblNewReviews.setBounds(260, 13, 42, 32);
+		reviewPanel.add(lblNewReviews);
 	}
 	
 	private void returnPropertyForUser() {
@@ -631,5 +538,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		if (temp.size() > 0) {
 			reservationPanelRight.addNewBookings(temp);
 		}
+	}
+
+	public void signalNewReview(PropertyReview propertyReview) {
+		reviewCount++;
+		lblNewReviews.setText(reviewCount+"");
+		lblNewReviews.setBackground(ColorConstants.RED);
+		reviewPanelRight.addNewReview(propertyReview);
 	}
 }

@@ -12,9 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainUpdate;
+import com.comtrade.domain.behavior.GeneralDomain;
+
 import crypt.BCrypt;
 
-public class User implements DomainUpdate, DomainJoin, Serializable {
+public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -209,6 +213,30 @@ public class User implements DomainUpdate, DomainJoin, Serializable {
 		return null;
 	}
 	
+	public User createUser(ResultSet resultSet) throws SQLException {
+		String serverPath = "C:/Users/marko/Desktop/Booking-System-Java-Swing/Server";
+		
+		int userId = resultSet.getInt("id_user");
+		int countryId = resultSet.getInt("country_id");
+		String firstName = resultSet.getString("first_name");
+		String lastName = resultSet.getString("last_name");
+		String email = resultSet.getString("email");
+		String username = resultSet.getString("username");
+		String image = serverPath + resultSet.getString("profile_picture");
+		String status = resultSet.getString("status");
+		LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
+		
+		String countryName = resultSet.getString("name");
+		String countryImage = serverPath + resultSet.getString("image");
+		Country c = new Country(countryId, countryName, countryImage);
+		User user = new User(c, firstName, lastName, email, username, null, date, status);
+		
+		user.setProfilePicture(image);
+		user.idUser = userId;
+		
+		return user;
+	}
+	
 	@Override
 	public int returnIdNumber() {
 		return idUser;
@@ -276,7 +304,7 @@ public class User implements DomainUpdate, DomainJoin, Serializable {
 	}
 
 	@Override
-	public String returnBookingJoin() throws SQLException {
+	public String prepareJoin() throws SQLException {
 		String join =  "SELECT * FROM bookings"
 					+ " JOIN property ON property.id_property = bookings.id_property"
 					+ " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"

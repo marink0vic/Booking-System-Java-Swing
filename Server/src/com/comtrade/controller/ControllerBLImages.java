@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.User;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;

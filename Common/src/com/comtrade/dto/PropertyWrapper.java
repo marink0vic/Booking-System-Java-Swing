@@ -15,6 +15,7 @@ import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
@@ -33,11 +34,13 @@ public class PropertyWrapper implements Serializable, Generic {
 	private List<PaymentType> paymentList;
 	private List<Transaction> transactions;
 	private Map<Booking, List<BookedRoom>> bookings;
+	private List<PropertyReview> reviews;
 	private Country country;
 	
 	public PropertyWrapper() {
 		bookings = new HashMap<>();
 		transactions = new ArrayList<>();
+		reviews = new ArrayList<>();
 	}
 	
 	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
@@ -122,6 +125,15 @@ public class PropertyWrapper implements Serializable, Generic {
 	public void setBookings(Map<Booking, List<BookedRoom>> bookings) {
 		this.bookings = bookings;
 	}
+	
+	public List<PropertyReview> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<PropertyReview> reviews) {
+		this.reviews = reviews;
+	}
+
 	//------
 	public void addNewBooking(Booking booking, List<BookedRoom> bookedRoom) {
 		bookings.put(booking, bookedRoom);
@@ -133,6 +145,10 @@ public class PropertyWrapper implements Serializable, Generic {
 	
 	public void addNewRoom(RoomType type, Room room) {
 		rooms.put(type, room);
+	}
+	
+	public void addNewReview(PropertyReview review) {
+		reviews.add(review);
 	}
 
 }

@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comtrade.domain.behavior.DomainUpdate;
+import com.comtrade.domain.behavior.GeneralDomain;
+
 public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 
 	

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
-import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 

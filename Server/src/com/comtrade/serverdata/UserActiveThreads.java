@@ -74,7 +74,7 @@ public class UserActiveThreads implements ActiveThreads {
 		}
 	}
 
-	private void notifyHost(PropertyWrapper wrapper) {
+	public void notifyHost(PropertyWrapper wrapper) {
 		for (Map.Entry<User, ClientThread> entry : hostThreads.entrySet()) {
 			if (wrapper.getUser().equals(entry.getKey())) {
 				entry.getValue().sendToHost(wrapper);

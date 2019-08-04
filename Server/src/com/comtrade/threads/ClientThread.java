@@ -14,6 +14,7 @@ import com.comtrade.controller.ControllerBLCountry;
 import com.comtrade.controller.ControllerBLImages;
 import com.comtrade.controller.ControllerBLPaymentType;
 import com.comtrade.controller.ControllerBLProperty;
+import com.comtrade.controller.ControllerBLReview;
 import com.comtrade.controller.ControllerBLRoom;
 import com.comtrade.controller.ControllerBLUser;
 import com.comtrade.controller.IControllerBL;
@@ -82,8 +83,15 @@ public class ClientThread extends Thread {
 			break;
 		}
 		case BOOKING:
+		{
 			controller = new ControllerBLBooking();
 			break;
+		}
+		case REVIEW:
+		{
+			controller = new ControllerBLReview();
+			break;
+		}
 		default:
 			break;
 		}
@@ -107,8 +115,13 @@ public class ClientThread extends Thread {
 
 	public void sendToHost(PropertyWrapper wrapper) {
 		TransferClass transfer = new TransferClass();
-		transfer.setDomainType(DomainType.BOOKING);
-		transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_BOOKING);
+		if (wrapper.getBookings().size() > 0) {
+			transfer.setDomainType(DomainType.BOOKING);
+			transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_BOOKING);
+		} else if (wrapper.getReviews().size() > 0) {
+			transfer.setDomainType(DomainType.REVIEW);
+			transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_REVIEW);
+		}
 		transfer.setServerResponse(wrapper);
 		sendResponse(transfer);
 	}

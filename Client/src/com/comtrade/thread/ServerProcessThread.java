@@ -60,9 +60,13 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processBookingFromServer(transfer);
 			break;
 		}
-			
-
+		case REVIEW:
+		{
+			ControllerUI.getController().processReviewFromServer(transfer);
+			break;
+		}
 		default:
+			transfer.getMessageResponse();
 			break;
 		}
 	}

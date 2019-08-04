@@ -4,8 +4,8 @@ import java.sql.SQLException;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.User;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.serverdata.UserActiveThreads;

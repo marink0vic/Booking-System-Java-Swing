@@ -6,15 +6,17 @@ import java.util.Map;
 
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.DomainJoin;
-import com.comtrade.domain.DomainUpdate;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
+import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainJoinReview;
+import com.comtrade.domain.behavior.DomainUpdate;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
-public interface IBroker {
 
+public interface IBroker {
 	GeneralDomain save(GeneralDomain domain) throws SQLException;
 	void delete(GeneralDomain domain) throws SQLException;
 	void update(DomainUpdate domain) throws SQLException;
@@ -26,5 +28,6 @@ public interface IBroker {
 	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
 	List<User> returnUsers(User user, String status) throws SQLException;
-	Map<Booking, List<BookedRoom>> insertBookings(DomainJoin domain_join, int id_domain) throws SQLException;
+	Map<Booking, List<BookedRoom>> insertBookings(DomainJoinBookings domain_join, int id_domain) throws SQLException;
+	List<PropertyReview> returnPropertyReviews(DomainJoinReview domain_join, int id_domain) throws SQLException;
 }

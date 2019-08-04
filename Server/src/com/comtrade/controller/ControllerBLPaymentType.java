@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.payment.ReturnPaymentTypesSO;

@@ -33,7 +33,7 @@ public class ControllerBLBooking implements IControllerBL {
 			} catch (SQLException e) {
 				receiver.setServerResponse(null);
 				receiver.setMessageResponse(e.getMessage());
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			receiver.setDomainType(DomainType.BOOKING);
 			receiver.setOperation(Operations.SAVE);

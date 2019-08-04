@@ -1,12 +1,13 @@
-package com.comtrade.domain;
+package com.comtrade.domain.behavior;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public interface DomainJoin extends GeneralDomain {
+import com.comtrade.domain.BookedRoom;
+import com.comtrade.domain.Booking;
 
-	String returnBookingJoin() throws SQLException;
+public interface DomainJoinBookings extends DomainJoin {
 	Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException;
 }

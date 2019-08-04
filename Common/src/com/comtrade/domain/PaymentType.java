@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comtrade.domain.behavior.GeneralDomain;
+
 public class PaymentType implements GeneralDomain, Serializable {
 
 	
