@@ -18,16 +18,19 @@ import com.comtrade.domain.Address;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
-import com.comtrade.domain.DomainJoin;
-import com.comtrade.domain.DomainUpdate;
-import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Position;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.domain.behavior.DomainJoin;
+import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainJoinReview;
+import com.comtrade.domain.behavior.DomainUpdate;
+import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.lock.DbLock;
 
@@ -119,23 +122,7 @@ public class Broker implements IBroker {
 		if (resultSet.next()) {
 			String hash = resultSet.getString("password");
 			if (user.checkPassword(user.getPassword(), hash)) {
-				
-				int userId = resultSet.getInt("id_user");
-				int countryId = resultSet.getInt("country_id");
-				String firstName = resultSet.getString("first_name");
-				String lastName = resultSet.getString("last_name");
-				String email = resultSet.getString("email");
-				String username = resultSet.getString("username");
-				String profilePicture = resultSet.getString("profile_picture");
-				String status = resultSet.getString("status");
-				LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
-				
-				String countryName = resultSet.getString("name");
-				String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
-				
-				User u = new User(new Country(countryId, countryName, fullPath), firstName, lastName, email, username, null, date, status);
-				u.setProfilePicture(profilePicture);
-				u.setIdUser(userId);
+				User u = user.createUser(resultSet);
 				return u;
 			}
 		}
@@ -144,15 +131,24 @@ public class Broker implements IBroker {
 
 
 	@Override
-	public Map<Booking, List<BookedRoom>> insertBookings(DomainJoin domain_join, int id_domain) throws SQLException {
-		String sql = domain_join.returnBookingJoin();
-		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ps.setInt(1, id_domain);
-		
-		ResultSet rs = ps.executeQuery();
+	public Map<Booking, List<BookedRoom>> insertBookings(DomainJoinBookings domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
 		return domain_join.returnJoinTables(rs);
 	}
 
+	@Override
+	public List<PropertyReview> returnPropertyReviews(DomainJoinReview domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
+		return domain_join.returnJoinTables(rs);
+	}
+	
+	private ResultSet prepareResultSet(DomainJoin domain, int id_domain) throws SQLException {
+		String sql = domain.prepareJoin();
+		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		ps.setInt(1, id_domain);
+		ResultSet rs = ps.executeQuery();
+		return rs;
+	}
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
@@ -162,7 +158,9 @@ public class Broker implements IBroker {
 		wrapper.setPaymentList(returnPayments(idProperty));
 		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
 		wrapper.setBookings(insertBookings(new Property(), wrapper.getProperty().getIdProperty()));
+		wrapper.setReviews(returnPropertyReviews(new PropertyReview(), idProperty));
 	}	
+
 
 	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
 		String sql = "SELECT * FROM property JOIN address "

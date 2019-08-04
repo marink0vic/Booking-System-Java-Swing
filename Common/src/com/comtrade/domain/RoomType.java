@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.comtrade.domain.behavior.DomainUpdate;
+import com.comtrade.domain.behavior.GeneralDomain;
+
 public class RoomType implements DomainUpdate, Serializable {
 
 	

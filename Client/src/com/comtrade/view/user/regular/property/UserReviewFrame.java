@@ -1,7 +1,5 @@
 package com.comtrade.view.user.regular.property;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -45,27 +43,8 @@ public class UserReviewFrame extends JFrame {
 	private Map<Booking, List<BookedRoom>> myBookings;
 	private Property property;
 	private User user;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UserReviewFrame frame = new UserReviewFrame();
-					frame.setVisible(true);
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
+	
 	private UserReviewFrame() {
 		initializeComponents();
 	}
@@ -180,7 +159,7 @@ public class UserReviewFrame extends JFrame {
 
 	private boolean checkBookingID(int booking_id) {
 		for (Booking b : myBookings.keySet()) {
-			if (b.getIdBooking() == booking_id) {
+			if (b.getIdBooking() == booking_id && b.getProperty().getIdProperty() == property.getIdProperty()) {
 				return true;
 			}
 		}

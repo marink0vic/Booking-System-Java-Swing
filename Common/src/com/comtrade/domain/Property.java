@@ -12,7 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Property implements GeneralDomain, DomainJoin, Serializable {
+import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.GeneralDomain;
+
+public class Property implements GeneralDomain, DomainJoinBookings, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -177,8 +180,7 @@ public class Property implements GeneralDomain, DomainJoin, Serializable {
 
 	@Override
 	public int returnIdNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return idProperty;
 	}
 
 	@Override
@@ -239,7 +241,7 @@ public class Property implements GeneralDomain, DomainJoin, Serializable {
 	}
 
 	@Override
-	public String returnBookingJoin() throws SQLException {
+	public String prepareJoin() throws SQLException {
 		String join =  "SELECT * FROM bookings"
 				    + " JOIN user ON user.id_user = bookings.id_user"
 				    + " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"

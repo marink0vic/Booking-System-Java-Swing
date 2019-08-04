@@ -3,7 +3,7 @@ package com.comtrade.generics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comtrade.domain.GeneralDomain;
+import com.comtrade.domain.behavior.GeneralDomain;
 
 public class GenericList<E extends Generic> implements Generic {
 	

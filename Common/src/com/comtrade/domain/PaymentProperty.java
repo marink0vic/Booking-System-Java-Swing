@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.comtrade.domain.behavior.GeneralDomain;
+
 public class PaymentProperty implements GeneralDomain, Serializable {
 
 	private static final long serialVersionUID = 1L;

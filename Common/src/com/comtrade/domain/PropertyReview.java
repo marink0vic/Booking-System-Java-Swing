@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import com.comtrade.domain.behavior.DomainJoinReview;
+import com.comtrade.domain.behavior.GeneralDomain;
 
-public class PropertyReview implements GeneralDomain, Serializable {
+public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -136,5 +139,34 @@ public class PropertyReview implements GeneralDomain, Serializable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String prepareJoin() throws SQLException {
+		String join =  "SELECT * FROM property_review"
+					+ " JOIN user ON user.id_user = property_review.id_user"
+					+ " JOIN country on user.country_id = country.id_country"
+					+ " WHERE property_review.id_property = ?";
+		return join;
+	}
+
+	@Override
+	public List<PropertyReview> returnJoinTables(ResultSet rs) throws SQLException {
+		List<PropertyReview> reviews = new ArrayList<>();
+		while (rs.next()) {
+			User user = new User().createUser(rs);
+			int idReview = rs.getInt("id_review");
+			int idBooking = rs.getInt("id_booking");
+			int idProperty = rs.getInt("id_property");
+			int rating = rs.getInt("rating");
+			String comment = rs.getString("comment");
+			
+			PropertyReview pr = new PropertyReview(idBooking, idProperty, user, rating, comment);
+			pr.setIdPropertyReview(idReview);
+			
+			reviews.add(pr);
+		}
+		return reviews;
+	}
+
 
 }
