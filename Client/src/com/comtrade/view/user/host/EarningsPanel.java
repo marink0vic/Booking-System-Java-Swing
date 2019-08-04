@@ -21,7 +21,7 @@ import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Property;
 
-public class EarningsPanelRight extends JPanel {
+public class EarningsPanel extends JPanel {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class EarningsPanelRight extends JPanel {
 	private Map<Booking, List<BookedRoom>> oldBookings;
 	private Property property;
 
-	public EarningsPanelRight(Map<Booking, List<BookedRoom>> oldBookings, Property property) {
+	public EarningsPanel(Map<Booking, List<BookedRoom>> oldBookings, Property property) {
 		this.oldBookings = oldBookings;
 		this.property = property;
 		initializeComponents();

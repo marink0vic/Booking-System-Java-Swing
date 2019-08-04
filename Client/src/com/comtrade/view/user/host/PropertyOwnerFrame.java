@@ -14,6 +14,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -24,8 +25,13 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.JLabel;
 
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.SwingConstants;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -36,6 +42,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,9 +60,12 @@ import java.util.Set;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -78,12 +88,14 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private JPanel reservationPanel;
 	private JPanel messagePanel;
 	private JPanel earningsPanel;
+	private JPanel reviewPanel;
 	private JPanel currentPanel;
 	//-----right panels
 	private HomePanel homePanelRight;
 	private ReservationPanel reservationPanelRight;
 	private AvailabilityPanel availabilityPanelRight;
-	private EarningsPanelRight earningsPanelRight;
+	private EarningsPanel earningsPanelRight;
+	private ReviewPanel reviewPanelRight;
 	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
@@ -91,7 +103,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> oldBookings;
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
-	
+	//----
 	
 	
 	/**
@@ -144,13 +156,18 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		availabilityPanelRight = new AvailabilityPanel(roomTypes, oldBookings);
 		layeredPane.add(availabilityPanelRight, "name_89976615789600");
+		//----------------------------------
 		
 		JPanel MessagePanelRight = new JPanel();
 		layeredPane.add(MessagePanelRight, "name_179496146822800");
 		MessagePanelRight.setLayout(null);
-	//-----------------------------------------------------------------------	
-		earningsPanelRight = new EarningsPanelRight(oldBookings, propertyWrapper.getProperty());
+		
+		//--------------------------------------
+		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty());
 		layeredPane.add(earningsPanelRight, "name_179515782969900");
+			
+		reviewPanelRight = new ReviewPanel(propertyWrapper.getReviews());
+		layeredPane.add(reviewPanelRight, "name_270003645240700");
 		
 		
 		
@@ -172,7 +189,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	}
 
 	private void createSidePanel() {
-		boolean activePanel[] = {false, false, false, false, false};
+		boolean activePanel[] = {false, false, false, false, false, false};
 		
 		JPanel headerPanel = new JPanel();
 		headerPanel.setBackground(new Color(32, 40, 44));
@@ -414,6 +431,48 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		lblInances.setFont(new Font("Dialog", Font.BOLD, 17));
 		lblInances.setBounds(130, 13, 145, 32);
 		earningsPanel.add(lblInances);
+		
+		reviewPanel = new JPanel();
+		reviewPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (!activePanel[5])
+					reviewPanel.setBackground(new Color(46, 63, 71));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (!activePanel[5])
+					reviewPanel.setBackground(new Color(32, 40, 44));
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				currentPanel.setBackground(new Color(32, 40, 44));
+				activePanel[5] = true;
+				changeSelectedBackgroundColor(activePanel, 5);
+				reviewPanel.setBackground(new Color(95, 139, 161));
+				currentPanel = reviewPanel;
+				mainTextHeader.setText("Reviews");
+				switchPanel(reviewPanelRight);
+			}
+		});
+		reviewPanel.setLayout(null);
+		reviewPanel.setBorder(null);
+		reviewPanel.setBackground(new Color(32, 40, 44));
+		reviewPanel.setBounds(0, 479, 350, 59);
+		headerPanel.add(reviewPanel);
+		
+		JLabel lblReviewIcon = new JLabel("");
+		lblReviewIcon.setBorder(null);
+		lblReviewIcon.setBounds(54, 13, 32, 32);
+		Icon iconReview = new ImageIcon("./resources/icons/review-icon.png");
+		lblReviewIcon.setIcon(iconReview);
+		reviewPanel.add(lblReviewIcon);
+		
+		JLabel lblReviews = new JLabel("Reviews");
+		lblReviews.setForeground(Color.WHITE);
+		lblReviews.setFont(new Font("Dialog", Font.BOLD, 17));
+		lblReviews.setBounds(130, 13, 145, 32);
+		reviewPanel.add(lblReviews);
 	}
 	
 	private void returnPropertyForUser() {
