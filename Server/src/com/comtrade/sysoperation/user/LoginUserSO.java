@@ -16,10 +16,6 @@ public class LoginUserSO extends GeneralSystemOperation<GenericClass<User>> {
 		User user = domain.getDomain();
 		IBroker iBroker = new Broker();
 		User newUser = iBroker.login(user);
-		if (newUser != null) {
-			String fulPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + newUser.getProfilePicture();
-			newUser.setProfilePicture(fulPath);
-		}
 		domain.setDomain(newUser);
 	}
 

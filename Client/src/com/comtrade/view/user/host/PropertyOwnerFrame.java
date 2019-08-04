@@ -103,6 +103,8 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> oldBookings;
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
+	private JLabel lblNewReviews;
+	private int reviewCount;
 	//----
 	
 	
@@ -452,6 +454,10 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				reviewPanel.setBackground(new Color(95, 139, 161));
 				currentPanel = reviewPanel;
 				mainTextHeader.setText("Reviews");
+				
+				lblNewReviews.setText("");
+				lblNewReviews.setBackground(null);
+				reviewCount = 0;
 				switchPanel(reviewPanelRight);
 			}
 		});
@@ -471,8 +477,18 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		JLabel lblReviews = new JLabel("Reviews");
 		lblReviews.setForeground(Color.WHITE);
 		lblReviews.setFont(new Font("Dialog", Font.BOLD, 17));
-		lblReviews.setBounds(130, 13, 145, 32);
+		lblReviews.setBounds(130, 13, 91, 32);
 		reviewPanel.add(lblReviews);
+		
+		lblNewReviews = new JLabel("");
+		lblNewReviews.setOpaque(true);
+		lblNewReviews.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewReviews.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewReviews.setForeground(Color.WHITE);
+		lblNewReviews.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewReviews.setBackground(null);
+		lblNewReviews.setBounds(260, 13, 42, 32);
+		reviewPanel.add(lblNewReviews);
 	}
 	
 	private void returnPropertyForUser() {
@@ -522,5 +538,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		if (temp.size() > 0) {
 			reservationPanelRight.addNewBookings(temp);
 		}
+	}
+
+	public void signalNewReview(PropertyReview propertyReview) {
+		reviewCount++;
+		lblNewReviews.setText(reviewCount+"");
+		lblNewReviews.setBackground(ColorConstants.RED);
+		reviewPanelRight.addNewReview(propertyReview);
 	}
 }

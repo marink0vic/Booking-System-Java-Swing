@@ -90,9 +90,10 @@ public class SelectedPropertyFrame extends JFrame {
 		roomPricesPanel.setPropertyFrame(this);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
-		reviewPropertyPanel = new ReviewPropertyPanel(user, propertyWrapper.getProperty());
+		reviewPropertyPanel = new ReviewPropertyPanel(propertyWrapper.getReviews());
 		layeredPane.add(reviewPropertyPanel, "name_194976834767000");
 		
+		UserReviewFrame.getReviewFrame().setPropertyInfo(propertyWrapper);
 	}
 
 	private void addPropertyNavigationLabels() {

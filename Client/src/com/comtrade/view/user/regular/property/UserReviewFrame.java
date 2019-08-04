@@ -14,6 +14,7 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 
 import java.awt.Color;
@@ -41,9 +42,11 @@ public class UserReviewFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfBookingID;
 	private Map<Booking, List<BookedRoom>> myBookings;
-	private Property property;
+	private List<PropertyReview> reviews;
+	private int propertyID;
 	private User user;
-
+	private PropertyWrapper wrapper;
+	private ReviewPropertyPanel reviewPropertyPanel;
 	
 	private UserReviewFrame() {
 		initializeComponents();
@@ -52,25 +55,23 @@ public class UserReviewFrame extends JFrame {
 	public static UserReviewFrame getReviewFrame() {
 		return frame;
 	}
-	
-	public Map<Booking, List<BookedRoom>> getMyBookings() {
-		return myBookings;
-	}
 
 	public void setMyBookings(Map<Booking, List<BookedRoom>> myBookings) {
 		this.myBookings = myBookings;
 	}
 
-	public Property getProperty() {
-		return property;
-	}
-
-	public void setProperty(Property property) {
-		this.property = property;
-	}
-
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void setPropertyInfo(PropertyWrapper wrapper) {
+		this.wrapper = wrapper;
+		this.propertyID = wrapper.getProperty().getIdProperty();
+		this.reviews = wrapper.getReviews();
+	}
+
+	public void setReviewPanel(ReviewPropertyPanel reviewPropertyPanel) {
+		this.reviewPropertyPanel = reviewPropertyPanel;
 	}
 
 	private void initializeComponents() {
@@ -128,19 +129,33 @@ public class UserReviewFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					int bookingId = Integer.parseInt(tfBookingID.getText());
-					boolean flag = checkBookingID(bookingId);
-					if (flag) {
-						int rating = (int) spinner.getValue();
-						String description = textArea.getText();
-						int idProperty = property.getIdProperty();
-						PropertyReview propertyReview = new PropertyReview(bookingId, idProperty, user, rating, description);
-						
-						TransferClass transferClass = new TransferClass();
-						transferClass.setClientRequest(propertyReview);
-						transferClass.setDomainType(DomainType.REVIEW);
-						transferClass.setOperation(Operations.SAVE);
-						
-						ControllerUI.getController().sendToServer(transferClass);
+					if (checkBookingID(bookingId)) {
+						if (!checkReviews(bookingId)) {
+							int rating = (int) spinner.getValue();
+							String description = textArea.getText();
+							PropertyReview propertyReview = new PropertyReview(bookingId, propertyID, user, rating, description);
+							
+							PropertyWrapper tempWrapper = new PropertyWrapper();
+							tempWrapper.setUser(wrapper.getUser());
+							tempWrapper.addNewReview(propertyReview);
+							
+							TransferClass transferClass = new TransferClass();
+							transferClass.setClientRequest(tempWrapper);
+							transferClass.setDomainType(DomainType.REVIEW);
+							transferClass.setOperation(Operations.SAVE);
+							
+							ControllerUI.getController().sendToServer(transferClass);
+							
+							reviews.add(propertyReview);
+							spinner.setValue(1);
+							tfBookingID.setText("");
+							textArea.setText("");
+							
+							reviewPropertyPanel.loadDinamicPanel();
+							dispose();
+						} else {
+							JOptionPane.showMessageDialog(null, "You have already rated this propererty for ID: " + bookingId);
+						}
 					} else {
 						JOptionPane.showMessageDialog(null, "You have to reserve a room in this property to leave the review");
 					}
@@ -157,12 +172,25 @@ public class UserReviewFrame extends JFrame {
 		contentPane.add(btnSubmit);
 	}
 
-	private boolean checkBookingID(int booking_id) {
-		for (Booking b : myBookings.keySet()) {
-			if (b.getIdBooking() == booking_id && b.getProperty().getIdProperty() == property.getIdProperty()) {
+	protected boolean checkReviews(int booking_id) {
+		for (PropertyReview r : reviews) {
+			if (r.getIdBooking() == booking_id) {
 				return true;
 			}
 		}
 		return false;
 	}
+
+	private boolean checkBookingID(int booking_id) {
+		for (Booking b : myBookings.keySet()) {
+			if (b.getIdBooking() == booking_id && b.getProperty().getIdProperty() == propertyID) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	
+
+	
 }

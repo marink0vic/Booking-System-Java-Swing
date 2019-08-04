@@ -222,7 +222,7 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 		String lastName = resultSet.getString("last_name");
 		String email = resultSet.getString("email");
 		String username = resultSet.getString("username");
-		String profilePicture = serverPath + resultSet.getString("profile_picture");
+		String image = serverPath + resultSet.getString("profile_picture");
 		String status = resultSet.getString("status");
 		LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
 		
@@ -231,7 +231,7 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 		Country c = new Country(countryId, countryName, countryImage);
 		User user = new User(c, firstName, lastName, email, username, null, date, status);
 		
-		user.setProfilePicture(profilePicture);
+		user.setProfilePicture(image);
 		user.idUser = userId;
 		
 		return user;

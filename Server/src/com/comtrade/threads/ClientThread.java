@@ -115,8 +115,13 @@ public class ClientThread extends Thread {
 
 	public void sendToHost(PropertyWrapper wrapper) {
 		TransferClass transfer = new TransferClass();
-		transfer.setDomainType(DomainType.BOOKING);
-		transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_BOOKING);
+		if (wrapper.getBookings().size() > 0) {
+			transfer.setDomainType(DomainType.BOOKING);
+			transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_BOOKING);
+		} else if (wrapper.getReviews().size() > 0) {
+			transfer.setDomainType(DomainType.REVIEW);
+			transfer.setOperation(Operations.NOTIFY_HOST_WTIH_NEW_REVIEW);
+		}
 		transfer.setServerResponse(wrapper);
 		sendResponse(transfer);
 	}

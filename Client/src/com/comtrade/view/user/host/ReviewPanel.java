@@ -44,6 +44,26 @@ public class ReviewPanel extends JPanel {
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 		
+		loadBasePanel();
+		loadDinamicPanel();
+	
+	}
+	
+	public void addNewReview(PropertyReview review) {
+		reviews.add(review);
+		loadDinamicPanel();
+	}
+	
+	private void loadDinamicPanel() {
+		gridPanel.removeAll();
+		for (int i = 0; i < reviews.size(); i++) {
+			PropertyReview propertyReview = reviews.get(i);
+			JPanel panel = addRewiewPanelToScrollPane(propertyReview);
+			gridPanel.add(panel);
+		}
+	}
+
+	private void loadBasePanel() {
 		gridPanel = new JPanel();
 		gridPanel.setLayout(new GridLayout(-1, 1));
 		gridPanel.setBackground(new Color(255, 255, 255));
@@ -63,13 +83,8 @@ public class ReviewPanel extends JPanel {
 		container.add(scrollPane, BorderLayout.CENTER);
 		add(container);
 		
-		for (int i = 0; i < reviews.size(); i++) {
-			PropertyReview propertyReview = reviews.get(i);
-			JPanel panel = addRewiewPanelToScrollPane(propertyReview);
-			gridPanel.add(panel);
-		}
 	}
-	
+
 	private JPanel addRewiewPanelToScrollPane(PropertyReview property_review) {
 		JPanel review = new JPanel();
 		User user = property_review.getUser();

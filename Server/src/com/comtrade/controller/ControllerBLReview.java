@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.PropertyReview;
+import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.review.SaveReviewOS;
@@ -19,9 +20,9 @@ public class ControllerBLReview implements IControllerBL {
 		switch (operation) {
 		case SAVE:
 		{
-			PropertyReview review = (PropertyReview) sender.getClientRequest();
+			PropertyWrapper wrapper = (PropertyWrapper) sender.getClientRequest();
 			try {
-				saveReview(review);
+				saveReview(wrapper);
 				receiver.setOperation(Operations.SAVE);
 				receiver.setDomainType(DomainType.REVIEW);
 				receiver.setMessageResponse("Successfull insert");
@@ -39,10 +40,9 @@ public class ControllerBLReview implements IControllerBL {
 		
 	}
 
-	private void saveReview(PropertyReview review) throws SQLException {
-		GenericClass<PropertyReview> genericClass = new GenericClass<PropertyReview>(review);
-		GeneralSystemOperation<GenericClass<PropertyReview>> sysOperation = new SaveReviewOS();
-		sysOperation.executeSystemOperation(genericClass);
+	private void saveReview(PropertyWrapper wrapper) throws SQLException {
+		GeneralSystemOperation<PropertyWrapper> sysOperation = new SaveReviewOS();
+		sysOperation.executeSystemOperation(wrapper);
 	}
 
 }

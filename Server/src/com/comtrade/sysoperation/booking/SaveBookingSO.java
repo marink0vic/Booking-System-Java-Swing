@@ -19,6 +19,7 @@ import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
+import com.comtrade.serverdata.ActiveThreads;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -28,7 +29,6 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	private IBroker iBroker = new Broker();
 	private DbLock dbLock = DbLock.getInstance();
 	private ServerData server = ServerData.getInstance();
-	private UserActiveThreads activeThreads = UserActiveThreads.getActiveThreads();
 	
 	@Override
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
@@ -68,7 +68,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		pw.addNewBooking(booking, bookedRooms);
 		pw.addNewTransaction(tr);
 		pw.setUser(user);
-		activeThreads.notify(pw);
+		UserActiveThreads.getActiveThreads().notify(pw);
 	}
 	private void addOwnerBookingOnServer(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
 		server.addNewTransaction(tr);

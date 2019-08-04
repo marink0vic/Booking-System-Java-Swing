@@ -29,7 +29,7 @@ public class ControllerUI {
 	private Map<Booking, List<BookedRoom>> bookedRooms;
 	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
 	private UserWrapper userWrapper;
-	PropertyOwnerFrame ownerFrame;
+	private PropertyOwnerFrame ownerFrame;
 	
 	private ControllerUI() {
 		bookedRooms = new HashMap<>();
@@ -278,6 +278,21 @@ public class ControllerUI {
 			ownerFrame.signalNewBooking(hostReservationInfo);
 			break;
 		}
+		default:
+			break;
+		}
+	}
+
+	public void processReviewFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case NOTIFY_HOST_WTIH_NEW_REVIEW:
+		{
+			PropertyWrapper temp = (PropertyWrapper) transfer.getServerResponse();
+			ownerFrame.signalNewReview(temp.getReviews().get(0));
+			break;
+		}
+
 		default:
 			break;
 		}
