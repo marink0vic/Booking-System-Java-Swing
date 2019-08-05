@@ -39,6 +39,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 public class PropertyInfoPanel extends JPanel {
 
@@ -57,6 +58,7 @@ public class PropertyInfoPanel extends JPanel {
 	private JLabel lblGrade;
 	private JLabel lblHelper1;
 	private JTextArea messageArea;
+	private JTextArea chatArea;
 	private String messageText;
 
 	
@@ -111,6 +113,8 @@ public class PropertyInfoPanel extends JPanel {
 		this.add(lblHelper1);
 		
 		messageArea = new JTextArea();
+		messageArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		messageArea.setFont(new Font("Dialog", Font.BOLD, 18));
 		messageArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -122,14 +126,18 @@ public class PropertyInfoPanel extends JPanel {
 				}
 			}
 		});
-		messageArea.setBackground(new Color(173, 216, 230));
+		messageArea.setBackground(new Color(255, 255, 255));
+		messageArea.setForeground(ColorConstants.GRAY);
 		messageArea.setBounds(0, 278, 315, 85);
 		messageArea.setWrapStyleWord(true);
 		messageArea.setLineWrap(true);
 		this.add(messageArea);
 		
-		JTextArea chatArea = new JTextArea();
-		chatArea.setBackground(new Color(173, 216, 230));
+		chatArea = new JTextArea();
+		chatArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		chatArea.setForeground(ColorConstants.GRAY);
+		chatArea.setFont(new Font("Dialog", Font.BOLD, 18));
+		chatArea.setBackground(new Color(255, 255, 255));
 		chatArea.setBounds(0, 380, 315, 288);
 		chatArea.setEditable(false);
 		chatArea.setWrapStyleWord(true);
@@ -231,6 +239,15 @@ public class PropertyInfoPanel extends JPanel {
 		transfer.setDomainType(DomainType.USER);
 		transfer.setOperation(Operations.MESSAGE);
 		
+		chatArea.append("Me: " + messageText + "\n");
+		messageArea.setText("");
 		ControllerUI.getController().sendToServer(transfer);
+	}
+
+	public void showMessageToTextArea(Message message) {
+		User userSender = message.getSender();
+		String name = userSender.getFirstName() + " " + userSender.getLastName() + ": ";
+		String ms = name + message.getMessage();
+		chatArea.append(ms + "\n");
 	}
 }

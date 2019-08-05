@@ -12,6 +12,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
 import com.comtrade.view.user.regular.HomePagePanel;
@@ -54,6 +55,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private User user;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
+	private Message message;
 	
 
 	
@@ -94,6 +96,17 @@ public class SelectedPropertyFrame extends JFrame {
 		layeredPane.add(reviewPropertyPanel, "name_194976834767000");
 		
 		UserReviewFrame.getReviewFrame().setPropertyInfo(propertyWrapper);
+		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					message = ControllerUI.getController().getMessage();
+					propertyInfoPanel.showMessageToTextArea(message);
+				}
+			}
+		});
+		thread.start();
 	}
 
 	private void addPropertyNavigationLabels() {

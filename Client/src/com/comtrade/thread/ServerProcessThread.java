@@ -70,7 +70,6 @@ public class ServerProcessThread implements Runnable {
 		}
 		case NO_DOMAIN:
 		{
-			System.out.println("No domain sent");
 			System.out.println(transfer.getMessageResponse());
 		}
 		default:
