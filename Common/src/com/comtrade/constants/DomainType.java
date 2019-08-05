@@ -8,5 +8,6 @@ public enum DomainType {
 	IMAGES, 
 	ROOM, 
 	BOOKING, 
-	REVIEW
+	REVIEW,
+	NO_DOMAIN
 }

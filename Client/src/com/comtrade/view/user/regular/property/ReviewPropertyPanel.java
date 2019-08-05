@@ -143,6 +143,7 @@ public class ReviewPropertyPanel extends JPanel {
 		textArea.setText(review.getComment());
 		textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+        textArea.setEditable(false);
         temp.add(textArea);
 		
 		lblRating = new JLabel(review.getRating()+"");

@@ -83,7 +83,7 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper);
+		propertyInfoPanel = new PropertyInfoPanel(propertyWrapper, user);
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
 		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut, headerPanel);

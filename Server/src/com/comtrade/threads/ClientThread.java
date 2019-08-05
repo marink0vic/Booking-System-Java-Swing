@@ -20,6 +20,7 @@ import com.comtrade.controller.ControllerBLUser;
 import com.comtrade.controller.IControllerBL;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.transfer.TransferClass;
@@ -131,6 +132,15 @@ public class ClientThread extends Thread {
 		transfer.setDomainType(DomainType.BOOKING);
 		transfer.setOperation(Operations.NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS);
 		transfer.setServerResponse(bookings);
+		sendResponse(transfer);
+	}
+
+	public void forwardMessage(User sender, String text_message) {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.USER);
+		transfer.setOperation(Operations.MESSAGE);
+		transfer.setMessageResponse(text_message);
+		transfer.setServerResponse(sender);
 		sendResponse(transfer);
 	}
 	

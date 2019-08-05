@@ -17,6 +17,7 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
@@ -105,6 +106,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private JLabel lblNewRes;
 	private JLabel lblNewReviews;
 	private int reviewCount;
+	private Message message;
 	//----
 	
 	
@@ -188,6 +190,19 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		HeaderTextPanel.add(mainTextHeader);
 	
 		ControllerUI.getController().setOwnerFrame(this);
+		
+		Thread messageThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					message = ControllerUI.getController().getMessage();
+					System.out.println(message.getSender().getUsername());
+					System.out.println(message.getMessage());
+				}
+			}
+		});
+		
+		messageThread.start();
 	}
 
 	private void createSidePanel() {

@@ -1,5 +1,7 @@
 package com.comtrade.thread;
 
+import java.io.IOException;
+
 import com.comtrade.communication.Communication;
 import com.comtrade.constants.DomainType;
 import com.comtrade.controller.ControllerUI;
@@ -15,7 +17,8 @@ public class ServerProcessThread implements Runnable {
 				transfer = Communication.getCommunication().read();
 				processInformation(transfer);
 			} catch (Exception e) {
-				System.out.println("Communication failed");
+				//System.out.println("Communication failed");
+				e.printStackTrace();
 				break;
 			}
 		}
@@ -65,8 +68,12 @@ public class ServerProcessThread implements Runnable {
 			ControllerUI.getController().processReviewFromServer(transfer);
 			break;
 		}
+		case NO_DOMAIN:
+		{
+			System.out.println("No domain sent");
+			System.out.println(transfer.getMessageResponse());
+		}
 		default:
-			transfer.getMessageResponse();
 			break;
 		}
 	}

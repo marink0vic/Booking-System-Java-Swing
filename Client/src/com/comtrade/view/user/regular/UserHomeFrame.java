@@ -61,7 +61,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private SearchPagePanel searchPagePanel;
 	
 	private List<PropertyWrapper> listOfProperties;
-	private User user;
+	private User user; // loged inuser
 	private UserWrapper userWrapper;
 	private JTextField tfSearch;
 	private JDateChooser dateCheckIn;

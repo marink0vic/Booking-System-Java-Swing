@@ -7,25 +7,43 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
+import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Address;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.domain.PropertyReview;
+import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.transfer.TransferClass;
+
+import javax.swing.JButton;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PropertyInfoPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private User user;
 	private PropertyWrapper propertyWrapper;
 	private Property property;
 	private Address address;
@@ -38,10 +56,13 @@ public class PropertyInfoPanel extends JPanel {
 	private JLabel lblLocation;
 	private JLabel lblGrade;
 	private JLabel lblHelper1;
+	private JTextArea messageArea;
+	private String messageText;
 
 	
-	public PropertyInfoPanel(PropertyWrapper propertyWrapper) {
+	public PropertyInfoPanel(PropertyWrapper propertyWrapper, User user) {
 		this.propertyWrapper = propertyWrapper;
+		this.user = user;
 		this.property = propertyWrapper.getProperty();
 		this.address = propertyWrapper.getAddress();
 		this.propertyImages = propertyWrapper.getImages();
@@ -74,7 +95,7 @@ public class PropertyInfoPanel extends JPanel {
 		lblLocation.setBounds(0, 65, 288, 62);
 		this.add(lblLocation);
 		
-		lblGrade = new JLabel("10");
+		lblGrade = new JLabel(setPropertyRating());
 		lblGrade.setOpaque(true);
 		lblGrade.setForeground(new Color(255, 255, 255));
 		lblGrade.setBackground(new Color(9, 121, 186));
@@ -83,27 +104,37 @@ public class PropertyInfoPanel extends JPanel {
 		lblGrade.setBounds(0, 121, 56, 48);
 		this.add(lblGrade);
 		
-		lblHelper1 = new JLabel("What guests loved the most:");
+		lblHelper1 = new JLabel("If you have any questions send us a message");
 		lblHelper1.setFont(new Font("Dialog", Font.BOLD, 15));
 		lblHelper1.setForeground(new Color(71, 71, 71));
-		lblHelper1.setBounds(0, 223, 272, 32);
+		lblHelper1.setBounds(0, 223, 353, 32);
 		this.add(lblHelper1);
 		
-		JTextArea reviewOne = new JTextArea();
-		reviewOne.setBackground(new Color(173, 216, 230));
-		reviewOne.setBounds(0, 278, 315, 192);
-		this.add(reviewOne);
+		messageArea = new JTextArea();
+		messageArea.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					messageText = messageArea.getText();
+					if (messageText.length() > 0) {
+						sendMessage();
+					}
+				}
+			}
+		});
+		messageArea.setBackground(new Color(173, 216, 230));
+		messageArea.setBounds(0, 278, 315, 85);
+		messageArea.setWrapStyleWord(true);
+		messageArea.setLineWrap(true);
+		this.add(messageArea);
 		
-		JTextArea reviewTwo = new JTextArea();
-		reviewTwo.setBackground(new Color(173, 216, 230));
-		reviewTwo.setBounds(0, 483, 315, 192);
-		this.add(reviewTwo);
-		
-		JLabel lblCheckAllReviews = new JLabel("Check all reviews:");
-		lblCheckAllReviews.setForeground(new Color(71, 71, 71));
-		lblCheckAllReviews.setFont(new Font("Dialog", Font.BOLD, 15));
-		lblCheckAllReviews.setBounds(0, 688, 197, 32);
-		this.add(lblCheckAllReviews);
+		JTextArea chatArea = new JTextArea();
+		chatArea.setBackground(new Color(173, 216, 230));
+		chatArea.setBounds(0, 380, 315, 288);
+		chatArea.setEditable(false);
+		chatArea.setWrapStyleWord(true);
+		chatArea.setLineWrap(true);
+		this.add(chatArea);
 		
 		JTextArea txtAboutProperty = new JTextArea();
 		txtAboutProperty.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -112,7 +143,23 @@ public class PropertyInfoPanel extends JPanel {
 		txtAboutProperty.setText(property.getDescription());
 		txtAboutProperty.setLineWrap(true);
 		txtAboutProperty.setWrapStyleWord(true);
+		txtAboutProperty.setEditable(false);
 		this.add(txtAboutProperty);
+		
+		JButton btnSend = new JButton("SEND");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				messageText = messageArea.getText();
+				if (messageText.length() > 0) {
+					sendMessage();
+				}
+			}
+		});
+		btnSend.setForeground(Color.WHITE);
+		btnSend.setBackground(ColorConstants.BLUE);
+		btnSend.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnSend.setBounds(62, 688, 194, 48);
+		add(btnSend);
 		
 		addImagesToLabels();
 	}
@@ -163,5 +210,27 @@ public class PropertyInfoPanel extends JPanel {
 		Image newImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		return new ImageIcon(newImage);
 	}
-
+	
+	private String setPropertyRating() {
+		int score = 0;
+		int count = 0;
+		for (PropertyReview pr : propertyWrapper.getReviews()) {
+			score += pr.getRating();
+			count++;
+		}
+		if (score == 0) return "--";
+		double avg = (double) score / count;
+		String total = String.format("%.2f", avg);
+		return total;
+	}
+	
+	private void sendMessage() {
+		Message message = new Message(user, propertyWrapper.getUser(), messageText);
+		TransferClass transfer = new TransferClass();
+		transfer.setClientRequest(message);
+		transfer.setDomainType(DomainType.USER);
+		transfer.setOperation(Operations.MESSAGE);
+		
+		ControllerUI.getController().sendToServer(transfer);
+	}
 }
