@@ -26,8 +26,8 @@ public class ControllerUI {
 	private User user;
 	private PropertyWrapper propertyWrapper;
 	private List<PropertyWrapper> properties;
-	private String messageResponse;
-	private Message message;
+	private String messageResponseFromServer;
+	private Message chatMessage;
 	
 	private Map<Booking, List<BookedRoom>> bookedRooms;
 	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
@@ -36,7 +36,7 @@ public class ControllerUI {
 	
 	private ControllerUI() {
 		bookedRooms = new HashMap<>();
-		message = new Message();
+		chatMessage = new Message();
 	}
 	
 	public static ControllerUI getController() {
@@ -55,7 +55,7 @@ public class ControllerUI {
 	}
 	
 	public String getMessageResponse() {
-		return messageResponse;
+		return messageResponseFromServer;
 	}
 	
 	public Message getMessage() {
@@ -66,7 +66,7 @@ public class ControllerUI {
 				e.printStackTrace();
 			}
 		}
-		return message;
+		return chatMessage;
 	}
 
 	public User getUser() {
@@ -116,7 +116,7 @@ public class ControllerUI {
 	//OBRATI PAZNJU KADA SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
 	public List<PropertyWrapper> getProperties() {
 		while (properties == null) {
-			System.out.println("Waiting for list of all properies");
+			System.out.println("Waiting for list of all properties");
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
@@ -180,7 +180,7 @@ public class ControllerUI {
 		case LOGIN_USER:
 		{
 			user = (User) transfer.getServerResponse();
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
 			break;
 		}
 		case RETURN_BOOKING_FOR_USER:
@@ -190,14 +190,14 @@ public class ControllerUI {
 		}
 		case UPDATE:
 		{
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
 			break;
 		}
 		case MESSAGE:
 		{
 			User temp = (User) transfer.getServerResponse();
-			message.setSender(temp);
-			message.setMessage(transfer.getMessageResponse());
+			chatMessage.setSender(temp);
+			chatMessage.setMessage(transfer.getMessageResponse());
 			synchronized (lock) {
 				lock.notify();
 			}
@@ -283,7 +283,7 @@ public class ControllerUI {
 		case SAVE:
 		{
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
 			break;
 		}
 		case UPDATE:

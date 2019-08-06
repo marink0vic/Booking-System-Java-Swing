@@ -1,6 +1,5 @@
 package com.comtrade.thread;
 
-import java.io.IOException;
 
 import com.comtrade.communication.Communication;
 import com.comtrade.constants.DomainType;

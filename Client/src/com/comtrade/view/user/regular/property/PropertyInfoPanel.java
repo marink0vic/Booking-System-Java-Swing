@@ -60,6 +60,7 @@ public class PropertyInfoPanel extends JPanel {
 	private JTextArea messageArea;
 	private JTextArea chatArea;
 	private String messageText;
+	private JScrollPane scrollPane;
 
 	
 	public PropertyInfoPanel(PropertyWrapper propertyWrapper, User user) {
@@ -133,16 +134,19 @@ public class PropertyInfoPanel extends JPanel {
 		messageArea.setLineWrap(true);
 		this.add(messageArea);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 376, 315, 295);
+		add(scrollPane);
+		
 		chatArea = new JTextArea();
 		chatArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		chatArea.setForeground(ColorConstants.GRAY);
-		chatArea.setFont(new Font("Dialog", Font.BOLD, 18));
+		chatArea.setFont(new Font("Dialog", Font.BOLD, 15));
 		chatArea.setBackground(new Color(255, 255, 255));
-		chatArea.setBounds(0, 380, 315, 288);
 		chatArea.setEditable(false);
 		chatArea.setWrapStyleWord(true);
 		chatArea.setLineWrap(true);
-		this.add(chatArea);
+		scrollPane.setViewportView(chatArea);
 		
 		JTextArea txtAboutProperty = new JTextArea();
 		txtAboutProperty.setFont(new Font("Dialog", Font.BOLD, 18));

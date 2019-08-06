@@ -99,7 +99,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private AvailabilityPanel availabilityPanelRight;
 	private EarningsPanel earningsPanelRight;
 	private ReviewPanel reviewPanelRight;
-	private JPanel MessagePanelRight;
+	private MessagePanel messagePanelRight;
 	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
@@ -108,18 +108,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
 	private JLabel lblNewReviews;
+	private JLabel lblNewMessage;
 	private int reviewCount;
-	private JTextArea textAreaReceive;
-	private JTextArea textAreaSend;
 	private Message message;
-	private String messageToSend;
-	private User userSender;
-	//----
 	
 	
-	/**
-	 * Create the frame.
-	 */
+
 	public PropertyOwnerFrame(PropertyWrapper propertyWrapper) {
 		this.user = propertyWrapper.getUser();
 		this.propertyWrapper = propertyWrapper;
@@ -153,7 +147,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		createSidePanel();
 		
-		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
 		contentPane.add(layeredPane);
@@ -167,59 +160,10 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		availabilityPanelRight = new AvailabilityPanel(roomTypes, oldBookings);
 		layeredPane.add(availabilityPanelRight, "name_89976615789600");
-		//----------------------------------
 		
-		MessagePanelRight = new JPanel();
-		MessagePanelRight.setBackground(new Color(255, 255, 255));
-		layeredPane.add(MessagePanelRight, "name_179496146822800");
-		MessagePanelRight.setLayout(null);
+		messagePanelRight = new MessagePanel(user);
+		layeredPane.add(messagePanelRight, "name_179496146822800");
 		
-		textAreaReceive = new JTextArea();
-		textAreaReceive.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
-		textAreaReceive.setForeground(ColorConstants.GRAY);
-		textAreaReceive.setFont(new Font("Dialog", Font.BOLD, 19));
-		textAreaReceive.setBounds(152, 92, 519, 507);
-		textAreaReceive.setLineWrap(true);
-		textAreaReceive.setWrapStyleWord(true);
-		textAreaReceive.setEditable(false);
-		MessagePanelRight.add(textAreaReceive);
-		
-		textAreaSend = new JTextArea();
-		textAreaSend.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
-		textAreaSend.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					messageToSend = textAreaSend.getText();
-					if (messageToSend.length() > 0) {
-						sendMessageToClient();
-					}
-				}
-			}
-		});
-		textAreaSend.setForeground(ColorConstants.GRAY);
-		textAreaSend.setFont(new Font("Dialog", Font.BOLD, 19));
-		textAreaSend.setBounds(707, 92, 358, 189);
-		textAreaSend.setLineWrap(true);
-		textAreaSend.setWrapStyleWord(true);
-		MessagePanelRight.add(textAreaSend);
-		
-		JButton btnNewButton = new JButton("SEND");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				messageToSend = textAreaSend.getText();
-				if (messageToSend.length() > 0) {
-					sendMessageToClient();
-				}
-			}
-		});
-		btnNewButton.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(ColorConstants.BLUE);
-		btnNewButton.setBounds(707, 325, 360, 79);
-		MessagePanelRight.add(btnNewButton);
-		
-		//--------------------------------------
 		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty());
 		layeredPane.add(earningsPanelRight, "name_179515782969900");
 			
@@ -227,8 +171,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		layeredPane.add(reviewPanelRight, "name_270003645240700");
 		
 		
-		
-		//-----------------------------------------------------------
 		JPanel HeaderTextPanel = new JPanel();
 		HeaderTextPanel.setBackground(new Color(95, 139, 161));
 		HeaderTextPanel.setBounds(350, 0, 1132, 136);
@@ -249,31 +191,16 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 			public void run() {
 				while (true) {
 					message = ControllerUI.getController().getMessage();
-					showMessageToTextArea();
+					messagePanelRight.showMessageToTextArea(message);
+					if (messagePanel != currentPanel) {
+						lblNewMessage.setText("1");
+						lblNewMessage.setBackground(ColorConstants.RED);
+					}
 				}
 			}
 		});
 		
 		messageThread.start();
-	}
-	
-	private void showMessageToTextArea() {
-		userSender = message.getSender();
-		String name = userSender.getFirstName() + " " + userSender.getLastName() + ": ";
-		String ms = name + message.getMessage();
-		textAreaReceive.append(ms + "\n");
-	}
-
-	private void sendMessageToClient() {
-		textAreaReceive.append("Me: " + messageToSend + "\n");
-		textAreaSend.setText("");	
-		Message message = new Message(user, userSender, messageToSend);
-		TransferClass transfer = new TransferClass();
-		transfer.setClientRequest(message);
-		transfer.setDomainType(DomainType.USER);
-		transfer.setOperation(Operations.MESSAGE);
-		
-		ControllerUI.getController().sendToServer(transfer);
 	}
 
 	private void createSidePanel() {
@@ -457,7 +384,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				messagePanel.setBackground(new Color(95, 139, 161));
 				currentPanel = messagePanel;
 				mainTextHeader.setText("Messages");
-				switchPanel(MessagePanelRight);
+				lblNewMessage.setText("");
+				lblNewMessage.setBackground(null);
+				switchPanel(messagePanelRight);
 			}
 		});
 		messagePanel.setLayout(null);
@@ -476,8 +405,18 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		JLabel lblMessages = new JLabel("Messages");
 		lblMessages.setForeground(Color.WHITE);
 		lblMessages.setFont(new Font("Dialog", Font.BOLD, 17));
-		lblMessages.setBounds(130, 13, 145, 32);
+		lblMessages.setBounds(130, 13, 94, 32);
 		messagePanel.add(lblMessages);
+		
+		lblNewMessage = new JLabel("");
+		lblNewMessage.setOpaque(true);
+		lblNewMessage.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewMessage.setForeground(Color.WHITE);
+		lblNewMessage.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewMessage.setBackground((Color) null);
+		lblNewMessage.setBounds(260, 13, 42, 32);
+		messagePanel.add(lblNewMessage);
 		
 		earningsPanel = new JPanel();
 		earningsPanel.addMouseListener(new MouseAdapter() {
