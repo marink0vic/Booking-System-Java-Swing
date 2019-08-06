@@ -11,6 +11,7 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
@@ -19,12 +20,14 @@ import com.comtrade.view.user.host.PropertyOwnerFrame;
 public class ControllerUI {
 
 	private static ControllerUI controller;
+	private final Object lock = new Object();
 	private List<Country> countryImages;
 	private List<PaymentType> payments;
 	private User user;
 	private PropertyWrapper propertyWrapper;
 	private List<PropertyWrapper> properties;
-	private String messageResponse;
+	private String messageResponseFromServer;
+	private Message chatMessage;
 	
 	private Map<Booking, List<BookedRoom>> bookedRooms;
 	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
@@ -33,6 +36,7 @@ public class ControllerUI {
 	
 	private ControllerUI() {
 		bookedRooms = new HashMap<>();
+		chatMessage = new Message();
 	}
 	
 	public static ControllerUI getController() {
@@ -44,6 +48,25 @@ public class ControllerUI {
 
 	public void setOwnerFrame(PropertyOwnerFrame ownerFrame) {
 		this.ownerFrame = ownerFrame;
+	}
+	
+	public PropertyWrapper getHostReservationInfo() {
+		return hostReservationInfo;
+	}
+	
+	public String getMessageResponse() {
+		return messageResponseFromServer;
+	}
+	
+	public Message getMessage() {
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return chatMessage;
 	}
 
 	public User getUser() {
@@ -93,7 +116,7 @@ public class ControllerUI {
 	//OBRATI PAZNJU KADA SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
 	public List<PropertyWrapper> getProperties() {
 		while (properties == null) {
-			System.out.println("Waiting for list of all properies");
+			System.out.println("Waiting for list of all properties");
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
@@ -105,10 +128,6 @@ public class ControllerUI {
 
 	public Map<Booking, List<BookedRoom>> getBookedRooms() {
 		return bookedRooms;
-	}
-
-	public PropertyWrapper getHostReservationInfo() {
-		return hostReservationInfo;
 	}
 
 	public List<Country> getCountryImages() {
@@ -133,10 +152,6 @@ public class ControllerUI {
 			}
 		}
 		return payments;
-	}
-
-	public String getMessageResponse() {
-		return messageResponse;
 	}
 
 	public void sendToServer(TransferClass transferClass) {
@@ -165,7 +180,7 @@ public class ControllerUI {
 		case LOGIN_USER:
 		{
 			user = (User) transfer.getServerResponse();
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
 			break;
 		}
 		case RETURN_BOOKING_FOR_USER:
@@ -175,7 +190,17 @@ public class ControllerUI {
 		}
 		case UPDATE:
 		{
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
+			break;
+		}
+		case MESSAGE:
+		{
+			User temp = (User) transfer.getServerResponse();
+			chatMessage.setSender(temp);
+			chatMessage.setMessage(transfer.getMessageResponse());
+			synchronized (lock) {
+				lock.notify();
+			}
 			break;
 		}
 		default:
@@ -258,7 +283,7 @@ public class ControllerUI {
 		case SAVE:
 		{
 			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
-			messageResponse = transfer.getMessageResponse();
+			messageResponseFromServer = transfer.getMessageResponse();
 			break;
 		}
 		case UPDATE:
@@ -297,6 +322,5 @@ public class ControllerUI {
 			break;
 		}
 	}
-
 	
 }

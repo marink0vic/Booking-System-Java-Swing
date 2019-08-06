@@ -92,7 +92,23 @@ public class UserActiveThreads implements ActiveThreads {
 		}
 	}
 
+	public void sendMessage(User sender, User receiver, String message) {
+		if (sender.getStatus().equals(UserType.USER.getAccess())) {
+			sendMessage(sender, receiver, message, hostThreads);
+		} else if (sender.getStatus().equals(UserType.SUPER_USER.getAccess())) {
+			sendMessage(sender, receiver, message, userThreads);
+		}
+		
+	}
 
-
+	private void sendMessage(User sender, User receiver, String message, Map<User, ClientThread> active_threads) {
+		for (User user : active_threads.keySet()) {
+			if (user.getIdUser() == receiver.getIdUser()) {
+				ClientThread clientThread = active_threads.get(user);
+				clientThread.forwardMessage(sender, message);
+				break;
+			}
+		}
+	}
 
 }

@@ -1,11 +1,14 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
+import com.comtrade.constants.UserType;
 import com.comtrade.domain.User;
 import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.serverdata.UserActiveThreads;
@@ -79,7 +82,6 @@ public class ControllerBLUser implements IControllerBL {
 				receiver.setDomainType(DomainType.USER);
 				receiver.setOperation(Operations.RETURN_BOOKING_FOR_USER);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return receiver;
@@ -96,6 +98,14 @@ public class ControllerBLUser implements IControllerBL {
 				receiver.setMessageResponse("Update failed");
 				e.printStackTrace();
 			}
+			return receiver;
+		}
+		case MESSAGE:
+		{
+			Message message = (Message) sender.getClientRequest();
+			UserActiveThreads.getActiveThreads().sendMessage(message.getSender(), message.getReceiver(), message.getMessage());
+			receiver.setMessageResponse("Message sent");
+			receiver.setDomainType(DomainType.NO_DOMAIN);
 			return receiver;
 		}
 		default:

@@ -17,6 +17,7 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
@@ -73,6 +74,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class PropertyOwnerFrame extends JFrame implements IProxy {
 
@@ -96,6 +99,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private AvailabilityPanel availabilityPanelRight;
 	private EarningsPanel earningsPanelRight;
 	private ReviewPanel reviewPanelRight;
+	private MessagePanel messagePanelRight;
 	//------
 	private PropertyWrapper propertyWrapper;
 	private User user;
@@ -104,13 +108,12 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 	private  Map<Booking, List<BookedRoom>> newBookings;
 	private JLabel lblNewRes;
 	private JLabel lblNewReviews;
+	private JLabel lblNewMessage;
 	private int reviewCount;
-	//----
+	private Message message;
 	
 	
-	/**
-	 * Create the frame.
-	 */
+
 	public PropertyOwnerFrame(PropertyWrapper propertyWrapper) {
 		this.user = propertyWrapper.getUser();
 		this.propertyWrapper = propertyWrapper;
@@ -144,7 +147,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		createSidePanel();
 		
-		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(350, 136, 1132, 667);
 		contentPane.add(layeredPane);
@@ -158,13 +160,10 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		
 		availabilityPanelRight = new AvailabilityPanel(roomTypes, oldBookings);
 		layeredPane.add(availabilityPanelRight, "name_89976615789600");
-		//----------------------------------
 		
-		JPanel MessagePanelRight = new JPanel();
-		layeredPane.add(MessagePanelRight, "name_179496146822800");
-		MessagePanelRight.setLayout(null);
+		messagePanelRight = new MessagePanel(user);
+		layeredPane.add(messagePanelRight, "name_179496146822800");
 		
-		//--------------------------------------
 		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty());
 		layeredPane.add(earningsPanelRight, "name_179515782969900");
 			
@@ -172,8 +171,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		layeredPane.add(reviewPanelRight, "name_270003645240700");
 		
 		
-		
-		//-----------------------------------------------------------
 		JPanel HeaderTextPanel = new JPanel();
 		HeaderTextPanel.setBackground(new Color(95, 139, 161));
 		HeaderTextPanel.setBounds(350, 0, 1132, 136);
@@ -188,6 +185,22 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		HeaderTextPanel.add(mainTextHeader);
 	
 		ControllerUI.getController().setOwnerFrame(this);
+		
+		Thread messageThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (true) {
+					message = ControllerUI.getController().getMessage();
+					messagePanelRight.showMessageToTextArea(message);
+					if (messagePanel != currentPanel) {
+						lblNewMessage.setText("1");
+						lblNewMessage.setBackground(ColorConstants.RED);
+					}
+				}
+			}
+		});
+		
+		messageThread.start();
 	}
 
 	private void createSidePanel() {
@@ -371,6 +384,9 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 				messagePanel.setBackground(new Color(95, 139, 161));
 				currentPanel = messagePanel;
 				mainTextHeader.setText("Messages");
+				lblNewMessage.setText("");
+				lblNewMessage.setBackground(null);
+				switchPanel(messagePanelRight);
 			}
 		});
 		messagePanel.setLayout(null);
@@ -389,8 +405,18 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		JLabel lblMessages = new JLabel("Messages");
 		lblMessages.setForeground(Color.WHITE);
 		lblMessages.setFont(new Font("Dialog", Font.BOLD, 17));
-		lblMessages.setBounds(130, 13, 145, 32);
+		lblMessages.setBounds(130, 13, 94, 32);
 		messagePanel.add(lblMessages);
+		
+		lblNewMessage = new JLabel("");
+		lblNewMessage.setOpaque(true);
+		lblNewMessage.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblNewMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewMessage.setForeground(Color.WHITE);
+		lblNewMessage.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblNewMessage.setBackground((Color) null);
+		lblNewMessage.setBounds(260, 13, 42, 32);
+		messagePanel.add(lblNewMessage);
 		
 		earningsPanel = new JPanel();
 		earningsPanel.addMouseListener(new MouseAdapter() {

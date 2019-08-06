@@ -23,6 +23,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
@@ -148,7 +149,7 @@ public class SearchPagePanel extends JPanel {
 		btnReserve.setBounds(330, 231, 195, 53);
 		testPanel.add(btnReserve);
 		
-		lblRating = new JLabel("10");
+		lblRating = new JLabel(setPropertyRating(property));
 		lblRating.setOpaque(true);
 		lblRating.setForeground(new Color(255, 255, 255));
 		lblRating.setBackground(new Color(9, 121, 186));
@@ -159,7 +160,20 @@ public class SearchPagePanel extends JPanel {
 		
 		return testPanel;
 	}
-	
+
+	private String setPropertyRating(PropertyWrapper property) {
+		int score = 0;
+		int count = 0;
+		for (PropertyReview pr : property.getReviews()) {
+			score += pr.getRating();
+			count++;
+		}
+		if (score == 0) return "--";
+		double avg = (double) score / count;
+		String total = String.format("%.2f", avg);
+		return total;
+	}
+
 	private Icon resizeImage(String imgPath, int width, int height) {
 		File file = new File(imgPath);
 		Image image = new ImageIcon(file.getPath()).getImage();

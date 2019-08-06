@@ -24,6 +24,7 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.host.frames.PropertyImagesFrame;
 import com.comtrade.view.user.host.frames.RoomFrame;
