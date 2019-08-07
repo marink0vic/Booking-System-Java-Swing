@@ -152,6 +152,7 @@ public class Broker implements IBroker {
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
+		if (wrapper.getProperty() == null) return;
 		int idProperty = wrapper.getProperty().getIdProperty();
 		wrapper.setRooms(returnRoomAndRoomInfo(idProperty));
 		wrapper.setImages(returnPropertyImages(idProperty));

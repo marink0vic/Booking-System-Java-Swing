@@ -26,8 +26,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.RoomTypeConstants;
 import com.comtrade.domain.RoomType;
+import javax.swing.border.LineBorder;
 
 public class RoomTypePanel extends JPanel {
 
@@ -108,6 +110,13 @@ public class RoomTypePanel extends JPanel {
 		addRoomType.add(lblPricePerNight);
 		
 		tfPrice = new JTextField();
+		tfPrice.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				tfPrice.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		tfPrice.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		tfPrice.setForeground(new Color(71, 71, 71));
 		tfPrice.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfPrice.setColumns(10);
@@ -118,14 +127,23 @@ public class RoomTypePanel extends JPanel {
 		btnAddRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAddRoom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String typeOfRoom = String.valueOf(comboRoomType.getSelectedItem());
-				if (!listContains(typeOfRoom)) {
-					RoomType roomType = createRoomType(typeOfRoom);
-					listOfTypes.add(roomType);
-					fillTable();
-					switchPanel(moreRoomType);
+				if (tfPrice.getText().length() != 0) {
+					String typeOfRoom = String.valueOf(comboRoomType.getSelectedItem());
+					if (!listContains(typeOfRoom)) {
+						try {
+							RoomType roomType = createRoomType(typeOfRoom);
+							listOfTypes.add(roomType);
+							fillTable();
+							switchPanel(moreRoomType);
+						} catch (NumberFormatException e) {
+							JOptionPane.showMessageDialog(null, "Please insert correct data");
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "You have already chosen that room type");
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "You have already chosen that room type");
+					tfPrice.setBorder(new LineBorder(ColorConstants.RED));
+					JOptionPane.showMessageDialog(null, "You can't leave empty fields");
 				}
 			}
 		});
@@ -234,9 +252,15 @@ public class RoomTypePanel extends JPanel {
 		   roomPanel.setHeaderValue(listOfTypes.get(0).getRoomType());
 	}
 	
-	private RoomType createRoomType(String typeOfRoom) {
+	private RoomType createRoomType(String typeOfRoom) throws NumberFormatException {
 		int numOfRooms = (Integer) spinner.getValue();
-		Double pricePerNight = Double.valueOf(tfPrice.getText());
+		Double pricePerNight;
+		try {
+			pricePerNight = Double.valueOf(tfPrice.getText());
+		} catch (NumberFormatException e) {
+			tfPrice.setBorder(new LineBorder(ColorConstants.RED));
+			throw new NumberFormatException();
+		}
 		RoomType roomType = new RoomType(typeOfRoom, numOfRooms, pricePerNight);
 		return roomType;
 	}

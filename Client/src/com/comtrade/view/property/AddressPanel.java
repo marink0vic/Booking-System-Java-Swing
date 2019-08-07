@@ -170,9 +170,13 @@ public class AddressPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (checkFields()) {
-					createAddress();
-					updateUI(lblPropertyInfo);
-					switchPanel(basicInfoPanel);
+					try {
+						createAddress();
+						updateUI(lblPropertyInfo);
+						switchPanel(basicInfoPanel);
+					} catch (NumberFormatException n) {
+						JOptionPane.showMessageDialog(null, "Please insert correct data");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "You can't leave empty fields");
 				}
@@ -217,12 +221,18 @@ public class AddressPanel extends JPanel {
 		return counter == 0;
 	}
 
-	private void createAddress() {
+	private void createAddress() throws NumberFormatException {
 		String street = tfStreet.getText();
 		String num = tfNumber.getText();
 		String city = (String) comboCities.getSelectedItem();
-		int zip = Integer.parseInt(tfZip.getText());
 		double[] coordinates = getCoordinates();
+		int zip;
+		try {
+			zip = Integer.parseInt(tfZip.getText());
+		} catch (NumberFormatException e) {
+			tfZip.setBorder(new LineBorder(ColorConstants.RED));
+			throw new NumberFormatException();
+		}
 		
 		address.setIdCountry(idCountry);
 		address.setStreet(street);

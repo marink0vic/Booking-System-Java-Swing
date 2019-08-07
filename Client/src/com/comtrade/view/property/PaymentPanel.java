@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -166,7 +167,11 @@ public class PaymentPanel extends JPanel {
 		btnFinishRegistration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				preparePaymentList();
-				registerProperty();
+				if (paymentList.size() == 0) {
+					JOptionPane.showMessageDialog(null, "You have to select at least one payment method");
+				} else {
+					registerProperty();
+				}
 			}
 		});
 		btnFinishRegistration.addMouseListener(new MouseAdapter() {
