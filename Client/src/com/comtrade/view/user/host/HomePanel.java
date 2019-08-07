@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
@@ -236,7 +236,7 @@ public class HomePanel extends JPanel {
 
 	private void addAddressLabelValues() {
 		lblPropertyName.setText(propertyWrapper.getProperty().getName());
-		Address a = propertyWrapper.getAddress();
+		Location a = propertyWrapper.getAddress();
 		
 		String countryName = propertyWrapper.getCountry().getName();
 		String addressText = a.getStreet() + " " + a.getNumber() + ", " + a.getZipCode() + " " + a.getCity() + ", " + countryName; 

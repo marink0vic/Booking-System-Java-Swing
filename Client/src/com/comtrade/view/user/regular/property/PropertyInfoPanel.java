@@ -25,7 +25,7 @@ import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
@@ -47,7 +47,7 @@ public class PropertyInfoPanel extends JPanel {
 	private User user;
 	private PropertyWrapper propertyWrapper;
 	private Property property;
-	private Address address;
+	private Location address;
 	private List<PropertyImage> propertyImages;
 	
 	private JLabel lblMainImage;

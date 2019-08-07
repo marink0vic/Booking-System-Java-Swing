@@ -12,7 +12,7 @@ import java.util.Map;
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.constants.ImageFolder;
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.PaymentProperty;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
@@ -33,11 +33,11 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
 		User user = wrapper.getUser();
 		
-		Address address = saveAddress(wrapper.getAddress());
+		Location address = saveAddress(wrapper.getAddress());
 		wrapper.setAddress(address);
 
 		Property property = wrapper.getProperty();
-		property.setIdAddress(address.getIdAddress());
+		property.setIdLocation(address.getIdLocation());
 		property = saveProperty(property);
 		wrapper.setProperty(property);
 		
@@ -122,8 +122,8 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		return (Property) ib.save(property);
 	}
 
-	private Address saveAddress(Address address) throws SQLException {
-		return (Address) ib.save(address);
+	private Location saveAddress(Location address) throws SQLException {
+		return (Location) ib.save(address);
 	}
 
 }

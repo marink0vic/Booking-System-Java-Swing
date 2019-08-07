@@ -14,7 +14,7 @@ import java.util.Map;
 
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
@@ -152,6 +152,7 @@ public class Broker implements IBroker {
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);
+		if (wrapper.getProperty() == null) return;
 		int idProperty = wrapper.getProperty().getIdProperty();
 		wrapper.setRooms(returnRoomAndRoomInfo(idProperty));
 		wrapper.setImages(returnPropertyImages(idProperty));
@@ -163,8 +164,8 @@ public class Broker implements IBroker {
 
 
 	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
-		String sql = "SELECT * FROM property JOIN address "
-				+ "ON property.id_address = address.id_address "
+		String sql = "SELECT * FROM property JOIN location "
+				+ "ON property.id_location = location.id_location "
 				+ "WHERE property.id_user = " + wrapper.getUser().getIdUser();
 		
 		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
@@ -172,33 +173,33 @@ public class Broker implements IBroker {
 		
 		if (resultSet.next()) {
 			int idProperty = resultSet.getInt("id_property");
-			int idAddress = resultSet.getInt("id_address");
+			int idLocation = resultSet.getInt("id_location");
 			String type = resultSet.getString("type");
 			String name = resultSet.getString("name");
 			String phone = resultSet.getString("phone_number");
 			int rating = resultSet.getInt("rating");
-			double latitude = resultSet.getDouble("latitude");
-			double longitude = resultSet.getDouble("longitude");
 			String description = resultSet.getString("description");
 			String created = resultSet.getString("created");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
 	
-			Property property = new Property(wrapper.getUser().getIdUser(), idAddress, type, name, phone, rating, description);
+			Property property = new Property(wrapper.getUser().getIdUser(), idLocation, type, name, phone, rating, description);
 			property.setIdProperty(idProperty);
-			property.setLatitude(latitude);
-			property.setLongitude(longitude);
 			property.setCreated(dateTime);
 			
 			int idCountry = resultSet.getInt("id_country");
 			String street = resultSet.getString("street");
-			int number = resultSet.getInt("number");
+			String number = resultSet.getString("number");
 			String city = resultSet.getString("city");
 			int zip = resultSet.getInt("post_or_zipcode");
-			Address address = new Address(idCountry, street, number, city, zip);
-			address.setIdAddress(idAddress);
+			double latitude = resultSet.getDouble("latitude");
+			double longitude = resultSet.getDouble("longitude");
+			Location location = new Location(idCountry, street, number, city, zip);
+			location.setIdLocation(idLocation);
+			location.setLatitude(latitude);
+			location.setLongitude(longitude);
 			
-			wrapper.setAddress(address);
+			wrapper.setAddress(location);
 			wrapper.setProperty(property);
 		}
 		

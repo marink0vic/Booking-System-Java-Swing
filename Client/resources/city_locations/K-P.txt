@@ -1,0 +1,375 @@
+Kazakhstan;Almaty;43.2500000;76.9499969
+Kazakhstan;Qaraghandy;49.7988889;73.0994415
+Kazakhstan;Karagandy;50.0666667;54.8666649
+Kazakhstan;Shymkent;42.3000000;69.5999985
+Kazakhstan;Taraz;42.9000000;71.3666687
+Kazakhstan;Astana;51.1811111;71.4277802
+Kazakhstan;Pavlodar;52.3000000;76.9499969
+Kazakhstan;Kyzylorda;44.8527778;65.5091629
+Kazakhstan;Semipalatinsk;50.4111111;80.2275009
+Kazakhstan;Aqtobe;50.2796868;57.2071838
+Kazakhstan;Qostanay;53.1666667;63.5833321
+Kenya;Nairobi;-1.2833333;36.8166656
+Kenya;Mombasa;-4.0500000;39.6666679
+Kenya;Nakuru;-0.2833333;36.0666656
+Kenya;Eldoret;0.5166667;35.2833328
+Kenya;Kisumu;-0.1000000;34.7500000
+Kenya;Thika;-1.0332596;37.0693283
+Kenya;Kitale;1.0166667;35.0000000
+Kenya;Malindi;-3.2166667;40.1166649
+Kenya;Garissa;-0.4569444;39.6583328
+Kenya;Kakamega;0.2833333;34.7500000
+Kenya;Bungoma;0.5666667;34.5666656
+Kenya;Nyeri;-0.4166667;36.9500008
+Kenya;Meru;0.0500000;37.6500015
+Kenya;Kilifi;-3.6333333;39.8499985
+Kenya;Wajir;1.7472222;40.0688896
+Korea_south;Seoul;37.5663889;126.9997253
+Korea_south;Pusan;35.1027778;129.0402832
+Korea_south;Taegu;35.8702778;128.5911102
+Korea_south;Taejon;36.3213889;127.4197235
+Korea_south;Kwangju;35.1547222;126.9155579
+Korea_south;Suwon;37.2841667;127.0191650
+Korea_south;Songnam;37.4386111;127.1377792
+Korea_south;Ulsan;35.5372222;129.3166656
+Korea_south;Chonju;35.8219444;127.1488876
+Korea_south;Ansan;37.3236111;126.8219452
+Korea_south;Anyang;37.3925000;126.9269409
+Korea_south;Uijongbu;37.7486111;127.0388870
+Korea_south;Kwangmyong;37.4772222;126.8663864
+Korea_south;Kimhae;35.2341667;128.8811035
+Korea_south;Masan;35.2080556;128.5724945
+Korea_south;Yosu;34.7441667;127.7377777
+Kuwait;As Salimiyah;29.3338889;48.0761108
+Kuwait;Sabah as Salim;29.2572222;48.0572205
+Kuwait;Al Farwaniyah;29.2775000;47.9586105
+Kuwait;Al Fuhayhil;29.0825000;48.1302795
+Kuwait;Kuwait;29.3697222;47.9783325
+Kuwait;Ar Riqqah;29.1458333;48.0947227
+Kuwait;Salwa;29.2958333;48.0786095
+Kuwait;Al Manqaf;29.0961111;48.1327782
+Kuwait;Ar Rabiyah;29.2950000;47.9330559
+Latvia;Riga;56.9500000;24.1000004
+Latvia;Daugavpils;55.8833333;26.5333328
+Latvia;Vec-Liepaja;56.5333333;21.0166664
+Latvia;Liepaja;56.5166667;21.0166664
+Latvia;Jelgava;56.6500000;23.7127781
+Latvia;Jurmala;56.9608333;23.7500000
+Latvia;Ventspils;57.3894444;21.5605564
+Latvia;Rezekne;56.5000000;27.3166676
+Latvia;Jekabpils;56.4833333;25.8500004
+Latvia;Valmiera;57.5359155;25.4244232
+Latvia;Ogre;56.8166667;24.6000004
+Latvia;Tukums;56.9669444;23.1552773
+Lebanon;Beirut;33.8719444;35.5097237
+Lebanon;Tripoli;34.4366667;35.8497238
+Lebanon;Sidon;33.5630556;35.3688889
+Lebanon;Tyre;33.2733333;35.1938896
+Lebanon;Habbouch;33.4075000;35.4827766
+Lebanon;Jounie;33.9808333;35.6177788
+Lebanon;Zahle;33.8497222;35.9041672
+Lebanon;Baalbek;34.0058333;36.2180557
+Lebanon;Jbail;34.1211111;35.6480560
+Lebanon;Batroun;34.2552778;35.6580544
+Lebanon;Ain Ebel;33.1102269;35.4025078
+Lebanon;Cheikhlar;34.6211111;36.2730560
+Malawi;Antananarivo;-18.9166667;47.5166664
+Malawi;Toamasina;-18.1666667;49.3833351
+Malawi;Fianarantsoa;-21.4333333;47.0833321
+Malawi;Mahajanga;-15.7166667;46.3166656
+Malawi;Toliara;-23.3500000;43.6666679
+Malawi;Antsiranana;-12.2666667;49.2833328
+Malawi;Antanifotsy;-19.6500000;47.3166656
+Malawi;Ambovombe;-25.1666667;46.0833321
+Malawi;Amparafaravola;-17.5833333;48.2166672
+Malawi;Fort Dauphin;-25.0318335;46.9998131
+Malawi;Ambatondrazaka;-17.8333333;48.4166679
+Malawi;Mananara Avaratra;-16.1666667;49.7666664
+Malawi;Soavinandriana;-19.1666667;46.7333336
+Malawi;Mahanoro;-19.9000000;48.7999992
+Malawi;Soanierana Ivongo;-16.9166667;49.5833321
+Malaysia;Lilongwe;-13.9833333;33.7833328
+Malaysia;Blantyre;-15.7833333;35.0000000
+Malaysia;Zomba;-15.3833333;35.3333321
+Malaysia;Kasungu;-13.0333333;33.4833336
+Malaysia;Mangochi;-14.4666667;35.2666664
+Malaysia;Karonga;-9.9333333;33.9333344
+Malaysia;Salima;-13.7833333;34.4333344
+Malaysia;Nkhotakota;-12.9166667;34.2999992
+Malaysia;Liwonde;-15.0666667;35.2166672
+Malaysia;Nsanje;-16.9166667;35.2666664
+Malaysia;Rumphi;-11.0166667;33.8666649
+Maldives;Kuala Lumpur;3.1666667;101.6999969
+Maldives;Klang;3.0333333;101.4499969
+Maldives;Kampung Baru Subang;3.1500000;101.5333328
+Maldives;Johor Bahru;1.4666667;103.7500000
+Maldives;Ipoh;4.5833333;101.0833359
+Maldives;Kuching;1.5500000;110.3333359
+Maldives;Petaling Jaya;3.1072633;101.6067123
+Maldives;Shah Alam;3.0850656;101.5328140
+Maldives;Kota Kinabalu;5.9833333;116.0666656
+Maldives;Sandakan;5.8333333;118.1166687
+Maldives;Seremban;2.7166667;101.9333344
+Maldives;Kuantan;3.8000000;103.3333359
+Maldives;Tawau;4.2500000;117.9000015
+Maldives;Kuala Terengganu;5.3333333;103.1333313
+Mali;Male;4.1771077;73.5098648
+Mali;Hithadhoo;-0.6000000;73.0833359
+Mali;Kulhudhuffushi;6.6220656;73.0699844
+Mali;Thinadhoo;0.5333333;72.9333344
+Mali;Naifaru;5.4333333;73.3333359
+Mali;Dhidhdhoo;6.8833333;73.0999985
+Mali;Eydhafushi;5.1166667;73.0333328
+Mali;Mahibadhoo;3.7833333;72.9666672
+Mali;Midu;-0.5833333;73.2333298
+Mali;Manadhoo;5.7666667;73.3833313
+Mali;Kudahuvadhoo;2.6666667;72.9000015
+Mali;Ugoofaaru;5.6666667;73.0000000
+Mali;Funadhoo;6.1500000;73.2666702
+Mali;Muli;2.9166667;73.5666656
+Mali;Hithadhoo;1.7833333;73.3833313
+Mali;Felidhoo;3.4833333;73.5333328
+Mali;Magoodhoo;3.1000000;72.9666672
+Mali;Nolhivaranfaru;6.7017755;73.1184769
+Malta;Bamako;12.6500000;-8.0000000
+Malta;Sikasso;11.3166667;-5.6666665
+Malta;Mopti;14.4930237;-4.1942024
+Malta;Koutiala;12.3833333;-5.4666667
+Malta;Kayes Ndi;14.4666667;-11.4333334
+Mexico;Mexico City;19.4341667;-99.1386108
+Mexico;Ecatepec;19.6011111;-99.0524979
+Mexico;Guadalajara;20.6666667;-103.3333359
+Mexico;Ciudad Juarez;31.7333333;-106.4833298
+Mexico;Puebla de Zaragoza;19.0500000;-98.1999969
+Mexico;Tijuana;32.5333333;-117.0166702
+Mexico;Ciudad Nezahualcoyotl;19.4136111;-99.0330582
+Mexico;Monterrey;25.6666667;-100.3166656
+Mexico;Leon;21.1166667;-101.6666641
+Mexico;Zapopan;20.7166667;-103.4000015
+Mexico;Naucalpan de Juarez;19.4785079;-99.2396317
+Mexico;Guadalupe;25.6833333;-100.2500000
+Mexico;Merida;20.9666667;-89.6166687
+Mexico;Tlalnepantla;19.5269444;-99.2216644
+Mexico;Chihuahua;28.6333333;-106.0833359
+Mexico;San Luis Potosi;22.1500000;-100.9833298
+Mexico;Aguascalientes;21.8833333;-102.3000031
+Mexico;Acapulco de Juarez;16.8633624;-99.8900986
+Mexico;Saltillo;25.4166667;-101.0000000
+Mexico;Queretaro;20.6000000;-100.3833313
+Mexico;Mexicali;32.6519444;-115.4683304
+Moldova;Chisinau;47.0055556;28.8575001
+Moldova;Tiraspol;46.8402778;29.6433334
+Moldova;Balti;47.7616667;27.9288883
+Moldova;Tighina;46.8305556;29.4711113
+Moldova;Stefan-Voda;46.5152778;29.6630554
+Moldova;Ribnita;47.7663889;29.0011120
+Moldova;Cahul;45.9075000;28.1944447
+Moldova;Ungheni;47.2041667;27.7958336
+Moldova;Soroca;48.1558333;28.2975006
+Moldova;Orhei;47.3830556;28.8230553
+Moldova;Dubasari;47.2630556;29.1608334
+Moldova;Comrat;46.3002778;28.6572227
+Moldova;Edinet;48.1680556;27.3050003
+Monaco;Ulaanbaatar;47.9166667;106.9166641
+Monaco;Erdenet;49.0333333;104.0833359
+Monaco;Darhan;49.4866667;105.9227753
+Monaco;Hovd;48.0055556;91.6419449
+Monaco;OElgiy;48.9683333;89.9625015
+Monaco;Ulaangom;49.9811111;92.0666656
+Monaco;Hovd;44.6702399;102.1749115
+Monaco;Moron;49.6341667;100.1624985
+Monaco;Suhbaatar;50.2313889;106.2077789
+Monaco;Bayanhongor;46.7166667;100.1166687
+Monaco;Dzuunharaa;48.8522914;106.4578629
+Monaco;Dzuunmod;47.7069444;106.9527740
+Monaco;Bulgan;48.8125000;103.5347214
+Monaco;Baruun-Urt;46.6805556;113.2791672
+Monaco;Mandalgovi;45.7625000;106.2708359
+Monaco;Dalandzadgad;43.5708333;104.4250031
+Monaco;Ondorhaan;47.3194444;110.6555557
+Monaco;Choyr;46.3611111;108.3611145
+Monaco;Tosontsengel;48.7566667;98.2838898
+Monaco;Harhorin;47.1975279;102.8237915
+Monaco;Tsetserleg;47.4750000;101.4541702
+Monaco;Choybalsan;48.0666667;114.5000000
+Monaco;Ereencav;49.8806989;115.7252579
+Morocco;Casablanca;33.5900000;-7.6100001
+Morocco;Rabat;34.0200000;-6.8299999
+Morocco;Fes;34.0500000;-4.9800000
+Morocco;Marrakech;31.6300000;-8.0000000
+Morocco;Agadir;30.4000000;-9.6000004
+Morocco;Tangier;35.7800000;-5.8099999
+Morocco;Meknes;33.9000000;-5.5500002
+Morocco;Oujda;34.6800000;-1.9100000
+Morocco;Kenitra;34.2600000;-6.5700002
+Morocco;Tetouan;35.5700000;-5.3699999
+Morocco;Safi;32.3000000;-9.2299995
+Morocco;Khouribga;32.8800000;-6.9000001
+Morocco;Beni Mellal;32.3300000;-6.3499999
+Morocco;El Jadida;33.2500000;-8.5000000
+Myanmar;Rangoon;16.8052778;96.1561127
+Myanmar;Mandalay;22.0000000;96.0833359
+Myanmar;Mawlamyine;16.4913889;97.6255569
+Myanmar;Bago;17.3366667;96.4797211
+Myanmar;Pathein;16.7833333;94.7333298
+Myanmar;Monywa;22.1166667;95.1333313
+Myanmar;Akyab;20.1500000;92.9000015
+Myanmar;Meiktila;20.8666667;95.8666687
+Myanmar;Myeik;12.4333333;98.5999985
+Myanmar;Taunggyi;20.7833333;97.0333328
+Myanmar;Myingyan;21.4666667;95.3833313
+Myanmar;Dawei;14.0833333;98.1999969
+Myanmar;Prome;18.8166667;95.2166672
+Myanmar;Hinthada;17.6333333;95.4666672
+Netherlands;Amsterdam;52.3730840;4.8999023
+Netherlands;Rotterdam;51.9225000;4.4791670
+Netherlands;The Hague;52.0766670;4.2986112
+Netherlands;Utrecht;52.0908330;5.1222219
+Netherlands;Eindhoven;51.4408330;5.4777780
+Netherlands;Tilburg;51.5555149;5.0913048
+Netherlands;Groningen;53.2191670;6.5666671
+Netherlands;Almere Stad;52.3702542;5.2141285
+Netherlands;Breda;51.5865631;4.7759628
+Netherlands;Nijmegen;51.8425000;5.8527780
+Netherlands;Enschede;52.2183330;6.8958330
+Netherlands;Haarlem;52.3808387;4.6368313
+Netherlands;Arnhem;51.9800000;5.9111109
+Netherlands;Zaanstad;52.4500000;4.8333335
+Netherlands;Amersfoort;52.1550000;5.3874998
+Netherlands;Apeldoorn;52.2100000;5.9694438
+Netherlands;Hoofddorp;52.3025000;4.6888890
+Netherlands;Maastricht;50.8483330;5.6888890
+Netherlands;Leiden;52.1583330;4.4930558
+New_zealand;Auckland;-36.8666667;174.7666626
+New_zealand;Wellington;-41.2785362;174.7766418
+New_zealand;Christchurch;-43.5333333;172.6333313
+New_zealand;Manakau;-40.7166667;175.2166595
+New_zealand;North Shore;-36.8000000;174.7500000
+New_zealand;Waitakere;-36.8500000;174.5500031
+New_zealand;Hamilton;-37.7833333;175.2833405
+New_zealand;Dunedin;-45.8741595;170.5036163
+New_zealand;Tauranga;-37.6861111;176.1666718
+New_zealand;Lower Hutt;-41.2166667;174.9166718
+New_zealand;Palmerston North;-40.3500000;175.6166687
+New_zealand;Rotorua;-38.1387422;176.2451630
+New_zealand;Hastings;-39.6381000;176.8491821
+New_zealand;Napier;-39.4833333;176.9166718
+Nigeria;Niamey;13.5166667;2.1166668
+Nigeria;Zinder;13.8000000;8.9833336
+Nigeria;Maradi;13.4916667;7.0963888
+Nigeria;Alarsas;17.0166667;8.0000000
+Nigeria;Tahoua;14.8902778;5.2677779
+Nigeria;Dosso;13.0444444;3.1947222
+Nigeria;Birnin Konni;13.8000000;5.2500000
+Nigeria;Tessaoua;13.7533333;7.9863887
+Nigeria;Gaya;11.8877778;3.4466667
+Nigeria;Dogondoutchi;13.6461111;4.0288887
+Nigeria;Diffa;13.3155556;12.6088886
+Nigeria;Ayorou;14.7313889;0.9194444
+Nigeria;Madaoua;14.0758333;5.9586110
+Nigeria;Mayahi;13.9577778;7.6683335
+Nigeria;Tera;14.0105556;0.7530556
+Nigeria;Miria;13.7141667;9.1505556
+Nigeria;Tibiri;13.5705556;7.0444446
+Nigeria;Dakoro;14.5105556;6.7649999
+Nigeria;Magaria;12.9975000;8.9105558
+Nigeria;Tillaberi;14.2116667;1.4530556
+Norway;Pyongyang;39.0194444;125.7547226
+Norway;Hamhung;39.9183333;127.5363922
+Norway;Hungnam;39.8316667;127.6186142
+Norway;Kaesong;37.9708333;126.5544434
+Norway;Wonsan;39.1527778;127.4436111
+Norway;Chongjin;41.7955556;129.7758331
+Norway;Sinuiju;40.1005556;124.3980560
+Norway;Haeju;38.0405556;125.7147217
+Norway;Kanggye;40.9872222;126.6113892
+Norway;Sariwon;38.5072222;125.7558365
+Norway;Songnim;38.7541667;125.6449966
+Norway;Hyesan-dong;41.4000000;128.1833344
+Norway;Sokko-dong;40.9561111;126.5819473
+Norway;Yuktae-dong;40.0247222;128.1597290
+Norway;Hongwon;40.0252778;127.9558334
+Norway;Najin;42.2488889;130.3002777
+Norway;Ongjin;37.9347222;125.3619461
+Norway;Kilju;40.9641667;129.3277740
+Panama;Panama;8.9666667;-79.5333328
+Panama;San Miguelito;9.0333333;-79.5000000
+Panama;Tocumen;9.0833333;-79.3833313
+Panama;David;8.4333333;-82.4333344
+Panama;Arraijan;8.9500000;-79.6500015
+Panama;Colon;9.3591667;-79.9013901
+Panama;Las Cumbres;9.0833333;-79.5333328
+Panama;La Chorrera;8.8802778;-79.7833328
+Panama;Pacora;9.0833333;-79.2833328
+Panama;Santiago;8.1000000;-80.9833298
+Panama;Chitre;7.9666667;-80.4333344
+Panama;Vista Alegre;8.9333333;-79.6999969
+Panama;Chilibre;9.1500000;-79.6166687
+Panama;Cativa;9.3605556;-79.8436127
+Panama;Nuevo Arraijan;8.9166667;-79.7166672
+Panama;Changuinola;9.4333333;-82.5166702
+Panama;Alcaldediaz;9.1166667;-79.5500031
+Panama;Puerto Armuelles;8.2833333;-82.8666687
+Panama;La Cabima;9.1333333;-79.5333328
+Paraguay;Asuncion;-25.2666667;-57.6666679
+Paraguay;San Lorenzo;-25.3333333;-57.5333328
+Paraguay;Capiata;-25.3500000;-57.4166679
+Paraguay;Lambare;-25.3500000;-57.6500015
+Paraguay;Fernando de la Mora;-25.3166667;-57.5999985
+Paraguay;Limpio;-25.1833333;-57.5333328
+Paraguay;Nemby;-25.3666667;-57.5999985
+Paraguay;Encarnacion;-27.3333333;-55.9000015
+Paraguay;Colonia Mariano Roque Alonso;-25.1666667;-57.5499992
+Paraguay;Itaugua;-25.3833333;-57.3333321
+Paraguay;Villa Elisa;-25.3666667;-57.6166649
+Paraguay;San Antonio;-25.3833333;-57.6333351
+Paraguay;Caaguazu;-25.4500000;-56.0166664
+Paraguay;Presidente Franco;-25.5333333;-54.6166649
+Peru;Lima;-12.0500000;-77.0500031
+Peru;Arequipa;-16.3988889;-71.5350037
+Peru;Callao;-12.0666667;-77.1500015
+Peru;Trujillo;-8.1159943;-79.0299759
+Peru;Chiclayo;-6.7736111;-79.8416672
+Peru;Iquitos;-3.7480556;-73.2472229
+Peru;Huancayo;-12.0666667;-75.2333298
+Peru;Piura;-5.2000000;-80.6333313
+Peru;Chimbote;-9.0852778;-78.5783310
+Peru;Cusco;-13.5183333;-71.9780579
+Peru;Pucallpa;-8.3791474;-74.5538635
+Peru;Tacna;-18.0055556;-70.2483368
+Peru;Ica;-14.0680556;-75.7255554
+Peru;Juliaca;-15.5000000;-70.1333313
+Peru;Sullana;-4.9038889;-80.6852798
+Peru;Chincha Alta;-13.4500000;-76.1333313
+Peru;Huanuco;-9.9166667;-76.2333298
+Peru;Ayacucho;-13.1583333;-74.2238922
+Philippines;Manila;14.6041667;120.9822235
+Philippines;Davao;7.0730556;125.6127777
+Philippines;Cebu City;10.3111111;123.8916702
+Philippines;Antipolo;14.5863889;121.1752777
+Philippines;Zamboanga;6.9102778;122.0738907
+Philippines;Mansilingan;10.6311111;122.9788895
+Philippines;Cagayan de Oro;8.4822222;124.6472244
+Philippines;Dasmarinas;14.3294444;120.9366684
+Philippines;Iloilo;10.6969444;122.5644455
+Philippines;San Jose del Monte;14.8138889;121.0452805
+Philippines;Bacoor;14.4577778;120.9424973
+Philippines;Calamba;14.2116667;121.1652756
+Philippines;Santol;15.1622222;120.5674973
+Philippines;Mandaue City;10.3236111;123.9222260
+Poland;Warsaw;52.2500000;21.0000000
+Poland;Lodz;51.7500000;19.4666672
+Poland;Krakow;50.0833333;19.9166660
+Poland;Wroclaw;51.1000000;17.0333328
+Poland;Poznan;52.4166667;16.9666672
+Poland;Gdansk;54.3500000;18.6666660
+Poland;Szczecin;53.4293784;14.5529366
+Poland;Bydgoszcz;53.1500000;18.0000000
+Poland;Lublin;51.2500000;22.5666676
+Poland;Katowice;50.2666667;19.0166664
+Poland;Bialystok;53.1333333;23.1499996
+Poland;Gdynia;54.5000000;18.5499992
+Poland;Czestochowa;50.8000000;19.1166668
+Poland;Sosnowiec;50.3000000;19.1666660
+Poland;Radom;51.4166667;21.1499996
+Poland;Torun;53.0333333;18.6000004

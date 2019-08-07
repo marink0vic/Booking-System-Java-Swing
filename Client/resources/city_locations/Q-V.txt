@@ -1,0 +1,352 @@
+Qatar;Doha;25.2866667;51.5333328
+Qatar;Ar Rayyan;25.2919444;51.4244461
+Qatar;Umm Salal Muhammad;25.4169444;51.4038887
+Qatar;Al Wakrah;25.1677778;51.6069450
+Qatar;Al Khawr;25.6838889;51.5058327
+Qatar;Dukhan;25.4297222;50.7858315
+Qatar;Al Wukayr;25.1508333;51.5377769
+Qatar;Umm Bab;25.2141667;50.8072205
+Qatar;Al Ghuwayriyah;25.8297222;51.2452774
+Qatar;Al Jumayliyah;25.6094444;51.0922203
+Qatar;Fuwayrit;26.0216667;51.3669434
+Qatar;Abu Samrah;24.7483333;50.8400002
+Qatar;Al Kharrarah;24.9044444;51.1749992
+Romania;Bucharest;44.4333333;26.1000004
+Romania;Iasi;47.1666667;27.6000004
+Romania;Cluj-Napoca;46.7666667;23.6000004
+Romania;Timisoara;45.7494444;21.2272224
+Romania;Craiova;44.3166667;23.7999992
+Romania;Constanta;44.1833333;28.6499996
+Romania;Galati;45.4500000;28.0499992
+Romania;Brasov;45.6486084;25.6061268
+Romania;Ploiesti;44.9500000;26.0166664
+Romania;Braila;45.2666667;27.9833336
+Romania;Oradea;47.0666667;21.9333324
+Romania;Bacau;46.5666667;26.8999996
+Russia;Moscow;55.7522222;37.6155548
+Russia;Saint Petersburg;59.8944444;30.2641659
+Russia;Novosibirsk;55.0411111;82.9344406
+Russia;Yekaterinburg;56.8575000;60.6124992
+Russia;Nizhniy Novgorod;56.3286733;44.0020485
+Russia;Samara;53.2000000;50.1500015
+Russia;Omsk;55.0000000;73.4000015
+Russia;Rostov-na-Donu;47.2363889;39.7138901
+Russia;Chelyabinsk;55.1544444;61.4297218
+Russia;Ufa;54.7750000;56.0374985
+Russia;Volgograd;48.8047222;44.5858345
+Russia;Krasnoyarsk;56.0097222;92.7916641
+Russia;Saratov;51.5666667;46.0333328
+Russia;Voronezh;51.6663889;39.1699982
+Russia;Krasnodar;45.0327778;38.9769440
+Russia;Izhevsk;56.8500000;53.2333336
+Russia;Barnaul;53.3600000;83.7600021
+Russia;Vladivostok;43.1056202;131.8735352
+Russia;Irkutsk;52.2977778;104.2963867
+Russia;Khabarovsk;48.4808333;135.0927734
+Russia;Khabarovsk Vtoroy;48.4430556;135.1355591
+Russia;Orenburg;51.7847222;55.0986099
+Russia;Novokuznetsk;53.7500000;87.0999985
+Russia;Lipetsk;52.6186111;39.5688896
+Russia;Penza;53.1958333;45.0000000
+Senegal;Dakar;14.6951119;-17.4438858
+Senegal;Grand Dakar;14.7088889;-17.4552784
+Senegal;Thies Nones;14.7833333;-16.9666672
+Senegal;Saint-Louis;16.0179310;-16.4896202
+Senegal;Ziguinchor;12.5833333;-16.2719440
+Senegal;Tiebo;14.6333333;-16.2333336
+Senegal;Mbake;14.7903186;-15.9080315
+Senegal;Kolda;12.8833333;-14.9499998
+Senegal;Richard Toll;16.4666667;-15.6833334
+Senegal;Joal-Fadiout;14.1666667;-16.8333340
+Senegal;Dara;15.3484448;-15.4799290
+Senegal;Ndibene Dahra;15.3333333;-15.4833336
+Senegal;Bignona;12.8102778;-16.2263889
+Serbia;Belgrade;44.818611;20.468056
+Serbia;Niš;43.323356;21.901779
+Serbia;Novi Sad;45.259272;19.829056
+Serbia;Kragujevac;44.010876;20.909029
+Serbia;Subotica;46.100972;19.668233
+Serbia;Zrenjanin;45.38182;20.395396
+Serbia;Cuprija;43.928388;21.374491
+Serbia;Krupanj;44.367619;19.36327
+Serbia;Arilje;43.754987;20.097004
+Serbia;Pancevo;44.87131;20.644304
+Serbia;Coka;45.941516;20.146023
+Serbia;Bogatic;44.8376;19.480699
+Serbia;Sombor;45.774239;19.115068
+Serbia;Šabac;44.753841;19.687569
+Serbia;Koceljeva;44.468716;19.82139
+Serbia;Požega;43.845852;20.036774
+Serbia;Kovacica;45.110931;20.623601
+Serbia;Lebane;42.917129;21.729449
+Serbia;Ljig;44.226611;20.239352
+Serbia;Babušnica;43.067962;22.411508
+Serbia;Aleksinac;43.541667;21.707778
+Slovenia;Ljubljana;46.0552778;14.5144444
+Slovenia;Maribor;46.5547222;15.6466665
+Slovenia;Celje;46.2361111;15.2674999
+Slovenia;Kranj;46.2411111;14.3616667
+Slovenia;Velenje;46.3591667;15.1102781
+Slovenia;Koper;45.5469444;13.7294445
+Slovenia;Novo Mesto;45.7925000;15.1647224
+Slovenia;Ptuj;46.4213889;15.8697224
+Slovenia;Trbovlje;46.1550000;15.0533333
+Slovenia;Podhom;46.4000000;14.1000004
+Slovenia;Nova Gorica;45.9613889;13.6436110
+Slovenia;Kamnik;46.2197222;14.6094446
+Slovenia;Jesenice;46.4305556;14.0669441
+Slovenia;Murska Sobota;46.6625000;16.1663895
+Slovenia;Skofja Loka;46.1672222;14.3088884
+Slovenia;Domzale;46.1380556;14.5977774
+Slovenia;Izola;45.5369444;13.6619444
+Slovenia;Kocevje;45.6433333;14.8633337
+Slovenia;Postojna;45.7769444;14.2166672
+South_africa;Cape Town;-33.9166667;18.4166660
+South_africa;Durban;-29.8500000;31.0166664
+South_africa;Johannesburg;-26.2000000;28.0833340
+South_africa;Soweto;-26.2666667;27.8666668
+South_africa;Pretoria;-25.7069444;28.2294445
+South_africa;Port Elizabeth;-33.9666667;25.5833340
+South_africa;Pietermaritzburg;-29.6166667;30.3833332
+South_africa;Benoni;-26.1833333;28.3166676
+South_africa;Tembisa;-25.9988889;28.2269440
+South_africa;Vereeniging;-26.6666667;27.9333324
+South_africa;Bloemfontein;-29.1333333;26.2000008
+South_africa;Boksburg;-26.2166667;28.2500000
+South_africa;Welkom;-27.9833333;26.7333336
+South_africa;Newcastle;-27.7500000;29.9333324
+South_africa;Krugersdorp;-26.1000000;27.7666664
+South_africa;Botshabelo;-29.2333333;26.7333336
+Spain;Madrid;40.4165021;-3.7025642
+Spain;Barcelona;41.3887869;2.1589851
+Spain;Valencia;39.4697524;-0.3773868
+Spain;Sevilla;37.3772222;-5.9869442
+Spain;Zaragoza;41.6560643;-0.8773398
+Spain;Malaga;36.7201559;-4.4203448
+Spain;Murcia;37.9833333;-1.1166667
+Spain;Las Palmas de Gran Canaria;28.1000000;-15.4166670
+Spain;Palma;39.5693908;2.6502371
+Spain;Bilbao;43.2627062;-2.9252815
+Spain;Valladolid;41.6500000;-4.7166667
+Spain;Cordoba;37.8833333;-4.7666669
+Spain;Alacant;38.3451735;-0.4814887
+Spain;Vigo;42.2333333;-8.7166672
+Spain;Gijon;43.5411111;-5.6644444
+Spain;Eixample;41.3889553;2.1617899
+Spain;A Coruna;43.3713496;-8.3960009
+Spain;Granada;37.1881684;-3.6066699
+Spain;Vitoria-Gasteiz;42.8500000;-2.6666667
+Sri_lanka;Colombo;6.9319444;79.8477783
+Sri_lanka;Galkissa;6.8333333;79.8666687
+Sri_lanka;Moratuwa;6.7733333;79.8824997
+Sri_lanka;Jaffna;9.6666667;80.0000000
+Sri_lanka;Negombo;7.2086111;79.8358307
+Sri_lanka;Pita Kotte;6.8833333;79.9000015
+Sri_lanka;Sri Jayewardenepura Kotte;6.9027778;79.9083328
+Sri_lanka;Kandy;7.2963889;80.6350021
+Sri_lanka;Trincomalee;8.5666667;81.2333298
+Sri_lanka;Kalmunai;7.4166667;81.8166656
+Sri_lanka;Galle;6.0536111;80.2116699
+Sri_lanka;Point Pedro;9.8166667;80.2333298
+Sri_lanka;Batticaloa;7.7166667;81.6999969
+Sri_lanka;Katunayaka;7.1647222;79.8730545
+Sri_lanka;Valvedditturai;9.8166667;80.1666641
+Sri_lanka;Battaramulla;6.9000000;79.9166641
+Sri_lanka;Dambulla;7.8600000;80.6516647
+Sri_lanka;Maharagama;6.8461111;79.9280548
+Sri_lanka;Kotikawatta;6.9333333;79.9166641
+Sri_lanka;Anuradhapura;8.3564746;80.4172592
+Sri_lanka;Vavuniya;8.7500000;80.5000000
+Sri_lanka;Kolonnawa;6.9316667;79.8944473
+Sri_lanka;Hendala;6.9838889;79.8763885
+Sri_lanka;Ratnapura;6.6827778;80.3991699
+Sri_lanka;Puttalam;8.0333333;79.8166656
+Sri_lanka;Badulla;6.9833333;81.0500031
+Sri_lanka;Welisara;7.0333333;79.9000015
+Sri_lanka;Kalutara;6.5761111;79.9658356
+Sweden;Stockholm;59.3325765;18.0649033
+Sweden;Goteborg;57.7071623;11.9667931
+Sweden;Malmoe;55.6058691;13.0007315
+Sweden;Uppsala;59.8585015;17.6454277
+Sweden;Kista;59.4031612;17.9447937
+Sweden;Vasteras;59.6161738;16.5527592
+Sweden;Orebro;59.2741206;15.2066011
+Sweden;Linkoping;58.4166667;15.6166668
+Sweden;Helsingborg;56.0467266;12.6943693
+Sweden;Huddinge;59.2370497;17.9819164
+Sweden;Jonkoping;57.7814509;14.1561842
+Sweden;Norrkoping;58.5941863;16.1826038
+Sweden;Lund;55.7028025;13.1927347
+Sweden;Umea;63.8284245;20.2597218
+Switzerland;Zurich;47.3666667;8.5500002
+Switzerland;Geneve;46.2022157;6.1456919
+Switzerland;Basel;47.5666667;7.5999999
+Switzerland;Bern;46.9480943;7.4474430
+Switzerland;Lausanne;46.5159963;6.6328239
+Switzerland;Winterthur;47.5000000;8.7500000
+Switzerland;Sankt Gallen;47.4297131;9.3761444
+Switzerland;Luzern;47.0504758;8.3063507
+Switzerland;Zuerich (Kreis 11)";"47.4232576;8.5216589
+Switzerland;Biel;47.1324032;7.2441101
+Switzerland;Zuerich (Kreis 3)";"47.3578517;8.5029612
+Switzerland;Zuerich (Kreis 9)";"47.3824493;8.4799318
+Switzerland;Thun;46.7500000;7.6166668
+Switzerland;Koniz;46.9243588;7.4145699
+Switzerland;La Chaux-de-Fonds;47.0999278;6.8258572
+Switzerland;Zuerich (Kreis 10)";"47.4077332;8.5004988
+Switzerland;Rapperswil;47.2255722;8.8222790
+Switzerland;Schaffhausen;47.7000000;8.6333332
+Thailand;Bangkok;13.7500000;100.5166702
+Thailand;Samut Prakan;13.5993364;100.5967560
+Thailand;Udon Thani;17.4075000;102.7930527
+Thailand;Chon Buri;13.3666667;100.9833298
+Thailand;Nakhon Ratchasima;14.9706567;102.1019516
+Thailand;Chiang Mai;18.7902778;98.9816666
+Thailand;Hat Yai;7.0166667;100.4666672
+Thailand;Pak Kret;13.9166667;100.5000000
+Thailand;Si Racha;13.1666667;100.9333344
+Thailand;Phra Pradaeng;13.6666667;100.5333328
+Thailand;Lampang;18.2983333;99.5072250
+Thailand;Khon Kaen;16.4333333;102.8333359
+Thailand;Surat Thani;9.1333333;99.3166656
+Thailand;Ban Rangsit;14.0166667;100.7333298
+Thailand;Ubon Ratchathani;15.2330556;104.8630524
+Thailand;Nakhon Si Thammarat;8.4333333;99.9666672
+Thailand;Changwat Rayong;12.6833333;101.2833328
+Thailand;Khlong Luang;14.0666667;100.6500015
+Thailand;Nakhon Pathom;13.8166667;100.0500031
+Thailand;Phitsanulok;16.8333333;100.2500000
+Tunisia;Tunis;36.8027778;10.1797218
+Tunisia;Sfax;34.7405556;10.7602777
+Tunisia;Sousse;35.8255556;10.6411114
+Tunisia;Midoun;33.8083333;10.9938889
+Tunisia;Kairouan;35.6744444;10.1016665
+Tunisia;Bizerte;37.2744444;9.8738890
+Tunisia;Gabes;33.8833333;10.1166668
+Tunisia;Kasserine;35.1672222;8.8288889
+Tunisia;Gafsa;34.4250000;8.7841663
+Tunisia;La Goulette;36.8180556;10.3050003
+Tunisia;Zarzis;33.5000000;11.1166668
+Tunisia;Monastir;35.7833333;10.8333330
+Tunisia;La Mohammedia;36.6769444;10.1555557
+Tunisia;Al Marsa;36.8781788;10.3246593
+Tunisia;Masakin;35.7333333;10.5833330
+Tunisia;Saqanis;35.7833333;10.8000002
+Tunisia;Houmt Souk;33.8747222;10.8591671
+Tunisia;Tataouine;32.9333333;10.4499998
+Tunisia;Douane;36.4447222;10.7508335
+Tunisia;Beja;36.7333333;9.1833334
+Turkey;Istanbul;41.0138430;28.9496613
+Turkey;Ankara;39.9272222;32.8644447
+Turkey;Izmir;38.4072222;27.1502781
+Turkey;Bursa;40.1916667;29.0611115
+Turkey;Adana;37.0016667;35.3288879
+Turkey;Gaziantep;37.0594444;37.3824997
+Turkey;Konya;37.8655556;32.4824982
+Turkey;Antalya;36.9125000;30.6897221
+Turkey;Eskisehir Ili;39.6666667;31.1666660
+Turkey;Diyarbakir;37.9188889;40.2105560
+Turkey;Kayseri;38.7322222;35.4852791
+Turkey;Mercin;36.7952647;34.6179199
+Turkey;Eskisehir;39.7766667;30.5205555
+Ukraine;Kiev;50.4333333;30.5166664
+Ukraine;Kharkiv;50.0000000;36.2500000
+Ukraine;Odesa;46.4774726;30.7326221
+Ukraine;Zaporizhzhya;47.8166667;35.1833344
+Ukraine;Kryvyy Rih;47.9166667;33.3499985
+Ukraine;Mykolayiv;46.9666667;32.0000000
+Ukraine;Makiyivka;48.0333333;37.9666672
+Ukraine;Vinnytsya;49.2333333;28.4833336
+Ukraine;Kherson;46.6333333;32.5999985
+Ukraine;Poltava;49.5833333;34.5666656
+Ukraine;Chernihiv;51.5000000;31.2999992
+United_kingdom;London;51.5084153;-0.1255327
+United_kingdom;Birmingham;52.4666667;-1.9166667
+United_kingdom;Glasgow;55.8333333;-4.2500000
+United_kingdom;Liverpool;53.4166667;-3.0000000
+United_kingdom;Leeds;53.7964813;-1.5478492
+United_kingdom;Sheffield;53.3829700;-1.4659023
+United_kingdom;Edinburgh;55.9500000;-3.2000000
+United_kingdom;Bristol;51.4500000;-2.5833333
+United_kingdom;Manchester;53.4809464;-2.2374344
+United_kingdom;Leicester;52.6333333;-1.1333333
+United_kingdom;Coventry;52.4065556;-1.5121651
+United_kingdom;Kingston upon Hull;53.7445995;-0.3352547
+United_kingdom;Cardiff;51.4800000;-3.1800001
+United_kingdom;Bradford;53.7833333;-1.7500000
+United_kingdom;Belfast;54.5833333;-5.9333334
+United_kingdom;Stoke-on-Trent;53.0000000;-2.1833334
+United_kingdom;Wolverhampton;52.5833333;-2.1333332
+United_kingdom;Plymouth;50.3715254;-4.1430473
+United_kingdom;Nottingham;52.9536023;-1.1504745
+United_kingdom;Southampton;50.9000000;-1.4000000
+United_kingdom;Reading;51.4333333;-1.0000000
+United_kingdom;Derby;52.9333333;-1.5000000
+United_states_of_america;New York City;40.7142691;-74.0059738
+United_states_of_america;Los Angeles;34.0522342;-118.2436829
+United_states_of_america;Chicago;41.8500330;-87.6500549
+United_states_of_america;Houston;29.7632836;-95.3632736
+United_states_of_america;Philadelphia;39.9523350;-75.1637878
+United_states_of_america;Phoenix;33.4483771;-112.0740356
+United_states_of_america;San Antonio;29.4241219;-98.4936295
+United_states_of_america;San Diego;32.7153292;-117.1572571
+United_states_of_america;Dallas;32.7830556;-96.8066635
+United_states_of_america;Detroit;42.3314270;-83.0457535
+United_states_of_america;San Jose;37.3393857;-121.8949585
+United_states_of_america;Jacksonville;30.3321838;-81.6556473
+United_states_of_america;Indianapolis;39.7683765;-86.1580429
+United_states_of_america;Columbus;39.9611755;-82.9987946
+United_states_of_america;San Francisco;37.7749295;-122.4194183
+United_states_of_america;Austin;30.2671530;-97.7430573
+United_states_of_america;Memphis;35.1495343;-90.0489807
+United_states_of_america;New South Memphis;35.0867579;-90.0567551
+United_states_of_america;Fort Worth;32.7254090;-97.3208466
+United_states_of_america;Baltimore;39.2903848;-76.6121902
+United_states_of_america;Charlotte;35.2270869;-80.8431244
+United_states_of_america;Boston;42.3584308;-71.0597763
+United_states_of_america;Milwaukee;43.0389025;-87.9064713
+United_states_of_america;South Boston;42.3334312;-71.0494919
+United_states_of_america;Seattle;47.6062095;-122.3320694
+United_states_of_america;El Paso;31.7587198;-106.4869308
+United_states_of_america;Denver;39.7391536;-104.9847031
+United_states_of_america;Washington;38.8951118;-77.0363693
+Uruguay;Montevideo;-34.8580556;-56.1708336
+Uruguay;Salto;-31.3833333;-57.9666672
+Uruguay;Paysandu;-32.3213889;-58.0755539
+Uruguay;Las Piedras;-34.7263889;-56.2200012
+Uruguay;Rivera;-30.9000000;-55.5166664
+Uruguay;Maldonado;-34.9000000;-54.9500008
+Uruguay;Tacuarembo;-31.7333333;-55.9833336
+Uruguay;Melo;-32.3666667;-54.1833344
+Uruguay;Mercedes;-33.2558333;-58.0191650
+Uruguay;Artigas;-30.4000000;-56.4666672
+Uruguay;Minas;-34.3700000;-55.2249985
+Uruguay;San Jose de Mayo;-34.3375000;-56.7136116
+Uruguay;Durazno;-33.4130556;-56.5005569
+Uruguay;Florida;-34.0955556;-56.2141685
+Uruguay;Treinta y Tres;-33.2333333;-54.3833351
+Uruguay;Rocha;-34.4833333;-54.3333321
+Uruguay;San Carlos;-34.8000000;-54.9166679
+Venezuela;Maracaibo;10.6316667;-71.6405563
+Venezuela;Caracas;10.5000000;-66.9166641
+Venezuela;Valencia;10.1805556;-68.0038910
+Venezuela;Barquisimeto;10.0738889;-69.3227768
+Venezuela;Ciudad Guayana;8.3533333;-62.6527786
+Venezuela;Barcelona;10.1333333;-64.6999969
+Venezuela;Maturin;9.7500000;-63.1766663
+Venezuela;Puerto La Cruz;10.2166667;-64.6166687
+Venezuela;Petare;10.4833333;-66.8166656
+Venezuela;Turmero;10.2333333;-67.4833298
+Venezuela;Ciudad Bolivar;8.1222222;-63.5497208
+Venezuela;Merida;8.5983333;-71.1449966
+Venezuela;Alto Barinas;8.5944444;-70.2222214
+Venezuela;Santa Teresa;10.2313889;-66.6636124
+Venezuela;Cumana;10.4666667;-64.1666641
+Venezuela;San Cristobal;7.7669444;-72.2249985
+Vietnam;Thanh pho Ho Chi Minh;10.7500000;106.666664
+Vietnam;Ha Noi;21.0333333;105.8499985
+Vietnam;Da Nang;16.0677778;108.2208328
+Vietnam;Haiphong;20.8561111;106.6822205
+Vietnam;Bien Hoa;10.9500000;106.8166656
+Vietnam;Hue;16.4666667;107.5999985
+Vietnam;Nha Trang;12.2500000;109.1833344

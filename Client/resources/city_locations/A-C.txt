@@ -1,0 +1,414 @@
+Afghanistan;Kabul;34.5166667;69.1833344
+Afghanistan;Kandahar;31.6100000;65.6999969
+Afghanistan;Mazar-e Sharif;36.7069444;67.1122208
+Afghanistan;Herat;34.3400000;62.1899986
+Afghanistan;Jalalabad;34.4200000;70.4499969
+Afghanistan;Konduz;36.7200000;68.8600006
+Afghanistan;Ghazni;33.5535554;68.4268875
+Afghanistan;Balkh;36.7586111;66.8961105
+Afghanistan;Baghlan;36.1200000;68.6999969
+Afghanistan;Gardez;33.5900000;69.2200012
+Afghanistan;Khost;33.3380556;69.9202805
+Albania;Tirana;41.3275000;19.8188896
+Albania;Durres;41.3230556;19.4413891
+Albania;Elbasan;41.1125000;20.0822220
+Albania;Vlore;40.4666667;19.4897213
+Albania;Shkoder;42.0682829;19.5125771
+Albania;Fier-Cifci;40.7166667;19.5666676
+Albania;Korce;40.6186111;20.7808342
+Albania;Berat;40.7058333;19.9522228
+Albania;Lushnje;40.9419444;19.7049999
+Albania;Kavaje;41.1855556;19.5569439
+Albania;Lac;41.6355556;19.7130547
+Albania;Gjirokaster;40.0758333;20.1388893
+Albania;Patos Fshat;40.6427778;19.6508331
+Albania;Kruje;41.5091667;19.7927780
+Albania;Lezhe;41.7836111;19.6436119
+Algeria;Algiers;36.7630556;3.0505557
+Algeria;Oran;35.6911111;-0.6416667
+Algeria;Constantine;36.3650000;6.6147223
+Algeria;Batna;35.5559710;6.1741447
+Algeria;Bab Ezzouar;36.7166667;3.1833334
+Algeria;Annaba;36.9000000;7.7666669
+Algeria;Sidi Bel Abbes;35.1938889;-0.6413889
+Algeria;Ech Chettia;36.1956637;1.2584496
+Algeria;Bejaia;36.7500000;5.0833335
+Algeria;Skikda;36.8791667;6.9066668
+Algeria;El Achir;36.0666667;4.6305556
+Algeria;Medea;36.2675000;2.7500000
+Algeria;Bechar;31.6166667;-2.2166667
+Algeria;Tlemcen;34.8783333;-1.3150001
+Algeria;Mostaganem;35.9333333;0.0902778
+Andorra;Andorra la Vella;42.5051514;1.5150619
+Andorra;les Escaldes;42.5072870;1.5341377
+Andorra;Encamp;42.5333333;1.5833333
+Andorra;Sant Julia de Loria;42.4637237;1.4912868
+Andorra;la Massana;42.5449867;1.5148258
+Andorra;Canillo;42.5666667;1.6000000
+Andorra;Pas de la Casa;42.5427734;1.7336082
+Angola;Luanda;-8.8383333;13.2344446
+Angola;Huambo;-12.7761111;15.7391663
+Angola;Lobito;-12.3480556;13.5455561
+Angola;Benguela;-12.5783333;13.4072218
+Angola;Kuito;-12.3833333;16.9333324
+Angola;Lubango;-14.9166667;13.5000000
+Angola;Malanje;-9.5447222;16.3452778
+Angola;Namibe;-15.1961111;12.1522226
+Angola;Soyo;-6.1333333;12.3666668
+Angola;Cabinda;-5.5500000;12.1999998
+Argentina;Buenos Aires;-34.5761256;-58.4088135
+Argentina;Cordoba;-31.4000000;-64.1833344
+Argentina;Rosario;-32.9511111;-60.6663895
+Argentina;Mendoza;-32.8833333;-68.8166656
+Argentina;San Miguel de Tucuman;-26.8166667;-65.2166672
+Argentina;La Plata;-34.9313889;-57.9488907
+Argentina;Mar del Plata;-38.0000000;-57.5499992
+Argentina;Quilmes;-34.7202778;-58.2694435
+Argentina;Salta;-24.7833333;-65.4166641
+Argentina;Santa Fe;-31.6333333;-60.7000008
+Argentina;San Juan;-31.5375000;-68.5363922
+Argentina;Resistencia;-27.4500000;-58.9833336
+Argentina;Santiago del Estero;-27.7833333;-64.2666702
+Argentina;Corrientes;-27.4666667;-58.8333321
+Argentina;Posadas;-27.3833333;-55.8833351
+Argentina;San Salvador de Jujuy;-24.1833333;-65.3000031
+Argentina;Bahia Blanca;-38.7166667;-62.2833328
+Argentina;Parana;-31.7333333;-60.5333328
+Argentina;Neuquen;-38.9500000;-68.0666656
+Argentina;Formosa;-26.1833333;-58.1833344
+Armenia;Yerevan;40.1811111;44.5136108
+Armenia;Gyumri;40.7894444;43.8474998
+Armenia;Vanadzor;40.8127778;44.4883347
+Armenia;Ejmiatsin;40.1727778;44.2924995
+Armenia;Hrazdan;40.5016667;44.7547226
+Armenia;Abovyan;40.2691667;44.6244431
+Armenia;Kapan;39.2011111;46.4150009
+Armenia;Ararat;39.8302778;44.7024994
+Armenia;Armavir;40.1522222;44.0308342
+Armenia;Gavarr;40.3588889;45.1266670
+Armenia;Artashat;39.9538889;44.5505562
+Armenia;Goris;39.5077778;46.3386116
+Armenia;Masis;40.0672222;44.4361115
+Armenia;Ashtarak;40.3016667;44.3591652
+Armenia;Sevan;40.5550000;44.9536095
+Armenia;Spitak;40.8372222;44.2675018
+Australia;Sydney;-33.8678500;151.2073212
+Australia;Melbourne;-37.8139966;144.9633179
+Australia;Perth;-31.9333333;115.8333359
+Australia;Adelaide;-34.9333333;138.6000061
+Australia;Brisbane;-27.4679357;153.0280914
+Australia;Gold Coast;-28.0000000;153.4333344
+Australia;Newcastle;-32.9271484;151.7764740
+Australia;Canberra;-35.2834625;149.1280670
+Australia;Wollongong;-34.4333333;150.8833313
+Australia;Geelong;-38.1471126;144.3607025
+Australia;Cairns;-16.9166667;145.7666626
+Australia;Geelong West;-38.1333333;144.3500061
+Australia;Townsville;-19.2500000;146.8000031
+Australia;Albury;-36.0833333;146.9166718
+Australia;Nowra;-34.8833333;150.6000061
+Australia;Darwin;-12.4611337;130.8418427
+Australia;Toowoomba;-27.5500000;151.9666595
+Australia;Ballarat;-37.5666667;143.8500061
+Australia;Bendigo;-36.7666667;144.2833405
+Australia;Mackay;-21.1500000;149.1999969
+Austria;Wien;48.2084878;16.3720760
+Austria;Graz;47.0666667;15.4499998
+Austria;Linz;48.3063889;14.2861109
+Austria;Salzburg;47.8000000;13.0333328
+Austria;Innsbruck;47.2666667;11.3999996
+Austria;Klagenfurt;46.6247222;14.3052778
+Austria;Villach;46.6102778;13.8558331
+Austria;Wels;48.1666667;14.0333328
+Austria;Sankt Polten;48.2000000;15.6333332
+Austria;Dornbirn;47.4166667;9.7330561
+Austria;Steyr;48.0427423;14.4212723
+Austria;Wiener Neustadt;47.8000000;16.2500000
+Austria;Feldkirch;47.2330556;9.6000004
+Austria;Bregenz;47.5031127;9.7471046
+Austria;Wolfsberg;46.8405556;14.8441668
+Austria;Baden;48.0166667;16.2333336
+Austria;Klosterneuburg;48.3052064;16.3252220
+Austria;Leoben;47.3833333;15.1000004
+Barbados;Bridgetown;13.1000000;-59.6166649
+Barbados;Speightstown;13.2500000;-59.6500015
+Barbados;Oistins;13.0666667;-59.5333328
+Barbados;Bathsheba;13.2166667;-59.5166664
+Barbados;Holetown;13.1833333;-59.6500015
+Barbados;The Crane;13.1000000;-59.4500008
+Barbados;Crab Hill;13.3166667;-59.6333351
+Barbados;Blackmans;13.1833333;-59.5333328
+Barbados;Greenland;13.2500000;-59.5666656
+Barbados;Hillaby;13.2166667;-59.5833321
+Belarus;Minsk;53.9000000;27.5666676
+Belarus;Mahilyow;53.9138889;30.3363895
+Belarus;Vitsyebsk;55.1925000;30.1944447
+Belarus;Hrodna;53.6813889;23.8147221
+Belarus;Brest;52.1000000;23.7000008
+Belarus;Babruysk;53.1500000;29.2333336
+Belarus;Baranavichy;53.1333333;26.0333328
+Belarus;Pinsk;52.1213889;26.0727787
+Belarus;Orsha;54.5152778;30.4052773
+Belarus;Mazyr;52.0500000;29.2666664
+Belarus;Salihorsk;52.8000000;27.5333328
+Belarus;Maladzyechna;54.3166667;26.8497219
+Belgium;Brussels;50.8465975;4.3527746
+Belgium;Antwerp;51.2166667;4.4166665
+Belgium;Gent;51.0500000;3.7166667
+Belgium;Charleroi;50.4166667;4.4333334
+Belgium;Liege;50.6411876;5.5717850
+Belgium;Brugge;51.2097871;3.2250023
+Belgium;Namur;50.4666667;4.8666668
+Belgium;Leuven;50.8795896;4.7009254
+Belgium;Mons;50.4541296;3.9522886
+Belgium;Aalst;50.9333333;4.0333333
+Belgium;Mechelen;51.0333333;4.4666667
+Belgium;La Louviere;50.4865658;4.1878510
+Bolivia;Santa Cruz de la Sierra;-17.8000000;-63.1666679
+Bolivia;Cochabamba;-17.3833333;-66.1500015
+Bolivia;La Paz;-16.5000000;-68.1500015
+Bolivia;Sucre;-19.0430556;-65.2591629
+Bolivia;Oruro;-17.9833333;-67.1500015
+Bolivia;Tarija;-21.5354857;-64.7295532
+Bolivia;Potosi;-19.5836111;-65.7530594
+Bolivia;Montero;-17.3333333;-63.2500000
+Bolivia;Trinidad;-14.8333333;-64.9000015
+Bolivia;Yacuiba;-22.0333333;-63.6833344
+Bolivia;Riberalta;-10.9833333;-66.0999985
+Bolivia;Guayaramerin;-10.8000000;-65.3833313
+Bolivia;Villazon;-22.1000000;-65.5999985
+Bosnia_and_herzegovina;Sarajevo;43.8500000;18.3833332
+Bosnia_and_herzegovina;Banja Luka;44.7758333;17.1855564
+Bosnia_and_herzegovina;Zenica;44.2013889;17.9063892
+Bosnia_and_herzegovina;Tuzla;44.5427778;18.6694450
+Bosnia_and_herzegovina;Mostar;43.3433333;17.8080559
+Bosnia_and_herzegovina;Bihac;44.8169444;15.8708334
+Bosnia_and_herzegovina;Bugojno;44.0572222;17.4508324
+Bosnia_and_herzegovina;Brcko;44.8727778;18.8083324
+Bosnia_and_herzegovina;Bijeljina;44.7569444;19.2161102
+Bosnia_and_herzegovina;Prijedor;44.9813889;16.7130547
+Bosnia_and_herzegovina;Trebinje;42.7119444;18.3441658
+Bosnia_and_herzegovina;Travnik;44.2266667;17.6705551
+Bosnia_and_herzegovina;Doboj;44.7347222;18.0877781
+Bosnia_and_herzegovina;Cazin;44.9669444;15.9430552
+Bosnia_and_herzegovina;Velika Kladusa;45.1894444;15.8116665
+Brazil;Sao Paulo;-23.5475000;-46.6361122
+Brazil;Rio de Janeiro;-22.9027778;-43.2075005
+Brazil;Salvador;-12.9711111;-38.5108337
+Brazil;Fortaleza;-3.7172222;-38.5430565
+Brazil;Belo Horizonte;-19.9208333;-43.9377785
+Brazil;Brasilia;-15.7797200;-47.9297218
+Brazil;Curitiba;-25.4277778;-49.2730560
+Brazil;Manaus;-3.1019444;-60.0250015
+Brazil;Recife;-8.0538889;-34.8811111
+Brazil;Belem;-1.4558333;-48.5044441
+Brazil;Porto Alegre;-30.0330556;-51.2299995
+Brazil;Goiania;-16.6786111;-49.2538872
+Brazil;Guarulhos;-23.4627778;-46.5333328
+Brazil;Campinas;-22.9055556;-47.0608330
+Brazil;Nova Iguacu;-22.7591667;-43.4511108
+Brazil;Maceio;-9.6658333;-35.7352791
+Brazil;Sao Luis;-2.5297222;-44.3027763
+Brazil;Duque de Caxias;-22.7855556;-43.3116684
+Brazil;Natal;-5.7950000;-35.2094460
+Bulgaria;Sofia;42.6975135;23.3241463
+Bulgaria;Plovdiv;42.1500000;24.7500000
+Bulgaria;Varna;43.2166667;27.9166660
+Bulgaria;Burgas;42.5000000;27.4666672
+Bulgaria;Ruse;43.8563889;25.9708328
+Bulgaria;Stara Zagora;42.4327778;25.6419449
+Bulgaria;Pleven;43.4166667;24.6166668
+Bulgaria;Sliven;42.6858333;26.3291664
+Bulgaria;Dobrich;43.5666667;27.8333340
+Bulgaria;Shumen;43.2706437;26.9228554
+Bulgaria;Pernik;42.6000000;23.0333328
+Bulgaria;Yambol;42.4833333;26.5000000
+Bulgaria;Khaskovo;41.9402778;25.5694447
+Bulgaria;Pazardzhik;42.2000000;24.3333340
+Bulgaria;Gabrovo;41.8927778;22.9349995
+Bulgaria;Blagoevgrad;42.0166667;23.1000004
+Bulgaria;Veliko Turnovo;43.0812389;25.6290436
+Cambodia;Phnom Penh;11.5500000;104.9166641
+Cambodia;Kampong Saom;10.6333333;103.5000000
+Cambodia;Batdambang;13.1000000;103.1999969
+Cambodia;Siemreab;13.3666667;103.8499985
+Cambodia;Kampong Chhnang;12.2500000;104.6666641
+Cambodia;Kampong Cham;12.0000000;105.4499969
+Cambodia;Pouthisat;12.5333333;103.9166641
+Cambodia;Ta Khmau;11.4833333;104.9499969
+Cambodia;Phumi Veal Sre;10.9833333;104.7833328
+Cambodia;Kampong Spoe;11.4500000;104.5333328
+Cambodia;Krong Kaoh Kong;11.6175000;102.9805527
+Cambodia;Phnum Tbeng Meanchey;13.8166667;104.9666672
+Cambodia;Sisophon;13.5833333;102.9833298
+Cameroon;Douala;4.0502778;9.6999998
+Cameroon;Yaounde;3.8666667;11.5166664
+Cameroon;Garoua;9.3000000;13.3999996
+Cameroon;Kousseri;12.0783333;15.0308332
+Cameroon;Bamenda;5.9333333;10.1666670
+Cameroon;Maroua;10.5955556;14.3247223
+Cameroon;Bafoussam;5.4666667;10.4166670
+Cameroon;Mokolo;10.7402778;13.8027782
+Cameroon;Ngaoundere;7.3166667;13.5833330
+Cameroon;Bertoua;4.5833333;13.6833334
+Cameroon;Edea;3.8000000;10.1333332
+Cameroon;Loum;4.7161111;9.7463884
+Canada;Toronto;43.7001138;-79.4163055
+Canada;Montreal;45.5167792;-73.6491776
+Canada;Vancouver;49.2496574;-123.1193390
+Canada;Calgary;51.0501123;-114.0852890
+Canada;Ottawa;45.4209405;-75.6902847
+Canada;Edmonton;53.5501359;-113.4687119
+Canada;Winnipeg;49.8843986;-97.1470413
+Canada;Quebec;46.8122791;-71.2145386
+Canada;Hamilton;43.2334084;-79.9496384
+Canada;Kitchener;43.4500956;-80.4829865
+Canada;Halifax;44.6519862;-63.5968475
+Canada;London;42.9833893;-81.2330399
+Canada;Victoria;48.4329357;-123.3693008
+Canada;Windsor;42.3000836;-83.0165405
+Canada;Oshawa;43.9001204;-78.8495712
+Canada;Saskatoon;52.1167863;-106.6345215
+Canada;Barrie;44.4001075;-79.6663361
+Chile;Santiago;-33.4500000;-70.6666641
+Chile;vina causino;-33.6166667;-70.5833359
+Chile;Antofagasta;-23.6500000;-70.4000015
+Chile;Vina del Mar;-33.0229137;-71.5525360
+Chile;Valparaiso;-33.0393202;-71.6272583
+Chile;Talcahuano;-36.7166667;-73.1166687
+Chile;San Bernardo;-33.6000000;-70.7166672
+Chile;Temuco;-38.7333333;-72.5999985
+Chile;Iquique;-20.2166667;-70.1666641
+Chile;Concepcion;-36.8269950;-73.0497665
+Chile;Rancagua;-34.1666667;-70.7500000
+Chile;Talca;-35.4333333;-71.6666641
+China;Shanghai;31.2222222;121.4580536
+China;Beijing;39.9074977;116.3972244
+China;Nanchong;30.8000000;106.0666656
+China;Kaifeng;34.7911111;114.3483353
+China;Wuhan;30.5833333;114.2666702
+China;Chongqing;29.5627778;106.5527802
+China;Chengdu;30.6666667;104.0666656
+China;Tianjin;39.1422222;117.1766663
+China;Puyang;29.4602778;119.8861084
+China;Shenyang;41.7922222;123.4327774
+China;Shiyan;32.6475000;110.7780533
+China;Harbin;45.7500000;126.6500015
+China;Lanzhou;36.0563889;103.7922211
+China;Guangzhou;23.1166667;113.2500000
+China;Nanjing;32.0616667;118.7777786
+China;Taiyuan;37.8694444;112.5602798
+China;Yunfu;22.9333333;112.0333328
+China;Changchun;43.8800000;125.3227768
+China;Changsha;28.2000000;112.9666672
+China;Jinan;36.6683333;116.9972229
+China;Dalian;38.9122222;121.6022186
+China;Zhengzhou;34.7577778;113.6486130
+China;Shijiazhuang;38.0413889;114.4786148
+China;Jilin;43.8508333;126.5602798
+China;Hangzhou;30.2552778;120.1688919
+China;Nanchang;28.6833333;115.8833313
+Colombia;Bogota;4.6000000;-74.0833359
+Colombia;Cali;3.4372222;-76.5224991
+Colombia;Medellin;6.2913889;-75.5361099
+Colombia;Barranquilla;10.9638889;-74.7963867
+Colombia;Cartagena;10.3997222;-75.5144424
+Colombia;Cucuta;7.8833333;-72.5052795
+Colombia;Bucaramanga;7.1297222;-73.1258316
+Colombia;Pereira;4.8133333;-75.6961136
+Colombia;Santa Marta;11.2472222;-74.2016678
+Colombia;Ibague;4.4388889;-75.2322235
+Colombia;Bello;6.3388889;-75.5622253
+Colombia;Pasto;1.2136111;-77.2811127
+Colombia;Manizales;5.0700000;-75.5205536
+Colombia;Neiva;2.9305556;-75.3302765
+Colombia;Soledad;10.9172222;-74.7666702
+Colombia;Villavicencio;4.1533333;-73.6350021
+Colombia;Armenia;4.5338889;-75.6811142
+Colombia;Soacha;4.5872222;-74.2213898
+Colombia;Valledupar;10.4769444;-73.2505569
+Colombia;Itagui;6.1719444;-75.6113892
+Colombia;Planeta Rica;8.4147222;-75.5883331
+Costa_rica;San Jose;9.9333333;-84.0833359
+Costa_rica;Puerto Limon;10.0000000;-83.0333328
+Costa_rica;San Francisco;9.9833333;-84.1333313
+Costa_rica;Alajuela;10.0166667;-84.2166672
+Costa_rica;Liberia;10.6333333;-85.4333344
+Costa_rica;Paraiso;9.8333333;-83.8666687
+Costa_rica;Puntarenas;9.9762473;-84.8383560
+Costa_rica;San Isidro;9.3833333;-83.6999969
+Costa_rica;Curridabat;9.9166667;-84.0333328
+Costa_rica;San Vicente;9.9666667;-84.0500031
+Costa_rica;San Vicente de Moravia;9.9616439;-84.0487976
+Costa_rica;San Jose;10.9666667;-85.1333313
+Costa_rica;Purral;9.9500000;-84.0333328
+Costa_rica;Turrialba;9.9000000;-83.6833344
+Costa_rica;San Miguel;9.8833333;-84.0666656
+Costa_rica;San Pedro;9.9333333;-84.0500031
+Costa_rica;San Rafael Abajo;9.8333333;-84.2833328
+Costa_rica;Quesada;10.3333333;-84.4333344
+Costa_rica;Ipis;9.9666667;-84.0166702
+Croatia;Zagreb;45.8000000;16.0000000
+Croatia;Split;43.5089078;16.4391518
+Croatia;Rijeka;45.3430556;14.4091663
+Croatia;Osijek;45.5511111;18.6938896
+Croatia;Zadar;44.1197222;15.2422218
+Croatia;Slavonski Brod;45.1602778;18.0155563
+Croatia;Pula;44.8683333;13.8480558
+Croatia;Sesvete;45.8311111;16.1163883
+Croatia;Karlovac;45.4872222;15.5477781
+Croatia;Varazdin;46.3044444;16.3377781
+Croatia;Sibenik;43.7272222;15.9058332
+Croatia;Sisak;45.4661111;16.3783340
+Croatia;Velika Gorica;45.7125000;16.0755558
+Croatia;Vinkovci;45.2883333;18.8047218
+Cuba;Havana;23.1319444;-82.3641663
+Cuba;Santiago de Cuba;20.0247222;-75.8219452
+Cuba;Camaguey;21.3808333;-77.9169464
+Cuba;Holguin;20.8872222;-76.2630539
+Cuba;Guantanamo;20.1444444;-75.2091675
+Cuba;Santa Clara;22.4000000;-79.9666672
+Cuba;Las Tunas;20.9616667;-76.9511108
+Cuba;Bayamo;20.3791667;-76.6433334
+Cuba;Pinar del Rio;22.4175000;-83.6980591
+Cuba;Cienfuegos;22.1461111;-80.4355545
+Cuba;Matanzas;23.0411111;-81.5774994
+Cuba;Ciego de Avila;21.8400000;-78.7619476
+Cuba;Manzanillo;20.3433333;-77.1166687
+Cuba;Sancti Spiritus;21.9297222;-79.4424973
+Cuba;Palma Soriano;20.2172222;-75.9988861
+Cuba;Cardenas;23.0375000;-81.2047195
+Cuba;Moa;20.6569444;-74.9402771
+Cuba;Puerto Padre;21.1950000;-76.6027756
+Cyprus;Nicosia;35.1666667;33.3666649
+Cyprus;Limassol;34.6750000;33.0333328
+Cyprus;Larnaca;34.9166667;33.6291656
+Cyprus;Famagusta;35.1250000;33.9500008
+Cyprus;Paphos;34.7666667;32.4166679
+Cyprus;Kyrenia;35.3416667;33.3166656
+Cyprus;Protaras;35.0125000;34.0583344
+Cyprus;Morphou;35.1980556;32.9913902
+Cyprus;Aradhippou;34.9500000;33.5916672
+Cyprus;Paralimni;35.0375000;33.9833336
+Cyprus;Lefka;35.1105556;32.8505554
+Cyprus;Yeri;35.1000000;33.4166679
+Czech_republic;Praha;50.0878368;14.4241323
+Czech_republic;Brno;49.1952227;16.6079597
+Czech_republic;Ostrava;49.8346452;18.2820435
+Czech_republic;Plzen;49.7474748;13.3775873
+Czech_republic;Olomouc;49.5955243;17.2517529
+Czech_republic;Liberec;50.7671119;15.0561914
+Czech_republic;Ceske Budejovice;48.9744684;14.4743404
+Czech_republic;Hradec Kralove;50.2092284;15.8327684
+Czech_republic;Usti nad Labem;50.6607038;14.0322723
+Czech_republic;Pardubice;50.0407508;15.7765903
+Czech_republic;Havirov;49.7798448;18.4368801
+Czech_republic;Zlin;49.2166667;17.6666660
+Czech_republic;Kladno;50.1473356;14.1028509
+Czech_republic;Most;50.5030069;13.6361742
+Czech_republic;Karvina;49.8540031;18.5416889
+Czech_republic;Frydek-Mistek;49.6853662;18.3483772
+Czech_republic;Opava;49.9386635;17.9025707
+Czech_republic;Frydek-Mistek;49.6833333;18.3500004
+Czech_republic;Decin;50.7821525;14.2147818
+Czech_republic;Karlovy Vary;50.2327126;12.8711700

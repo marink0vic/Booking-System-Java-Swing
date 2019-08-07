@@ -79,7 +79,7 @@ public class ControllerUI {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (counter == 4) break;
+			if (counter == 5) break;
 		}
 		return user;
 	}

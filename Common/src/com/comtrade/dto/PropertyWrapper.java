@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.omg.IOP.TransactionService;
 
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
@@ -27,7 +27,7 @@ public class PropertyWrapper implements Serializable, Generic {
 	
 	private static final long serialVersionUID = 1L;
 	private User user;
-	private Address address;
+	private Location address;
 	private Property property;
 	private Map<RoomType, Room> rooms;
 	private List<PropertyImage> images; 
@@ -43,7 +43,7 @@ public class PropertyWrapper implements Serializable, Generic {
 		reviews = new ArrayList<>();
 	}
 	
-	public PropertyWrapper(User user, Address address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(User user, Location address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
 		this.user = user;
 		this.address = address;
 		this.property = property;
@@ -52,6 +52,7 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.paymentList = paymentList;
 		bookings = new HashMap<>();
 		transactions = new ArrayList<>();
+		reviews = new ArrayList<>();
 	}
 
 	public User getUser() {
@@ -62,11 +63,11 @@ public class PropertyWrapper implements Serializable, Generic {
 		this.user = user;
 	}
 
-	public Address getAddress() {
+	public Location getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(Location address) {
 		this.address = address;
 	}
 

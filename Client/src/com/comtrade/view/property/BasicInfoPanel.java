@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -21,6 +22,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.PropertyTypeConstants;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.User;
@@ -78,6 +80,13 @@ public class BasicInfoPanel extends JPanel {
 		this.add(lblTypeOfProperty);
 		
 		tfName = new JTextField();
+		tfName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
 		tfName.setForeground(new Color(71, 71, 71));
 		tfName.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfName.setColumns(10);
@@ -97,7 +106,14 @@ public class BasicInfoPanel extends JPanel {
 		this.add(lblPhoneNumber);
 		
 		tfPhoneNumber = new JTextField();
-		tfPhoneNumber.setForeground(new Color(71, 71, 71));
+		tfPhoneNumber.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfPhoneNumber.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				tfPhoneNumber.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		tfPhoneNumber.setForeground(ColorConstants.GRAY);
 		tfPhoneNumber.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfPhoneNumber.setColumns(10);
 		tfPhoneNumber.setBounds(316, 346, 389, 55);
@@ -122,8 +138,14 @@ public class BasicInfoPanel extends JPanel {
 		this.add(lblAddDescriptionFor);
 		
 		textArea = new JTextArea();
+		textArea.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				textArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
 		textArea.setForeground(new Color(71, 71, 71));
-		textArea.setBorder(new LineBorder(new Color(71, 71, 71)));
+		textArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		textArea.setFont(new Font("Dialog", Font.PLAIN, 18));
 		textArea.setBounds(785, 164, 394, 318);
 		textArea.setLineWrap(true);
@@ -144,9 +166,13 @@ public class BasicInfoPanel extends JPanel {
 		});
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				createProperty();
-				updateUI(lblRoomtype);
-				switchPanel(roomTypePanel);
+				if (checkFileds()) {
+					createProperty();
+					updateUI(lblRoomtype);
+					switchPanel(roomTypePanel);	
+				} else {
+					JOptionPane.showMessageDialog(null, "You can't leave empty fields");
+				}
 			}
 		});
 		btnContinue.setForeground(Color.WHITE);
@@ -159,7 +185,24 @@ public class BasicInfoPanel extends JPanel {
 		fillComboPropertyType();
 	}
 	
-	protected void createProperty() {
+	private boolean checkFileds() {
+		int counter = 0;
+		if (tfName.getText().length() == 0) {
+			tfName.setBorder(new LineBorder(ColorConstants.RED));
+			counter ++;
+		}
+		if (tfPhoneNumber.getText().length() == 0) {
+			tfPhoneNumber.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (textArea.getText().length() == 0) {
+			textArea.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		return counter == 0;
+	}
+
+	private void createProperty() {
 		property.setIdUser(user.getIdUser());
 		property.setType(comboType.getSelectedItem().toString());
 		property.setName(tfName.getText());
