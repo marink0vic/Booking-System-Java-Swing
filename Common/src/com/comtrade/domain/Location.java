@@ -10,19 +10,21 @@ import java.util.List;
 
 import com.comtrade.domain.behavior.GeneralDomain;
 
-public class Address implements GeneralDomain, Serializable {
+public class Location implements GeneralDomain, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
-	private int idAddress;
+	private int idLocation;
 	private int idCountry;
 	private String street;
-	private int number;
+	private String number;
 	private String city;
 	private int zipCode;
+	private double latitude;
+	private double longitude;
 	private LocalDateTime created;
 
-	public Address(int idCountry, String street, int number, String city, int zipCode) {
+	public Location(int idCountry, String street, String number, String city, int zipCode) {
 		super();
 		this.idCountry = idCountry;
 		this.street = street;
@@ -30,15 +32,15 @@ public class Address implements GeneralDomain, Serializable {
 		this.city = city;
 		this.zipCode = zipCode;
 	}
-	public Address() {
+	public Location() {
 		
 	}
-
-	public int getIdAddress() {
-		return idAddress;
+	
+	public int getIdLocation() {
+		return idLocation;
 	}
-	public void setIdAddress(int idAddress) {
-		this.idAddress = idAddress;
+	public void setIdLocation(int idLocation) {
+		this.idLocation = idLocation;
 	}
 	public int getIdCountry() {
 		return idCountry;
@@ -52,10 +54,10 @@ public class Address implements GeneralDomain, Serializable {
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	public int getNumber() {
+	public String getNumber() {
 		return number;
 	}
-	public void setNumber(int number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 	public String getCity() {
@@ -70,6 +72,18 @@ public class Address implements GeneralDomain, Serializable {
 	public void setZipCode(int zipCode) {
 		this.zipCode = zipCode;
 	}
+	public double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -79,17 +93,17 @@ public class Address implements GeneralDomain, Serializable {
 	
 	@Override
 	public String returnTableName() {
-		return "address";
+		return "location";
 	}
 
 	@Override
 	public String returnColumnNames() {
-		return " (id_country, street, number, city, post_or_zipcode, created) VALUES ";
+		return " (id_country, street, number, city, post_or_zipcode, latitude, longitude, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?)";
+		return "(?,?,?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -98,9 +112,11 @@ public class Address implements GeneralDomain, Serializable {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idCountry);
 		preparedStatement.setString(index.next(), street);
-		preparedStatement.setInt(index.next(), number);
+		preparedStatement.setString(index.next(), number);
 		preparedStatement.setString(index.next(), city);
 		preparedStatement.setInt(index.next(), zipCode);
+		preparedStatement.setDouble(index.next(), latitude);
+		preparedStatement.setDouble(index.next(), longitude);
 		preparedStatement.setString(index.next(), sdf.format(date));
 
 	}
@@ -113,7 +129,7 @@ public class Address implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnIdColumnName() {
-		return "id_address";
+		return "id_location";
 	}
 
 	@Override
@@ -124,15 +140,17 @@ public class Address implements GeneralDomain, Serializable {
 	
 	@Override
 	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Address address = new Address();
+		Location location = new Location();
 		if (resultSet.next()) {
-			address.idAddress = resultSet.getInt("id_address");
-			address.idCountry = resultSet.getInt("id_country");
-			address.street = resultSet.getString("street");
-			address.number = resultSet.getInt("number");
-			address.city = resultSet.getString("city");
-			address.zipCode = resultSet.getInt("post_or_zipcode");
-			return address;
+			location.idLocation = resultSet.getInt("id_location");
+			location.idCountry = resultSet.getInt("id_country");
+			location.street = resultSet.getString("street");
+			location.number = resultSet.getString("number");
+			location.city = resultSet.getString("city");
+			location.zipCode = resultSet.getInt("post_or_zipcode");
+			location.latitude = resultSet.getDouble("latitude");
+			location.longitude = resultSet.getDouble("longitude");
+			return location;
 		}
 		return null;
 	}

@@ -25,7 +25,7 @@ import javax.swing.SwingConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
@@ -62,7 +62,7 @@ public class PaymentPanel extends JPanel {
 	
 	//---
 	private User user;
-	private Address address;
+	private Location address;
 	private Property property;
 	private Map<RoomType, Room> room;
 	private List<PropertyImage> images; 
@@ -70,7 +70,7 @@ public class PaymentPanel extends JPanel {
 	private Country country;
 
 	
-	public PaymentPanel(User user, Address address, Property property, Map<RoomType, Room> room, List<PropertyImage> images) {
+	public PaymentPanel(User user, Location address, Property property, Map<RoomType, Room> room, List<PropertyImage> images) {
 		this.user = user;
 		this.address = address;
 		this.property = property;

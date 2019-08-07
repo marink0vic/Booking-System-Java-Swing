@@ -21,13 +21,11 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	private static final long serialVersionUID = 1L;
 	private int idProperty;
 	private int idUser;
-	private int idAddress;
+	private int idLocation;
 	private String type;
 	private String name;
 	private String phoneNumner;
 	private int rating;
-	private double latitude;
-	private double longitude;
 	private String description;
 	private LocalDateTime created;
 	
@@ -35,11 +33,11 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 		
 	}
 
-	public Property(int idUser, int idAddress, String type, String name, String phoneNumner, int rating,
+	public Property(int idUser, int idLocation, String type, String name, String phoneNumner, int rating,
 			String description) {
 		super();
 		this.idUser = idUser;
-		this.idAddress = idAddress;
+		this.idLocation = idLocation;
 		this.type = type;
 		this.name = name;
 		this.phoneNumner = phoneNumner;
@@ -62,13 +60,13 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	public void setIdUser(int idUser) {
 		this.idUser = idUser;
 	}
-
-	public int getIdAddress() {
-		return idAddress;
+	
+	public int getIdLocation() {
+		return idLocation;
 	}
 
-	public void setIdAddress(int idAddress) {
-		this.idAddress = idAddress;
+	public void setIdLocation(int idLocation) {
+		this.idLocation = idLocation;
 	}
 
 	public String getType() {
@@ -103,22 +101,6 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 		this.rating = rating;
 	}
 
-	public double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
-
-	public double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -143,12 +125,12 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 
 	@Override
 	public String returnColumnNames() {
-		return " (id_user, id_address, type, name, phone_number, rating, latitude, longitude, description, created) VALUES ";
+		return " (id_user, id_location, type, name, phone_number, rating, description, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return "(?,?,?,?,?,?,?,?,?,?)";
+		return "(?,?,?,?,?,?,?,?)";
 	}
 
 	@Override
@@ -156,13 +138,11 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(index.next(), idUser);
-		preparedStatement.setInt(index.next(), idAddress);
+		preparedStatement.setInt(index.next(), idLocation);
 		preparedStatement.setString(index.next(), type);
 		preparedStatement.setString(index.next(), name);
 		preparedStatement.setString(index.next(), phoneNumner);
 		preparedStatement.setInt(index.next(), rating);
-		preparedStatement.setDouble(index.next(), latitude);
-		preparedStatement.setDouble(index.next(), longitude);
 		preparedStatement.setString(index.next(), description);
 		preparedStatement.setString(index.next(), sdf.format(date));
 	}
@@ -187,7 +167,7 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idAddress;
+		result = prime * result + idLocation;
 		result = prime * result + idProperty;
 		result = prime * result + idUser;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -203,7 +183,7 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 		if (getClass() != obj.getClass())
 			return false;
 		Property other = (Property) obj;
-		if (idAddress != other.idAddress)
+		if (idLocation != other.idLocation)
 			return false;
 		if (idProperty != other.idProperty)
 			return false;
@@ -223,13 +203,11 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 		if (resultSet.next()) {
 			property.idProperty = resultSet.getInt("id_property");
 			property.idUser = resultSet.getInt("id_user");
-			property.idAddress = resultSet.getInt("id_address");
+			property.idLocation = resultSet.getInt("id_location");
 			property.type = resultSet.getString("type");
 			property.name = resultSet.getString("name");
 			property.phoneNumner = resultSet.getString("phone_number");
 			property.rating = resultSet.getInt("rating");
-			property.latitude = resultSet.getDouble("latitude");
-			property.longitude = resultSet.getDouble("longitude");
 			property.description = resultSet.getString("description");
 			String created = resultSet.getString("created");
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

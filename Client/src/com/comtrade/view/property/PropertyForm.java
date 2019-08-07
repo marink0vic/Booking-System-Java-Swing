@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.comtrade.domain.Address;
+import com.comtrade.domain.Location;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
@@ -36,7 +36,7 @@ public class PropertyForm extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private User user;
-	private Address address;
+	private Location address;
 	private Property property;
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
@@ -75,7 +75,7 @@ public class PropertyForm extends JFrame {
 		listOfTypes = new ArrayList<>();
 		room = new LinkedHashMap<>();
 		propertyImageFiles = new ArrayList<>();
-		address = new Address();
+		address = new Location();
 		property = new Property();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
