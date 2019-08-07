@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -131,16 +130,16 @@ public class BookedRoom implements GeneralDomain, Serializable {
 
 	
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idBooking);
-		preparedStatement.setInt(index.next(), idRoomType);
-		preparedStatement.setInt(index.next(), numberOfRooms);
-		preparedStatement.setInt(index.next(), numberOfAdults);
-		preparedStatement.setInt(index.next(), numberOfChildren);
-		preparedStatement.setDouble(index.next(), priceForRoom);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, idBooking);
+		preparedStatement.setInt(2, idRoomType);
+		preparedStatement.setInt(3, numberOfRooms);
+		preparedStatement.setInt(4, numberOfAdults);
+		preparedStatement.setInt(5, numberOfChildren);
+		preparedStatement.setDouble(6, priceForRoom);
+		preparedStatement.setString(7, sdf.format(date));
 	}
 
 	@Override

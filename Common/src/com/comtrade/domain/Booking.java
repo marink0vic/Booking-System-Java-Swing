@@ -128,16 +128,16 @@ public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), user.getIdUser());
-		preparedStatement.setInt(index.next(), property.getIdProperty());
-		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkIn));
-		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(checkOut));
-		preparedStatement.setDouble(index.next(), priceForStay);
-		preparedStatement.setString(index.next(), "PENDING");
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, user.getIdUser());
+		preparedStatement.setInt(2, property.getIdProperty());
+		preparedStatement.setDate(3, java.sql.Date.valueOf(checkIn));
+		preparedStatement.setDate(4, java.sql.Date.valueOf(checkOut));
+		preparedStatement.setDouble(5, priceForStay);
+		preparedStatement.setString(6, "PENDING");
+		preparedStatement.setString(7, sdf.format(date));
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 	}
 
 	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementUpdate(PreparedStatement preparedStatement) throws SQLException {
 		preparedStatement.setString(1, "ACCEPTED");
 		preparedStatement.setInt(2, idBooking);
 	}

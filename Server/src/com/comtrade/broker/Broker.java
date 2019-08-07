@@ -3,11 +3,9 @@ package com.comtrade.broker;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,6 @@ import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
-import com.comtrade.domain.Position;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
@@ -35,30 +32,32 @@ import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
-	
-	private DbLock dbLock = DbLock.getInstance();
 
 	@Override
-	public GeneralDomain save(GeneralDomain domain) throws SQLException {
+	public int save(GeneralDomain domain) throws SQLException {
 		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		Position index = new Position();
-		domain.preparedStatementInsert(preparedStatement, index);
-		dbLock.lock();
-		try {
-			preparedStatement.executeUpdate();
-			return returnLastInsertedData(domain);
-		} finally {
-			dbLock.unlock();
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql ,PreparedStatement.RETURN_GENERATED_KEYS);
+		
+		domain.preparedStatementInsert(preparedStatement);
+		preparedStatement.executeUpdate();
+		ResultSet rs = preparedStatement.getGeneratedKeys();
+		int id = -1;
+		if (rs.next()) {
+			try {
+				id = rs.getInt(1);
+			} catch (Exception e) {
+				System.out.println("primary key is not integer");
+			}
 		}
+		return id;
 	}
 	
 	@Override
 	public void update(DomainUpdate domain) throws SQLException {
 		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
-		Position index = new Position();
+		
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		domain.preparedStatementUpdate(preparedStatement, index);
+		domain.preparedStatementUpdate(preparedStatement);
 		preparedStatement.executeUpdate();
 	}
 	
@@ -67,14 +66,26 @@ public class Broker implements IBroker {
 		DomainUpdate domain = list.get(0);
 		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		Position index = new Position();
+		
 		for (DomainUpdate d : list) {
-			d.preparedStatementUpdate(preparedStatement, index);
+			d.preparedStatementUpdate(preparedStatement);
 			preparedStatement.addBatch();
 		}
 		preparedStatement.executeBatch();
 	}
 
+	@Override
+	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
+		if (list.size() == 0) return;
+		GeneralDomain domain = list.get(0);
+		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		for (GeneralDomain d : list) {
+			d.preparedStatementInsert(preparedStatement);
+			preparedStatement.addBatch();
+		}
+		preparedStatement.executeBatch();
+	}
 	@Override
 	public void delete(GeneralDomain domain) throws SQLException {
 		String sql = "DELETE FROM " + domain.returnTableName() + " WHERE " + domain.returnIdColumnName() + " = ?";
@@ -83,26 +94,6 @@ public class Broker implements IBroker {
 		preparedStatement.executeUpdate();
 	}
 	
-	@Override
-	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
-		if (list.size() == 0) return;
-		
-		GeneralDomain domain = list.get(0);
-		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO ").append(domain.returnTableName()).append(domain.returnColumnNames());
-		for (int i = 0; i < list.size(); i++) {
-			sb.append(domain.returnStatementPlaceholder()).append(",");
-		}
-		
-		String sql = sb.substring(0, sb.length() - 1);
-		Position index = new Position();
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		
-		for (int i = 0; i < list.size(); i++) {
-			list.get(i).preparedStatementInsert(preparedStatement, index);
-		}
-		preparedStatement.executeUpdate();
-	}
 	
 	@Override
 	public List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException {
@@ -299,13 +290,6 @@ public class Broker implements IBroker {
 			return country;
 		}
 		return null;
-	}
-	
-	private GeneralDomain returnLastInsertedData(GeneralDomain domain) throws SQLException {
-		String sql = "SELECT * FROM " + domain.returnTableName() + " ORDER BY " + domain.returnIdColumnName()+" DESC LIMIT 1";
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return domain.returnLastInsertedObject(resultSet);
 	}
 
 	@Override

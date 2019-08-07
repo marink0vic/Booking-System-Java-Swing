@@ -155,19 +155,19 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), country.getIdCountry());
-		preparedStatement.setString(index.next(), firstName);
-		preparedStatement.setString(index.next(), lastName);
-		preparedStatement.setString(index.next(), email);
-		preparedStatement.setString(index.next(), username);
-		preparedStatement.setString(index.next(), hashPassword(password));
-		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(dateOfBirth));
-		preparedStatement.setString(index.next(), "/resources/images/users/user-icon.jpg");
-		preparedStatement.setString(index.next(), status);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, country.getIdCountry());
+		preparedStatement.setString(2, firstName);
+		preparedStatement.setString(3, lastName);
+		preparedStatement.setString(4, email);
+		preparedStatement.setString(5, username);
+		preparedStatement.setString(6, hashPassword(password));
+		preparedStatement.setDate(7, java.sql.Date.valueOf(dateOfBirth));
+		preparedStatement.setString(8, "/resources/images/users/user-icon.jpg");
+		preparedStatement.setString(9, status);
+		preparedStatement.setString(10, sdf.format(date));
 	}
 
 	@Override
@@ -248,9 +248,9 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 	}
 	
 	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		preparedStatement.setString(index.next(), profilePicture);
-		preparedStatement.setInt(index.next(), idUser);
+	public void preparedStatementUpdate(PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setString(1, profilePicture);
+		preparedStatement.setInt(2, idUser);
 	}
 	
 	private String hashPassword(String password) {

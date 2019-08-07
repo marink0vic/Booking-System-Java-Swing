@@ -117,7 +117,7 @@ public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializ
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		preparedStatement.setInt(1, user.getIdUser());

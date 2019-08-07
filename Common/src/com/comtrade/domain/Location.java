@@ -107,17 +107,17 @@ public class Location implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idCountry);
-		preparedStatement.setString(index.next(), street);
-		preparedStatement.setString(index.next(), number);
-		preparedStatement.setString(index.next(), city);
-		preparedStatement.setInt(index.next(), zipCode);
-		preparedStatement.setDouble(index.next(), latitude);
-		preparedStatement.setDouble(index.next(), longitude);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, idCountry);
+		preparedStatement.setString(2, street);
+		preparedStatement.setString(3, number);
+		preparedStatement.setString(4, city);
+		preparedStatement.setInt(5, zipCode);
+		preparedStatement.setDouble(6, latitude);
+		preparedStatement.setDouble(7, longitude);
+		preparedStatement.setString(8, sdf.format(date));
 
 	}
 

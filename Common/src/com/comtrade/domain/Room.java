@@ -128,16 +128,16 @@ public class Room implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idRoomType);
-		preparedStatement.setInt(index.next(), numOfBads);
-		preparedStatement.setBoolean(index.next(), kitchen);
-		preparedStatement.setBoolean(index.next(), tv);
-		preparedStatement.setBoolean(index.next(), airConditioning);
-		preparedStatement.setBoolean(index.next(), wifi);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, idRoomType);
+		preparedStatement.setInt(2, numOfBads);
+		preparedStatement.setBoolean(3, kitchen);
+		preparedStatement.setBoolean(4, tv);
+		preparedStatement.setBoolean(5, airConditioning);
+		preparedStatement.setBoolean(6, wifi);
+		preparedStatement.setString(7, sdf.format(date));
 	}
 
 	@Override
@@ -178,13 +178,13 @@ public class Room implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		preparedStatement.setInt(index.next(), numOfBads);
-		preparedStatement.setBoolean(index.next(), kitchen);
-		preparedStatement.setBoolean(index.next(), tv);
-		preparedStatement.setBoolean(index.next(), airConditioning);
-		preparedStatement.setBoolean(index.next(), wifi);
-		preparedStatement.setInt(index.next(), idRoom);
+	public void preparedStatementUpdate(PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setInt(1, numOfBads);
+		preparedStatement.setBoolean(2, kitchen);
+		preparedStatement.setBoolean(3, tv);
+		preparedStatement.setBoolean(4, airConditioning);
+		preparedStatement.setBoolean(5, wifi);
+		preparedStatement.setInt(6, idRoom);
 	}
 
 }

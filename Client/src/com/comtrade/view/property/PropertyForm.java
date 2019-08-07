@@ -117,7 +117,7 @@ public class PropertyForm extends JFrame {
 	
 	
 	private void createNavigationPanel() {
-		navigationPanel.setBackground(new Color(32, 40, 44));
+		navigationPanel.setBackground(new Color(95, 139, 161));
 		navigationPanel.setBounds(0, 0, 1300, 121);
 		contentPane.add(navigationPanel);
 		navigationPanel.setLayout(null);

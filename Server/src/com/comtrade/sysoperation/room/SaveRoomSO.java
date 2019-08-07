@@ -1,7 +1,6 @@
 package com.comtrade.sysoperation.room;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.comtrade.broker.Broker;
@@ -21,13 +20,9 @@ public class SaveRoomSO extends GeneralSystemOperation<PropertyWrapper> {
 		Room info = temp.getValue();
 		
 		IBroker iBroker = new Broker();
-		type = (RoomType) iBroker.save(type);
+		type.setIdRoomType(iBroker.save(type));
 		info.setIdRoomType(type.getIdRoomType());
-		info = (Room) iBroker.save(info);
-		
-		Map<RoomType, Room> room = new HashMap<>();
-		room.put(type, info);
-		wrapper.setRooms(room);
+		info.setIdRoom(iBroker.save(info));
 		
 		for (PropertyWrapper pw : ServerData.getInstance().returnAllProperties()) {
 			if (pw.getProperty().getIdProperty() == type.getIdProperty()) {

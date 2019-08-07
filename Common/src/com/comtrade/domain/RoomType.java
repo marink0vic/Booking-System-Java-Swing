@@ -97,14 +97,14 @@ public class RoomType implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idProperty);
-		preparedStatement.setString(index.next(), roomType);
-		preparedStatement.setInt(index.next(), numberOfRooms);
-		preparedStatement.setDouble(index.next(), pricePerNight);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, idProperty);
+		preparedStatement.setString(2, roomType);
+		preparedStatement.setInt(3, numberOfRooms);
+		preparedStatement.setDouble(4, pricePerNight);
+		preparedStatement.setString(5, sdf.format(date));
 
 	}
 
@@ -144,11 +144,11 @@ public class RoomType implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public void preparedStatementUpdate(PreparedStatement preparedStatement, Position index) throws SQLException {
-		preparedStatement.setString(index.next(), roomType);
-		preparedStatement.setInt(index.next(), numberOfRooms);
-		preparedStatement.setDouble(index.next(), pricePerNight);
-		preparedStatement.setInt(index.next(), idRoomType);
+	public void preparedStatementUpdate(PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setString(1, roomType);
+		preparedStatement.setInt(2, numberOfRooms);
+		preparedStatement.setDouble(3, pricePerNight);
+		preparedStatement.setInt(4, idRoomType);
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,14 +34,14 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
 		User user = wrapper.getUser();
 		
-		Location address = saveAddress(wrapper.getAddress());
-		wrapper.setAddress(address);
+		int idLocation = saveAddress(wrapper.getAddress());
+		wrapper.getAddress().setIdLocation(idLocation);
 
 		Property property = wrapper.getProperty();
-		property.setIdLocation(address.getIdLocation());
-		property = saveProperty(property);
-		wrapper.setProperty(property);
-		
+		property.setIdLocation(idLocation);
+		int idProperty = saveProperty(property);
+		property.setIdProperty(idProperty);
+		property.setCreated(LocalDateTime.now());
 		
 		Map<RoomType, Room> room = wrapper.getRooms();
 		room = saveAllRooms(room, property.getIdProperty());
@@ -51,20 +52,18 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		wrapper.setImages(imageFiles);
 		
 		List<PaymentType> payments = wrapper.getPaymentList();
-		payments = savePropertyPayments(payments, property.getIdProperty());
-		wrapper.setPaymentList(payments);
+		savePropertyPayments(payments, property.getIdProperty());
 		
 		ServerData.getInstance().addNewProperty(wrapper);
 	}
 
-	private List<PaymentType> savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
+	private void savePropertyPayments(List<PaymentType> payments, int id_property) throws SQLException {
 		List<PaymentProperty> paymentProperty = new ArrayList<>();
 		for (PaymentType type : payments) {
 			PaymentProperty pp = new PaymentProperty(type.getId_payment(), id_property);
 			paymentProperty.add(pp);
 		}
 		ib.saveCollectionOfData(paymentProperty);
-		return ib.returnPayments(id_property);
 	}
 
 	private List<PropertyImage> saveAllImages(List<PropertyImage> image_files, int id_property, String username) throws SQLException {
@@ -100,30 +99,32 @@ public class SavePropertySO extends GeneralSystemOperation<PropertyWrapper> {
 		for (Map.Entry<RoomType, Room> mapRoom : room.entrySet()) {
 			RoomType roomType = mapRoom.getKey();
 			roomType.setIdProperty(id_property);
-			roomType = saveRoomType(roomType);
+			int idRoomType = saveRoomType(roomType);
+			roomType.setIdRoomType(idRoomType);
 			
 			Room info = mapRoom.getValue();
-			info.setIdRoomType(roomType.getIdRoomType());
-			info = saveRoomInfo(info);
+			info.setIdRoomType(idRoomType);
+			int idRoom = saveRoomInfo(info);
+			info.setIdRoom(idRoom);
 			map.put(roomType, info);
 		}
 		return map;
 	}
 
-	private Room saveRoomInfo(Room info) throws SQLException {
-		return (Room) ib.save(info);
+	private int saveRoomInfo(Room info) throws SQLException {
+		return ib.save(info);
 	}
 
-	private RoomType saveRoomType(RoomType r) throws SQLException {
-		return (RoomType) ib.save(r);
+	private int saveRoomType(RoomType r) throws SQLException {
+		return ib.save(r);
 	}
 
-	private Property saveProperty(Property property) throws SQLException {
-		return (Property) ib.save(property);
+	private int saveProperty(Property property) throws SQLException {
+		return ib.save(property);
 	}
 
-	private Location saveAddress(Location address) throws SQLException {
-		return (Location) ib.save(address);
+	private int saveAddress(Location address) throws SQLException {
+		return ib.save(address);
 	}
 
 }

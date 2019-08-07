@@ -17,7 +17,7 @@ import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public interface IBroker {
-	GeneralDomain save(GeneralDomain domain) throws SQLException;
+	int save(GeneralDomain domain) throws SQLException;
 	void delete(GeneralDomain domain) throws SQLException;
 	void update(DomainUpdate domain) throws SQLException;
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;

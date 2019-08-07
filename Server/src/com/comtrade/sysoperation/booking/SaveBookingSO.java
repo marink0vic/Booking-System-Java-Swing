@@ -44,20 +44,18 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 				throw new SQLException();
 			}
 			//---saving to database
-			Booking booking = saveBooking(bookings.getKey());
-			booking.setProperty(bookings.getKey().getProperty());
-			booking.setUser(bookings.getKey().getUser());
-			List<BookedRoom> bookedRooms = saveRooms(booking.getIdBooking(), bookings.getValue());
+			Booking booking = bookings.getKey();
+			booking.setIdBooking(saveBooking(booking));
+			
+			saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
-			Transaction tr = saveTransaction(transaction);
+			transaction.setIdTransaction(saveTransaction(transaction));
 			wrapper.setTransactions(null);
-			Map<Booking, List<BookedRoom>> map = new HashMap<>();
-			map.put(booking, bookedRooms);
-			wrapper.setBookings(map);
+			
 			//---saving to server and notify logged users
-			notifyUsers(wrapper.getUser(), booking, bookedRooms, tr);
-			addOwnerBookingOnServer(booking, bookedRooms, tr);
-			addUserBookingOnServer(booking,bookedRooms);
+			notifyUsers(wrapper.getUser(), booking, bookings.getValue(), transaction);
+			addOwnerBookingOnServer(booking, bookings.getValue(), transaction);
+			addUserBookingOnServer(booking,bookings.getValue());
 		} finally {
 			dbLock.unlock();
 		}
@@ -142,22 +140,20 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		return false;
 	}
 	
-	private Transaction saveTransaction(Transaction transaction) throws SQLException {
-		return (Transaction) iBroker.save(transaction);
+	private int saveTransaction(Transaction transaction) throws SQLException {
+		return iBroker.save(transaction);
 	}
 	
-	private List<BookedRoom> saveRooms(int idBooking, List<BookedRoom> list) throws SQLException {
-		List<BookedRoom> rooms = new ArrayList<>();
+	private void saveRooms(int idBooking, List<BookedRoom> list) throws SQLException {
 		for (int i = 0; i < list.size(); i++) {
 			BookedRoom br = list.get(i);
 			br.setIdBooking(idBooking);
-			rooms.add((BookedRoom) iBroker.save(br));
+			br.setIdBookedRoom(iBroker.save(br));
 		}
-		return rooms;
 	}
 	
-	private Booking saveBooking(Booking booking) throws SQLException {
-		return (Booking) iBroker.save(booking);
+	private int saveBooking(Booking booking) throws SQLException {
+		return iBroker.save(booking);
 	}
 
 }

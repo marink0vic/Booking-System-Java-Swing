@@ -134,17 +134,17 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 		java.util.Date date = new java.util.Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		preparedStatement.setInt(index.next(), idUser);
-		preparedStatement.setInt(index.next(), idLocation);
-		preparedStatement.setString(index.next(), type);
-		preparedStatement.setString(index.next(), name);
-		preparedStatement.setString(index.next(), phoneNumner);
-		preparedStatement.setInt(index.next(), rating);
-		preparedStatement.setString(index.next(), description);
-		preparedStatement.setString(index.next(), sdf.format(date));
+		preparedStatement.setInt(1, idUser);
+		preparedStatement.setInt(2, idLocation);
+		preparedStatement.setString(3, type);
+		preparedStatement.setString(4, name);
+		preparedStatement.setString(5, phoneNumner);
+		preparedStatement.setInt(6, rating);
+		preparedStatement.setString(7, description);
+		preparedStatement.setString(8, sdf.format(date));
 	}
 
 	@Override

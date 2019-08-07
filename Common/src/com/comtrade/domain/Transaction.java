@@ -132,14 +132,14 @@ public class Transaction implements GeneralDomain, Serializable {
 	}
 	
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
-		preparedStatement.setInt(index.next(), idSender);
-		preparedStatement.setInt(index.next(), idReceiver);
-		preparedStatement.setInt(index.next(), idBooking);
-		preparedStatement.setDate(index.next(), java.sql.Date.valueOf(transferDate));
-		preparedStatement.setTime(index.next(), java.sql.Time.valueOf(transferTime));
-		preparedStatement.setDouble(index.next(), amount);
-		preparedStatement.setDouble(index.next(), siteFees);
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
+		preparedStatement.setInt(1, idSender);
+		preparedStatement.setInt(2, idReceiver);
+		preparedStatement.setInt(3, idBooking);
+		preparedStatement.setDate(4, java.sql.Date.valueOf(transferDate));
+		preparedStatement.setTime(5, java.sql.Time.valueOf(transferTime));
+		preparedStatement.setDouble(6, amount);
+		preparedStatement.setDouble(7, siteFees);
 	}
 	@Override
 	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {

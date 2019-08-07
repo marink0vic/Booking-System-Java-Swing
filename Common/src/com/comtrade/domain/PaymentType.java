@@ -68,7 +68,7 @@ public class PaymentType implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public void preparedStatementInsert(PreparedStatement preparedStatement, Position index) throws SQLException {
+	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
 
 	}
 

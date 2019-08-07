@@ -36,7 +36,7 @@ public class ControllerBLUser implements IControllerBL {
 		switch (operation) {
 		case SAVE:
 		{
-			GeneralDomain user = (GeneralDomain) sender.getClientRequest();
+			User user = (User) sender.getClientRequest();
 			User returnedUser = null;
 			try {
 				returnedUser = saveUser(user);
@@ -122,12 +122,11 @@ public class ControllerBLUser implements IControllerBL {
 		return domainUser.getDomain();
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T extends GeneralDomain> T saveUser(GeneralDomain user) throws SQLException {
-		GenericClass<GeneralDomain> genericClass = new GenericClass<>(user);
-		GeneralSystemOperation<GenericClass<GeneralDomain>> sysOperation = new SaveUserSO();
+	private User saveUser(User user) throws SQLException {
+		GenericClass<User> genericClass = new GenericClass<>(user);
+		GeneralSystemOperation<GenericClass<User>> sysOperation = new SaveUserSO();
 		sysOperation.executeSystemOperation(genericClass);
-		return  (T) genericClass.getDomain();
+		return  genericClass.getDomain();
 	}
 	
 	private UserWrapper returnBookingsForUser(UserWrapper user_wrapper) throws SQLException {
