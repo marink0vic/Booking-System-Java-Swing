@@ -142,6 +142,7 @@ public class UserProfileFrame extends JFrame {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = file.getSelectedFile();
 					String path = selectedFile.getAbsolutePath();
+					user.setProfilePicture(path);
 					User tempUser = new User();
 					tempUser.setUsername(user.getUsername());
 					tempUser.setIdUser(user.getIdUser());

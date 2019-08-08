@@ -212,13 +212,16 @@ public class UserHomeFrame extends JFrame implements IProxy {
 			public int compare(PropertyWrapper wrapper1, PropertyWrapper wrapper2) {
 				Double avg1 = calculateAverage(wrapper1.getReviews());
 				Double avg2 = calculateAverage(wrapper2.getReviews());
-				return avg1.compareTo(avg2);
+				if (avg1 == avg2) return 0;
+				if (avg1 > avg2) return -1;
+				else return 1;
 			}
 		});
 	}
 
 	private double calculateAverage(List<PropertyReview> reviews) {
 		int sum = reviews.stream().mapToInt(v -> v.getRating()).sum();
+		if (sum == 0) return 0.0;
 		return (double) sum / reviews.size();
 	}
 

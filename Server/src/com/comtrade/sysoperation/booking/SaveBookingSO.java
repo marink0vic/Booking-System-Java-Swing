@@ -46,6 +46,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			//---saving to database
 			Booking booking = bookings.getKey();
 			booking.setIdBooking(saveBooking(booking));
+			booking.setStatus("PENDING");
 			
 			saveRooms(booking.getIdBooking(), bookings.getValue());
 			transaction.setIdBooking(booking.getIdBooking());
@@ -55,7 +56,6 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			//---saving to server and notify logged users
 			notifyUsers(wrapper.getUser(), booking, bookings.getValue(), transaction);
 			addOwnerBookingOnServer(booking, bookings.getValue(), transaction);
-			addUserBookingOnServer(booking,bookings.getValue());
 		} finally {
 			dbLock.unlock();
 		}
@@ -78,15 +78,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 		}
 	}
-	private void addUserBookingOnServer(Booking booking, List<BookedRoom> bookedRooms) {
-		for (UserWrapper user : ServerData.getInstance().getUserBookings()) {
-			if (booking.getUser().getIdUser() == user.getUser().getIdUser()) {
-				user.addNewBooking(booking, bookedRooms);
-				break;
-			}
-		}
-		
-	}
+	
 	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
 		Booking client = bookings.getKey();
 		List<BookedRoom> rooms = bookings.getValue();

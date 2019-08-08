@@ -9,6 +9,7 @@ import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.domain.Booking;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.dto.UserWrapper;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 
@@ -22,7 +23,7 @@ public class UpdateBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				updateInfoOnServer(bookings);
+				updatePropertyInfoOnServer(bookings);
 			}
 		});
 		thread.start();
@@ -37,7 +38,7 @@ public class UpdateBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		return list;
 	}
 	
-	private void updateInfoOnServer(List<Booking> bookings) {
+	private void updatePropertyInfoOnServer(List<Booking> bookings) {
 		int idProperty = bookings.get(0).getProperty().getIdProperty();
 		for (PropertyWrapper wrapper : ServerData.getInstance().returnAllProperties()) {
 			if (wrapper.getProperty().getIdProperty() == idProperty) {

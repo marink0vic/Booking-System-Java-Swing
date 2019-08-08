@@ -129,7 +129,8 @@ public class UserReviewFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					int bookingId = Integer.parseInt(tfBookingID.getText());
-					if (checkBookingID(bookingId)) {
+					try {
+						checkBookingID(bookingId);
 						if (!checkReviews(bookingId)) {
 							int rating = (int) spinner.getValue();
 							String description = textArea.getText();
@@ -156,8 +157,8 @@ public class UserReviewFrame extends JFrame {
 						} else {
 							JOptionPane.showMessageDialog(null, "You have already rated this propererty for ID: " + bookingId);
 						}
-					} else {
-						JOptionPane.showMessageDialog(null, "You have to reserve a room in this property to leave the review");
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 					
 				} catch (NumberFormatException n) {
@@ -181,13 +182,17 @@ public class UserReviewFrame extends JFrame {
 		return false;
 	}
 
-	private boolean checkBookingID(int booking_id) {
+	private void checkBookingID(int booking_id) throws Exception {
 		for (Booking b : myBookings.keySet()) {
 			if (b.getIdBooking() == booking_id && b.getProperty().getIdProperty() == propertyID) {
-				return true;
+				if (b.getStatus().equals("PENDING")) {
+					throw new Exception("Your reservation is in pending stage.\n You can leave a comment after confirmation");
+				} else {
+					return;
+				}
 			}
 		}
-		return false;
+		throw new Exception("You have to reserve a room in this property to leave the review");
 	}
 
 	

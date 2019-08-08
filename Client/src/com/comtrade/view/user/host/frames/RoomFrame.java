@@ -5,7 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +18,7 @@ import java.util.Map.Entry;
 import java.awt.Color;
 import javax.swing.JComboBox;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.constants.RoomTypeConstants;
@@ -120,6 +124,13 @@ public class RoomFrame extends JFrame {
 		contentPane.add(lblPrice);
 		
 		tfPrice = new JTextField();
+		tfPrice.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfPrice.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfPrice.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
 		tfPrice.setForeground(new Color(71, 71, 71));
 		tfPrice.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfPrice.setColumns(10);
@@ -129,27 +140,35 @@ public class RoomFrame extends JFrame {
 		JButton btnAction = new JButton("");
 		btnAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				RoomType type = createRoomType();
-				Room info = createRoomInfo();
-				PropertyWrapper tempOwner = new PropertyWrapper();
-				Map<RoomType, Room> room = new HashMap<>();
-				TransferClass transferClass = new TransferClass();
-				
-				if (action.equals("ADD")) {
-					room.put(type, info);
-					tempOwner.setRooms(room);
-					addNewRoom(transferClass, tempOwner);
-				} else if (action.equals("UPDATE")) {
-					updateRoomType();
-					updateRoomInfo();
-					room.put(roomType, roomInfo);
-					tempOwner.setRooms(room);
-					updateRoom(transferClass, tempOwner);
+				if (tfPrice.getText().length() != 0) {
+					try {
+						RoomType type = createRoomType();
+						Room info = createRoomInfo();
+						PropertyWrapper tempOwner = new PropertyWrapper();
+						Map<RoomType, Room> room = new HashMap<>();
+						TransferClass transferClass = new TransferClass();
+						
+						if (action.equals("ADD")) {
+							room.put(type, info);
+							tempOwner.setRooms(room);
+							addNewRoom(transferClass, tempOwner);
+						} else if (action.equals("UPDATE")) {
+							updateRoomType();
+							updateRoomInfo();
+							room.put(roomType, roomInfo);
+							tempOwner.setRooms(room);
+							updateRoom(transferClass, tempOwner);
+						}
+						
+						panel.fillRoomTypeTable();
+						dispose();	
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Please insert correct data in price field");
+					}
+				} else {
+					tfPrice.setBorder(new LineBorder(ColorConstants.RED));
+					JOptionPane.showMessageDialog(null, "You can't leave empty fields");
 				}
-				
-				panel.fillRoomTypeTable();
-				dispose();
 			}
 		});
 		btnAction.addMouseListener(new MouseAdapter() {

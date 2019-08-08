@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.comtrade.connection.Connection;
 import com.comtrade.constants.ImageFolder;
+import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
@@ -238,7 +239,7 @@ public class Broker implements IBroker {
 		
 		while (resultSet.next()) {
 			int idImage = resultSet.getInt("id_image");
-			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
+			String fullPath = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
 			PropertyImage propertyImage = new PropertyImage();
 			propertyImage.setIdImage(idImage);
 			propertyImage.setIdProperty(id_property);
@@ -263,7 +264,7 @@ public class Broker implements IBroker {
 		while (resultSet.next()) {
 			int idCardType = resultSet.getInt("id_card_type");
 			String name = resultSet.getString("name");
-			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
+			String fullPath = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
 			PaymentType paymentType = new PaymentType();
 			paymentType.setId_payment(idCardType);
 			paymentType.setName(name);
@@ -281,7 +282,7 @@ public class Broker implements IBroker {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			int idCountry = resultSet.getInt("id_country");
-			String fullPath = ImageFolder.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
+			String fullPath = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
 			String name = resultSet.getString("name");
 			Country country = new Country();
 			country.setIdCountry(idCountry);
@@ -291,15 +292,4 @@ public class Broker implements IBroker {
 		}
 		return null;
 	}
-
-	@Override
-	public List<User> returnUsers(User user, String status) throws SQLException {
-		String sql = "SELECT * FROM user WHERE status = ?";
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		preparedStatement.setString(1,status);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return user.returnList(resultSet);
-	}
-
-	
 }

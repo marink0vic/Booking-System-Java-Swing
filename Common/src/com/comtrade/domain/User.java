@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.behavior.DomainJoinBookings;
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
@@ -207,11 +208,11 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 		LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
 		
 		String countryName = resultSet.getString("name");
-		String countryImage = resultSet.getString("image");
+		String countryImage = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
 		Country c = new Country(countryId, countryName, countryImage);
 		User user = new User(c, firstName, lastName, email, username, null, date, status);
 		
-		user.setProfilePicture(image);
+		user.setProfilePicture(ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + image);
 		user.idUser = userId;
 		
 		return user;
@@ -240,6 +241,42 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 
 	public boolean checkPassword(String password, String hash_password) {
 		return BCrypt.checkpw(password, hash_password);
+	}
+	
+	@Override
+	public String prepareJoin() throws SQLException {
+		String join =  "SELECT * FROM bookings"
+					+ " JOIN property ON property.id_property = bookings.id_property"
+					+ " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"
+					+ " WHERE bookings.id_user = ?";
+		return join;
+	}
+
+	@Override
+	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
+		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
+		while (rs.next()) {
+			Booking booking = new Booking();
+			booking = booking.createBooking(rs);
+			
+			BookedRoom br = new BookedRoom();
+			br = br.createBookedRoom(rs);
+			
+			Property property = new Property();
+			property.setIdProperty(rs.getInt("id_property"));
+			property.setType(rs.getString("type"));
+			property.setName(rs.getString("name"));
+			booking.setProperty(property);
+			
+			if (bookings.containsKey(booking)) {
+				bookings.get(booking).add(br);
+			} else {
+				List<BookedRoom> rooms = new ArrayList<>();
+				rooms.add(br);
+				bookings.put(booking, rooms);
+			}
+		}
+		return bookings;
 	}
 
 
@@ -281,41 +318,5 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String prepareJoin() throws SQLException {
-		String join =  "SELECT * FROM bookings"
-					+ " JOIN property ON property.id_property = bookings.id_property"
-					+ " JOIN booked_room ON booked_room.id_booking = bookings.id_booking"
-					+ " WHERE bookings.id_user = ?";
-		return join;
-	}
-
-	@Override
-	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
-		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
-		while (rs.next()) {
-			Booking booking = new Booking();
-			booking = booking.createBooking(rs);
-			
-			BookedRoom br = new BookedRoom();
-			br = br.createBookedRoom(rs);
-			
-			Property property = new Property();
-			property.setIdProperty(rs.getInt("id_property"));
-			property.setType(rs.getString("type"));
-			property.setName(rs.getString("name"));
-			booking.setProperty(property);
-			
-			if (bookings.containsKey(booking)) {
-				bookings.get(booking).add(br);
-			} else {
-				List<BookedRoom> rooms = new ArrayList<>();
-				rooms.add(br);
-				bookings.put(booking, rooms);
-			}
-		}
-		return bookings;
 	}
 }

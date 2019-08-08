@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.constants.ImageFolder;
+import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.User;
 import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.generics.GenericClass;
@@ -24,7 +25,7 @@ public class SaveUserSO extends GeneralSystemOperation<GenericClass<User>> {
 			user.setProfilePicture(ImageFolder.IMAGE_DEFAULT_USER_PROFILE_PICTURE.getPath());
 			int id = iBroker.save(user);
 			user.setIdUser(id);
-			user.setProfilePicture(ImageFolder.SERVER_RESOURCES_PATH.getPath() + ImageFolder.IMAGE_DEFAULT_USER_PROFILE_PICTURE.getPath());
+			user.setProfilePicture(ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + ImageFolder.IMAGE_DEFAULT_USER_PROFILE_PICTURE.getPath());
 			
 			ServerData.getInstance().addNewUser(user);
 		}
