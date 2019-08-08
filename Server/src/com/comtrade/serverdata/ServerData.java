@@ -87,6 +87,14 @@ public class ServerData {
 		transactions.add(transaction);
 	}
 	
+	public void addNewUser(User user) {
+		if (user.getStatus().equals(UserType.USER.getAccess())) {
+			regularUsers.add(user);
+		} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {
+			superUsers.add(user);
+		}
+	}
+	
 	public Map<Booking, List<BookedRoom>> returnBookingsForProperty(Property property) {
 		for (PropertyWrapper pw : properties) {
 			if (pw.getProperty().getIdProperty() == property.getIdProperty()) {
@@ -137,5 +145,20 @@ public class ServerData {
 			payment.setImage(fullPath);
 		}
 	}
+
+	public boolean existsInDatabase(User user) {
+		for (User u : regularUsers) {
+			if (u.getUsername().equals(user.getUsername()) || u.getEmail().equals(user.getEmail())) {
+				return true;
+			}
+		} 
+		for (User u : superUsers) {
+			if (u.getUsername().equals(user.getUsername()) || u.getEmail().equals(user.getEmail())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }

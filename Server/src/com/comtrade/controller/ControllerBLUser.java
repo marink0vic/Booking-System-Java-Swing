@@ -40,7 +40,11 @@ public class ControllerBLUser implements IControllerBL {
 			User returnedUser = null;
 			try {
 				returnedUser = saveUser(user);
-				UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
+				if (returnedUser.getIdUser() == 0) {
+					receiver.setMessageResponse("Entered data already exists in the database\nCheck your username and email");
+				} else {
+					UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
+				}
 				
 				receiver.setServerResponse(returnedUser);
 				receiver.setDomainType(DomainType.USER);

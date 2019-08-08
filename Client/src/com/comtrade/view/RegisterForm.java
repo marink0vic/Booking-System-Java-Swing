@@ -4,7 +4,9 @@ package com.comtrade.view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
@@ -77,7 +79,7 @@ public class RegisterForm extends JFrame {
 		setContentPane(contentPane);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(71, 71, 71));
+		panel.setBackground(ColorConstants.BLUE);
 		panel.setBounds(0, 0, 632, 101);
 		contentPane.add(panel);
 		panel.setLayout(null);
@@ -90,65 +92,100 @@ public class RegisterForm extends JFrame {
 		panel.add(lblNewLabel);
 		
 		JLabel lblFirstName = new JLabel("First name:");
-		lblFirstName.setForeground(new Color(71, 71, 71));
+		lblFirstName.setForeground(ColorConstants.GRAY);
 		lblFirstName.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblFirstName.setBounds(51, 156, 124, 37);
 		contentPane.add(lblFirstName);
 		
 		tfFirstName = new JTextField();
+		tfFirstName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfFirstName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfFirstName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
 		tfFirstName.setFont(new Font("Dialog", Font.BOLD, 19));
-		tfFirstName.setForeground(new Color(71, 71, 71));
+		tfFirstName.setForeground(ColorConstants.GRAY);
 		tfFirstName.setBounds(198, 143, 383, 55);
 		contentPane.add(tfFirstName);
 		tfFirstName.setColumns(10);
 		
 		tfLastName = new JTextField();
-		tfLastName.setForeground(new Color(71, 71, 71));
+		tfLastName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfLastName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfLastName.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		tfLastName.setForeground(ColorConstants.GRAY);
 		tfLastName.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfLastName.setColumns(10);
 		tfLastName.setBounds(198, 226, 383, 55);
 		contentPane.add(tfLastName);
 		
 		JLabel lblLastName = new JLabel("Last name:");
-		lblLastName.setForeground(new Color(71, 71, 71));
+		lblLastName.setForeground(ColorConstants.GRAY);
 		lblLastName.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblLastName.setBounds(51, 239, 124, 37);
 		contentPane.add(lblLastName);
 		
 		tfEmail = new JTextField();
-		tfEmail.setForeground(new Color(71, 71, 71));
+		tfEmail.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfEmail.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfEmail.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		tfEmail.setForeground(ColorConstants.GRAY);
 		tfEmail.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfEmail.setColumns(10);
 		tfEmail.setBounds(198, 311, 383, 55);
 		contentPane.add(tfEmail);
 		
 		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setForeground(new Color(71, 71, 71));
+		lblEmail.setForeground(ColorConstants.GRAY);
 		lblEmail.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblEmail.setBounds(51, 324, 124, 37);
 		contentPane.add(lblEmail);
 		
 		tfUsername = new JTextField();
-		tfUsername.setForeground(new Color(71, 71, 71));
+		tfUsername.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		tfUsername.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				tfUsername.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		tfUsername.setForeground(ColorConstants.GRAY);
 		tfUsername.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfUsername.setColumns(10);
 		tfUsername.setBounds(198, 394, 383, 55);
 		contentPane.add(tfUsername);
 		
 		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setForeground(new Color(71, 71, 71));
+		lblUsername.setForeground(ColorConstants.GRAY);
 		lblUsername.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblUsername.setBounds(51, 407, 124, 37);
 		contentPane.add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setForeground(new Color(71, 71, 71));
+		lblPassword.setForeground(ColorConstants.GRAY);
 		lblPassword.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblPassword.setBounds(51, 491, 124, 37);
 		contentPane.add(lblPassword);
 		
 		passwordField = new JPasswordField();
-		passwordField.setForeground(new Color(71, 71, 71));
+		passwordField.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		passwordField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				passwordField.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+			}
+		});
+		passwordField.setForeground(ColorConstants.GRAY);
 		passwordField.setFont(new Font("Dialog", Font.BOLD, 13));
 		passwordField.setBounds(198, 480, 383, 55);
 		contentPane.add(passwordField);
@@ -212,33 +249,18 @@ public class RegisterForm extends JFrame {
 		JButton btnSignIn = new JButton("Sign in");
 		btnSignIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				User userForDatabase = createUser();
-				TransferClass transferClass = new TransferClass();
-				transferClass.setClientRequest(userForDatabase);
-				transferClass.setDomainType(DomainType.USER);
-				transferClass.setOperation(Operations.SAVE);
-				
-				ControllerUI.getController().sendToServer(transferClass);
-				
-				User user = ControllerUI.getController().getUser();
-				if (user != null) {
-					if (STATUS.equals("SUPER_USER")) {
-						user.setCountry(userCountry);
-						PropertyForm propertyForm = new PropertyForm(user, countries);
-						propertyForm.setLocationRelativeTo(null);
-						propertyForm.setVisible(true);
-						dispose();
+				try {
+					checkForEmptyFields();
+					User userForDatabase = createUser();
+					if (userForDatabase != null) {
+						saveToDatabase(userForDatabase);
 					} else {
-						user.setCountry(userCountry);
-						UserHomeFrame mainUserFrame = new UserHomeFrame(user);
-						mainUserFrame.setLocationRelativeTo(null);
-						mainUserFrame.setVisible(true);
-						dispose();
+						JOptionPane.showMessageDialog(null, "Please enter a valid email address");
 					}
-				} else {
-					JOptionPane.showMessageDialog(null, "<html>Something went wrong with your information"
-							+ "<br> we'll get back to you soon</html>");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, ex.getMessage());
 				}
+				
 			}
 		});
 		btnSignIn.addMouseListener(new MouseAdapter() {
@@ -266,14 +288,78 @@ public class RegisterForm extends JFrame {
 		uploadCountryImagesFromDB();
 	}
 
+	protected void checkForEmptyFields() throws Exception {
+		int counter  = 0;
+		if (tfFirstName.getText().length() == 0) {
+			tfFirstName.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (tfLastName.getText().length() == 0) {
+			tfLastName.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (tfEmail.getText().length() == 0) {
+			tfEmail.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (tfUsername.getText().length() == 0) {
+			tfUsername.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (passwordField.getPassword().length == 0) {
+			passwordField.setBorder(new LineBorder(ColorConstants.RED));
+			counter++;
+		}
+		if (counter != 0) {
+			throw new Exception("You can't leave empty fields");
+		}
+	}
+
+	private void saveToDatabase(User userForDatabase) {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(userForDatabase);
+		transferClass.setDomainType(DomainType.USER);
+		transferClass.setOperation(Operations.SAVE);
+		
+		ControllerUI.getController().sendToServer(transferClass);
+		
+		User user = ControllerUI.getController().getUser();
+		if (user.getIdUser() != 0) {
+			if (STATUS.equals("SUPER_USER")) {
+				user.setCountry(userCountry);
+				PropertyForm propertyForm = new PropertyForm(user, countries);
+				propertyForm.setLocationRelativeTo(null);
+				propertyForm.setVisible(true);
+				dispose();
+			} else {
+				user.setCountry(userCountry);
+				UserHomeFrame mainUserFrame = new UserHomeFrame(user);
+				mainUserFrame.setLocationRelativeTo(null);
+				mainUserFrame.setVisible(true);
+				dispose();
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, ControllerUI.getController().getMessageResponse());
+		}
+	}
+
 	protected User createUser() {
-		String firstName = tfFirstName.getText();
-		String lastName = tfLastName.getText();
 		String email = tfEmail.getText();
-		String username = tfUsername.getText();
-		String password = String.copyValueOf(passwordField.getPassword());
-		LocalDate dateOfBirth = LocalDate.of(year, month, day);
-		return new User(userCountry, firstName, lastName, email, username, password, dateOfBirth, STATUS);
+		if (isValid(email)) {
+			String firstName = tfFirstName.getText();
+			String lastName = tfLastName.getText();
+			String username = tfUsername.getText();
+			String password = String.copyValueOf(passwordField.getPassword());
+			LocalDate dateOfBirth = LocalDate.of(year, month, day);
+			return new User(userCountry, firstName, lastName, email, username, password, dateOfBirth, STATUS);
+		} else {
+			return null;
+		}
+	}
+
+	private boolean isValid(String email) {
+		String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+		return email.matches(regex);
 	}
 
 	private void fillComboYear() {
