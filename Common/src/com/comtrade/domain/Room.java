@@ -152,22 +152,6 @@ public class Room implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Room room = new Room();
-		if (resultSet.next()) {
-			room.idRoom = resultSet.getInt("id_room");
-			room.idRoomType = resultSet.getInt("id_room_type");
-			room.numOfBads = resultSet.getInt("num_of_bads");
-			room.kitchen = resultSet.getBoolean("kitchen");
-			room.tv = resultSet.getBoolean("tv");
-			room.airConditioning = resultSet.getBoolean("air_conditioning");
-			room.wifi = resultSet.getBoolean("wifi");
-			return room;
-		}
-		return null;
-	}
-
-	@Override
 	public int returnIdNumber() {
 		return idRoom;
 	}

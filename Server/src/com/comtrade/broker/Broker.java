@@ -117,7 +117,7 @@ public class Broker implements IBroker {
 				return u;
 			}
 		}
-		return null;
+		return new User();
 	}
 
 

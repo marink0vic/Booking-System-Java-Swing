@@ -3,6 +3,7 @@ package com.comtrade.view.property;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -137,6 +139,10 @@ public class BasicInfoPanel extends JPanel {
 		lblAddDescriptionFor.setBounds(785, 113, 376, 37);
 		this.add(lblAddDescriptionFor);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(785, 164, 394, 318);
+		add(scrollPane);
+		
 		textArea = new JTextArea();
 		textArea.addMouseListener(new MouseAdapter() {
 			@Override
@@ -147,10 +153,9 @@ public class BasicInfoPanel extends JPanel {
 		textArea.setForeground(new Color(71, 71, 71));
 		textArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		textArea.setFont(new Font("Dialog", Font.PLAIN, 18));
-		textArea.setBounds(785, 164, 394, 318);
 		textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-		this.add(textArea);
+		scrollPane.setViewportView(textArea);
 		
 		JButton btnContinue = new JButton("Continue");
 		btnContinue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

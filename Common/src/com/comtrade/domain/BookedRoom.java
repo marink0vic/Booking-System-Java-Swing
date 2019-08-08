@@ -152,14 +152,6 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		return bookedRooms;
 	}
 	
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		if (resultSet.next()) {
-			return createBookedRoom(resultSet);
-		}
-		return null;
-	}
-	
 	public BookedRoom createBookedRoom(ResultSet resultSet) throws SQLException {
 		int id = resultSet.getInt("id_booked_room");
 		int idBooking = resultSet.getInt("id_booking");

@@ -137,22 +137,5 @@ public class Location implements GeneralDomain, Serializable {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Location location = new Location();
-		if (resultSet.next()) {
-			location.idLocation = resultSet.getInt("id_location");
-			location.idCountry = resultSet.getInt("id_country");
-			location.street = resultSet.getString("street");
-			location.number = resultSet.getString("number");
-			location.city = resultSet.getString("city");
-			location.zipCode = resultSet.getInt("post_or_zipcode");
-			location.latitude = resultSet.getDouble("latitude");
-			location.longitude = resultSet.getDouble("longitude");
-			return location;
-		}
-		return null;
-	}
 
 }

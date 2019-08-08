@@ -34,6 +34,14 @@ public class UserActiveThreads implements ActiveThreads {
 		return activeThreads;
 	}
 	
+	public Map<User, ClientThread> getUserThreads() {
+		return userThreads;
+	}
+
+	public Map<User, ClientThread> getHostThreads() {
+		return hostThreads;
+	}
+
 	@Override
 	public void register(User user, ClientThread thread) {
 		if (user.getStatus().equals(UserType.USER.getAccess())) {

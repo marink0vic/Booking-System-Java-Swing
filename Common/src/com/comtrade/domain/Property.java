@@ -198,27 +198,6 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Property property = new Property();
-		if (resultSet.next()) {
-			property.idProperty = resultSet.getInt("id_property");
-			property.idUser = resultSet.getInt("id_user");
-			property.idLocation = resultSet.getInt("id_location");
-			property.type = resultSet.getString("type");
-			property.name = resultSet.getString("name");
-			property.phoneNumner = resultSet.getString("phone_number");
-			property.rating = resultSet.getInt("rating");
-			property.description = resultSet.getString("description");
-			String created = resultSet.getString("created");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
-			property.created = dateTime;
-			return property;
-		}
-		return null;
-	}
-
-	@Override
 	public String prepareJoin() throws SQLException {
 		String join =  "SELECT * FROM bookings"
 				    + " JOIN user ON user.id_user = bookings.id_user"

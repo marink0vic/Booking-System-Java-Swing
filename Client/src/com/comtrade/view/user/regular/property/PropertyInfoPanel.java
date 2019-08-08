@@ -86,16 +86,17 @@ public class PropertyInfoPanel extends JPanel {
 		lblAddress = new JLabel("");
 		lblAddress.setForeground(new Color(71, 71, 71));
 		lblAddress.setFont(new Font("Dialog", Font.PLAIN, 17));
-		lblAddress.setBounds(0, 13, 353, 95);
+		lblAddress.setBounds(0, 44, 353, 70);
 		this.add(lblAddress);
 		String street = address.getStreet() + " " + address.getNumber();
 		String city = address.getZipCode() + " " + address.getCity();
-		lblAddress.setText(street + ", " + city + ", " + propertyWrapper.getCountry().getName());
+		String info = "<html>"+street + ", " + city + "<br>" + propertyWrapper.getCountry().getName()+"</html>";
+		lblAddress.setText(info);
 		
 		lblLocation = new JLabel("map location");
 		lblLocation.setForeground(new Color(71, 71, 71));
 		lblLocation.setFont(new Font("Dialog", Font.PLAIN, 17));
-		lblLocation.setBounds(0, 65, 288, 62);
+		lblLocation.setBounds(0, 105, 158, 32);
 		this.add(lblLocation);
 		
 		lblGrade = new JLabel(setPropertyRating());
@@ -104,7 +105,7 @@ public class PropertyInfoPanel extends JPanel {
 		lblGrade.setBackground(new Color(9, 121, 186));
 		lblGrade.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGrade.setFont(new Font("Dialog", Font.BOLD, 24));
-		lblGrade.setBounds(0, 121, 56, 48);
+		lblGrade.setBounds(0, 150, 56, 48);
 		this.add(lblGrade);
 		
 		lblHelper1 = new JLabel("If you have any questions send us a message");
@@ -148,15 +149,18 @@ public class PropertyInfoPanel extends JPanel {
 		chatArea.setLineWrap(true);
 		scrollPane.setViewportView(chatArea);
 		
+		JScrollPane scrollDescription = new JScrollPane();
+		scrollDescription.setBounds(379, 524, 596, 177);
+		this.add(scrollDescription);
+		
 		JTextArea txtAboutProperty = new JTextArea();
 		txtAboutProperty.setFont(new Font("Dialog", Font.BOLD, 18));
-		txtAboutProperty.setForeground(new Color(71, 71, 71));
-		txtAboutProperty.setBounds(379, 524, 596, 177);
+		txtAboutProperty.setForeground(ColorConstants.GRAY);
 		txtAboutProperty.setText(property.getDescription());
 		txtAboutProperty.setLineWrap(true);
 		txtAboutProperty.setWrapStyleWord(true);
 		txtAboutProperty.setEditable(false);
-		this.add(txtAboutProperty);
+		scrollDescription.setViewportView(txtAboutProperty);
 		
 		JButton btnSend = new JButton("SEND");
 		btnSend.addActionListener(new ActionListener() {

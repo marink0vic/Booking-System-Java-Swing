@@ -16,5 +16,4 @@ public interface GeneralDomain extends Generic {
 	String returnIdColumnName();
 	void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException;
 	List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException;
-	GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException;
 }

@@ -149,15 +149,6 @@ public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 		}
 		return list;
 	}
-
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		if (resultSet.next()) {
-			Booking booking = createBooking(resultSet);
-			return booking;
-		}
-		return null;
-	}
 	
 	public Booking createBooking (ResultSet resultSet) throws SQLException {
 		int id = resultSet.getInt("id_booking");

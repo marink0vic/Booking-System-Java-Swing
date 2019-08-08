@@ -70,18 +70,17 @@ public class ControllerUI {
 	}
 
 	public User getUser() {
-		int counter = 0;
 		while (user == null) {
-			System.out.println("waiting for user " + counter);
-			counter++;
+			System.out.println("waiting for user ");
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (counter == 5) break;
 		}
-		return user;
+		User temp = user;
+		user = null;
+		return temp;
 	}
 	
 	public UserWrapper getUserWrapper() {
@@ -179,8 +178,8 @@ public class ControllerUI {
 		case SAVE:
 		case LOGIN_USER:
 		{
-			user = (User) transfer.getServerResponse();
 			messageResponseFromServer = transfer.getMessageResponse();
+			user = (User) transfer.getServerResponse();
 			break;
 		}
 		case RETURN_BOOKING_FOR_USER:

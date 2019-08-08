@@ -165,7 +165,7 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 		preparedStatement.setString(5, username);
 		preparedStatement.setString(6, hashPassword(password));
 		preparedStatement.setDate(7, java.sql.Date.valueOf(dateOfBirth));
-		preparedStatement.setString(8, "/resources/images/users/user-icon.jpg");
+		preparedStatement.setString(8, profilePicture);
 		preparedStatement.setString(9, status);
 		preparedStatement.setString(10, sdf.format(date));
 	}
@@ -194,40 +194,20 @@ public class User implements DomainUpdate, DomainJoinBookings, Serializable {
 	public String returnIdColumnName() {
 		return "id_user";
 	}
-
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		User user = new User();
-		if (resultSet.next()) {
-			user.setIdUser(resultSet.getInt("id_user"));
-			user.setFirstName(resultSet.getString("first_name"));
-			user.setLastName(resultSet.getString("last_name"));
-			user.setEmail(resultSet.getString("email"));
-			user.setUsername(resultSet.getString("username"));
-			java.sql.Date date = resultSet.getDate("date_of_birth");
-		    user.setDateOfBirth(date.toLocalDate());
-		    user.setProfilePicture(resultSet.getString("profile_picture"));
-		    user.setStatus(resultSet.getString("status"));
-		    return user;
-		}
-		return null;
-	}
 	
 	public User createUser(ResultSet resultSet) throws SQLException {
-		String serverPath = "C:/Users/marko/Desktop/Booking-System-Java-Swing/Server";
-		
 		int userId = resultSet.getInt("id_user");
 		int countryId = resultSet.getInt("country_id");
 		String firstName = resultSet.getString("first_name");
 		String lastName = resultSet.getString("last_name");
 		String email = resultSet.getString("email");
 		String username = resultSet.getString("username");
-		String image = serverPath + resultSet.getString("profile_picture");
+		String image = resultSet.getString("profile_picture");
 		String status = resultSet.getString("status");
 		LocalDate date = resultSet.getDate("date_of_birth").toLocalDate();
 		
 		String countryName = resultSet.getString("name");
-		String countryImage = serverPath + resultSet.getString("image");
+		String countryImage = resultSet.getString("image");
 		Country c = new Country(countryId, countryName, countryImage);
 		User user = new User(c, firstName, lastName, email, username, null, date, status);
 		

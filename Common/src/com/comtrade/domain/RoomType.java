@@ -120,20 +120,6 @@ public class RoomType implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		RoomType roomType = new RoomType();
-		if (resultSet.next()) {
-			roomType.setIdRoomType(resultSet.getInt("id_room_type"));
-			roomType.setIdProperty(resultSet.getInt("id_property"));
-			roomType.setRoomType(resultSet.getString("type"));
-			roomType.setNumberOfRooms(resultSet.getInt("num_of_rooms"));
-			roomType.setPricePerNight(resultSet.getDouble("price_per_night"));
-			return roomType;
-		}
-		return null;
-	}
-
-	@Override
 	public int returnIdNumber() {
 		return idRoomType;
 	}

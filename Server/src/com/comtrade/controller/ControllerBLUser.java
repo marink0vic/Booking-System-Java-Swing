@@ -55,21 +55,25 @@ public class ControllerBLUser implements IControllerBL {
 		case LOGIN_USER:
 		{
 			User user = (User) sender.getClientRequest();
-			User returnedUser = null;
-			try {
-				returnedUser = loginUser(user);
-				receiver.setDomainType(DomainType.USER);
-				receiver.setOperation(Operations.LOGIN_USER);
-				if (returnedUser == null) {
-					receiver.setMessageResponse("Entered information does not exist in the database");
-				} else {
-					UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
+			User returnedUser = new User();
+			if(loggedIn(user)) {
+				receiver.setMessageResponse("You are already logged in");
+			} else {
+				try {
+					returnedUser = loginUser(user);
+					if (returnedUser.getIdUser() == 0) {
+						receiver.setMessageResponse("Entered information does not exist in the database");
+					} else {
+						UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
+					}
+				} catch (SQLException e) {
+					receiver.setMessageResponse("Problem occurred while login user to database");
+					e.printStackTrace();
 				}
-				receiver.setServerResponse(returnedUser);
-			} catch (SQLException e) {
-				receiver.setMessageResponse("Problem occurred while login user to database");
-				e.printStackTrace();
 			}
+			receiver.setServerResponse(returnedUser);
+			receiver.setDomainType(DomainType.USER);
+			receiver.setOperation(Operations.LOGIN_USER);
 			return receiver;
 		}
 		case RETURN_BOOKING_FOR_USER:
@@ -114,7 +118,6 @@ public class ControllerBLUser implements IControllerBL {
 		
 	}
 
-
 	private User loginUser(User user) throws SQLException {
 		GenericClass<User> domainUser = new GenericClass<>(user);
 		GeneralSystemOperation<GenericClass<User>> sysOperation = new LoginUserSO();
@@ -140,5 +143,15 @@ public class ControllerBLUser implements IControllerBL {
 		GenericClass<User> domainUser = new GenericClass<>(user);
 		GeneralSystemOperation<GenericClass<User>> sysOperation = new UpdateUserSO();
 		sysOperation.executeSystemOperation(domainUser);
+	}
+	
+	private boolean loggedIn(User user) {
+		for (User u : UserActiveThreads.getActiveThreads().getHostThreads().keySet()) {
+			if (u.getUsername().equals(user.getUsername())) return true;
+		}
+		for (User u : UserActiveThreads.getActiveThreads().getUserThreads().keySet()) {
+			if (u.getUsername().equals(user.getUsername())) return true;
+		}
+		return false;
 	}
 }

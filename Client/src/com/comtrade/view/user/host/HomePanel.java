@@ -73,14 +73,14 @@ public class HomePanel extends JPanel {
 		lblPropertyName.setForeground(new Color(71, 71, 71));
 		lblPropertyName.setFont(new Font("Dialog", Font.BOLD, 22));
 		lblPropertyName.setBorder(null);
-		lblPropertyName.setBounds(168, 71, 308, 37);
+		lblPropertyName.setBounds(168, 71, 517, 37);
 		this.add(lblPropertyName);
 		
 		lblPropertyAddress = new JLabel("Propery Address");
 		lblPropertyAddress.setForeground(new Color(71, 71, 71));
 		lblPropertyAddress.setFont(new Font("Dialog", Font.PLAIN, 20));
 		lblPropertyAddress.setBorder(null);
-		lblPropertyAddress.setBounds(168, 107, 570, 37);
+		lblPropertyAddress.setBounds(168, 107, 850, 37);
 		this.add(lblPropertyAddress);
 		
 		lblSmallImage = new JLabel("");

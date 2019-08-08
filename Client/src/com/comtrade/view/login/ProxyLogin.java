@@ -36,7 +36,7 @@ public class ProxyLogin implements IProxy {
 		ControllerUI.getController().sendToServer(transferClass);
 		user = ControllerUI.getController().getUser();
 		
-		if (user != null) {
+		if (user.getIdUser() != 0) {
 			if (user.getStatus().equals(UserType.ADMIN.getAccess())) {
 				JOptionPane.showMessageDialog(null, "You are admin");
 			} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {

@@ -87,12 +87,6 @@ public class PaymentProperty implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public int returnIdNumber() {
 		// TODO Auto-generated method stub
 		return 0;

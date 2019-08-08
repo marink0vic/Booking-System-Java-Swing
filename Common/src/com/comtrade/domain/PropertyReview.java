@@ -135,12 +135,6 @@ public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializ
 	}
 
 	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String prepareJoin() throws SQLException {
 		String join =  "SELECT * FROM property_review"
 					+ " JOIN user ON user.id_user = property_review.id_user"

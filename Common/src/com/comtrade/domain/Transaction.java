@@ -150,15 +150,6 @@ public class Transaction implements GeneralDomain, Serializable {
 		}
 		return transactions;
 	}
-	
-	@Override
-	public GeneralDomain returnLastInsertedObject(ResultSet resultSet) throws SQLException {
-		Transaction transaction = new Transaction();
-		if (resultSet.next()) {
-			transaction = createTransaction(resultSet);
-		}
-		return transaction;
-	}
 
 	private Transaction createTransaction(ResultSet resultSet) throws SQLException {
 		int id = resultSet.getInt("id_transaction");
