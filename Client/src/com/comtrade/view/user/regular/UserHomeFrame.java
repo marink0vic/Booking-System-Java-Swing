@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -31,6 +32,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Property;
+import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
@@ -61,7 +63,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private SearchPagePanel searchPagePanel;
 	
 	private List<PropertyWrapper> listOfProperties;
-	private User user; // loged inuser
+	private User user; // loged user
 	private UserWrapper userWrapper;
 	private JTextField tfSearch;
 	private JDateChooser dateCheckIn;
@@ -92,7 +94,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		
 		returnBookingsForUser();
 		loadAllProperties();
-		sortPropertiesBasedOnRating();
+		sortPropertiesBasedOnReviewRating();
 		setSearchPanel();
 		
 		headerPanel = HeaderPanel.getPanel();
@@ -204,13 +206,20 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		layeredPane.revalidate();
 	}
 
-	private void sortPropertiesBasedOnRating() {
+	private void sortPropertiesBasedOnReviewRating() {
 		listOfProperties.sort(new Comparator<PropertyWrapper>() {
 			@Override
 			public int compare(PropertyWrapper wrapper1, PropertyWrapper wrapper2) {
-				return wrapper2.getProperty().getRating() - wrapper1.getProperty().getRating();
+				Double avg1 = calculateAverage(wrapper1.getReviews());
+				Double avg2 = calculateAverage(wrapper2.getReviews());
+				return avg1.compareTo(avg2);
 			}
 		});
+	}
+
+	private double calculateAverage(List<PropertyReview> reviews) {
+		int sum = reviews.stream().mapToInt(v -> v.getRating()).sum();
+		return (double) sum / reviews.size();
 	}
 
 	private void returnBookingsForUser() {

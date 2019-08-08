@@ -259,6 +259,7 @@ public class RegisterForm extends JFrame {
 					}
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, ex.getMessage());
+					ex.printStackTrace();
 				}
 				
 			}
@@ -326,13 +327,11 @@ public class RegisterForm extends JFrame {
 		User user = ControllerUI.getController().getUser();
 		if (user.getIdUser() != 0) {
 			if (STATUS.equals("SUPER_USER")) {
-				user.setCountry(userCountry);
 				PropertyForm propertyForm = new PropertyForm(user, countries);
 				propertyForm.setLocationRelativeTo(null);
 				propertyForm.setVisible(true);
 				dispose();
 			} else {
-				user.setCountry(userCountry);
 				UserHomeFrame mainUserFrame = new UserHomeFrame(user);
 				mainUserFrame.setLocationRelativeTo(null);
 				mainUserFrame.setVisible(true);

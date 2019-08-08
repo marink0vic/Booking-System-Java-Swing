@@ -57,6 +57,7 @@ public class AddressPanel extends JPanel {
 		this.lblPropertyInfo = lblPropertyInfo;
 		this.address = address;
 		this.countries = countries;
+		propertyCountry = new Country();
 		initializeComponents();
 	}
 	
@@ -322,7 +323,9 @@ public class AddressPanel extends JPanel {
 		for (Country country : countries) {
 			if (country.getName().equals(countryName)) {
 				idCountry = country.getIdCountry();
-				propertyCountry = country;
+				propertyCountry.setIdCountry(idCountry);
+				propertyCountry.setName(country.getName());
+				propertyCountry.setImage(country.getImage());
 				
 				File file = new File(country.getImage());
 				Image im = new ImageIcon(file.toString()).getImage().getScaledInstance(62, 35, Image.SCALE_DEFAULT);
