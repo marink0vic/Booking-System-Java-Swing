@@ -61,6 +61,7 @@ public class PropertyInfoPanel extends JPanel {
 	private JTextArea chatArea;
 	private String messageText;
 	private JScrollPane scrollPane;
+	private JLabel lblReviewCount;
 
 	
 	public PropertyInfoPanel(PropertyWrapper propertyWrapper, User user) {
@@ -198,6 +199,12 @@ public class PropertyInfoPanel extends JPanel {
 		
 		JPanel smallImagePanel = new JPanel();
 		scrollPanelSmallGallery.setViewportView(smallImagePanel);
+		
+		lblReviewCount = new JLabel(propertyWrapper.getReviews().size() + " reviews");
+		lblReviewCount.setForeground(ColorConstants.GRAY);
+		lblReviewCount.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblReviewCount.setBounds(80, 170, 106, 16);
+		add(lblReviewCount);
 		
 		for (PropertyImage image : propertyImages) {
 			smallImagePanel.add(smallGalleryPanels(smallImagePanel, image.getImage()));

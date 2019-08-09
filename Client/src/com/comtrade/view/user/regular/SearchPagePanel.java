@@ -41,6 +41,8 @@ public class SearchPagePanel extends JPanel {
 	private JLabel lblRating;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
+	private JPanel gridPanel;
+	private String searchInput;
 	
 	public SearchPagePanel(List<PropertyWrapper> listOfProperties, User user) {
 		this.listOfProperties = listOfProperties;
@@ -52,10 +54,9 @@ public class SearchPagePanel extends JPanel {
 		this.setBounds(252, 204, 975, 728);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
-		
-		listAllProperties();
+		loadScrollPaneBase();
 	}
-	
+
 	public void setCheckIn(LocalDate checkIn) {
 		this.checkIn = checkIn;
 	}
@@ -63,9 +64,13 @@ public class SearchPagePanel extends JPanel {
 	public void setCheckOut(LocalDate checkOut) {
 		this.checkOut = checkOut;
 	}
-
-	private void listAllProperties() {
-		JPanel gridPanel = new JPanel();
+	
+	public void setSearchCityInput(String text) {
+		this.searchInput = text.toLowerCase();
+	}
+	
+	private void loadScrollPaneBase() {
+		gridPanel = new JPanel();
 		gridPanel.setLayout(new GridLayout(-1, 1));
 		gridPanel.setBackground(new Color(255, 255, 255));
 		gridPanel.setBounds(261, 562, 950, 320);
@@ -77,18 +82,31 @@ public class SearchPagePanel extends JPanel {
 	    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    scrollPane.setBounds(261, 562, 950, 320);
-	    
+	   
 		JPanel container = new JPanel(new BorderLayout());
 		container.setBackground(new Color(255, 255, 255));
 		container.setBorder(null);
 		container.setBounds(12, 0, 950, 715);
 		container.add(scrollPane, BorderLayout.CENTER);
 		this.add(container);
-		
-		for (PropertyWrapper property : listOfProperties) {
-            JPanel scrollPanel = setScrollProperty(property);
-            gridPanel.add(scrollPanel);
-        }
+	}
+
+	public void listAllProperties() {
+		gridPanel.removeAll();
+		if (searchInput.length() == 0) {
+			for (PropertyWrapper property : listOfProperties) {
+				JPanel scrollPanel = setScrollProperty(property);
+				gridPanel.add(scrollPanel);
+			}
+		} else {
+			for (PropertyWrapper property : listOfProperties) {
+				String city = property.getAddress().getCity().toLowerCase();
+				if (city.startsWith(searchInput)) {
+					JPanel scrollPanel = setScrollProperty(property);
+					gridPanel.add(scrollPanel);	
+				}
+			}
+		}
 		
 	}
 

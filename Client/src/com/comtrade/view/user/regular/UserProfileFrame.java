@@ -143,16 +143,9 @@ public class UserProfileFrame extends JFrame {
 					File selectedFile = file.getSelectedFile();
 					String path = selectedFile.getAbsolutePath();
 					user.setProfilePicture(path);
-					User tempUser = new User();
-					tempUser.setUsername(user.getUsername());
-					tempUser.setIdUser(user.getIdUser());
-					tempUser.setProfilePicture(path);
 					
-					TransferClass transfer = new TransferClass();
-					transfer.setClientRequest(tempUser);
-					transfer.setDomainType(DomainType.USER);
-					transfer.setOperation(Operations.UPDATE);
-					ControllerUI.getController().sendToServer(transfer);
+					User tempUser = prepareUserDataForDB(path);
+					sendProfilePicToServer(tempUser);
 					
 					lblProfileImage.setIcon(setProfileImage(path));
 				} else if (result == JFileChooser.CANCEL_OPTION) {
@@ -178,7 +171,7 @@ public class UserProfileFrame extends JFrame {
 		
 		fillTable(propertyName);
 	}
-	
+
 	public void addNewPropertyName(Integer id, String name) {
 		propertyNames.put(id, name);
 		fillComboBox();
@@ -243,5 +236,21 @@ public class UserProfileFrame extends JFrame {
 		Image newImg = img.getScaledInstance(lblProfileImage.getWidth(), lblProfileImage.getHeight(), Image.SCALE_SMOOTH);
 		ImageIcon image = new ImageIcon(newImg);
 		return image;
+	}
+	
+	private User prepareUserDataForDB(String path) {
+		User tempUser = new User();
+		tempUser.setUsername(user.getUsername());
+		tempUser.setIdUser(user.getIdUser());
+		tempUser.setProfilePicture(path);
+		return tempUser;
+	}
+	
+	private void sendProfilePicToServer(User temp_user) {
+		TransferClass transfer = new TransferClass();
+		transfer.setClientRequest(temp_user);
+		transfer.setDomainType(DomainType.USER);
+		transfer.setOperation(Operations.UPDATE);
+		ControllerUI.getController().sendToServer(transfer);
 	}
 }

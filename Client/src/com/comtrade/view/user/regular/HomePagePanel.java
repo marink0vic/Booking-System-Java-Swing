@@ -1,9 +1,13 @@
 package com.comtrade.view.user.regular;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +21,21 @@ import javax.swing.SwingConstants;
 
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
+import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
+import com.toedter.calendar.JDateChooser;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class HomePagePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private List<PropertyWrapper> listOfProperties;
+	private User user;
+	private JDateChooser dateCheckIn;
+	private JDateChooser dateCheckOut;
 	private JLabel lblLeftTop;
 	private JLabel lblSmallLeftTop;
 	private JLabel lblSmallRightTop;
@@ -34,8 +47,11 @@ public class HomePagePanel extends JPanel {
 	//---
 	
 
-	public HomePagePanel(List<PropertyWrapper> listOfProperties) {
+	public HomePagePanel(List<PropertyWrapper> listOfProperties, User user, JDateChooser dateCheckIn, JDateChooser dateCheckOut) {
 		this.listOfProperties = listOfProperties;
+		this.user = user;
+		this.dateCheckIn = dateCheckIn;
+		this.dateCheckOut = dateCheckOut;
 		initializeComponents();
 	}
 	
@@ -66,9 +82,20 @@ public class HomePagePanel extends JPanel {
 		
 		
 		lblLeftTop = new JLabel("");
+		lblLeftTop.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				PropertyWrapper pw = listOfProperties.get(0);
+				LocalDate[] dates = setDates();
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
+				reservationFrame.setVisible(true);
+				reservationFrame.setLocationRelativeTo(null);
+			}
+		});
 		lblLeftTop.setOpaque(true);
 		lblLeftTop.setBorder(null);
 		lblLeftTop.setBounds(49, 93, 407, 281);
+		lblLeftTop.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.add(lblLeftTop);
 		
 		lblSmallRightTop = new JLabel("");
@@ -82,6 +109,17 @@ public class HomePagePanel extends JPanel {
 		add(lblSmallRightTop);
 		
 		lblRightTop = new JLabel("");
+		lblRightTop.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblRightTop.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				PropertyWrapper pw = listOfProperties.get(1);
+				LocalDate[] dates = setDates();
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
+				reservationFrame.setVisible(true);
+				reservationFrame.setLocationRelativeTo(null);
+			}
+		});
 		lblRightTop.setOpaque(true);
 		lblRightTop.setBorder(null);
 		lblRightTop.setBounds(509, 93, 407, 281);
@@ -98,6 +136,17 @@ public class HomePagePanel extends JPanel {
 		add(lblSmallLeftBottom);
 		
 		lblLeftBottom = new JLabel("");
+		lblLeftBottom.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				PropertyWrapper pw = listOfProperties.get(2);
+				LocalDate[] dates = setDates();
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
+				reservationFrame.setVisible(true);
+				reservationFrame.setLocationRelativeTo(null);
+			}
+		});
+		lblLeftBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblLeftBottom.setOpaque(true);
 		lblLeftBottom.setBorder(null);
 		lblLeftBottom.setBounds(49, 418, 407, 281);
@@ -114,6 +163,17 @@ public class HomePagePanel extends JPanel {
 		add(lblSmallRightBottom);
 		
 		lblRightBottom = new JLabel("");
+		lblRightBottom.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				PropertyWrapper pw = listOfProperties.get(3);
+				LocalDate[] dates = setDates();
+				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
+				reservationFrame.setVisible(true);
+				reservationFrame.setLocationRelativeTo(null);
+			}
+		});
+		lblRightBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblRightBottom.setOpaque(true);
 		lblRightBottom.setBorder(null);
 		lblRightBottom.setBounds(509, 418, 407, 281);
@@ -171,5 +231,18 @@ public class HomePagePanel extends JPanel {
 			roomCount++;
 		}
 		return price / roomCount;
+	}
+	
+	private LocalDate[] setDates() {
+		LocalDate chcIn = LocalDate.now();
+		LocalDate chcOut = chcIn.plusDays(10);
+		DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+		if (dateCheckIn.getDate() != null && dateCheckOut.getDate() != null) {
+			String in = date.format(dateCheckIn.getDate());
+			String out = date.format(dateCheckOut.getDate());
+			chcIn = LocalDate.parse(in);
+			chcOut = LocalDate.parse(out);
+		}
+		return new LocalDate[] {chcIn, chcOut};
 	}
 }

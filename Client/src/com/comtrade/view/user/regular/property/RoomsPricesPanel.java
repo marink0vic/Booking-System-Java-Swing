@@ -90,6 +90,9 @@ public class RoomsPricesPanel extends JPanel {
 	private JLabel lblNumberOfRooms;
 	private JSpinner spinnerRoomCount;
 	private JPanel gridPanel;
+	private JLabel lblCheckOut;
+	private JLabel lblDateIn;
+	private JLabel lblDateOut;
 	
 	public RoomsPricesPanel(User user, PropertyWrapper propertyWrapper, LocalDate checkIn, LocalDate checkOut, HeaderPanel panel) {
 		this.user = user;
@@ -124,8 +127,8 @@ public class RoomsPricesPanel extends JPanel {
 		this.setLayout(null);
 		loadTopSectionPanel();
 		loadScrollPaneBase();
+		addConfirmButton();
 	}
-	
 	private void loadTopSectionPanel() {
 		roomInfoPanel = new JPanel();
 		roomInfoPanel.setBackground(ColorConstants.BLUE);
@@ -224,71 +227,6 @@ public class RoomsPricesPanel extends JPanel {
             gridPanel.add(scrollPanel);
             i++;
 		}
-		
-		JButton btnConfirmBooking = new JButton("Complete");
-		btnConfirmBooking.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (bookedRooms.size() != 0) {
-					int choice = JOptionPane.showConfirmDialog(null, "Confirm booking", "Cansel booking",
-							JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-					if (choice == JOptionPane.YES_OPTION) {
-						double fullPrice = Arrays.stream(pricesPerRoom).sum();
-						booking.setPriceForStay(fullPrice);
-						Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
-						transaction.setAmount(fullPrice);
-						transaction.setSiteFees(fullPrice);
-						booking.setUser(user);
-						
-						PropertyWrapper wrapper = new PropertyWrapper();
-						reservations.put(booking, bookedRooms);
-						wrapper.setBookings(reservations);
-						List<Transaction> list = new ArrayList<>();
-						list.add(transaction);
-						wrapper.setTransactions(list);
-						wrapper.setRooms(rooms);
-						wrapper.setUser(propertyOwner);
-						
-						TransferClass transferClass = new TransferClass();
-						transferClass.setClientRequest(wrapper);
-						transferClass.setDomainType(DomainType.BOOKING);
-						transferClass.setOperation(Operations.SAVE);
-						ControllerUI.getController().sendToServer(transferClass);
-						
-						wrapper = ControllerUI.getController().getPropertyWrapper();
-						String message = ControllerUI.getController().getMessageResponse();
-						
-						if (wrapper == null) {
-							JOptionPane.showMessageDialog(null, message);
-						} else {
-							numOfCompleteBookings++;
-							booking = wrapper.getBookings().entrySet().iterator().next().getKey();
-							UserProfileFrame.getFrame().addNewPropertyName(property.getIdProperty(), property.getName());
-							UserProfileFrame.getFrame().addNewBooking(booking, bookedRooms);
-							headerPanel.getLblNew().setBackground(ColorConstants.RED);
-							headerPanel.getLblNew().setForeground(Color.WHITE);
-							headerPanel.getLblNew().setText(String.valueOf(numOfCompleteBookings));
-						}
-						bookedRooms = new ArrayList<>();
-						pricesPerRoom = new double[rooms.size()];
-					}
-				} else {
-					JOptionPane.showMessageDialog(null, "You need to select room to complete reservation");
-				}
-			}
-		});
-		btnConfirmBooking.setForeground(new Color(255, 255, 255));
-		btnConfirmBooking.setBackground(ColorConstants.BLUE);
-		btnConfirmBooking.setFont(new Font("Dialog", Font.BOLD, 14));
-		btnConfirmBooking.setBounds(1001, 319, 137, 108);
-		add(btnConfirmBooking);
-		
-		JLabel lblFinalComplete = new JLabel("Confirm reservation");
-		lblFinalComplete.setFont(new Font("Dialog", Font.PLAIN, 15));
-		lblFinalComplete.setForeground(ColorConstants.GRAY);
-		lblFinalComplete.setHorizontalAlignment(SwingConstants.CENTER);
-		lblFinalComplete.setBounds(987, 274, 151, 32);
-		add(lblFinalComplete);
 	}
 	
 	private JPanel addRoomPanelToScrollPane(RoomType room_type, Room room, int price_index) {
@@ -464,6 +402,103 @@ public class RoomsPricesPanel extends JPanel {
 		return panel_1;
 	}
 	
+	private void addConfirmButton() {
+		
+		JLabel lblFinalComplete = new JLabel("Confirm reservation");
+		lblFinalComplete.setFont(new Font("Dialog", Font.PLAIN, 15));
+		lblFinalComplete.setForeground(ColorConstants.GRAY);
+		lblFinalComplete.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFinalComplete.setBounds(987, 274, 151, 32);
+		add(lblFinalComplete);
+		
+		JButton btnConfirmBooking = new JButton("Complete");
+		btnConfirmBooking.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (bookedRooms.size() != 0) {
+					int choice = JOptionPane.showConfirmDialog(null, "Confirm booking", "Cansel booking",
+							JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					if (choice == JOptionPane.YES_OPTION) {
+						double fullPrice = Arrays.stream(pricesPerRoom).sum();
+						booking.setPriceForStay(fullPrice);
+						Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
+						transaction.setAmount(fullPrice);
+						transaction.setSiteFees(fullPrice);
+						booking.setUser(user);
+						
+						PropertyWrapper wrapper = new PropertyWrapper();
+						reservations.put(booking, bookedRooms);
+						wrapper.setBookings(reservations);
+						List<Transaction> list = new ArrayList<>();
+						list.add(transaction);
+						wrapper.setTransactions(list);
+						wrapper.setRooms(rooms);
+						wrapper.setUser(propertyOwner);
+						
+						TransferClass transferClass = new TransferClass();
+						transferClass.setClientRequest(wrapper);
+						transferClass.setDomainType(DomainType.BOOKING);
+						transferClass.setOperation(Operations.SAVE);
+						ControllerUI.getController().sendToServer(transferClass);
+						
+						wrapper = ControllerUI.getController().getPropertyWrapper();
+						String message = ControllerUI.getController().getMessageResponse();
+						
+						if (wrapper == null) {
+							JOptionPane.showMessageDialog(null, message);
+						} else {
+							numOfCompleteBookings++;
+							booking = wrapper.getBookings().entrySet().iterator().next().getKey();
+							UserProfileFrame.getFrame().addNewPropertyName(property.getIdProperty(), property.getName());
+							UserProfileFrame.getFrame().addNewBooking(booking, bookedRooms);
+							headerPanel.getLblNew().setBackground(ColorConstants.RED);
+							headerPanel.getLblNew().setForeground(Color.WHITE);
+							headerPanel.getLblNew().setText(String.valueOf(numOfCompleteBookings));
+						}
+						bookedRooms = new ArrayList<>();
+						pricesPerRoom = new double[rooms.size()];
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "You need to select room to complete reservation");
+				}
+			}
+		});
+		btnConfirmBooking.setForeground(new Color(255, 255, 255));
+		btnConfirmBooking.setBackground(ColorConstants.BLUE);
+		btnConfirmBooking.setFont(new Font("Dialog", Font.BOLD, 14));
+		btnConfirmBooking.setBounds(1001, 319, 137, 108);
+		add(btnConfirmBooking);
+		
+		JLabel lblFrom = new JLabel("CHECK IN");
+		lblFrom.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFrom.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblFrom.setForeground(ColorConstants.LIGHT_GRAY);
+		lblFrom.setBounds(1024, 149, 79, 16);
+		add(lblFrom);
+		
+		lblCheckOut = new JLabel("CHECK OUT");
+		lblCheckOut.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCheckOut.setForeground(new Color(171, 171, 171));
+		lblCheckOut.setFont(new Font("Dialog", Font.BOLD, 13));
+		lblCheckOut.setBounds(1024, 198, 79, 16);
+		add(lblCheckOut);
+		
+		lblDateIn = new JLabel(String.valueOf(checkIn));
+		lblDateIn.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDateIn.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblDateIn.setForeground(ColorConstants.BLUE);
+		lblDateIn.setBounds(1007, 170, 113, 16);
+		add(lblDateIn);
+		
+		lblDateOut = new JLabel(String.valueOf(checkOut));
+		lblDateOut.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDateOut.setForeground(ColorConstants.BLUE);
+		lblDateOut.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblDateOut.setBounds(1007, 220, 113, 16);
+		add(lblDateOut);
+	}
+
+	
 
 	private int returnAvailableRooms(RoomType room_type) {
 		int freeRooms = 0;
@@ -513,6 +548,4 @@ public class RoomsPricesPanel extends JPanel {
 			}
 		}
 	}
-
-	
 }

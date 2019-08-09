@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,10 +71,11 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private JDateChooser dateCheckOut;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
-	private JLabel lblBackToHome;
 	
 	public UserHomeFrame(User user) {
 		this.user = user;
+		checkIn = LocalDate.now();
+		checkOut = checkIn.plusDays(10);
 		initializeComponents();
 	}
 
@@ -101,7 +103,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		headerPanel.setUserWrapper(userWrapper);
 		contentPane.add(headerPanel);
 		
-		homePagePanel = new HomePagePanel(listOfProperties);
+		homePagePanel = new HomePagePanel(listOfProperties, user, dateCheckIn, dateCheckOut);
 		layeredPane.add(homePagePanel, "name_536942772642600");
 		
 		searchPagePanel = new SearchPagePanel(listOfProperties, user);
@@ -133,30 +135,44 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				boolean flag = true;
+				String inputText = tfSearch.getText().trim();
+				searchPagePanel.setSearchCityInput(inputText);
 				DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 				if (dateCheckIn.getDate() != null && dateCheckOut.getDate() != null) {
-					String in = date.format(dateCheckIn.getDate());
-					String out = date.format(dateCheckOut.getDate());
-					checkIn = LocalDate.parse(in);
-					checkOut = LocalDate.parse(out);
-					if (checkIn.isEqual(checkOut)) {
-						JOptionPane.showMessageDialog(null, "You cannot enter the same dates");
-					} else {
-						searchPagePanel.setCheckIn(checkIn);
-						searchPagePanel.setCheckOut(checkOut);
-						switchPanel(searchPagePanel);
-					}
+					setDates(date);
+				} else if (dateCheckIn.getDate() == null && dateCheckOut.getDate() == null) {
+					setDateChooserValues(date);
 				} else {
-					JOptionPane.showMessageDialog(null, "You cannot leave empty date fields");
+					flag = false;
+					JOptionPane.showMessageDialog(null, "Please enter the seccond date");
 				}
 				
+				if (flag) {
+					searchPagePanel.setCheckIn(checkIn);
+					searchPagePanel.setCheckOut(checkOut);
+					searchPagePanel.listAllProperties();
+					switchPanel(searchPagePanel);
+				}
 			}
 		});
 		btnSearch.setFont(new Font("Dialog", Font.BOLD, 15));
 		btnSearch.setForeground(new Color(255, 255, 255));
-		btnSearch.setBackground(new Color(9, 121, 186));
+		btnSearch.setBackground(ColorConstants.BLUE);
 		btnSearch.setBounds(1075, 50, 138, 56);
 		searchPanel.add(btnSearch);
+		
+		JButton btnBackToHome = new JButton("Home");
+		btnBackToHome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchPanel(homePagePanel);
+			}
+		});
+		btnBackToHome.setFont(new Font("Dialog", Font.BOLD, 15));
+		btnBackToHome.setForeground(new Color(255, 255, 255));
+		btnBackToHome.setBackground(ColorConstants.RED);
+		btnBackToHome.setBounds(1225, 50, 138, 56);
+		searchPanel.add(btnBackToHome);
 		
 		JLabel lblWhere = new JLabel("WHERE");
 		lblWhere.setFont(new Font("Dialog", Font.BOLD, 15));
@@ -198,8 +214,27 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		searchPanel.add(dateCheckIn);
 		
 	}
+	
+	private void setDates(DateFormat date) {
+		String in = date.format(dateCheckIn.getDate());
+		String out = date.format(dateCheckOut.getDate());
+		checkIn = LocalDate.parse(in);
+		checkOut = LocalDate.parse(out);
+		if (checkIn.isEqual(checkOut)) checkOut = checkIn.plusDays(1);
+	}
+	
+	private void setDateChooserValues(DateFormat date) {
+		String chcIn = String.valueOf(checkIn);
+		String chcOut = String.valueOf(checkOut);
+		try {
+			dateCheckIn.setDate(date.parse(chcIn));
+			dateCheckOut.setDate(date.parse(chcOut));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 
-	protected void switchPanel(JPanel panel) {
+	private void switchPanel(JPanel panel) {
 		layeredPane.removeAll();
 		layeredPane.add(panel);
 		layeredPane.repaint();
