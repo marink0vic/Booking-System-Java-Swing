@@ -99,16 +99,6 @@ public class ClientThread extends Thread {
 		receiver = controller.executeOperation(sender);
 		sendResponse(receiver);
 	}
-	
-	private void sendResponse(TransferClass transfer) {
-		try{
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			objectOutputStream.writeObject(transfer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 
 	public void setSocket(Socket socket) {
 		this.socket = socket;
@@ -144,5 +134,22 @@ public class ClientThread extends Thread {
 		sendResponse(transfer);
 	}
 	
+	public void sendUpdatedBookingsToClient(List<Booking> booking_list) {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.BOOKING);
+		transfer.setOperation(Operations.NOTIFY_USER_WITH_ACCCEPTED_BOOKINGS);
+		transfer.setServerResponse(booking_list);
+		sendResponse(transfer);
+	}
+	
+	private void sendResponse(TransferClass transfer) {
+		try{
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			objectOutputStream.writeObject(transfer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 }

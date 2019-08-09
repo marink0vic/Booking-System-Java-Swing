@@ -114,6 +114,15 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		
 		UserReviewFrame.getReviewFrame().setMyBookings(userWrapper.getBookings());
 		UserReviewFrame.getReviewFrame().setUser(userWrapper.getUser());
+		
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				List<Booking> acceptedBookings = ControllerUI.getController().getAcceptedBookings();
+				UserProfileFrame.getFrame().updateBookings(acceptedBookings);
+			}
+		});
+		thread.start();
 	}
 
 	private void setSearchPanel() {

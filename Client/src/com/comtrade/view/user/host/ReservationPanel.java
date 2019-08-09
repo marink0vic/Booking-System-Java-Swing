@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
@@ -232,24 +233,11 @@ public class ReservationPanel extends JPanel {
 		lblAddNewRes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (newBookings.size() > 0) {
-					TransferClass transfer = new TransferClass();
-					transfer.setDomainType(DomainType.BOOKING);
-					transfer.setOperation(Operations.UPDATE);
-					PropertyWrapper pw = new PropertyWrapper();
-					pw.setBookings(newBookings);
-					transfer.setClientRequest(pw);
-					ControllerUI.getController().sendToServer(transfer);
-					
-					pw = ControllerUI.getController().getPropertyWrapper();
-					
+					PropertyWrapper pw = sendUpdatedReservationToServer();
 					oldBookings.putAll(pw.getBookings());
 					newBookings = new HashMap<>();
 					
-					smallOwnerLabel.setText("");
-					smallOwnerLabel.setBackground(null);
-					lblNewRes.setText("");
-					lblNewRes.setBackground(Color.WHITE);
-					
+					updateFlagLabels();
 					fillTable();
 					fillNewBookingTable();
 				}
@@ -284,6 +272,33 @@ public class ReservationPanel extends JPanel {
 		
 		fillTable();
 		fillNewBookingTable();
+		sort(dtm, table);
+		sort(dtm2, table2);
+	}
+
+	private void sort(DefaultTableModel d, JTable t) {
+		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(d);
+		t.setRowSorter(sorter);
+	}
+
+	protected void updateFlagLabels() {
+		smallOwnerLabel.setText("");
+		smallOwnerLabel.setBackground(null);
+		lblNewRes.setText("");
+		lblNewRes.setBackground(Color.WHITE);
+	}
+
+	private PropertyWrapper sendUpdatedReservationToServer() {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.BOOKING);
+		transfer.setOperation(Operations.UPDATE);
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setBookings(newBookings);
+		transfer.setClientRequest(pw);
+		ControllerUI.getController().sendToServer(transfer);
+		
+		pw = ControllerUI.getController().getPropertyWrapper();
+		return pw;
 	}
 
 	private void fillNewBookingTable() {

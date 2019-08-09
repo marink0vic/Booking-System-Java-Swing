@@ -1,6 +1,7 @@
 package com.comtrade.view.user.regular;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ import com.comtrade.transfer.TransferClass;
 
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.Image;
@@ -50,15 +52,20 @@ public class UserProfileFrame extends JFrame {
 	private JComboBox<String> comboBox;
 	private User user;
 	private Map<Booking, List<BookedRoom>> myBookings;
-	private Map<Integer, String> propertyNames;
+	private Map<Integer, String> propertyNamesAccepted;
+	private Map<Integer, String> propertyNamesPending;
 	private JLabel lblProfileImage;
 	private JTable table;
-	String propertyName;
+	private String propertyName;
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private JLabel lblNewLabel_1;
+	private JLabel lblPendingBookings;
+	private JLabel lblAcceptedBookings;
+	private JLabel lblMessageInfo;
 	
 	private UserProfileFrame() {
-		propertyNames = new HashMap<>();
+		propertyNamesAccepted = new HashMap<>();
+		propertyNamesPending = new HashMap<>();
 	}
 	
 	public void setBookings(UserWrapper userWrapper) {
@@ -102,7 +109,8 @@ public class UserProfileFrame extends JFrame {
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				propertyName = String.valueOf(comboBox.getSelectedItem());
-				fillTable(propertyName);
+				Map<Integer, String> propertyNames = findCorrectMap(propertyName);
+				fillTable(propertyName, propertyNames);
 			}
 		});
 		comboBox.setFont(new Font("Dialog", Font.BOLD, 18));
@@ -122,12 +130,42 @@ public class UserProfileFrame extends JFrame {
 		header.setFont(new Font("Dialog", Font.BOLD, 20));
 		scrollPane.setViewportView(table);
 		
-		JLabel lblListOfBookings = new JLabel("LIST OF ALL YOUR BOOKINGS");
-		lblListOfBookings.setForeground(ColorConstants.GRAY);
-		lblListOfBookings.setFont(new Font("Dialog", Font.PLAIN, 16));
-		lblListOfBookings.setHorizontalAlignment(SwingConstants.CENTER);
-		lblListOfBookings.setBounds(267, 201, 349, 58);
-		contentPane.add(lblListOfBookings);
+		lblAcceptedBookings = new JLabel("ACCEPTED BOOKINGS");
+		lblAcceptedBookings.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblAcceptedBookings.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				fillComboBox(propertyNamesAccepted);
+				lblAcceptedBookings.setForeground(ColorConstants.BLUE);
+				lblPendingBookings.setForeground(ColorConstants.GRAY);
+				lblMessageInfo.setText("");
+				propertyName = String.valueOf(comboBox.getSelectedItem());
+				fillTable(propertyName, propertyNamesAccepted);
+			}
+		});
+		lblAcceptedBookings.setForeground(ColorConstants.BLUE);
+		lblAcceptedBookings.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblAcceptedBookings.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAcceptedBookings.setBounds(129, 194, 349, 58);
+		contentPane.add(lblAcceptedBookings);
+		
+		lblPendingBookings = new JLabel("PENDING BOOKINGS");
+		lblPendingBookings.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblPendingBookings.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				fillComboBox(propertyNamesPending);
+				lblPendingBookings.setForeground(ColorConstants.BLUE);
+				lblAcceptedBookings.setForeground(ColorConstants.GRAY);
+				propertyName = String.valueOf(comboBox.getSelectedItem());
+				fillTable(propertyName, propertyNamesPending);
+			}
+		});
+		lblPendingBookings.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPendingBookings.setForeground(ColorConstants.GRAY);
+		lblPendingBookings.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblPendingBookings.setBounds(473, 194, 349, 58);
+		contentPane.add(lblPendingBookings);
 		
 		lblNewLabel_1 = new JLabel("Upload photo");
 		lblNewLabel_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -158,6 +196,13 @@ public class UserProfileFrame extends JFrame {
 		lblNewLabel_1.setBounds(288, 155, 89, 16);
 		contentPane.add(lblNewLabel_1);
 		
+		lblMessageInfo = new JLabel("");
+		lblMessageInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMessageInfo.setFont(new Font("Dialog", Font.PLAIN, 20));
+		lblMessageInfo.setForeground(ColorConstants.RED);
+		lblMessageInfo.setBounds(262, 687, 436, 38);
+		contentPane.add(lblMessageInfo);
+		
 		Object[] o = {"Check in", "Check out", "Rooms", "Adults", "Children", "Price", "Booking ID"};
 		dtm.addColumn(o[0]);
 		dtm.addColumn(o[1]);
@@ -167,24 +212,29 @@ public class UserProfileFrame extends JFrame {
 		dtm.addColumn(o[5]);
 		dtm.addColumn(o[6]);
 		
-		fillComboBox();
-		
-		fillTable(propertyName);
+		fillComboBox(propertyNamesAccepted);
+		fillTable(propertyName, propertyNamesAccepted);
+	}
+
+	protected Map<Integer, String> findCorrectMap(String property_name) {
+		for (Map.Entry<Integer, String> entry : propertyNamesAccepted.entrySet()) {
+			if (property_name.equals(entry.getValue())) return propertyNamesAccepted;
+		}
+		return propertyNamesPending;
 	}
 
 	public void addNewPropertyName(Integer id, String name) {
-		propertyNames.put(id, name);
-		fillComboBox();
+		propertyNamesPending.put(id, name);
 	}
 	
 	public void addNewBooking(Booking booking, List<BookedRoom> booked_rooms) {
 		myBookings.put(booking, booked_rooms);
 	}
 
-	private void fillTable(String property_name) {
+	private void fillTable(String property_name, Map<Integer, String> booking_names) {
 		dtm.setRowCount(0);
 		
-		int idProperty = findId(propertyName);
+		int idProperty = findId(propertyName, booking_names);
 		for (Map.Entry<Booking, List<BookedRoom>> entry : myBookings.entrySet()) {
 			Booking b = entry.getKey();
 			if (b.getProperty().getIdProperty() == idProperty) {
@@ -201,31 +251,34 @@ public class UserProfileFrame extends JFrame {
 				}
 			}
 		}
-		
 	}
 
-	private int findId(String property_name) {
-		for (Integer i : propertyNames.keySet()) {	
-			if (propertyNames.get(i).equals(property_name)) {
+	private int findId(String property_name, Map<Integer, String> booking_names) {
+		for (Integer i : booking_names.keySet()) {	
+			if (booking_names.get(i).equals(property_name)) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-	private void fillComboBox() {
+	private void fillComboBox(Map<Integer, String> bookings) {
 		comboBox.removeAllItems();
-		for (Integer i : propertyNames.keySet()) {
+		for (Integer i : bookings.keySet()) {
 			if (propertyName == null) {
-				propertyName = propertyNames.get(i);
+				propertyName = bookings.get(i);
 			}
-			comboBox.addItem(propertyNames.get(i));
+			comboBox.addItem(bookings.get(i));
 		}
 	}
 
 	private void setPropertyNames(Set<Booking> key_set) {
 		for (Booking booking : key_set) {
-			propertyNames.put(booking.getProperty().getIdProperty(), booking.getProperty().getName());
+			if (booking.getStatus().equals("PENDING")) {
+				propertyNamesPending.put(booking.getProperty().getIdProperty(), booking.getProperty().getName());
+			} else {
+				propertyNamesAccepted.put(booking.getProperty().getIdProperty(), booking.getProperty().getName());
+			}
 		}
 	}
 	
@@ -252,5 +305,33 @@ public class UserProfileFrame extends JFrame {
 		transfer.setDomainType(DomainType.USER);
 		transfer.setOperation(Operations.UPDATE);
 		ControllerUI.getController().sendToServer(transfer);
+	}
+
+	public void updateBookings(List<Booking> acceptedBookings) {
+		for (Booking booking : acceptedBookings) {
+			for (Booking b : myBookings.keySet()) {
+				if (booking.getIdBooking() == b.getIdBooking()) {
+					b.setStatus("ACCEPTED");
+					break;
+				}
+			}
+		}
+		updateNames(acceptedBookings);
+	}
+
+	private void updateNames(List<Booking> acceptedBookings) {
+		for (Booking booking : acceptedBookings) {
+			Iterator<Map.Entry<Integer, String>> iterator = propertyNamesPending.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<Integer, String> entry = iterator.next();
+				if (entry.getKey() == booking.getProperty().getIdProperty()) {
+					propertyNamesAccepted.put(entry.getKey(), entry.getValue());
+					iterator.remove();
+				}
+			}
+		}
+		lblMessageInfo.setText("YOU HAVE NEW ACCEPTED BOOKINGS");
+		fillComboBox(propertyNamesAccepted);
+		fillTable(propertyName, propertyNamesAccepted);
 	}
 }

@@ -1,5 +1,6 @@
 package com.comtrade.serverdata;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,17 @@ public class UserActiveThreads implements ActiveThreads {
 			}
 		}
 		
+	}
+	
+	public void notifyUsersForAcceptedBookings(List<Booking> accepted_bookings) {
+		for (Map.Entry<User, ClientThread> entry : userThreads.entrySet()) {
+			List<Booking> myList = new ArrayList<>();
+			User u = entry.getKey();
+			for (Booking b : accepted_bookings) {
+				if (u.getIdUser() == b.getUser().getIdUser()) myList.add(b);
+			}
+			entry.getValue().sendUpdatedBookingsToClient(myList);
+		}
 	}
 	
 	private void unregister(User user) {

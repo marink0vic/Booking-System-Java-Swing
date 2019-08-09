@@ -20,7 +20,9 @@ import com.comtrade.view.user.host.PropertyOwnerFrame;
 public class ControllerUI {
 
 	private static ControllerUI controller;
-	private final Object lock = new Object();
+	private final Object messageLock = new Object();
+	private final Object newAcceptedBookingsLock = new Object();
+	
 	private List<Country> countryImages;
 	private List<PaymentType> payments;
 	private User user;
@@ -30,6 +32,7 @@ public class ControllerUI {
 	private Message chatMessage;
 	
 	private Map<Booking, List<BookedRoom>> bookedRooms;
+	private List<Booking> acceptedBookings;
 	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
 	private UserWrapper userWrapper;
 	private PropertyOwnerFrame ownerFrame;
@@ -59,14 +62,25 @@ public class ControllerUI {
 	}
 	
 	public Message getMessage() {
-		synchronized (lock) {
+		synchronized (messageLock) {
 			try {
-				lock.wait();
+				messageLock.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		return chatMessage;
+	}
+	
+	public List<Booking> getAcceptedBookings() {
+		synchronized (newAcceptedBookingsLock) {
+			try {
+				newAcceptedBookingsLock.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return acceptedBookings;
 	}
 
 	public User getUser() {
@@ -112,7 +126,7 @@ public class ControllerUI {
 		return temp;
 	}
 	
-	//OBRATI PAZNJU KADA SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
+	//OBRATI PAZNJU AKO SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
 	public List<PropertyWrapper> getProperties() {
 		while (properties == null) {
 			System.out.println("Waiting for list of all properties");
@@ -197,8 +211,8 @@ public class ControllerUI {
 			User temp = (User) transfer.getServerResponse();
 			chatMessage.setSender(temp);
 			chatMessage.setMessage(transfer.getMessageResponse());
-			synchronized (lock) {
-				lock.notify();
+			synchronized (messageLock) {
+				messageLock.notify();
 			}
 			break;
 		}
@@ -300,6 +314,14 @@ public class ControllerUI {
 		{
 			hostReservationInfo = (PropertyWrapper) transfer.getServerResponse();
 			ownerFrame.signalNewBooking(hostReservationInfo);
+			break;
+		}
+		case NOTIFY_USER_WITH_ACCCEPTED_BOOKINGS:
+		{
+			acceptedBookings = (List<Booking>) transfer.getServerResponse();
+			synchronized (newAcceptedBookingsLock) {
+				newAcceptedBookingsLock.notify();
+			}
 			break;
 		}
 		default:
