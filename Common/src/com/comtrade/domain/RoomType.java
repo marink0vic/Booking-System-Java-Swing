@@ -109,12 +109,6 @@ public class RoomType implements DomainUpdate, Serializable {
 	}
 
 	@Override
-	public List<RoomType> returnList(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String returnIdColumnName() {
 		return "id_room_type";
 	}

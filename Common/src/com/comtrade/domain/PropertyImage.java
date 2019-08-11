@@ -87,12 +87,6 @@ public class PropertyImage implements GeneralDomain, Serializable {
 	}
 
 	@Override
-	public List<GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public String returnIdColumnName() {
 		return "id_image";
 	}

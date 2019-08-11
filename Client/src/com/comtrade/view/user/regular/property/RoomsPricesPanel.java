@@ -514,7 +514,8 @@ public class RoomsPricesPanel extends JPanel {
 				}
 			}
 		}
-		return room_type.getNumberOfRooms() - freeRooms;
+		int totalFreeRooms = room_type.getNumberOfRooms() - freeRooms;
+		return totalFreeRooms < 0 ? 0 : totalFreeRooms;
 	}
 
 	protected void removeFromReservation(int id_room) {

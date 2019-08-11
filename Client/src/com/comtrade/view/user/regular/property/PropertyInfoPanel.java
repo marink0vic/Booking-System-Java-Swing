@@ -20,6 +20,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
@@ -40,6 +42,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
+import javax.swing.JTextPane;
 
 public class PropertyInfoPanel extends JPanel {
 
@@ -60,7 +63,7 @@ public class PropertyInfoPanel extends JPanel {
 	private JTextArea messageArea;
 	private JTextArea chatArea;
 	private String messageText;
-	private JScrollPane scrollPane;
+	//private JScrollPane scrollPane;
 	private JLabel lblReviewCount;
 
 	
@@ -72,6 +75,7 @@ public class PropertyInfoPanel extends JPanel {
 		this.propertyImages = propertyWrapper.getImages();
 		initializeComponents();
 	}
+	
 
 	private void initializeComponents() {
 		this.setBounds(252, 165, 975, 767);
@@ -115,28 +119,7 @@ public class PropertyInfoPanel extends JPanel {
 		lblHelper1.setBounds(0, 223, 353, 32);
 		this.add(lblHelper1);
 		
-		messageArea = new JTextArea();
-		messageArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
-		messageArea.setFont(new Font("Dialog", Font.BOLD, 18));
-		messageArea.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					messageText = messageArea.getText();
-					if (messageText.length() > 0) {
-						sendMessage();
-					}
-				}
-			}
-		});
-		messageArea.setBackground(new Color(255, 255, 255));
-		messageArea.setForeground(ColorConstants.GRAY);
-		messageArea.setBounds(0, 278, 315, 85);
-		messageArea.setWrapStyleWord(true);
-		messageArea.setLineWrap(true);
-		this.add(messageArea);
-		
-		scrollPane = new JScrollPane();
+		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 376, 315, 295);
 		add(scrollPane);
 		
@@ -149,6 +132,27 @@ public class PropertyInfoPanel extends JPanel {
 		chatArea.setWrapStyleWord(true);
 		chatArea.setLineWrap(true);
 		scrollPane.setViewportView(chatArea);
+		
+		messageArea = new JTextArea();
+		messageArea.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
+		messageArea.setFont(new Font("Dialog", Font.BOLD, 18));
+		messageArea.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					messageText = messageArea.getText();
+					if (messageText.length() > 1) {
+						sendMessage();
+					}
+				}
+			}
+		});
+		messageArea.setBackground(new Color(255, 255, 255));
+		messageArea.setForeground(ColorConstants.GRAY);
+		messageArea.setBounds(0, 278, 315, 85);
+		messageArea.setWrapStyleWord(true);
+		messageArea.setLineWrap(true);
+		this.add(messageArea);
 		
 		JScrollPane scrollDescription = new JScrollPane();
 		scrollDescription.setBounds(379, 524, 596, 177);
@@ -167,7 +171,7 @@ public class PropertyInfoPanel extends JPanel {
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				messageText = messageArea.getText();
-				if (messageText.length() > 0) {
+				if (messageText.length() > 1) {
 					sendMessage();
 				}
 			}
@@ -262,7 +266,7 @@ public class PropertyInfoPanel extends JPanel {
 	public void showMessageToTextArea(Message message) {
 		User userSender = message.getSender();
 		String name = userSender.getFirstName() + " " + userSender.getLastName() + ": ";
-		String ms = name + message.getMessage();
-		chatArea.append(ms + "\n");
+		String messageToAppend = name + message.getMessage();
+		chatArea.append(messageToAppend + "\n"); 
 	}
 }

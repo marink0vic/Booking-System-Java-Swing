@@ -11,9 +11,8 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.threads.ClientThread;
-import com.comtrade.transfer.TransferClass;
 
-public class UserActiveThreads implements ActiveThreads {
+public class UserActiveThreads {
 
 	private static volatile UserActiveThreads activeThreads;
 	private Map<User, ClientThread> userThreads;
@@ -43,7 +42,6 @@ public class UserActiveThreads implements ActiveThreads {
 		return hostThreads;
 	}
 
-	@Override
 	public void register(User user, ClientThread thread) {
 		if (user.getStatus().equals(UserType.USER.getAccess())) {
 			userThreads.put(user, thread);
@@ -52,7 +50,7 @@ public class UserActiveThreads implements ActiveThreads {
 		}
 	}
 	
-	@Override
+	
 	public void removeThread(ClientThread clientThread) {
 		for (Map.Entry<User, ClientThread> entry : userThreads.entrySet()) {
 			ClientThread temp = entry.getValue();
@@ -71,7 +69,7 @@ public class UserActiveThreads implements ActiveThreads {
 		}
 	}
 	
-	@Override
+	
 	public void notify(PropertyWrapper wrapper) {
 		notifyHost(wrapper);
 		notifyUsers(wrapper.getBookings());
@@ -79,7 +77,7 @@ public class UserActiveThreads implements ActiveThreads {
 
 	private void notifyUsers(Map<Booking, List<BookedRoom>> bookings) {
 		for (Map.Entry<User, ClientThread> entry : userThreads.entrySet()) {
-			entry.getValue().sendToUsers(bookings);
+			entry.getValue().notifyLogedUsersWithNewBookings(bookings);
 		}
 	}
 

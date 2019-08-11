@@ -1,13 +1,10 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.constants.UserType;
 import com.comtrade.domain.User;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;

@@ -117,7 +117,7 @@ public class ClientThread extends Thread {
 		sendResponse(transfer);
 	}
 
-	public void sendToUsers(Map<Booking, List<BookedRoom>> bookings) {
+	public void notifyLogedUsersWithNewBookings(Map<Booking, List<BookedRoom>> bookings) {
 		TransferClass transfer = new TransferClass();
 		transfer.setDomainType(DomainType.BOOKING);
 		transfer.setOperation(Operations.NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS);

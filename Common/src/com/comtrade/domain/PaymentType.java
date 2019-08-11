@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.GeneralDomain;
 
-public class PaymentType implements GeneralDomain, Serializable {
+public class PaymentType implements GeneralDomain, DomainList, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -59,17 +61,21 @@ public class PaymentType implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnColumnNames() {
-		return null;
+		return " (name, image, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		return null;
+		return "(?,?,?)";
 	}
 
 	@Override
 	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
-
+		java.util.Date date = new java.util.Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		preparedStatement.setString(1, name);
+		preparedStatement.setString(2, image);
+		preparedStatement.setString(3, sdf.format(date));
 	}
 
 	@Override
@@ -96,14 +102,12 @@ public class PaymentType implements GeneralDomain, Serializable {
 
 	@Override
 	public String returnIdColumnName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "id_card_type";
 	}
 
 	@Override
 	public int returnIdNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id_payment;
 	}
 
 }

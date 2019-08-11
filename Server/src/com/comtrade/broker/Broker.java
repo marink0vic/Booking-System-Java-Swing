@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.comtrade.connection.Connection;
-import com.comtrade.constants.ImageFolder;
 import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
@@ -27,10 +26,10 @@ import com.comtrade.domain.User;
 import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.DomainJoinBookings;
 import com.comtrade.domain.behavior.DomainJoinReview;
+import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.lock.DbLock;
 
 public class Broker implements IBroker {
 
@@ -51,6 +50,19 @@ public class Broker implements IBroker {
 			}
 		}
 		return id;
+	}
+	
+	@Override
+	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
+		if (list.size() == 0) return;
+		GeneralDomain domain = list.get(0);
+		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
+		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
+		for (GeneralDomain d : list) {
+			d.preparedStatementInsert(preparedStatement);
+			preparedStatement.addBatch();
+		}
+		preparedStatement.executeBatch();
 	}
 	
 	@Override
@@ -76,18 +88,6 @@ public class Broker implements IBroker {
 	}
 
 	@Override
-	public void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException {
-		if (list.size() == 0) return;
-		GeneralDomain domain = list.get(0);
-		String sql = "INSERT INTO " + domain.returnTableName() + "" + domain.returnColumnNames() + "" + domain.returnStatementPlaceholder();
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		for (GeneralDomain d : list) {
-			d.preparedStatementInsert(preparedStatement);
-			preparedStatement.addBatch();
-		}
-		preparedStatement.executeBatch();
-	}
-	@Override
 	public void delete(GeneralDomain domain) throws SQLException {
 		String sql = "DELETE FROM " + domain.returnTableName() + " WHERE " + domain.returnIdColumnName() + " = ?";
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
@@ -97,7 +97,7 @@ public class Broker implements IBroker {
 	
 	
 	@Override
-	public List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException {
+	public List<? extends GeneralDomain> returnAllData(DomainList domain) throws SQLException {
 		String sql = "SELECT * FROM " + domain.returnTableName();
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -141,6 +141,7 @@ public class Broker implements IBroker {
 		ResultSet rs = ps.executeQuery();
 		return rs;
 	}
+	
 	@Override
 	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
 		setPropertyAndAddress(wrapper);

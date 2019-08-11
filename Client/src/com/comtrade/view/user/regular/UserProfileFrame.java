@@ -57,6 +57,7 @@ public class UserProfileFrame extends JFrame {
 	private JLabel lblProfileImage;
 	private JTable table;
 	private String propertyName;
+	private String status = "ACCEPTED";
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private JLabel lblNewLabel_1;
 	private JLabel lblPendingBookings;
@@ -140,6 +141,7 @@ public class UserProfileFrame extends JFrame {
 				lblPendingBookings.setForeground(ColorConstants.GRAY);
 				lblMessageInfo.setText("");
 				propertyName = String.valueOf(comboBox.getSelectedItem());
+				status = "ACCEPTED";
 				fillTable(propertyName, propertyNamesAccepted);
 			}
 		});
@@ -158,6 +160,7 @@ public class UserProfileFrame extends JFrame {
 				lblPendingBookings.setForeground(ColorConstants.BLUE);
 				lblAcceptedBookings.setForeground(ColorConstants.GRAY);
 				propertyName = String.valueOf(comboBox.getSelectedItem());
+				status = "PENDING";
 				fillTable(propertyName, propertyNamesPending);
 			}
 		});
@@ -237,7 +240,7 @@ public class UserProfileFrame extends JFrame {
 		int idProperty = findId(propertyName, booking_names);
 		for (Map.Entry<Booking, List<BookedRoom>> entry : myBookings.entrySet()) {
 			Booking b = entry.getKey();
-			if (b.getProperty().getIdProperty() == idProperty) {
+			if (b.getProperty().getIdProperty() == idProperty && b.getStatus().equals(status)) {
 				for (BookedRoom br : entry.getValue()) {
 					dtm.addRow(new Object[] {
 						b.getCheckIn(),

@@ -8,8 +8,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
@@ -138,16 +136,6 @@ public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 		preparedStatement.setDouble(5, priceForStay);
 		preparedStatement.setString(6, "PENDING");
 		preparedStatement.setString(7, sdf.format(date));
-	}
-
-	@Override
-	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		List<Booking> list = new ArrayList<>();
-		while (resultSet.next()) {
-			Booking booking = createBooking(resultSet);
-			list.add(booking);
-		}
-		return list;
 	}
 	
 	public Booking createBooking (ResultSet resultSet) throws SQLException {

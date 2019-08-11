@@ -1,7 +1,6 @@
 package com.comtrade.sysoperation.booking;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,14 +11,11 @@ import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.dto.UserWrapper;
 import com.comtrade.lock.DbLock;
-import com.comtrade.serverdata.ActiveThreads;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -68,6 +64,7 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		pw.setUser(user);
 		UserActiveThreads.getActiveThreads().notify(pw);
 	}
+	
 	private void addOwnerBookingOnServer(Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
 		server.addNewTransaction(tr);
 		for (PropertyWrapper pw : server.returnAllProperties()) {

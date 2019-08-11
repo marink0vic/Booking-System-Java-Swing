@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.GeneralDomain;
 
-public class Country implements GeneralDomain, Serializable {
+public class Country implements GeneralDomain, DomainList, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int idCountry;
@@ -65,23 +67,24 @@ public class Country implements GeneralDomain, Serializable {
 	public String returnTableName() {
 		return "country";
 	}
-
+	
 	@Override
 	public String returnColumnNames() {
-		// TODO Auto-generated method stub
-		return null;
+		return " (name, image, created) VALUES ";
 	}
 
 	@Override
 	public String returnStatementPlaceholder() {
-		// TODO Auto-generated method stub
-		return null;
+		return "(?,?,?)";
 	}
 
 	@Override
 	public void preparedStatementInsert(PreparedStatement preparedStatement) throws SQLException {
-		// TODO Auto-generated method stub
-
+		java.util.Date date = new java.util.Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		preparedStatement.setString(1, name);
+		preparedStatement.setString(2, image);
+		preparedStatement.setString(3, sdf.format(date));
 	}
 
 	@Override
@@ -113,8 +116,7 @@ public class Country implements GeneralDomain, Serializable {
 
 	@Override
 	public int returnIdNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return idCountry;
 	}
 
 }

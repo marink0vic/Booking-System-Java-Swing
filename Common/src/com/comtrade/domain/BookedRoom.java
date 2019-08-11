@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.comtrade.domain.behavior.GeneralDomain;
 
@@ -140,16 +138,6 @@ public class BookedRoom implements GeneralDomain, Serializable {
 		preparedStatement.setInt(5, numberOfChildren);
 		preparedStatement.setDouble(6, priceForRoom);
 		preparedStatement.setString(7, sdf.format(date));
-	}
-
-	@Override
-	public List<? extends GeneralDomain> returnList(ResultSet resultSet) throws SQLException {
-		List<BookedRoom> bookedRooms = new ArrayList<>();
-		while (resultSet.next()) {
-			BookedRoom br = createBookedRoom(resultSet);
-			bookedRooms.add(br);
-		}
-		return bookedRooms;
 	}
 	
 	public BookedRoom createBookedRoom(ResultSet resultSet) throws SQLException {

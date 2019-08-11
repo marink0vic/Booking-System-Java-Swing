@@ -128,8 +128,9 @@ public class AvailabilityPanel extends JPanel {
 	
 	private void fillTable() {
 		dtm.setRowCount(0);
+		int freeRooms = 0;
 		for (RoomType type : roomTypes) {
-			int freeRooms = type.getNumberOfRooms();
+			freeRooms = type.getNumberOfRooms();
 			for (Map.Entry<Booking, List<BookedRoom>> entry : oldBookings.entrySet()) {
 				Booking b = entry.getKey();
 				if (b.getCheckOut().isBefore(checkIn) || b.getCheckIn().isAfter(checkOut)) continue;
@@ -139,6 +140,7 @@ public class AvailabilityPanel extends JPanel {
 					}
 				}
 			}
+			if (freeRooms < 0) freeRooms = 0;
 			dtm.addRow(new Object[] {type.getRoomType(), freeRooms});
 		}
 	}

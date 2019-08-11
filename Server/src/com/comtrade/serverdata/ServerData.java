@@ -10,7 +10,6 @@ import java.util.Map;
 import com.comtrade.broker.Broker;
 import com.comtrade.broker.IBroker;
 import com.comtrade.connection.Connection;
-import com.comtrade.constants.ImageFolder;
 import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.constants.UserType;
 import com.comtrade.domain.BookedRoom;
@@ -21,7 +20,6 @@ import com.comtrade.domain.Property;
 import com.comtrade.domain.Transaction;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.dto.UserWrapper;
 
 public class ServerData {
 	private List<Country> countries;

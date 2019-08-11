@@ -27,7 +27,7 @@ public class MessagePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextArea textAreaReceive;
 	private JTextArea textAreaSend;
-	private String messageToSend;
+	//private String messageToSend;
 	private User userSender;
 	private User propertyOwner;
 
@@ -61,9 +61,9 @@ public class MessagePanel extends JPanel {
 			@Override
 			public void keyReleased(KeyEvent event) {
 				if (event.getKeyCode() == KeyEvent.VK_ENTER) {
-					messageToSend = textAreaSend.getText();
-					if (messageToSend.length() > 0) {
-						sendMessageToClient();
+					String messageToSend = textAreaSend.getText();
+					if (messageToSend.length() > 1) {
+						sendMessageToClient(messageToSend);
 					}
 				}
 			}
@@ -78,9 +78,9 @@ public class MessagePanel extends JPanel {
 		JButton btnNewButton = new JButton("SEND");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				messageToSend = textAreaSend.getText();
-				if (messageToSend.length() > 0) {
-					sendMessageToClient();
+				String messageToSend = textAreaSend.getText();
+				if (messageToSend.length() > 1) {
+					sendMessageToClient(messageToSend);
 				}
 			}
 		});
@@ -96,12 +96,13 @@ public class MessagePanel extends JPanel {
 		String name = userSender.getFirstName() + " " + userSender.getLastName() + ": ";
 		String ms = name + message.getMessage();
 		textAreaReceive.append(ms + "\n");
+
 	}
 
-	private void sendMessageToClient() {
-		textAreaReceive.append("Me: " + messageToSend + "\n");
+	private void sendMessageToClient(String msg) {
+		textAreaReceive.append("Me: " + msg + "\n");
 		textAreaSend.setText("");	
-		Message message = new Message(propertyOwner, userSender, messageToSend);
+		Message message = new Message(propertyOwner, userSender, msg);
 		TransferClass transfer = new TransferClass();
 		transfer.setClientRequest(message);
 		transfer.setDomainType(DomainType.USER);

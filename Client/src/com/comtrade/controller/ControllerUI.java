@@ -212,7 +212,7 @@ public class ControllerUI {
 			chatMessage.setSender(temp);
 			chatMessage.setMessage(transfer.getMessageResponse());
 			synchronized (messageLock) {
-				messageLock.notify();
+				messageLock.notifyAll();
 			}
 			break;
 		}

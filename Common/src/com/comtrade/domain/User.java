@@ -14,12 +14,13 @@ import java.util.Map;
 
 import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
 
 import crypt.BCrypt;
 
-public class User implements DomainUpdate, DomainJoinBookings, Serializable {
+public class User implements DomainUpdate, DomainJoinBookings, DomainList, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;

@@ -12,6 +12,7 @@ import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.domain.behavior.DomainJoinBookings;
 import com.comtrade.domain.behavior.DomainJoinReview;
+import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
@@ -22,11 +23,13 @@ public interface IBroker {
 	void update(DomainUpdate domain) throws SQLException;
 	void saveCollectionOfData(List<? extends GeneralDomain> list) throws SQLException;
 	void updateCollectionOfData(List<? extends DomainUpdate> list) throws SQLException;
-	List<? extends GeneralDomain> returnAllData(GeneralDomain domain) throws SQLException;
+	List<? extends GeneralDomain> returnAllData(DomainList domain) throws SQLException;
+	
 	void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException;
 	List<PropertyImage> returnPropertyImages(int id_property) throws SQLException;
 	List<PaymentType> returnPayments(int id_property) throws SQLException;
 	User login(User user) throws SQLException;
+	
 	Map<Booking, List<BookedRoom>> insertBookings(DomainJoinBookings domain_join, int id_domain) throws SQLException;
 	List<PropertyReview> returnPropertyReviews(DomainJoinReview domain_join, int id_domain) throws SQLException;
 }
