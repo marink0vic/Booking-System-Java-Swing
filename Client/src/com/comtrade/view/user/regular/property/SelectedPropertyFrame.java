@@ -45,7 +45,7 @@ public class SelectedPropertyFrame extends JFrame {
 	private RoomsPricesPanel roomPricesPanel;
 	private ReviewPropertyPanel reviewPropertyPanel;
 	private HomePagePanel homePagePanel;
-	private HeaderPanel headerPanel = HeaderPanel.getPanel(); 
+	private HeaderPanel headerPanel; 
 	//--
 	private JLabel lblInfo;
 	private JLabel lblRoomPrices;
@@ -76,6 +76,8 @@ public class SelectedPropertyFrame extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
+		headerPanel = new HeaderPanel();
+		headerPanel.setUser(user);
 		contentPane.add(headerPanel);
 		
 		addPropertyNavigationLabels();

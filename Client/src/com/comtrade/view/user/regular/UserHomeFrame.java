@@ -99,8 +99,8 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		sortPropertiesBasedOnReviewRating();
 		setSearchPanel();
 		
-		headerPanel = HeaderPanel.getPanel();
-		headerPanel.setUserWrapper(userWrapper);
+		headerPanel = new HeaderPanel();
+		headerPanel.setUser(user);
 		contentPane.add(headerPanel);
 		
 		homePagePanel = new HomePagePanel(listOfProperties, user, dateCheckIn, dateCheckOut);

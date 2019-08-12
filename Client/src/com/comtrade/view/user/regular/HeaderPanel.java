@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.domain.User;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.regular.property.RoomsPricesPanel;
@@ -21,31 +22,27 @@ import java.awt.Cursor;
 public class HeaderPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static final HeaderPanel panel = new HeaderPanel();
-	private UserWrapper userWrapper;
+	private User user;
 	private JLabel lblLogedUser;
 	private JLabel imageLabel;
 	private JLabel lblNew;
-	private HeaderPanel() {
+	
+	public HeaderPanel() {
 		initializeComponents();
 	}
 	
-	public static HeaderPanel getPanel() {
-		return panel;
-	}
-	
-	public UserWrapper getUserWrapper() {
-		return userWrapper;
+	public User getUser() {
+		return user;
 	}
 	
 	public JLabel getLblNew() {
 		return lblNew;
 	}
 
-	public void setUserWrapper(UserWrapper userWrapper) {
-		this.userWrapper = userWrapper;
+	public void setUser(User user) {
+		this.user = user;
 		setProfileNameLabel();
-		File f = new File(userWrapper.getUser().getCountry().getImage());
+		File f = new File(user.getCountry().getImage());
 		Icon icon = ImageResize.resizeImage(f, imageLabel.getWidth(), imageLabel.getHeight());
 		imageLabel.setIcon(icon);
 	}
@@ -98,6 +95,6 @@ public class HeaderPanel extends JPanel {
 	}
 
 	private void setProfileNameLabel() {
-		lblLogedUser.setText(userWrapper.getUser().getFirstName() + " " + userWrapper.getUser().getLastName());
+		lblLogedUser.setText(user.getFirstName() + " " + user.getLastName());
 	}
 }
