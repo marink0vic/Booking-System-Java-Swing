@@ -3,7 +3,6 @@ package com.comtrade.view.user.regular;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Image;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -23,6 +20,7 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
 import com.toedter.calendar.JDateChooser;
 
@@ -190,7 +188,8 @@ public class HomePagePanel extends JPanel {
 		for (int i = 0; i < labels.length; i++) {
 			if (i < listOfProperties.size()) {
 				imgPath = listOfProperties.get(i).getImages().get(0).getImage();
-				labels[i].setIcon(resizeImage(imgPath, lblLeftTop.getWidth(), lblLeftTop.getHeight()));
+				File f = new File(imgPath);
+				labels[i].setIcon(ImageResize.resizeImage(f, lblLeftTop.getWidth(), lblLeftTop.getHeight()));
 			}
 		}
 	}
@@ -211,13 +210,6 @@ public class HomePagePanel extends JPanel {
 				labels[i].setText(text);
 			}
 		}
-	}
-	
-	private Icon resizeImage(String imgPath, int width, int height) {
-		File file = new File(imgPath);
-		Image image = new ImageIcon(file.getPath()).getImage();
-		Image newImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		return new ImageIcon(newImage);
 	}
 	
 	private double avgPropertyPrice(Map<RoomType, Room> room) {

@@ -22,17 +22,15 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.User;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.util.ImageResize;
 
 import java.awt.Color;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.Image;
 import java.io.File;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
@@ -103,7 +101,9 @@ public class UserProfileFrame extends JFrame {
 		lblProfileImage.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblProfileImage.setOpaque(true);
 		lblProfileImage.setBounds(274, 36, 117, 103);
-		lblProfileImage.setIcon(setProfileImage(user.getProfilePicture()));
+		File f = new File(user.getProfilePicture());
+		Icon icon = ImageResize.resizeImage(f, lblProfileImage.getWidth(), lblProfileImage.getHeight());
+		lblProfileImage.setIcon(icon);
 		contentPane.add(lblProfileImage);
 		
 		comboBox = new JComboBox<>();
@@ -188,7 +188,9 @@ public class UserProfileFrame extends JFrame {
 					User tempUser = prepareUserDataForDB(path);
 					sendProfilePicToServer(tempUser);
 					
-					lblProfileImage.setIcon(setProfileImage(path));
+					File f = new File(path);
+					Icon icon = ImageResize.resizeImage(f, lblProfileImage.getWidth(), lblProfileImage.getHeight());
+					lblProfileImage.setIcon(icon);
 				} else if (result == JFileChooser.CANCEL_OPTION) {
 					System.out.println("No file select");
 				}
@@ -283,15 +285,6 @@ public class UserProfileFrame extends JFrame {
 				propertyNamesAccepted.put(booking.getProperty().getIdProperty(), booking.getProperty().getName());
 			}
 		}
-	}
-	
-	private Icon setProfileImage(String path) {
-		File file = new File(path);
-		ImageIcon imgIcon = new ImageIcon(file.getPath());
-		Image img = imgIcon.getImage();
-		Image newImg = img.getScaledInstance(lblProfileImage.getWidth(), lblProfileImage.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
 	}
 	
 	private User prepareUserDataForDB(String path) {

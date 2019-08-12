@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,6 +24,7 @@ import javax.swing.border.MatteBorder;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.regular.property.SelectedPropertyFrame;
 
 public class SearchPagePanel extends JPanel {
@@ -122,8 +121,10 @@ public class SearchPagePanel extends JPanel {
 		lblImage.setBackground(new Color(135, 206, 235));
 		lblImage.setOpaque(true);
 		lblImage.setBounds(12, 38, 282, 250);
-		String icon = property.getImages().get(0).getImage();
-		lblImage.setIcon(resizeImage(icon, lblImage.getWidth(), lblImage.getHeight()));
+		String strIcon = property.getImages().get(0).getImage();
+		File f = new File(strIcon);
+		Icon icon = ImageResize.resizeImage(f, lblImage.getWidth(), lblImage.getHeight());
+		lblImage.setIcon(icon);
 		testPanel.add(lblImage);
 		
 		lblPropertyName = new JLabel("");
@@ -190,13 +191,6 @@ public class SearchPagePanel extends JPanel {
 		double avg = (double) score / count;
 		String total = String.format("%.2f", avg);
 		return total;
-	}
-
-	private Icon resizeImage(String imgPath, int width, int height) {
-		File file = new File(imgPath);
-		Image image = new ImageIcon(file.getPath()).getImage();
-		Image newImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		return new ImageIcon(newImage);
 	}
 
 }

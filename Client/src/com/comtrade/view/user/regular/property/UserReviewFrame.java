@@ -194,8 +194,4 @@ public class UserReviewFrame extends JFrame {
 		}
 		throw new Exception("You have to reserve a room in this property to leave the review");
 	}
-
-	
-
-	
 }

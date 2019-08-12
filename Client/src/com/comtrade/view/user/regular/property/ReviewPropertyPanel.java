@@ -10,7 +10,6 @@ import java.io.File;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,10 +20,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
-import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.util.ImageResize;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -114,7 +112,9 @@ public class ReviewPropertyPanel extends JPanel {
 		lblProfilePicture = new JLabel("");
 		lblProfilePicture.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProfilePicture.setBounds(32, 23, 96, 85);
-		lblProfilePicture.setIcon(setImage(user.getProfilePicture(), lblProfilePicture));
+		File f = new File(user.getProfilePicture());
+		Icon i = ImageResize.resizeImage(f, lblProfilePicture.getWidth(), lblProfilePicture.getHeight());
+		lblProfilePicture.setIcon(i);
 		temp.add(lblProfilePicture);
 		
 		JLabel lblName = new JLabel();
@@ -126,7 +126,9 @@ public class ReviewPropertyPanel extends JPanel {
 		
 		lblCountryFlag = new JLabel("");
 		lblCountryFlag.setBounds(140, 71, 50, 37);
-		lblCountryFlag.setIcon(setImage(user.getCountry().getImage(), lblCountryFlag));
+		File f2 = new File(user.getCountry().getImage());
+		Icon icon = ImageResize.resizeImage(f2, lblCountryFlag.getWidth(), lblCountryFlag.getHeight());
+		lblCountryFlag.setIcon(icon);
 		temp.add(lblCountryFlag);
 		
 		lblCountryName = new JLabel();
@@ -159,12 +161,12 @@ public class ReviewPropertyPanel extends JPanel {
 	}
 
 
-	private Icon setImage(String path, JLabel label) {
-		File file = new File(path);
-		ImageIcon imgIcon = new ImageIcon(file.getPath());
-		Image img = imgIcon.getImage();
-		Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
-	}
+//	private Icon setImage(String path, JLabel label) {
+//		File file = new File(path);
+//		ImageIcon imgIcon = new ImageIcon(file.getPath());
+//		Image img = imgIcon.getImage();
+//		Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+//		ImageIcon image = new ImageIcon(newImg);
+//		return image;
+//	}
 }

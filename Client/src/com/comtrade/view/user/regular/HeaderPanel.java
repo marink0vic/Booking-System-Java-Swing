@@ -2,26 +2,20 @@ package com.comtrade.view.user.regular;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 
 import com.comtrade.constants.ColorConstants;
-import com.comtrade.domain.Booking;
-import com.comtrade.domain.User;
 import com.comtrade.dto.UserWrapper;
+import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.regular.property.RoomsPricesPanel;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.Map;
 import java.awt.Cursor;
 
 public class HeaderPanel extends JPanel {
@@ -51,7 +45,9 @@ public class HeaderPanel extends JPanel {
 	public void setUserWrapper(UserWrapper userWrapper) {
 		this.userWrapper = userWrapper;
 		setProfileNameLabel();
-		imageLabel.setIcon(setIcon());
+		File f = new File(userWrapper.getUser().getCountry().getImage());
+		Icon icon = ImageResize.resizeImage(f, imageLabel.getWidth(), imageLabel.getHeight());
+		imageLabel.setIcon(icon);
 	}
 
 	private void initializeComponents() {
@@ -99,15 +95,6 @@ public class HeaderPanel extends JPanel {
 		
 		add(lblLogedUser);
 		
-	}
-	
-	private Icon setIcon() {
-		File file = new File(userWrapper.getUser().getCountry().getImage());
-		ImageIcon imgIcon = new ImageIcon(file.getPath());
-		Image img = imgIcon.getImage();
-		Image newImg = img.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
 	}
 
 	private void setProfileNameLabel() {

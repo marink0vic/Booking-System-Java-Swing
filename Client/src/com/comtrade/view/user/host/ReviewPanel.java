@@ -23,6 +23,7 @@ import javax.swing.border.MatteBorder;
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
+import com.comtrade.util.ImageResize;
 
 public class ReviewPanel extends JPanel {
 
@@ -97,7 +98,8 @@ public class ReviewPanel extends JPanel {
 		lblProfilePicture = new JLabel("");
 		lblProfilePicture.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProfilePicture.setBounds(32, 23, 96, 85);
-		lblProfilePicture.setIcon(setImage(user.getProfilePicture(), lblProfilePicture));
+		File f = new File(user.getProfilePicture());
+		lblProfilePicture.setIcon(ImageResize.resizeImage(f, lblProfilePicture.getWidth(), lblProfilePicture.getHeight()));
 		review.add(lblProfilePicture);
 		
 		JLabel lblName = new JLabel();
@@ -109,7 +111,9 @@ public class ReviewPanel extends JPanel {
 		
 		lblCountryFlag = new JLabel("");
 		lblCountryFlag.setBounds(140, 71, 50, 37);
-		lblCountryFlag.setIcon(setImage(user.getCountry().getImage(), lblCountryFlag));
+		File f2 = new File(user.getCountry().getImage());
+		Icon icon = ImageResize.resizeImage(f2, lblCountryFlag.getWidth(), lblCountryFlag.getHeight());
+		lblCountryFlag.setIcon(icon);
 		review.add(lblCountryFlag);
 		
 		lblCountryName = new JLabel();
@@ -139,15 +143,6 @@ public class ReviewPanel extends JPanel {
 		review.add(lblRating);
 		
 		return review;
-	}
-	
-	private Icon setImage(String path, JLabel label) {
-		File file = new File(path);
-		ImageIcon imgIcon = new ImageIcon(file.getPath());
-		Image img = imgIcon.getImage();
-		Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
 	}
 
 }

@@ -26,6 +26,7 @@ import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
+import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.host.frames.PropertyImagesFrame;
 import com.comtrade.view.user.host.frames.RoomFrame;
 
@@ -200,14 +201,14 @@ public class HomePanel extends JPanel {
 	}
 	
 	public void addIconToPanel(File file) {
-		Icon icon = resizeImage(file, WIDTH, HEIGHT);
+		Icon icon = ImageResize.resizeImage(file, WIDTH, HEIGHT);
 		gallery.add(addGalleryPanels(gallery, icon));
 	}
 
 	private void addSmallGallery() {
 		for (int i = 0; i < propertyImages.size(); i++) {
 			File file = new File(propertyImages.get(i).getImage());
-			Icon icon = resizeImage(file, WIDTH, HEIGHT);
+			Icon icon = ImageResize.resizeImage(file, WIDTH, HEIGHT);
 			gallery.add(addGalleryPanels(gallery, icon));
 		}
 		JScrollPane scrollPaneImages = new JScrollPane(gallery);
@@ -225,14 +226,6 @@ public class HomePanel extends JPanel {
         newPanel.add(lbl);
         return newPanel;
 	}
-	
-	private Icon resizeImage(File selectedFile, int width, int height) {
-		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
-		Image img = myImage.getImage();
-		Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
-	}
 
 	private void addAddressLabelValues() {
 		lblPropertyName.setText(propertyWrapper.getProperty().getName());
@@ -248,7 +241,7 @@ public class HomePanel extends JPanel {
 		if (propertyImages.size() > 0)
 			imageUrl = propertyImages.get(0).getImage();
 		File f = new File(imageUrl);
-		Icon icon = resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
+		Icon icon = ImageResize.resizeImage(f, lblSmallImage.getWidth(), lblSmallImage.getHeight());
 		lblSmallImage.setIcon(icon);
 	}
 

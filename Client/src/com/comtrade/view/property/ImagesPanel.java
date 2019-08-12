@@ -31,6 +31,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
 import com.comtrade.domain.PropertyImage;
+import com.comtrade.util.ImageResize;
 
 
 public class ImagesPanel extends JPanel {
@@ -98,7 +99,7 @@ public class ImagesPanel extends JPanel {
 					image.setImage(path);
 					propertyImageFiles.add(image);
 					
-					Icon icon = resizeImage(selectedFile);
+					Icon icon = ImageResize.resizeImage(selectedFile, scrollPane.getWidth(), scrollPane.getHeight());
 					images.add(icon);
 					updateTable();
 					
@@ -163,14 +164,6 @@ public class ImagesPanel extends JPanel {
 			table.getColumn("Image").setCellRenderer(new LabelRenderer());
 			dtm.addRow(new Object[] {label});
 		}
-	}
-
-	private Icon resizeImage(File selectedFile) {
-		ImageIcon myImage = new ImageIcon(selectedFile.getAbsolutePath());
-		Image img = myImage.getImage();
-		Image newImg = img.getScaledInstance(scrollPane.getWidth(), scrollPane.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		return image;
 	}
 	
 	private void switchPanel(JPanel panel) {

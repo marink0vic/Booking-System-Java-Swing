@@ -18,6 +18,7 @@ import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.host.HomePanel;
 
 import javax.swing.Icon;
@@ -50,6 +51,8 @@ public class PropertyImagesFrame extends JFrame {
 	private int index;
 	private HomePanel homePanel;
 	private PropertyWrapper propertyWrapper;
+	private File imageFile;
+	private Icon imageIcon;
 	
 	public PropertyImagesFrame(HomePanel homePanel, PropertyWrapper propertyWrapper) {
 		this.homePanel = homePanel;
@@ -97,7 +100,9 @@ public class PropertyImagesFrame extends JFrame {
 					propertyImages.add(image);
 					
 					index = propertyImages.size() - 1;
-					setImage(index);
+					imageFile = new File(propertyImages.get(index).getImage());
+					imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
+					lblImage.setIcon(imageIcon);
 					
 				} else if (result == JFileChooser.CANCEL_OPTION) {
 					System.out.println("No file select");
@@ -136,7 +141,9 @@ public class PropertyImagesFrame extends JFrame {
 					homePanel.removeIconFromPanel(index);
 					if (index == 0) homePanel.addSmallTopIcon();
 					if (index != 0) index--;
-					setImage(index);
+					imageFile = new File(propertyImages.get(index).getImage());
+					imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
+					lblImage.setIcon(imageIcon);
 				}
 			}
 		});
@@ -221,8 +228,9 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.setBackground(new Color(9, 121, 186));
 		btnBack.setBorder(null);
 		contentPane.add(btnBack);
-		
-		setImage(0);
+		imageFile = new File(propertyImages.get(0).getImage());
+		imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
+		lblImage.setIcon(imageIcon);
 	}
 
 	protected List<PropertyImage> newImagesForDatabase() {
@@ -233,15 +241,6 @@ public class PropertyImagesFrame extends JFrame {
 		}
 		return images;
 	}
-
-	private void setImage(int position) {
-		File file = new File(propertyImages.get(position).getImage());
-		ImageIcon imgIcon = new ImageIcon(file.getPath());
-		Image img = imgIcon.getImage();
-		Image newImg = img.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(newImg);
-		lblImage.setIcon(image);
-	}
 	
 	private void moveSlider(char command) {
 		if (command == 'L') {
@@ -250,14 +249,18 @@ public class PropertyImagesFrame extends JFrame {
 			} else {
 				index--;
 			}
-			setImage(index);
+			imageFile = new File(propertyImages.get(index).getImage());
+			imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
+			lblImage.setIcon(imageIcon);
 		} else if (command == 'R') {
 			if (index == propertyImages.size() - 1) {
 				index = 0;
 			} else {
 				index++;
 			}
-			setImage(index);
+			imageFile = new File(propertyImages.get(index).getImage());
+			imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
+			lblImage.setIcon(imageIcon);
 		}
 	}
 	

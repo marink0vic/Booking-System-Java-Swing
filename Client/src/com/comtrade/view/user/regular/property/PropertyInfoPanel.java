@@ -35,6 +35,7 @@ import com.comtrade.domain.User;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.util.ImageResize;
 
 import javax.swing.JButton;
 import java.awt.event.KeyAdapter;
@@ -191,8 +192,9 @@ public class PropertyInfoPanel extends JPanel {
 		lblMainImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMainImage.setOpaque(true);
 		lblMainImage.setBounds(379, 0, 596, 347);
-		String mainImagePath = propertyImages.get(0).getImage();
-		lblMainImage.setIcon(resizeImage(mainImagePath, lblMainImage.getWidth(), lblMainImage.getHeight()));
+		File f = new File(propertyImages.get(0).getImage());
+		Icon icon = ImageResize.resizeImage(f, lblMainImage.getWidth(), lblMainImage.getHeight());
+		lblMainImage.setIcon(icon);
 		this.add(lblMainImage);
 		
 		JScrollPane scrollPanelSmallGallery = new JScrollPane();
@@ -216,7 +218,8 @@ public class PropertyInfoPanel extends JPanel {
 	}
 	
 	private JPanel smallGalleryPanels(JPanel smallImagePanel,String image) {
-		Icon icon = resizeImage(image, DIMENSION, DIMENSION);
+		File f = new File(image);
+		Icon icon = ImageResize.resizeImage(f, DIMENSION, DIMENSION);
 		JPanel newPanel = new JPanel();
         JLabel lbl = new JLabel();
         lbl.setPreferredSize(new Dimension(DIMENSION,DIMENSION));
@@ -225,17 +228,11 @@ public class PropertyInfoPanel extends JPanel {
         newPanel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				lblMainImage.setIcon(resizeImage(image, lblMainImage.getWidth(), lblMainImage.getHeight()));
+				Icon icon = ImageResize.resizeImage(f, lblMainImage.getWidth(), lblMainImage.getHeight());
+				lblMainImage.setIcon(icon);
 			}
 		});
         return newPanel;
-	}
-	
-	private Icon resizeImage(String imgPath, int width, int height) {
-		File file = new File(imgPath);
-		Image image = new ImageIcon(file.getPath()).getImage();
-		Image newImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		return new ImageIcon(newImage);
 	}
 	
 	private String setPropertyRating() {
