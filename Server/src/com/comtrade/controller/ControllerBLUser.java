@@ -58,7 +58,7 @@ public class ControllerBLUser implements IControllerBL {
 			User user = (User) sender.getClientRequest();
 			User returnedUser = new User();
 			if(loggedIn(user)) {
-				receiver.setMessageResponse("You are already logged in");
+				receiver.setMessageResponse("Someone is already logged in with that data");
 			} else {
 				try {
 					returnedUser = loginUser(user);

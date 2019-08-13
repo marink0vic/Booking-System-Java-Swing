@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.comtrade.constants.ServerResourcePath;
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public class PaymentType implements GeneralDomain, DomainList, DomainJoin, Serializable {

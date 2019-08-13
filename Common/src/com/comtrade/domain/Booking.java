@@ -9,9 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.comtrade.domain.behavior.DomainUpdate;
-import com.comtrade.domain.behavior.GeneralDomain;
-
 public class Booking implements GeneralDomain, DomainUpdate, Serializable {
 
 	

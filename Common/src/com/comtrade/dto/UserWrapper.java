@@ -1,19 +1,16 @@
 package com.comtrade.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.generics.Generic;
 
 public class UserWrapper implements Generic, Serializable {
-
 	
 	private static final long serialVersionUID = 1L;
 	private User user;

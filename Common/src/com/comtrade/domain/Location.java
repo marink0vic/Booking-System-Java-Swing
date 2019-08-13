@@ -8,8 +8,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public class Location implements GeneralDomain, DomainJoin, Serializable {

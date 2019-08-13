@@ -4,9 +4,7 @@ import java.sql.SQLException;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.PropertyReview;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.generics.GenericClass;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.review.SaveReviewOS;
 import com.comtrade.transfer.TransferClass;
@@ -32,8 +30,6 @@ public class ControllerBLReview implements IControllerBL {
 			}
 			return receiver;
 		}
-			
-
 		default:
 			return null;
 		}

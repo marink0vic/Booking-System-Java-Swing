@@ -6,13 +6,13 @@ import java.util.Map;
 
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
+import com.comtrade.domain.DomainJoin;
+import com.comtrade.domain.DomainList;
+import com.comtrade.domain.DomainUpdate;
+import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.DomainUpdate;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public interface IBroker {

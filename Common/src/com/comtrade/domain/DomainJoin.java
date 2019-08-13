@@ -1,4 +1,4 @@
-package com.comtrade.domain.behavior;
+package com.comtrade.domain;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -205,9 +205,13 @@ public class RoomTypePanel extends JPanel {
 		btnContinueNext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnContinueNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				switchPanel(roomPanel);
-				updateUI(lblRoomsInfo);
-				setHeaderValue();
+				if (listOfTypes.size() == 0) {
+					JOptionPane.showMessageDialog(null, "You need to enter at least one roomType");
+				} else {
+					switchPanel(roomPanel);
+					updateUI(lblRoomsInfo);
+					setHeaderValue();
+				}
 			}
 		});
 		btnContinueNext.setForeground(Color.WHITE);
@@ -224,6 +228,7 @@ public class RoomTypePanel extends JPanel {
 				} else {
 					removeTypeFroomList(roomType);
 					fillTable();
+					roomType = null;
 				}
 			}
 		});

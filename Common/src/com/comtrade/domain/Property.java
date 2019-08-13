@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public class Property implements GeneralDomain, DomainJoin, Serializable {

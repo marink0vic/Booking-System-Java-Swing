@@ -10,9 +10,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.GeneralDomain;
-
 public class Transaction implements GeneralDomain, DomainList, Serializable {
 
 

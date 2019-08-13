@@ -2,17 +2,12 @@ package com.comtrade.domain;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.List;
-
-import com.comtrade.domain.behavior.GeneralDomain;
 
 public class PropertyImage implements GeneralDomain, Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 	private int IdImage;
 	private int idProperty;

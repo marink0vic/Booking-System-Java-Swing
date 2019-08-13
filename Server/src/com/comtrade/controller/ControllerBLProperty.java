@@ -2,15 +2,12 @@ package com.comtrade.controller;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.generics.GenericList;
-import com.comtrade.generics.GenericMap;
 import com.comtrade.sysoperation.GeneralSystemOperation;
 import com.comtrade.sysoperation.property.ReturnAllPropertiesSO;
 import com.comtrade.sysoperation.property.ReturnUserPropertySO;

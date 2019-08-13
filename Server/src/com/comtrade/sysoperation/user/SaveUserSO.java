@@ -7,7 +7,6 @@ import com.comtrade.broker.IBroker;
 import com.comtrade.constants.ImageFolder;
 import com.comtrade.constants.ServerResourcePath;
 import com.comtrade.domain.User;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.serverdata.ServerData;
 import com.comtrade.sysoperation.GeneralSystemOperation;

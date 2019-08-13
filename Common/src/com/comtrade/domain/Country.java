@@ -10,9 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.GeneralDomain;
-
 public class Country implements GeneralDomain, DomainList, Serializable {
 
 	private static final long serialVersionUID = 1L;

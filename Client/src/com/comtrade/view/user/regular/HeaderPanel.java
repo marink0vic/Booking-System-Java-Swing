@@ -10,7 +10,6 @@ import javax.swing.SwingConstants;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.User;
-import com.comtrade.dto.UserWrapper;
 import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.regular.property.RoomsPricesPanel;
 

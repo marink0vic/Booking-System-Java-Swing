@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.comtrade.constants.ServerResourcePath;
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.dto.PropertyWrapper;
 
 import crypt.BCrypt;

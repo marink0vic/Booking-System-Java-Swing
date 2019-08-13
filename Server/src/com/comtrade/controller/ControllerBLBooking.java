@@ -1,11 +1,9 @@
 package com.comtrade.controller;
 
 import java.sql.SQLException;
-import java.util.Set;
 
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
-import com.comtrade.domain.Booking;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.sysoperation.GeneralSystemOperation;
@@ -49,7 +47,6 @@ public class ControllerBLBooking implements IControllerBL {
 				receiver.setDomainType(DomainType.BOOKING);
 				receiver.setOperation(Operations.UPDATE);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return receiver;

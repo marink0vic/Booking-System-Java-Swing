@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.dto.PropertyWrapper;
 
 public class RoomType implements DomainUpdate, DomainJoin, Serializable {

@@ -13,6 +13,10 @@ import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
+import com.comtrade.domain.DomainJoin;
+import com.comtrade.domain.DomainList;
+import com.comtrade.domain.DomainUpdate;
+import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyImage;
@@ -20,10 +24,6 @@ import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainList;
-import com.comtrade.domain.behavior.DomainUpdate;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public class Broker implements IBroker {
@@ -62,8 +62,7 @@ public class Broker implements IBroker {
 	
 	@Override
 	public void update(DomainUpdate domain) throws SQLException {
-		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";
-		
+		String sql = "UPDATE " + domain.returnTableName() + " SET " + domain.returnColumnsForUpdate() + " WHERE " + domain.returnIdColumnName() + " = ?";	
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		domain.preparedStatementUpdate(preparedStatement);
 		preparedStatement.executeUpdate();

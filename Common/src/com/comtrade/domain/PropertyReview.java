@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
 
 public class PropertyReview implements GeneralDomain, DomainJoin, Serializable {

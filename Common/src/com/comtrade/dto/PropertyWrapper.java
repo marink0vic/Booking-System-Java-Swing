@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.omg.IOP.TransactionService;
 
 import com.comtrade.domain.Location;
 import com.comtrade.domain.BookedRoom;
@@ -24,7 +23,6 @@ import com.comtrade.generics.Generic;
 
 public class PropertyWrapper implements Serializable, Generic {
 
-	
 	private static final long serialVersionUID = 1L;
 	private User user;
 	private Location address;
@@ -43,7 +41,10 @@ public class PropertyWrapper implements Serializable, Generic {
 		reviews = new ArrayList<>();
 	}
 	
-	public PropertyWrapper(User user, Location address, Property property, Map<RoomType, Room> rooms, List<PropertyImage> images, List<PaymentType> paymentList) {
+	public PropertyWrapper(User user, Location address, 
+						   Property property, Map<RoomType, Room> rooms, 
+						   List<PropertyImage> images, List<PaymentType> paymentList) 
+	{
 		this.user = user;
 		this.address = address;
 		this.property = property;
