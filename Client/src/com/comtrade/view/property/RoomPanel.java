@@ -5,8 +5,6 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +38,6 @@ public class RoomPanel extends JPanel {
 	private JButton btnContinue;
 	private int tempRoomTypePosition;
 	
-	//----
 	private JLayeredPane layeredPane;
 	private List<RoomType> listOfTypes;
 	private Map<RoomType, Room> room;
@@ -51,7 +48,12 @@ public class RoomPanel extends JPanel {
 	 * Create the panel.
 	 */
 	
-	public RoomPanel(JLayeredPane layeredPane, List<RoomType> listOfTypes, Map<RoomType, Room> room, JLabel lblPropertyImages, ImagesPanel imagesPanel) {
+	public RoomPanel(JLayeredPane layeredPane, 
+					List<RoomType> listOfTypes, 
+					Map<RoomType, Room> room, 
+					JLabel lblPropertyImages, 
+					ImagesPanel imagesPanel) 
+	{
 		this.layeredPane = layeredPane;
 		this.listOfTypes = listOfTypes;
 		this.room = room;
@@ -130,20 +132,9 @@ public class RoomPanel extends JPanel {
 				clearInputs();
 			}
 		});
-		btnNextRoom.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnNextRoom.setBounds(366, 487, 327, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnNextRoom.setBounds(368, 489, 323, 55);
-			}
-		});
 		btnNextRoom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNextRoom.setForeground(Color.WHITE);
 		btnNextRoom.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnNextRoom.setBorder(null);
 		btnNextRoom.setBackground(new Color(9, 121, 186));
 		btnNextRoom.setBounds(368, 489, 323, 55);
 		this.add(btnNextRoom);
@@ -152,27 +143,16 @@ public class RoomPanel extends JPanel {
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tempRoomTypePosition != listOfTypes.size()) {
-					JOptionPane.showMessageDialog(null, "Niste uneli podatke za sve sobe");
+					JOptionPane.showMessageDialog(null, "You didn't enter information for all rooms");
 				} else {
 					switchPanel(imagesPanel);
 					updateUI(lblPropertyImages);	
 				}
 			}
 		});
-		btnContinue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnContinue.setBounds(333, 635, 408, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnContinue.setBounds(335, 637, 404, 55);
-			}
-		});
 		btnContinue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnContinue.setForeground(Color.WHITE);
 		btnContinue.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnContinue.setBorder(null);
 		btnContinue.setBackground(new Color(255, 88, 93));
 		btnContinue.setBounds(335, 637, 404, 55);
 		this.add(btnContinue);
@@ -180,7 +160,6 @@ public class RoomPanel extends JPanel {
 	
 	public void setHeaderValue(String roomType) {
 		lblHeaderText.setText(headerText + roomType);
-		
 	}
 
 	private void addToMap(Room r) {

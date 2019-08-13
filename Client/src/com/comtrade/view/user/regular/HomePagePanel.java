@@ -42,7 +42,6 @@ public class HomePagePanel extends JPanel {
 	private JLabel lblSmallLeftBottom;
 	private JLabel lblSmallRightBottom;
 	private JLabel lblRightBottom;
-	//---
 	
 
 	public HomePagePanel(List<PropertyWrapper> listOfProperties, User user, JDateChooser dateCheckIn, JDateChooser dateCheckOut) {
@@ -84,10 +83,7 @@ public class HomePagePanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				PropertyWrapper pw = listOfProperties.get(0);
-				LocalDate[] dates = setDates();
-				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
-				reservationFrame.setVisible(true);
-				reservationFrame.setLocationRelativeTo(null);
+				loadSelectedPropertyFrame(pw);
 			}
 		});
 		lblLeftTop.setOpaque(true);
@@ -112,10 +108,7 @@ public class HomePagePanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				PropertyWrapper pw = listOfProperties.get(1);
-				LocalDate[] dates = setDates();
-				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
-				reservationFrame.setVisible(true);
-				reservationFrame.setLocationRelativeTo(null);
+				loadSelectedPropertyFrame(pw);
 			}
 		});
 		lblRightTop.setOpaque(true);
@@ -138,10 +131,7 @@ public class HomePagePanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				PropertyWrapper pw = listOfProperties.get(2);
-				LocalDate[] dates = setDates();
-				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
-				reservationFrame.setVisible(true);
-				reservationFrame.setLocationRelativeTo(null);
+				loadSelectedPropertyFrame(pw);
 			}
 		});
 		lblLeftBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -165,10 +155,7 @@ public class HomePagePanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				PropertyWrapper pw = listOfProperties.get(3);
-				LocalDate[] dates = setDates();
-				SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
-				reservationFrame.setVisible(true);
-				reservationFrame.setLocationRelativeTo(null);
+				loadSelectedPropertyFrame(pw);
 			}
 		});
 		lblRightBottom.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -183,6 +170,13 @@ public class HomePagePanel extends JPanel {
 		setSmallLabelsText(smallTextLabels);
 	}
 	
+	private void loadSelectedPropertyFrame(PropertyWrapper pw) {
+		LocalDate[] dates = setDates();
+		SelectedPropertyFrame reservationFrame = new SelectedPropertyFrame(pw, user, dates[0], dates[1]);
+		reservationFrame.setVisible(true);
+		reservationFrame.setLocationRelativeTo(null);
+	}
+
 	private void setDestinationIcons(JLabel[] labels) {
 		String imgPath;
 		for (int i = 0; i < labels.length; i++) {

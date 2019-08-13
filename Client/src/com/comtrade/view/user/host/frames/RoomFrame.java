@@ -1,6 +1,5 @@
 package com.comtrade.view.user.host.frames;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -37,7 +36,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -171,19 +169,8 @@ public class RoomFrame extends JFrame {
 				}
 			}
 		});
-		btnAction.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnAction.setBounds(489, 428, 285, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnAction.setBounds(491, 430, 281, 55);
-			}
-		});
 		btnAction.setForeground(Color.WHITE);
 		btnAction.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAction.setBorder(null);
 		btnAction.setBackground(new Color(255, 88, 93));
 		btnAction.setBounds(491, 430, 281, 55);
 		if (action.equals("ADD")) btnAction.setText("Add new room");

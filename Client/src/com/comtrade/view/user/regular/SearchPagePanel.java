@@ -21,6 +21,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -75,7 +76,6 @@ public class SearchPagePanel extends JPanel {
 		gridPanel.setBounds(261, 562, 950, 320);
 	    gridPanel.setAutoscrolls(true);
 	    
-	    
 	    JScrollPane scrollPane = new JScrollPane(gridPanel);
 	    scrollPane.setBorder(null);
 	    scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -111,7 +111,7 @@ public class SearchPagePanel extends JPanel {
 
 	private JPanel setScrollProperty(PropertyWrapper property) {
 		JPanel testPanel = new JPanel();
-		testPanel.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(171, 171, 171)));
+		testPanel.setBorder(new MatteBorder(0, 0, 1, 0, (Color) ColorConstants.LIGHT_GRAY));
 		testPanel.setOpaque(false);
 		testPanel.setPreferredSize(new Dimension(950, 320));
 		this.add(testPanel);
@@ -129,7 +129,7 @@ public class SearchPagePanel extends JPanel {
 		
 		lblPropertyName = new JLabel("");
 		lblPropertyName.setBorder(null);
-		lblPropertyName.setForeground(new Color(71, 71, 71));
+		lblPropertyName.setForeground(ColorConstants.GRAY);
 		lblPropertyName.setFont(new Font("Dialog", Font.BOLD, 22));
 		lblPropertyName.setBackground(new Color(255, 255, 255));
 		lblPropertyName.setBounds(330, 35, 351, 46);
@@ -137,7 +137,7 @@ public class SearchPagePanel extends JPanel {
 		testPanel.add(lblPropertyName);
 		
 		lblStreet = new JLabel("");
-		lblStreet.setForeground(new Color(71, 71, 71));
+		lblStreet.setForeground(ColorConstants.GRAY);
 		lblStreet.setFont(new Font("Dialog", Font.PLAIN, 18));
 		lblStreet.setBorder(null);
 		lblStreet.setBackground(Color.WHITE);
@@ -146,7 +146,7 @@ public class SearchPagePanel extends JPanel {
 		testPanel.add(lblStreet);
 		
 		JTextArea txtAreaDescription = new JTextArea();
-		txtAreaDescription.setForeground(new Color(71, 71, 71));
+		txtAreaDescription.setForeground(ColorConstants.GRAY);
 		txtAreaDescription.setFont(new Font("Dialog", Font.PLAIN, 15));
 		txtAreaDescription.setBounds(330, 128, 489, 92);
 		txtAreaDescription.setText(property.getProperty().getDescription());
@@ -163,7 +163,7 @@ public class SearchPagePanel extends JPanel {
 			}
 		});
 		btnReserve.setForeground(new Color(255, 255, 255));
-		btnReserve.setBackground(new Color(9, 121, 186));
+		btnReserve.setBackground(ColorConstants.BLUE);
 		btnReserve.setFont(new Font("Dialog", Font.BOLD, 15));
 		btnReserve.setBounds(330, 231, 195, 53);
 		testPanel.add(btnReserve);
@@ -171,7 +171,7 @@ public class SearchPagePanel extends JPanel {
 		lblRating = new JLabel(setPropertyRating(property));
 		lblRating.setOpaque(true);
 		lblRating.setForeground(new Color(255, 255, 255));
-		lblRating.setBackground(new Color(9, 121, 186));
+		lblRating.setBackground(ColorConstants.BLUE);
 		lblRating.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRating.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblRating.setBounds(866, 38, 56, 53);

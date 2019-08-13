@@ -1,7 +1,5 @@
 package com.comtrade.view.login;
 
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
 import com.comtrade.constants.DomainType;

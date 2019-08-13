@@ -49,7 +49,6 @@ public class ReservationPanel extends JPanel {
 	private Set<RoomType> roomTypes;
 	private  Map<Booking, List<BookedRoom>> oldBookings;
 	private  Map<Booking, List<BookedRoom>> newBookings;
-	private static final double PERCENT = 0.1;
 	private JDateChooser dateCheckIn;
 	private JDateChooser dateCheckOut;
 	private LocalDate checkIn;
@@ -144,7 +143,7 @@ public class ReservationPanel extends JPanel {
 		JTableHeader header = table.getTableHeader();
 		header.setFont(new Font("Dialog", Font.BOLD, 20));
 		scrollPane.setViewportView(table);
-		Object[] object = {"Guest name", "Check in", "Check out", "Room" , "Price", "Fee", "Booking num"};
+		Object[] object = {"Guest name", "Check in", "Check out", "Room" , "Price", "Booking num"};
 		addColumns(dtm, object);
 		
 		JLabel lblCheckin = new JLabel("CHECK-IN");
@@ -203,7 +202,7 @@ public class ReservationPanel extends JPanel {
 		lblShow.setBackground(ColorConstants.BLUE);
 		
 		lblFullPrice = new JLabel("");
-		lblFullPrice.setBounds(20, 522, 367, 50);
+		lblFullPrice.setBounds(20, 522, 483, 50);
 		OldReservationPanel.add(lblFullPrice);
 		lblFullPrice.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblFullPrice.setForeground(ColorConstants.GRAY);
@@ -226,7 +225,7 @@ public class ReservationPanel extends JPanel {
 		JTableHeader header2 = table2.getTableHeader();
 		header2.setFont(new Font("Dialog", Font.BOLD, 20));
 		scrollPane2.setViewportView(table2);
-		Object[] object2 = {"Guest name", "Check in", "Check out", "Room" , "Price", "Fee", "Booking num"};
+		Object[] object2 = {"Guest name", "Check in", "Check out", "Room" , "Price", "Booking num"};
 		addColumns(dtm2, object2);
 		
 		lblAddNewRes = new JButton("CONFIRM NEW BOOKINGS");
@@ -309,7 +308,7 @@ public class ReservationPanel extends JPanel {
 			priceTotal += addBookedRooms(b, entry.getValue(), dtm2);
 		}
 		String price = String.format("%.2f", priceTotal);
-		lblFullPrice2.setText("Full price: " + price + "$");
+		lblFullPrice2.setText("Amount paid for this period: " + price + "$");
 	}
 	
 	private void fillTable() {
@@ -330,8 +329,7 @@ public class ReservationPanel extends JPanel {
 		}
 		
 		String price = String.format("%.2f", priceTotal);
-		
-		lblFullPrice.setText("Full price: " + price + "$");
+		lblFullPrice.setText("Amount paid for this period: " + price + "$");
 	}
 	
 	private double addBookedRooms(Booking b, List<BookedRoom> list, DefaultTableModel default_model) {
@@ -344,8 +342,7 @@ public class ReservationPanel extends JPanel {
 					b.getCheckIn(),
 					b.getCheckOut(),
 					roomName,
-					br.getPriceForRoom() + "$",
-					String.format("%.2f",br.getPriceForRoom() * PERCENT) + "$",
+					String.format("%.2f",br.getPriceForRoom()) + "$",
 					b.getIdBooking()
 			});
 		}

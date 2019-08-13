@@ -27,7 +27,6 @@ public class MessagePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextArea textAreaReceive;
 	private JTextArea textAreaSend;
-	//private String messageToSend;
 	private User userSender;
 	private User propertyOwner;
 

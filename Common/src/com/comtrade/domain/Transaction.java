@@ -163,8 +163,8 @@ public class Transaction implements GeneralDomain, DomainList, Serializable {
 		double siteFees = resultSet.getDouble("site_fees");
 		
 		Transaction t = new Transaction(idSender, idReceiver, ld, lt);
-		t.setAmount(amount);
-		t.setSiteFees(siteFees);
+		t.amount = amount;
+		t.siteFees = siteFees;
 		t.setIdBooking(bookingId);
 		t.setIdTransaction(id);
 		

@@ -16,8 +16,8 @@ public class ServerProcessThread implements Runnable {
 				transfer = Communication.getCommunication().read();
 				processInformation(transfer);
 			} catch (Exception e) {
-				//System.out.println("Communication failed");
-				e.printStackTrace();
+				System.out.println("Communication failed");
+				//e.printStackTrace();
 				break;
 			}
 		}

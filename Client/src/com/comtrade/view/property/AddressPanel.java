@@ -27,6 +27,7 @@ import javax.swing.border.MatteBorder;
 import com.comtrade.constants.CityLocations;
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.Location;
+import com.comtrade.domain.User;
 import com.comtrade.domain.Country;
 import javax.swing.border.LineBorder;
 
@@ -49,14 +50,22 @@ public class AddressPanel extends JPanel {
 	private JLabel lblPropertyInfo;
 	private Location address;
 	private Country propertyCountry;
+	private User user;
 	
 	
-	public AddressPanel(JLayeredPane layeredPane, BasicInfoPanel basicInfoPanel, JLabel lblPropertyInfo, Location address, List<Country> countries) {
+	public AddressPanel(JLayeredPane layeredPane,
+						BasicInfoPanel basicInfoPanel, 
+						JLabel lblPropertyInfo, 
+						Location address, 
+						List<Country> countries,
+						User user) 
+	{
 		this.layeredPane = layeredPane;
 		this.basicInfoPanel = basicInfoPanel;
 		this.lblPropertyInfo = lblPropertyInfo;
 		this.address = address;
 		this.countries = countries;
+		this.user = user;
 		propertyCountry = new Country();
 		initializeComponents();
 	}
@@ -71,6 +80,18 @@ public class AddressPanel extends JPanel {
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 		
+		JLabel lblUser = new JLabel("Welcome " + user.getFirstName() + " " + user.getLastName());
+		lblUser.setForeground(new Color(71, 71, 71));
+		lblUser.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblUser.setBounds(243, 35, 349, 37);
+		add(lblUser);
+		
+		JLabel lblParagraph = new JLabel("Start by telling us your property location");
+		lblParagraph.setForeground(new Color(71, 71, 71));
+		lblParagraph.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblParagraph.setBounds(243, 77, 403, 37);
+		add(lblParagraph);
+		
 		comboCountries = new JComboBox<>();
 		comboCountries.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -80,24 +101,24 @@ public class AddressPanel extends JPanel {
 			}
 		});
 		comboCountries.setFont(new Font("Dialog", Font.BOLD, 17));
-		comboCountries.setBounds(481, 119, 389, 56);
+		comboCountries.setBounds(482, 162, 389, 56);
 		this.add(comboCountries);
 		
 		lblCountryImage = new JLabel("");
 		lblCountryImage.setBorder(null);
 		lblCountryImage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblCountryImage.setBounds(897, 119, 122, 56);
+		lblCountryImage.setBounds(898, 162, 122, 56);
 		this.add(lblCountryImage);
 		
 		comboCities = new JComboBox<>();
 		comboCities.setFont(new Font("Dialog", Font.BOLD, 17));
-		comboCities.setBounds(481, 210, 389, 56);
+		comboCities.setBounds(482, 253, 389, 56);
 		add(comboCities);
 		
 		JLabel lblCity = new JLabel("City:");
 		lblCity.setForeground(new Color(71, 71, 71));
 		lblCity.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblCity.setBounds(242, 221, 124, 37);
+		lblCity.setBounds(243, 264, 124, 37);
 		add(lblCity);
 		
 		tfStreet = new JTextField();
@@ -111,13 +132,13 @@ public class AddressPanel extends JPanel {
 		tfStreet.setForeground(new Color(71, 71, 71));
 		tfStreet.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfStreet.setColumns(10);
-		tfStreet.setBounds(481, 297, 389, 55);
+		tfStreet.setBounds(482, 340, 389, 55);
 		this.add(tfStreet);
 		
 		JLabel lblStreet = new JLabel("Street:");
 		lblStreet.setForeground(new Color(71, 71, 71));
 		lblStreet.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblStreet.setBounds(242, 308, 124, 37);
+		lblStreet.setBounds(243, 351, 124, 37);
 		this.add(lblStreet);
 		
 		tfNumber = new JTextField();
@@ -131,13 +152,13 @@ public class AddressPanel extends JPanel {
 		tfNumber.setForeground(new Color(71, 71, 71));
 		tfNumber.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfNumber.setColumns(10);
-		tfNumber.setBounds(481, 382, 389, 55);
+		tfNumber.setBounds(482, 425, 389, 55);
 		this.add(tfNumber);
 		
 		JLabel lblNumber = new JLabel("Number:");
 		lblNumber.setForeground(new Color(71, 71, 71));
 		lblNumber.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblNumber.setBounds(242, 393, 124, 37);
+		lblNumber.setBounds(243, 436, 124, 37);
 		this.add(lblNumber);
 		
 		tfZip = new JTextField();
@@ -151,19 +172,19 @@ public class AddressPanel extends JPanel {
 		tfZip.setForeground(new Color(71, 71, 71));
 		tfZip.setFont(new Font("Dialog", Font.BOLD, 19));
 		tfZip.setColumns(10);
-		tfZip.setBounds(481, 471, 389, 55);
+		tfZip.setBounds(482, 514, 389, 55);
 		this.add(tfZip);
 		
 		JLabel lblZippostalCode = new JLabel("Zip/Postal code:");
 		lblZippostalCode.setForeground(new Color(71, 71, 71));
 		lblZippostalCode.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblZippostalCode.setBounds(242, 482, 162, 37);
+		lblZippostalCode.setBounds(243, 525, 162, 37);
 		this.add(lblZippostalCode);
 		
 		JLabel lblCountry = new JLabel("Country:");
 		lblCountry.setForeground(new Color(71, 71, 71));
 		lblCountry.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblCountry.setBounds(242, 130, 124, 37);
+		lblCountry.setBounds(243, 173, 124, 37);
 		this.add(lblCountry);
 		
 		JButton btnContinue = new JButton("Continue");
@@ -183,22 +204,10 @@ public class AddressPanel extends JPanel {
 				}
 			}
 		});
-		btnContinue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnContinue.setBounds(240, 587, 632, 60);
-			}
-			                                                         
-			@Override 
-			public void mouseExited(MouseEvent e) {                
-				btnContinue.setBounds(242, 589, 628, 55);
-			}
-		});
 		btnContinue.setForeground(new Color(255, 255, 255));
 		btnContinue.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnContinue.setBorder(null);
 		btnContinue.setBackground(new Color(255, 88, 93));
-		btnContinue.setBounds(242, 589, 628, 55);
+		btnContinue.setBounds(243, 632, 628, 55);
 		this.add(btnContinue);
 		
 		fillComboCountires();

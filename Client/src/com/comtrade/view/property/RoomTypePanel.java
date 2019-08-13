@@ -52,6 +52,7 @@ public class RoomTypePanel extends JPanel {
 	private List<RoomType> listOfTypes;
 	private RoomPanel roomPanel;
 	private JLabel lblRoomsInfo;
+	private String roomType;
 
 	/**
 	 * Create the panel.
@@ -147,19 +148,8 @@ public class RoomTypePanel extends JPanel {
 				}
 			}
 		});
-		btnAddRoom.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnAddRoom.setBounds(356, 427, 531, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnAddRoom.setBounds(358, 429, 527, 55);
-			}
-		});
 		btnAddRoom.setForeground(Color.WHITE);
 		btnAddRoom.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAddRoom.setBorder(null);
 		btnAddRoom.setBackground(new Color(255, 88, 93));
 		btnAddRoom.setBounds(358, 429, 527, 55);
 		addRoomType.add(btnAddRoom);
@@ -180,6 +170,14 @@ public class RoomTypePanel extends JPanel {
 		moreRoomType.add(scrollPane);
 		
 		table = new JTable(dtm);
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				int row = table.getSelectedRow();
+				roomType = (String)dtm.getValueAt(row, 0);
+				table.setSelectionBackground(ColorConstants.RED);
+			}
+		});
 		table.setForeground(new Color(71, 71, 71));
 		table.setFont(new Font("Dialog", Font.BOLD, 17));
 		table.setRowHeight(30);
@@ -197,21 +195,10 @@ public class RoomTypePanel extends JPanel {
 				switchPanel(addRoomType);
 			}
 		});
-		btnAddAnotherRoom.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnAddAnotherRoom.setBounds(124, 627, 327, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnAddAnotherRoom.setBounds(126, 629, 323, 55);
-			}
-		});
 		btnAddAnotherRoom.setForeground(Color.WHITE);
 		btnAddAnotherRoom.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAddAnotherRoom.setBorder(null);
-		btnAddAnotherRoom.setBackground(new Color(9, 121, 186));
-		btnAddAnotherRoom.setBounds(126, 629, 323, 55);
+		btnAddAnotherRoom.setBackground(ColorConstants.BLUE);
+		btnAddAnotherRoom.setBounds(126, 629, 285, 55);
 		moreRoomType.add(btnAddAnotherRoom);
 		
 		btnContinueNext = new JButton("Continue");
@@ -223,22 +210,29 @@ public class RoomTypePanel extends JPanel {
 				setHeaderValue();
 			}
 		});
-		btnContinueNext.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnContinueNext.setBounds(490, 627, 327, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnContinueNext.setBounds(492, 629, 323, 55);
-			}
-		});
 		btnContinueNext.setForeground(Color.WHITE);
 		btnContinueNext.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnContinueNext.setBorder(null);
 		btnContinueNext.setBackground(new Color(255, 88, 93));
-		btnContinueNext.setBounds(492, 629, 323, 55);
+		btnContinueNext.setBounds(726, 629, 285, 55);
 		moreRoomType.add(btnContinueNext);
+		
+		JButton btnDelete = new JButton("Remove room from list");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (roomType == null) {
+					JOptionPane.showMessageDialog(null, "You need to select room to remove");
+				} else {
+					removeTypeFroomList(roomType);
+					fillTable();
+				}
+			}
+		});
+		btnDelete.setForeground(Color.WHITE);
+		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnDelete.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnDelete.setBackground(ColorConstants.BLUE);
+		btnDelete.setBounds(423, 629, 285, 55);
+		moreRoomType.add(btnDelete);
 		
 		Object[] object = {"Room type", "Number of rooms", "Price per night"};
 		dtm.addColumn(object[0]);
@@ -265,13 +259,22 @@ public class RoomTypePanel extends JPanel {
 		return roomType;
 	}
 	
-	private boolean listContains(String typeOfRoom) {
+	private boolean listContains(String type_of_room) {
 		for (RoomType type : listOfTypes) {
-			if (type.getRoomType().equals(typeOfRoom)) {
+			if (type.getRoomType().equals(type_of_room)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private void removeTypeFroomList(String room_type) {
+		for (int i = 0; i < listOfTypes.size(); i++) {
+			if (listOfTypes.get(i).getRoomType().equals(room_type)) {
+				listOfTypes.remove(i);
+				break;
+			}
+		}
 	}
 	
 	private void fillTable() {
@@ -300,5 +303,4 @@ public class RoomTypePanel extends JPanel {
 	private void updateUI(JLabel label) {
 		label.setBorder(new MatteBorder(0, 0, 3, 0, (Color) new Color(255, 255, 255)));
 	}
-
 }

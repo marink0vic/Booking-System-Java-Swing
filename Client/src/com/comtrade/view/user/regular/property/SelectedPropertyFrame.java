@@ -15,7 +15,6 @@ import com.comtrade.domain.User;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.view.user.regular.HeaderPanel;
-import com.comtrade.view.user.regular.HomePagePanel;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -44,7 +43,6 @@ public class SelectedPropertyFrame extends JFrame {
 	private PropertyInfoPanel propertyInfoPanel;
 	private RoomsPricesPanel roomPricesPanel;
 	private ReviewPropertyPanel reviewPropertyPanel;
-	private HomePagePanel homePagePanel;
 	private HeaderPanel headerPanel; 
 	//--
 	private JLabel lblInfo;
@@ -91,7 +89,6 @@ public class SelectedPropertyFrame extends JFrame {
 		layeredPane.add(propertyInfoPanel, "name_600211209077500");
 		
 		roomPricesPanel = new RoomsPricesPanel(user, propertyWrapper, checkIn, checkOut, headerPanel);
-		roomPricesPanel.setPropertyFrame(this);
 		layeredPane.add(roomPricesPanel, "name_604263933603500");
 		
 		reviewPropertyPanel = new ReviewPropertyPanel(propertyWrapper.getReviews());
@@ -134,8 +131,10 @@ public class SelectedPropertyFrame extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				Map<Booking, List<BookedRoom>> recentBookingsFomDB = ControllerUI.getController().getBookedRooms();
 				Map<Booking, List<BookedRoom>> newBookings = addNewBookings(recentBookingsFomDB);
-				roomPricesPanel.getBookingsFromDatabase().putAll(newBookings);
-				roomPricesPanel.loadRoomScrollPane();
+				if (newBookings.size() != 0) {
+					roomPricesPanel.getBookingsFromDatabase().putAll(newBookings);
+					roomPricesPanel.loadRoomScrollPane();
+				}
 				switchPanel(roomPricesPanel);
 				updateUI(lblRoomPrices);
 			}

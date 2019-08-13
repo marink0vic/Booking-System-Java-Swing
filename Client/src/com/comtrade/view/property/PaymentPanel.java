@@ -6,10 +6,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +31,6 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
 
@@ -61,7 +56,6 @@ public class PaymentPanel extends JPanel {
 	private Map<Integer,PaymentType> map;
 	private PropertyForm propertyForm;
 	
-	//---
 	private User user;
 	private Location address;
 	private Property property;
@@ -171,23 +165,13 @@ public class PaymentPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "You have to select at least one payment method");
 				} else {
 					registerProperty();
+					openPropertyOwnerFrame();
 				}
-			}
-		});
-		btnFinishRegistration.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnFinishRegistration.setBounds(421, 525, 408, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnFinishRegistration.setBounds(423, 527, 404, 55);
 			}
 		});
 		btnFinishRegistration.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFinishRegistration.setForeground(Color.WHITE);
 		btnFinishRegistration.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnFinishRegistration.setBorder(null);
 		btnFinishRegistration.setBackground(new Color(255, 88, 93));
 		btnFinishRegistration.setBounds(423, 527, 404, 55);
 		this.add(btnFinishRegistration);
@@ -196,7 +180,7 @@ public class PaymentPanel extends JPanel {
 		addLabelsToList();
 		fillLabels();
 	}
-	
+
 	private void registerProperty() {
 		PropertyWrapper propertyWrapper = new PropertyWrapper(user, address, property, room, images, paymentList);
 		propertyWrapper.setCountry(country);
@@ -205,16 +189,16 @@ public class PaymentPanel extends JPanel {
 		transfer.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
 		transfer.setDomainType(DomainType.PROPERTY);
 		ControllerUI.getController().sendToServer(transfer);
-		
+	}
+
+	private void openPropertyOwnerFrame() {
 		PropertyWrapper returnedProperty = ControllerUI.getController().getPropertyWrapper();
 		PropertyOwnerFrame propertyOwner = new PropertyOwnerFrame(returnedProperty);
 		propertyOwner.setLocationRelativeTo(null);
 		propertyOwner.setVisible(true);
 		propertyForm.dispose();
-		
 	}
-
-
+	
 	private void preparePaymentList() {
 		paymentList = new ArrayList<>();
 		if (cb1.isSelected())

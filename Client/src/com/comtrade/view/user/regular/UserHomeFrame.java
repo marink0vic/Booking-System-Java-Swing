@@ -1,23 +1,14 @@
 package com.comtrade.view.user.regular;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,9 +21,7 @@ import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
-import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -46,9 +35,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
 import java.beans.PropertyChangeEvent;
@@ -64,7 +50,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 	private SearchPagePanel searchPagePanel;
 	
 	private List<PropertyWrapper> listOfProperties;
-	private User user; // loged user
+	private User user;
 	private UserWrapper userWrapper;
 	private JTextField tfSearch;
 	private JDateChooser dateCheckIn;
@@ -92,7 +78,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		layeredPane.setBounds(252, 204, 975, 728);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
-		
 		
 		returnBookingsForUser();
 		loadAllProperties();
@@ -208,8 +193,7 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		searchPanel.add(dateCheckOut);
 		
 		dateCheckIn = new JDateChooser();
-		dateCheckIn.getDateEditor().addPropertyChangeListener(
-			new PropertyChangeListener() {
+		dateCheckIn.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent e) {
 				dateCheckOut.setCalendar(null);

@@ -1,6 +1,5 @@
 package com.comtrade.view.user.regular.property;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,7 +10,6 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.Property;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
@@ -136,18 +134,9 @@ public class UserReviewFrame extends JFrame {
 							String description = textArea.getText();
 							PropertyReview propertyReview = new PropertyReview(bookingId, propertyID, user, rating, description);
 							
-							PropertyWrapper tempWrapper = new PropertyWrapper();
-							tempWrapper.setUser(wrapper.getUser());
-							tempWrapper.addNewReview(propertyReview);
-							
-							TransferClass transferClass = new TransferClass();
-							transferClass.setClientRequest(tempWrapper);
-							transferClass.setDomainType(DomainType.REVIEW);
-							transferClass.setOperation(Operations.SAVE);
-							
-							ControllerUI.getController().sendToServer(transferClass);
-							
+							saveReviewToDatabase(propertyReview);
 							reviews.add(propertyReview);
+							
 							spinner.setValue(1);
 							tfBookingID.setText("");
 							textArea.setText("");
@@ -171,6 +160,19 @@ public class UserReviewFrame extends JFrame {
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 16));
 		btnSubmit.setBounds(693, 184, 148, 85);
 		contentPane.add(btnSubmit);
+	}
+
+	private void saveReviewToDatabase(PropertyReview property_review) {
+		PropertyWrapper tempWrapper = new PropertyWrapper();
+		tempWrapper.setUser(wrapper.getUser());
+		tempWrapper.addNewReview(property_review);
+		
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(tempWrapper);
+		transferClass.setDomainType(DomainType.REVIEW);
+		transferClass.setOperation(Operations.SAVE);
+		
+		ControllerUI.getController().sendToServer(transferClass);
 	}
 
 	protected boolean checkReviews(int booking_id) {

@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.io.File;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import java.awt.event.ActionEvent;
 
 public class ReviewPropertyPanel extends JPanel {
 
-	
 	private static final long serialVersionUID = 1L;
 	private JLabel lblCountryFlag;
 	private JLabel lblCountryName;
@@ -159,14 +157,4 @@ public class ReviewPropertyPanel extends JPanel {
 		
 		return temp;
 	}
-
-
-//	private Icon setImage(String path, JLabel label) {
-//		File file = new File(path);
-//		ImageIcon imgIcon = new ImageIcon(file.getPath());
-//		Image img = imgIcon.getImage();
-//		Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
-//		ImageIcon image = new ImageIcon(newImg);
-//		return image;
-//	}
 }

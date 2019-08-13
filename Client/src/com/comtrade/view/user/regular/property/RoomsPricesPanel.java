@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Period;
@@ -54,7 +53,6 @@ import com.comtrade.view.user.regular.UserProfileFrame;
 public class RoomsPricesPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private SelectedPropertyFrame frame;
 	private Map<RoomType, Room> rooms;
 	private Property property;
 	private User user;
@@ -113,10 +111,6 @@ public class RoomsPricesPanel extends JPanel {
 		initializeComponents();
 	}
 	
-	public void setPropertyFrame(SelectedPropertyFrame frame) {
-		this.frame = frame;
-	}
-	
 	public Map<Booking, List<BookedRoom>> getBookingsFromDatabase() {
 		return bookingsFromDatabase;
 	}
@@ -127,6 +121,7 @@ public class RoomsPricesPanel extends JPanel {
 		this.setLayout(null);
 		loadTopSectionPanel();
 		loadScrollPaneBase();
+		loadRoomScrollPane();
 		addConfirmButton();
 	}
 	private void loadTopSectionPanel() {
@@ -372,8 +367,6 @@ public class RoomsPricesPanel extends JPanel {
 						addToReservation(bookedRoom,room_type.getIdRoomType());
 					}
 				}
-				sm2.setValue(0);	
-				lblPrice.setText(strPrice + "$");
 			}
 		});
 		addReservation.setForeground(new Color(255, 255, 255));
@@ -389,6 +382,8 @@ public class RoomsPricesPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				removeFromReservation(room_type.getIdRoomType());
 				pricesPerRoom[price_index] = 0.0;
+				sm2.setValue(0);	
+				lblPrice.setText(strPrice + "$");
 			}
 		});
 		removeReservation.setForeground(new Color(255, 255, 255));
@@ -421,25 +416,11 @@ public class RoomsPricesPanel extends JPanel {
 					if (choice == JOptionPane.YES_OPTION) {
 						double fullPrice = Arrays.stream(pricesPerRoom).sum();
 						booking.setPriceForStay(fullPrice);
-						Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
-						transaction.setAmount(fullPrice);
-						transaction.setSiteFees(fullPrice);
 						booking.setUser(user);
 						
-						PropertyWrapper wrapper = new PropertyWrapper();
-						reservations.put(booking, bookedRooms);
-						wrapper.setBookings(reservations);
-						List<Transaction> list = new ArrayList<>();
-						list.add(transaction);
-						wrapper.setTransactions(list);
-						wrapper.setRooms(rooms);
-						wrapper.setUser(propertyOwner);
-						
-						TransferClass transferClass = new TransferClass();
-						transferClass.setClientRequest(wrapper);
-						transferClass.setDomainType(DomainType.BOOKING);
-						transferClass.setOperation(Operations.SAVE);
-						ControllerUI.getController().sendToServer(transferClass);
+						Transaction transaction = prepareTransactionForDataBase(fullPrice);
+						PropertyWrapper wrapper = prepareBookingForDataBase(transaction);
+						saveBookingToDataBase(wrapper);
 						
 						wrapper = ControllerUI.getController().getPropertyWrapper();
 						String message = ControllerUI.getController().getMessageResponse();
@@ -448,15 +429,11 @@ public class RoomsPricesPanel extends JPanel {
 							JOptionPane.showMessageDialog(null, message);
 						} else {
 							numOfCompleteBookings++;
-							booking = wrapper.getBookings().entrySet().iterator().next().getKey();
-							UserProfileFrame.getFrame().addNewPropertyName(property.getIdProperty(), property.getName());
-							UserProfileFrame.getFrame().addNewBooking(booking, bookedRooms);
-							headerPanel.getLblNew().setBackground(ColorConstants.RED);
-							headerPanel.getLblNew().setForeground(Color.WHITE);
-							headerPanel.getLblNew().setText(String.valueOf(numOfCompleteBookings));
+							updateFrameWithNewData(wrapper);
 						}
 						bookedRooms = new ArrayList<>();
 						pricesPerRoom = new double[rooms.size()];
+						loadRoomScrollPane();
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "You need to select room to complete reservation");
@@ -498,7 +475,41 @@ public class RoomsPricesPanel extends JPanel {
 		add(lblDateOut);
 	}
 
+	private Transaction prepareTransactionForDataBase(double full_price) {
+		Transaction transaction = new Transaction(user.getIdUser(), property.getIdProperty(), LocalDate.now(), LocalTime.now());
+		transaction.setAmount(full_price);
+		transaction.setSiteFees(full_price);
+		return transaction;
+	}
+
+	private PropertyWrapper prepareBookingForDataBase(Transaction transaction) {
+		PropertyWrapper wrapper = new PropertyWrapper();
+		reservations.put(booking, bookedRooms);
+		wrapper.setBookings(reservations);
+		List<Transaction> list = new ArrayList<>();
+		list.add(transaction);
+		wrapper.setTransactions(list);
+		wrapper.setRooms(rooms);
+		wrapper.setUser(propertyOwner);
+		return wrapper;
+	}
 	
+	private void saveBookingToDataBase(PropertyWrapper wrapper) {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(wrapper);
+		transferClass.setDomainType(DomainType.BOOKING);
+		transferClass.setOperation(Operations.SAVE);
+		ControllerUI.getController().sendToServer(transferClass);
+	}
+	
+	protected void updateFrameWithNewData(PropertyWrapper wrapper) {
+		booking = wrapper.getBookings().entrySet().iterator().next().getKey();
+		UserProfileFrame.getFrame().addNewPropertyName(property.getIdProperty(), property.getName());
+		UserProfileFrame.getFrame().addNewBooking(booking, bookedRooms);
+		headerPanel.getLblNew().setBackground(ColorConstants.RED);
+		headerPanel.getLblNew().setForeground(Color.WHITE);
+		headerPanel.getLblNew().setText(String.valueOf(numOfCompleteBookings));
+	}
 
 	private int returnAvailableRooms(RoomType room_type) {
 		int freeRooms = 0;
@@ -518,7 +529,7 @@ public class RoomsPricesPanel extends JPanel {
 		return totalFreeRooms < 0 ? 0 : totalFreeRooms;
 	}
 
-	protected void removeFromReservation(int id_room) {
+	private void removeFromReservation(int id_room) {
 		for (int i = 0; i < bookedRooms.size(); i++) {
 			if (bookedRooms.get(i).getIdRoomType() == id_room) {
 				JOptionPane.showMessageDialog(null, "Selected room removed from reservation");
@@ -527,7 +538,7 @@ public class RoomsPricesPanel extends JPanel {
 		}
 	}
 
-	protected void addToReservation(BookedRoom booked_room, int room_id) {
+	private void addToReservation(BookedRoom booked_room, int room_id) {
 		for (int i = 0; i < bookedRooms.size(); i++) {
 			if (bookedRooms.get(i).getIdRoomType() == room_id) {
 				bookedRooms.remove(i);

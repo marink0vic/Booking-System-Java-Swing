@@ -3,13 +3,11 @@ package com.comtrade.view.user.host;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.io.File;
 import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,8 +21,6 @@ import com.comtrade.domain.Location;
 import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
-import com.comtrade.domain.User;
-import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.host.frames.PropertyImagesFrame;
@@ -49,7 +45,6 @@ public class HomePanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel();
 	private DefaultTableModel dtmInfo = new DefaultTableModel();
 	private PropertyWrapper propertyWrapper;
-	//private User user;
 	private List<PropertyImage> propertyImages;
 	private RoomType roomType;
 	private Room roomInfo;
@@ -138,20 +133,9 @@ public class HomePanel extends JPanel {
 				imagesFrame.setVisible(true);
 			}
 		});
-		btnImages.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnImages.setBounds(754, 561, 129, 68);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnImages.setBounds(756, 563, 125, 63);
-			}
-		});
 		btnImages.setBounds(756, 563, 125, 63);
 		btnImages.setForeground(Color.WHITE);
 		btnImages.setFont(new Font("Dialog", Font.BOLD, 13));
-		btnImages.setBorder(null);
 		btnImages.setBackground(new Color(9, 121, 186));
 		add(btnImages);
 		
