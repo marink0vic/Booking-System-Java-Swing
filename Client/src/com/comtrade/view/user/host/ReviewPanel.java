@@ -5,12 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.io.File;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,7 +45,6 @@ public class ReviewPanel extends JPanel {
 		
 		loadBasePanel();
 		loadDinamicPanel();
-	
 	}
 	
 	public void addNewReview(PropertyReview review) {

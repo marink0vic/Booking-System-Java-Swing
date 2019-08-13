@@ -149,7 +149,7 @@ public class ControllerUI {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				
+				e.printStackTrace();
 			}
 		}
 		return countryImages;
@@ -161,7 +161,7 @@ public class ControllerUI {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				
+				e.printStackTrace();
 			}
 		}
 		return payments;
@@ -169,21 +169,6 @@ public class ControllerUI {
 
 	public void sendToServer(TransferClass transferClass) {
 		Communication.getCommunication().send(transferClass);
-	}
-
-	@SuppressWarnings("unchecked")
-	public void processCountryFromServer(TransferClass transfer) {
-		Operations operation = transfer.getOperation();
-		switch (operation) {
-		case RETURN_ALL:
-		{
-			countryImages = (List<Country>) transfer.getServerResponse();
-			break;
-		}
-		default:
-			break;
-		}
-		
 	}
 
 	public void processUserFromServer(TransferClass transfer) {
@@ -222,20 +207,6 @@ public class ControllerUI {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void processPaymentTypeFromServer(TransferClass transfer) {
-		Operations operation = transfer.getOperation();
-		switch (operation) {
-		case RETURN_ALL:
-		{
-			payments = (List<PaymentType>) transfer.getServerResponse();
-			break;
-		}
-		default:
-			break;
-		}
-	}
-
-	@SuppressWarnings("unchecked")
 	public void processPropertyFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
@@ -250,40 +221,6 @@ public class ControllerUI {
 			properties = (List<PropertyWrapper>) transfer.getServerResponse();
 			break;
 		}
-		default:
-			break;
-		}
-	}
-
-	public void processImagesFromServer(TransferClass transfer) {
-		Operations operation = transfer.getOperation();
-		switch (operation) {
-		case DELETE:
-		{
-			transfer.getServerResponse();
-			break;
-		}
-		case SAVE:
-		{
-			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
-			break;
-		}
-
-		default:
-			break;
-		}
-	}
-
-	public void processRoomsFromServer(TransferClass transfer) {
-		Operations operation = transfer.getOperation();
-		switch (operation) {
-		case SAVE:
-		case UPDATE:
-		{
-			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
-			break;
-		}
-
 		default:
 			break;
 		}
@@ -328,6 +265,20 @@ public class ControllerUI {
 			break;
 		}
 	}
+	
+	public void processRoomsFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case SAVE:
+		case UPDATE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+	}
 
 	public void processReviewFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
@@ -338,7 +289,52 @@ public class ControllerUI {
 			ownerFrame.signalNewReview(temp.getReviews().get(0));
 			break;
 		}
-
+		default:
+			break;
+		}
+	}
+	
+	public void processImagesFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case DELETE:
+		{
+			transfer.getServerResponse();
+			break;
+		}
+		case SAVE:
+		{
+			propertyWrapper = (PropertyWrapper) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void processCountryFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case RETURN_ALL:
+		{
+			countryImages = (List<Country>) transfer.getServerResponse();
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void processPaymentTypeFromServer(TransferClass transfer) {
+		Operations operation = transfer.getOperation();
+		switch (operation) {
+		case RETURN_ALL:
+		{
+			payments = (List<PaymentType>) transfer.getServerResponse();
+			break;
+		}
 		default:
 			break;
 		}

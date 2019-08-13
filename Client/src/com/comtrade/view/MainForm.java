@@ -53,9 +53,6 @@ public class MainForm extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public MainForm() {
 		initializeComponents();
 	}

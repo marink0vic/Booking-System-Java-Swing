@@ -87,7 +87,6 @@ public class PropertyForm extends JFrame {
 		
 		createNavigationPanel();
 		
-		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(0, 120, 1282, 783);
 		contentPane.add(layeredPane);
@@ -99,7 +98,7 @@ public class PropertyForm extends JFrame {
 		roomPanel = new RoomPanel(layeredPane, listOfTypes, room, lblPropertyImages, imagesPanel);
 		roomTypePanel = new RoomTypePanel(layeredPane, listOfTypes, roomPanel, lblRoomsInfo);
 		basicInfoPanel = new BasicInfoPanel(layeredPane, roomTypePanel, lblRoomtype);
-		addressPanel = new AddressPanel(layeredPane, basicInfoPanel, lblPropertyInfo, address, countries);
+		addressPanel = new AddressPanel(layeredPane, basicInfoPanel, lblPropertyInfo, address, countries, user);
 	
 		basicInfoPanel.setUser(user);
 		basicInfoPanel.setProperty(property);

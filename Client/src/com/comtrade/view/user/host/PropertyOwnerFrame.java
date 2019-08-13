@@ -13,7 +13,6 @@ import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.PropertyImage;
 import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
@@ -21,65 +20,25 @@ import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.login.IProxy;
-import com.toedter.calendar.JDateChooser;
 
 import javax.swing.JLabel;
-
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-
 import javax.swing.SwingConstants;
 import java.awt.Color;
-import java.awt.Dimension;
-
 import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JSeparator;
-import javax.swing.border.LineBorder;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class PropertyOwnerFrame extends JFrame implements IProxy {
 
-	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLayeredPane layeredPane;
@@ -120,9 +79,6 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		initializeComponents();
 	}
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public PropertyOwnerFrame(User user) {
 		this.user = user;
 		propertyWrapper = new PropertyWrapper();
@@ -164,7 +120,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		messagePanelRight = new MessagePanel(user);
 		layeredPane.add(messagePanelRight, "name_179496146822800");
 		
-		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty());
+		earningsPanelRight = new EarningsPanel(oldBookings, propertyWrapper.getProperty(), propertyWrapper.getTransactions());
 		layeredPane.add(earningsPanelRight, "name_179515782969900");
 			
 		reviewPanelRight = new ReviewPanel(propertyWrapper.getReviews());

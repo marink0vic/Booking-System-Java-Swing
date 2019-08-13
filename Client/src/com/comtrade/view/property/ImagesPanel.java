@@ -3,17 +3,13 @@ package com.comtrade.view.property;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -22,8 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -45,7 +39,6 @@ public class ImagesPanel extends JPanel {
 	private DefaultTableModel dtm = new DefaultTableModel(); 
 	private List<Icon> images = new ArrayList<>();
 	private JButton btnContinue;
-	//----
 	private JLayeredPane layeredPane;
 	private List<PropertyImage> propertyImageFiles;
 	private PaymentPanel paymentPanel;
@@ -74,16 +67,6 @@ public class ImagesPanel extends JPanel {
 		this.add(lblAddImagesOf);
 		
 		btnAddImage = new JButton("Add image");
-		btnAddImage.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnAddImage.setBounds(139, 370, 339, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnAddImage.setBounds(141, 372, 335, 55);
-			}
-		});
 		btnAddImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser file = new JFileChooser();
@@ -110,7 +93,6 @@ public class ImagesPanel extends JPanel {
 		});
 		btnAddImage.setForeground(Color.WHITE);
 		btnAddImage.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAddImage.setBorder(null);
 		btnAddImage.setBackground(new Color(9, 121, 186));
 		btnAddImage.setBounds(141, 372, 335, 55);
 		this.add(btnAddImage);
@@ -138,19 +120,8 @@ public class ImagesPanel extends JPanel {
 				}
 			}
 		});
-		btnContinue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnContinue.setBounds(290, 667, 531, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnContinue.setBounds(292, 669, 527, 55);
-			}
-		});
 		btnContinue.setForeground(Color.WHITE);
 		btnContinue.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnContinue.setBorder(null);
 		btnContinue.setBackground(new Color(255, 88, 93));
 		btnContinue.setBounds(292, 669, 527, 55);
 		this.add(btnContinue);

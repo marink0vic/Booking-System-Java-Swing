@@ -20,6 +20,7 @@ import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.BookedRoom;
 import com.comtrade.domain.Booking;
 import com.comtrade.domain.Property;
+import com.comtrade.domain.Transaction;
 
 public class EarningsPanel extends JPanel {
 
@@ -34,14 +35,14 @@ public class EarningsPanel extends JPanel {
 	private JLabel label_5;
 	private JLabel lblNightsCount;
 	private JLabel lblRoomCount;
-	private final double SITE_FEES = 0.1;
-	private final double PROPERTY_CUT = 0.9;
 	private Map<Booking, List<BookedRoom>> oldBookings;
+	private List<Transaction> transactions;
 	private Property property;
 
-	public EarningsPanel(Map<Booking, List<BookedRoom>> oldBookings, Property property) {
+	public EarningsPanel(Map<Booking, List<BookedRoom>> oldBookings, Property property, List<Transaction> transactions) {
 		this.oldBookings = oldBookings;
 		this.property = property;
+		this.transactions = transactions;
 		initializeComponents();
 	}
 
@@ -165,7 +166,8 @@ public class EarningsPanel extends JPanel {
 
 	protected void calculateDataForMonth() {
 		int roomReserved = 0;
-		double moneyPaid = 0;
+		double moneyPaid = 0d, total = 0d, fees = 0d;
+		
 		for (Map.Entry<Booking, List<BookedRoom>> entry : oldBookings.entrySet()) {
 			Booking b = entry.getKey();
 			int y = b.getCheckIn().getYear();
@@ -175,17 +177,31 @@ public class EarningsPanel extends JPanel {
 				for (BookedRoom br : entry.getValue()) {
 					roomReserved += br.getNumberOfRooms();
 				}
+				double[] revenue = calculateRevenue(b.getIdBooking());
+				total += revenue[0];
+				fees += revenue[1];
 			}
 		}
-		updateUI(roomReserved, moneyPaid);
+		updateUI(roomReserved, moneyPaid, total, fees);
 	}
 
-	private void updateUI(int room_reserved, double money_paid) {
+	private double[] calculateRevenue(int id_booking) {
+		double total = 0.0;
+		double fees = 0.0;
+		for (Transaction t : transactions) {
+			if (t.getIdBooking() == id_booking) {
+				total += t.getAmount();
+				fees += t.getSiteFees();
+				break;
+			}
+		}
+		return new double[] {total, fees};
+	}
+
+	private void updateUI(int room_reserved, double money_paid, double total, double site_fees) {
 		lblNightsCount.setText(String.valueOf(room_reserved));
 		String moneyPaid = String.format("%.2f", money_paid);
 		label_1.setText(moneyPaid + " $");
-		double site_fees = money_paid * SITE_FEES;
-		double total = money_paid * PROPERTY_CUT;
 		String fees = String.format("%.2f", site_fees);
 		String totalEarnings = String.format("%.2f", total);
 		label_3.setText(fees + " $");

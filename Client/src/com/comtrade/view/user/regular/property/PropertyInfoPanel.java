@@ -3,25 +3,18 @@ package com.comtrade.view.user.regular.property;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
@@ -43,7 +36,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
-import javax.swing.JTextPane;
 
 public class PropertyInfoPanel extends JPanel {
 
@@ -64,7 +56,6 @@ public class PropertyInfoPanel extends JPanel {
 	private JTextArea messageArea;
 	private JTextArea chatArea;
 	private String messageText;
-	//private JScrollPane scrollPane;
 	private JLabel lblReviewCount;
 
 	

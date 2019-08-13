@@ -3,7 +3,6 @@ package com.comtrade.view.user.host.frames;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,10 +12,7 @@ import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.User;
-import com.comtrade.domain.behavior.GeneralDomain;
 import com.comtrade.dto.PropertyWrapper;
-import com.comtrade.generics.GenericMap;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.util.ImageResize;
 import com.comtrade.view.user.host.HomePanel;
@@ -27,11 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Cursor;
@@ -40,7 +32,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
 
 public class PropertyImagesFrame extends JFrame {
-
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -110,19 +101,8 @@ public class PropertyImagesFrame extends JFrame {
 			}
 		});
 		btnAddNewImage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAddNewImage.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnAddNewImage.setBounds(118, 520, 327, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnAddNewImage.setBounds(120, 522, 323, 55);
-			}
-		});
 		btnAddNewImage.setForeground(Color.WHITE);
 		btnAddNewImage.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnAddNewImage.setBorder(null);
 		btnAddNewImage.setBackground(new Color(9, 121, 186));
 		btnAddNewImage.setBounds(120, 522, 323, 55);
 		contentPane.add(btnAddNewImage);
@@ -148,19 +128,8 @@ public class PropertyImagesFrame extends JFrame {
 			}
 		});
 		btnDeleteThisImage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnDeleteThisImage.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnDeleteThisImage.setBounds(490, 520, 327, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnDeleteThisImage.setBounds(492, 522, 323, 55);
-			}
-		});
 		btnDeleteThisImage.setForeground(Color.WHITE);
 		btnDeleteThisImage.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnDeleteThisImage.setBorder(null);
 		btnDeleteThisImage.setBackground(new Color(255, 88, 93));
 		btnDeleteThisImage.setBounds(492, 522, 323, 55);
 		contentPane.add(btnDeleteThisImage);
@@ -196,30 +165,15 @@ public class PropertyImagesFrame extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (imagesForDeletion.size() > 0) {
-					TransferClass transferClass = new TransferClass();
-					transferClass.setClientRequest(imagesForDeletion);
-					transferClass.setDomainType(DomainType.IMAGES);
-					transferClass.setOperation(Operations.DELETE);
-					ControllerUI.getController().sendToServer(transferClass);
+					sendImagesToDelete();
 				}
-				
 				List<PropertyImage> newImagesForDatabase = newImagesForDatabase();
 				if (newImagesForDatabase.size() > 0) {
-					PropertyWrapper wrapper = new PropertyWrapper();
-					wrapper.setImages(newImagesForDatabase);
-					wrapper.setUser(propertyWrapper.getUser());
-					
-					TransferClass transferClass = new TransferClass();
-					transferClass.setClientRequest(wrapper);
-					transferClass.setDomainType(DomainType.IMAGES);
-					transferClass.setOperation(Operations.SAVE);
-					ControllerUI.getController().sendToServer(transferClass);
-					
-					wrapper = ControllerUI.getController().getPropertyWrapper();
+					saveNewImagesToDB(newImagesForDatabase);
+					PropertyWrapper wrapper = ControllerUI.getController().getPropertyWrapper();
 					propertyWrapper.setImages(wrapper.getImages());
 					propertyImages = propertyWrapper.getImages();
 				}
-				
 				dispose();
 			}
 		});
@@ -232,8 +186,28 @@ public class PropertyImagesFrame extends JFrame {
 		imageIcon = ImageResize.resizeImage(imageFile, lblImage.getWidth(), lblImage.getHeight());
 		lblImage.setIcon(imageIcon);
 	}
+	
+	private void saveNewImagesToDB(List<PropertyImage> new_images_for_database) {
+		PropertyWrapper wrapper = new PropertyWrapper();
+		wrapper.setImages(new_images_for_database);
+		wrapper.setUser(propertyWrapper.getUser());
+		
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(wrapper);
+		transferClass.setDomainType(DomainType.IMAGES);
+		transferClass.setOperation(Operations.SAVE);
+		ControllerUI.getController().sendToServer(transferClass);
+	}
+	
+	private void sendImagesToDelete() {
+		TransferClass transferClass = new TransferClass();
+		transferClass.setClientRequest(imagesForDeletion);
+		transferClass.setDomainType(DomainType.IMAGES);
+		transferClass.setOperation(Operations.DELETE);
+		ControllerUI.getController().sendToServer(transferClass);
+	}
 
-	protected List<PropertyImage> newImagesForDatabase() {
+	private List<PropertyImage> newImagesForDatabase() {
 		List<PropertyImage> images = new ArrayList<>();
 		for (int i = propertyImages.size() - 1; i >= 0; i--) {
 			if (propertyImages.get(i).getIdImage() != 0) break;

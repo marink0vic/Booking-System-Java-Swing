@@ -3,7 +3,6 @@ package com.comtrade.view.property;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -38,8 +37,6 @@ public class BasicInfoPanel extends JPanel {
 	private JLabel lblPhoneNumber;
 	private JTextField tfPhoneNumber;
 	private JLabel lblAddDescriptionFor;
-	
-	//-----
 	private JLayeredPane layeredPane;
 	private RoomTypePanel roomTypePanel;
 	private JLabel lblRoomtype;
@@ -159,16 +156,6 @@ public class BasicInfoPanel extends JPanel {
 		
 		JButton btnContinue = new JButton("Continue");
 		btnContinue.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnContinue.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnContinue.setBounds(75, 568, 531, 60);
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnContinue.setBounds(77, 570, 527, 55);
-			}
-		});
 		btnContinue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (checkFileds()) {
@@ -182,7 +169,6 @@ public class BasicInfoPanel extends JPanel {
 		});
 		btnContinue.setForeground(Color.WHITE);
 		btnContinue.setFont(new Font("Dialog", Font.BOLD, 20));
-		btnContinue.setBorder(null);
 		btnContinue.setBackground(new Color(255, 88, 93));
 		btnContinue.setBounds(77, 570, 527, 55);
 		this.add(btnContinue);

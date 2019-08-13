@@ -1,6 +1,5 @@
 package com.comtrade.view;
 
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -34,7 +33,6 @@ import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -60,9 +58,7 @@ public class RegisterForm extends JFrame {
 	private int day;
 	private JLabel lblImage;
 
-	/**
-	 * Create the frame.
-	 */
+
 	public RegisterForm(String STATUS) {
 		this.STATUS = STATUS;
 		userCountry = new Country();
@@ -264,23 +260,11 @@ public class RegisterForm extends JFrame {
 				
 			}
 		});
-		btnSignIn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnSignIn.setBounds(172, 822, 290, 60);
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnSignIn.setBounds(174, 824, 285, 55);
-			}
-		});
 		
 		btnSignIn.setForeground(new Color(255, 255, 255));
 		btnSignIn.setFont(new Font("Dialog", Font.BOLD, 20));
 		btnSignIn.setBounds(174, 824, 285, 55);
 		btnSignIn.setBackground(new Color(255, 88, 93));
-		btnSignIn.setBorder(null);
 		contentPane.add(btnSignIn);
 		
 		fillComboYear();
