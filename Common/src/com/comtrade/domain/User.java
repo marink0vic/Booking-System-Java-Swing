@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.comtrade.constants.ServerResourcePath;
-import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.DomainUpdate;
-import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 
 import crypt.BCrypt;
 
-public class User implements DomainUpdate, DomainJoinBookings, DomainList, Serializable {
+public class User implements DomainUpdate, DomainJoin, DomainList, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -254,7 +254,7 @@ public class User implements DomainUpdate, DomainJoinBookings, DomainList, Seria
 	}
 
 	@Override
-	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
+	public PropertyWrapper returnJoinTables(ResultSet rs) throws SQLException {
 		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
 		while (rs.next()) {
 			Booking booking = new Booking();
@@ -277,7 +277,9 @@ public class User implements DomainUpdate, DomainJoinBookings, DomainList, Seria
 				bookings.put(booking, rooms);
 			}
 		}
-		return bookings;
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setBookings(bookings);
+		return pw;
 	}
 
 

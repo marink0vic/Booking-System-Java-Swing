@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
+import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 
-public class Location implements GeneralDomain, Serializable {
+public class Location implements GeneralDomain, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -128,8 +130,51 @@ public class Location implements GeneralDomain, Serializable {
 
 	@Override
 	public int returnIdNumber() {
-		// TODO Auto-generated method stub
-		return 0;
+		return idLocation;
+	}
+	@Override
+	public String prepareJoin() throws SQLException {
+		String join = "SELECT * FROM location JOIN property"
+				+ " ON location.id_location = property.id_location"
+				+ " WHERE property.id_user = ?";
+		return join;
+	}
+	@Override
+	public PropertyWrapper returnJoinTables(ResultSet rs) throws SQLException {
+		PropertyWrapper wrapper = new PropertyWrapper();
+		if (rs.next()) {
+			int idProperty = rs.getInt("id_property");
+			int idLocation = rs.getInt("id_location");
+			int idUser = rs.getInt("id_user");
+			String type = rs.getString("type");
+			String name = rs.getString("name");
+			String phone = rs.getString("phone_number");
+			int rating = rs.getInt("rating");
+			String description = rs.getString("description");
+			String created = rs.getString("created");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
+	
+			Property property = new Property(idUser, idLocation, type, name, phone, rating, description);
+			property.setIdProperty(idProperty);
+			property.setCreated(dateTime);
+			
+			int idCountry = rs.getInt("id_country");
+			String street = rs.getString("street");
+			String number = rs.getString("number");
+			String city = rs.getString("city");
+			int zip = rs.getInt("post_or_zipcode");
+			double latitude = rs.getDouble("latitude");
+			double longitude = rs.getDouble("longitude");
+			Location location = new Location(idCountry, street, number, city, zip);
+			location.setIdLocation(idLocation);
+			location.setLatitude(latitude);
+			location.setLongitude(longitude);
+			
+			wrapper.setAddress(location);
+			wrapper.setProperty(property);
+		}
+		return wrapper;
 	}
 
 }

@@ -8,10 +8,12 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import com.comtrade.domain.behavior.DomainJoinReview;
-import com.comtrade.domain.behavior.GeneralDomain;
 
-public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializable {
+import com.comtrade.domain.behavior.DomainJoin;
+import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
+
+public class PropertyReview implements GeneralDomain, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -138,7 +140,7 @@ public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializ
 	}
 
 	@Override
-	public List<PropertyReview> returnJoinTables(ResultSet rs) throws SQLException {
+	public PropertyWrapper returnJoinTables(ResultSet rs) throws SQLException {
 		List<PropertyReview> reviews = new ArrayList<>();
 		while (rs.next()) {
 			User user = new User().createUser(rs);
@@ -153,7 +155,9 @@ public class PropertyReview implements GeneralDomain, DomainJoinReview, Serializ
 			
 			reviews.add(pr);
 		}
-		return reviews;
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setReviews(reviews);
+		return pw;
 	}
 
 

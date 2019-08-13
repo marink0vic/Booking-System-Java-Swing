@@ -3,10 +3,7 @@ package com.comtrade.broker;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +21,6 @@ import com.comtrade.domain.Room;
 import com.comtrade.domain.RoomType;
 import com.comtrade.domain.User;
 import com.comtrade.domain.behavior.DomainJoin;
-import com.comtrade.domain.behavior.DomainJoinBookings;
-import com.comtrade.domain.behavior.DomainJoinReview;
 import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.DomainUpdate;
 import com.comtrade.domain.behavior.GeneralDomain;
@@ -120,22 +115,56 @@ public class Broker implements IBroker {
 		}
 		return new User();
 	}
-
-
+	
 	@Override
-	public Map<Booking, List<BookedRoom>> insertBookings(DomainJoinBookings domain_join, int id_domain) throws SQLException {
-		ResultSet rs = prepareResultSet(domain_join, id_domain);
-		return domain_join.returnJoinTables(rs);
-	}
+	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
+		setAddressAndProperty(new Location(), wrapper);
+		if (wrapper.getProperty() == null) return;
+		int idProperty = wrapper.getProperty().getIdProperty();
+		wrapper.setRooms(returnRoomAndRoomInfo(new RoomType(),idProperty));
+		wrapper.setImages(returnPropertyImages(idProperty));
+		wrapper.setPaymentList(returnPayments(new PaymentType(), idProperty));
+		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
+		wrapper.setBookings(returnBookings(new Property(), wrapper.getProperty().getIdProperty()));
+		wrapper.setReviews(returnPropertyReviews(new PropertyReview(), idProperty));
+	}	
 
-	@Override
-	public List<PropertyReview> returnPropertyReviews(DomainJoinReview domain_join, int id_domain) throws SQLException {
-		ResultSet rs = prepareResultSet(domain_join, id_domain);
-		return domain_join.returnJoinTables(rs);
+
+	private void setAddressAndProperty(DomainJoin domain_join, PropertyWrapper wrapper) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, wrapper.getUser().getIdUser());
+		PropertyWrapper wp = domain_join.returnJoinTables(rs);
+		wrapper.setAddress(wp.getAddress());
+		wrapper.setProperty(wp.getProperty());
 	}
 	
-	private ResultSet prepareResultSet(DomainJoin domain, int id_domain) throws SQLException {
-		String sql = domain.prepareJoin();
+	@Override
+	public Map<Booking, List<BookedRoom>> returnBookings(DomainJoin domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
+		PropertyWrapper wrapper = domain_join.returnJoinTables(rs);
+		return wrapper.getBookings();
+	}
+
+	@Override
+	public List<PropertyReview> returnPropertyReviews(DomainJoin domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
+		PropertyWrapper wrapper = domain_join.returnJoinTables(rs);
+		return wrapper.getReviews();
+	}
+	
+	private Map<RoomType, Room> returnRoomAndRoomInfo(DomainJoin domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
+		PropertyWrapper wrapper = domain_join.returnJoinTables(rs);
+		return wrapper.getRooms();
+	}
+	
+	private List<PaymentType> returnPayments(DomainJoin domain_join, int id_domain) throws SQLException {
+		ResultSet rs = prepareResultSet(domain_join, id_domain);
+		PropertyWrapper wrapper = domain_join.returnJoinTables(rs);
+		return wrapper.getPaymentList();
+	}
+	
+	private ResultSet prepareResultSet(DomainJoin domain_join, int id_domain) throws SQLException {
+		String sql = domain_join.prepareJoin();
 		PreparedStatement ps = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ps.setInt(1, id_domain);
 		ResultSet rs = ps.executeQuery();
@@ -143,96 +172,7 @@ public class Broker implements IBroker {
 	}
 	
 	@Override
-	public void insertPropertyForOwner(PropertyWrapper wrapper) throws SQLException {
-		setPropertyAndAddress(wrapper);
-		if (wrapper.getProperty() == null) return;
-		int idProperty = wrapper.getProperty().getIdProperty();
-		wrapper.setRooms(returnRoomAndRoomInfo(idProperty));
-		wrapper.setImages(returnPropertyImages(idProperty));
-		wrapper.setPaymentList(returnPayments(idProperty));
-		wrapper.setCountry(returnCountry(wrapper.getAddress().getIdCountry()));
-		wrapper.setBookings(insertBookings(new Property(), wrapper.getProperty().getIdProperty()));
-		wrapper.setReviews(returnPropertyReviews(new PropertyReview(), idProperty));
-	}	
-
-
-	private void setPropertyAndAddress(PropertyWrapper wrapper) throws SQLException {
-		String sql = "SELECT * FROM property JOIN location "
-				+ "ON property.id_location = location.id_location "
-				+ "WHERE property.id_user = " + wrapper.getUser().getIdUser();
-		
-		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ResultSet resultSet = statement.executeQuery();
-		
-		if (resultSet.next()) {
-			int idProperty = resultSet.getInt("id_property");
-			int idLocation = resultSet.getInt("id_location");
-			String type = resultSet.getString("type");
-			String name = resultSet.getString("name");
-			String phone = resultSet.getString("phone_number");
-			int rating = resultSet.getInt("rating");
-			String description = resultSet.getString("description");
-			String created = resultSet.getString("created");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			LocalDateTime dateTime = LocalDateTime.parse(created, formatter);
-	
-			Property property = new Property(wrapper.getUser().getIdUser(), idLocation, type, name, phone, rating, description);
-			property.setIdProperty(idProperty);
-			property.setCreated(dateTime);
-			
-			int idCountry = resultSet.getInt("id_country");
-			String street = resultSet.getString("street");
-			String number = resultSet.getString("number");
-			String city = resultSet.getString("city");
-			int zip = resultSet.getInt("post_or_zipcode");
-			double latitude = resultSet.getDouble("latitude");
-			double longitude = resultSet.getDouble("longitude");
-			Location location = new Location(idCountry, street, number, city, zip);
-			location.setIdLocation(idLocation);
-			location.setLatitude(latitude);
-			location.setLongitude(longitude);
-			
-			wrapper.setAddress(location);
-			wrapper.setProperty(property);
-		}
-		
-	}
-
-	private Map<RoomType, Room> returnRoomAndRoomInfo(int id_property) throws SQLException {
-		String sql = "SELECT * FROM room_type JOIN room ON room_type.id_room_type = room.id_room_type"
-					+ " WHERE room_type.id_property = " + id_property;
-		
-		PreparedStatement statement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ResultSet resultSet = statement.executeQuery();
-		Map<RoomType, Room> room = new LinkedHashMap<>();
-		while (resultSet.next()) {
-			int idRoomType = resultSet.getInt("id_room_type");
-			int idProperty = id_property;
-			String type = resultSet.getString("type");
-			int numOfRooms = resultSet.getInt("num_of_rooms");	
-			double pricePerNight = resultSet.getDouble("price_per_night");
-			RoomType rType = new RoomType(type, numOfRooms, pricePerNight);
-			rType.setIdRoomType(idRoomType);
-			rType.setIdProperty(idProperty);
-			
-			int idRoomInfo = resultSet.getInt("id_room");
-			int numOfBads = resultSet.getInt("num_of_bads");
-			boolean kitchen = resultSet.getBoolean("kitchen");
-			boolean tv = resultSet.getBoolean("tv");
-			boolean airConditioning = resultSet.getBoolean("air_conditioning");
-			boolean wifi = resultSet.getBoolean("wifi");
-			Room rInfo = new Room(numOfBads, kitchen, tv, airConditioning, wifi);
-			rInfo.setIdRoom(idRoomInfo);
-			rInfo.setIdRoomType(idRoomType);
-			
-			room.put(rType, rInfo);
-		}
-		return room;
-	}
-	
-	@Override
 	public List<PropertyImage> returnPropertyImages(int id_property) throws SQLException {
-		
 		String sql = "SELECT * FROM property_images WHERE id_property = " + id_property;
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -250,33 +190,7 @@ public class Broker implements IBroker {
 		
 		return propertyImages;
 	}
-	
-	@Override
-	public List<PaymentType> returnPayments(int id_property) throws SQLException {
-		String sql = "SELECT * FROM payment_type" + " "
-				+ "JOIN payment_property ON payment_property.id_payment = payment_type.id_card_type" + " "
-				+ "JOIN property ON property.id_property = payment_property.id_property" + " "
-				+ "WHERE property.id_property = " + id_property; 
-		
-		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		List<PaymentType> payments = new ArrayList<>();
-		
-		while (resultSet.next()) {
-			int idCardType = resultSet.getInt("id_card_type");
-			String name = resultSet.getString("name");
-			String fullPath = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + resultSet.getString("image");
-			PaymentType paymentType = new PaymentType();
-			paymentType.setId_payment(idCardType);
-			paymentType.setName(name);
-			paymentType.setImage(fullPath);
-			
-			payments.add(paymentType);
-		}
-		
-		return payments;
-	}
-	
+
 	private Country returnCountry(int id_country) throws SQLException {
 		String sql = "SELECT * FROM country WHERE id_country = " + id_country;
 		PreparedStatement preparedStatement = Connection.getConnection().getSqlConnection().prepareStatement(sql);

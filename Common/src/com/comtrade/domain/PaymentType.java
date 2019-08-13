@@ -10,10 +10,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.comtrade.constants.ServerResourcePath;
+import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.DomainList;
 import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 
-public class PaymentType implements GeneralDomain, DomainList, Serializable {
+public class PaymentType implements GeneralDomain, DomainList, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -108,6 +111,34 @@ public class PaymentType implements GeneralDomain, DomainList, Serializable {
 	@Override
 	public int returnIdNumber() {
 		return id_payment;
+	}
+
+	@Override
+	public String prepareJoin() throws SQLException {
+		String join = "SELECT * FROM payment_type"
+					+ " JOIN payment_property ON payment_property.id_payment = payment_type.id_card_type"
+					+ " JOIN property ON property.id_property = payment_property.id_property"
+					+ " WHERE property.id_property = ?"; 
+		return join;
+	}
+
+	@Override
+	public PropertyWrapper returnJoinTables(ResultSet rs) throws SQLException {
+		List<PaymentType> payments = new ArrayList<>();
+		while (rs.next()) {
+			int idCardType = rs.getInt("id_card_type");
+			String name = rs.getString("name");
+			String fullPath = ServerResourcePath.SERVER_RESOURCES_PATH.getPath() + rs.getString("image");
+			PaymentType paymentType = new PaymentType();
+			paymentType.setId_payment(idCardType);
+			paymentType.setName(name);
+			paymentType.setImage(fullPath);
+			
+			payments.add(paymentType);
+		}
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setPaymentList(payments);
+		return pw;
 	}
 
 }

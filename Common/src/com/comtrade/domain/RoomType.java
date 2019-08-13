@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.DomainUpdate;
-import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 
-public class RoomType implements DomainUpdate, Serializable {
+public class RoomType implements DomainUpdate, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -129,6 +131,44 @@ public class RoomType implements DomainUpdate, Serializable {
 		preparedStatement.setInt(2, numberOfRooms);
 		preparedStatement.setDouble(3, pricePerNight);
 		preparedStatement.setInt(4, idRoomType);
+	}
+
+	@Override
+	public String prepareJoin() throws SQLException {
+		String join = "SELECT * FROM room_type"
+					+ " JOIN room ON room_type.id_room_type = room.id_room_type"
+					+ " WHERE room_type.id_property = ?";
+		return join;
+	}
+
+	@Override
+	public PropertyWrapper returnJoinTables(ResultSet resultSet) throws SQLException {
+		Map<RoomType, Room> room = new LinkedHashMap<>();
+		while (resultSet.next()) {
+			int idRoomType = resultSet.getInt("id_room_type");
+			int idProperty = resultSet.getInt("id_property");;
+			String type = resultSet.getString("type");
+			int numOfRooms = resultSet.getInt("num_of_rooms");	
+			double pricePerNight = resultSet.getDouble("price_per_night");
+			RoomType rType = new RoomType(type, numOfRooms, pricePerNight);
+			rType.setIdRoomType(idRoomType);
+			rType.setIdProperty(idProperty);
+			
+			int idRoomInfo = resultSet.getInt("id_room");
+			int numOfBads = resultSet.getInt("num_of_bads");
+			boolean kitchen = resultSet.getBoolean("kitchen");
+			boolean tv = resultSet.getBoolean("tv");
+			boolean airConditioning = resultSet.getBoolean("air_conditioning");
+			boolean wifi = resultSet.getBoolean("wifi");
+			Room rInfo = new Room(numOfBads, kitchen, tv, airConditioning, wifi);
+			rInfo.setIdRoom(idRoomInfo);
+			rInfo.setIdRoomType(idRoomType);
+			
+			room.put(rType, rInfo);
+		}
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setRooms(room);
+		return pw;
 	}
 	
 }

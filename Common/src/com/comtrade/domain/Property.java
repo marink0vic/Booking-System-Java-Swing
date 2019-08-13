@@ -6,16 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.comtrade.domain.behavior.DomainJoinBookings;
+import com.comtrade.domain.behavior.DomainJoin;
 import com.comtrade.domain.behavior.GeneralDomain;
+import com.comtrade.dto.PropertyWrapper;
 
-public class Property implements GeneralDomain, DomainJoinBookings, Serializable {
+public class Property implements GeneralDomain, DomainJoin, Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -201,7 +201,7 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 	}
 
 	@Override
-	public Map<Booking, List<BookedRoom>> returnJoinTables(ResultSet rs) throws SQLException {
+	public PropertyWrapper returnJoinTables(ResultSet rs) throws SQLException {
 		Map<Booking, List<BookedRoom>> bookings = new HashMap<>();
 		while (rs.next()) {
 			Booking booking = new Booking();
@@ -221,7 +221,9 @@ public class Property implements GeneralDomain, DomainJoinBookings, Serializable
 				bookings.put(booking, rooms);
 			}
 		}
-		return bookings;
+		PropertyWrapper pw = new PropertyWrapper();
+		pw.setBookings(bookings);
+		return pw;
 	}
 	
 	private User createUser(ResultSet result_set) throws SQLException {
