@@ -11,7 +11,6 @@ import com.comtrade.domain.DomainList;
 import com.comtrade.domain.DomainUpdate;
 import com.comtrade.domain.GeneralDomain;
 import com.comtrade.domain.PropertyImage;
-import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 
@@ -28,5 +27,4 @@ public interface IBroker {
 	User login(User user) throws SQLException;
 	
 	Map<Booking, List<BookedRoom>> returnBookings(DomainJoin domain_join, int id_domain) throws SQLException;
-	List<PropertyReview> returnPropertyReviews(DomainJoin domain_join, int id_domain) throws SQLException;
 }

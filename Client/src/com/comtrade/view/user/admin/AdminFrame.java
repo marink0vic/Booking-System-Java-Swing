@@ -18,7 +18,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class AdminFrame extends JFrame {
-
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -29,8 +28,9 @@ public class AdminFrame extends JFrame {
 	private JLabel tempLabel;
 	private HomePanel homePanel;
 	private JPanel PropertiesPanel;
-	private JPanel UsersPanel;
-
+	private UsersPanel usersPanel;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -74,10 +74,14 @@ public class AdminFrame extends JFrame {
 		layeredPane.add(PropertiesPanel, "name_1133506876717400");
 		PropertiesPanel.setLayout(null);
 		
-		UsersPanel = new JPanel();
-		layeredPane.add(UsersPanel, "name_1133538685523500");
-		UsersPanel.setLayout(null);
+		usersPanel = new UsersPanel();
+		layeredPane.add(usersPanel, "name_1133538685523500");
+
+		setSideLabels();
 		
+	}
+
+	private void setSideLabels() {
 		JLabel lblProfilePic = new JLabel("New label");
 		lblProfilePic.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblProfilePic.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -132,7 +136,7 @@ public class AdminFrame extends JFrame {
 				lblUsers.setForeground(ColorConstants.BLUE);
 				tempLabel.setForeground(ColorConstants.LIGHT_GRAY);
 				tempLabel = lblUsers;
-				switchPanel(UsersPanel);
+				switchPanel(usersPanel);
 			}
 		});
 		lblUsers.setHorizontalAlignment(SwingConstants.CENTER);
@@ -148,5 +152,4 @@ public class AdminFrame extends JFrame {
 		layeredPane.repaint();
 		layeredPane.revalidate();
 	}
-	
 }

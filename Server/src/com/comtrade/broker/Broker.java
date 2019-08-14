@@ -143,8 +143,7 @@ public class Broker implements IBroker {
 		return wrapper.getBookings();
 	}
 
-	@Override
-	public List<PropertyReview> returnPropertyReviews(DomainJoin domain_join, int id_domain) throws SQLException {
+	private List<PropertyReview> returnPropertyReviews(DomainJoin domain_join, int id_domain) throws SQLException {
 		ResultSet rs = prepareResultSet(domain_join, id_domain);
 		PropertyWrapper wrapper = domain_join.returnJoinTables(rs);
 		return wrapper.getReviews();

@@ -17,13 +17,13 @@ public class HomePanel extends JPanel {
 
 	public HomePanel() {
 		initializeComponents();
-		setHomePanelLabels();
 	}
 
 	private void initializeComponents() {
 		this.setBounds(435, 0, 1047, 803);
 		this.setBackground(new Color(240, 240, 240));
 		this.setLayout(null);
+		setHomePanelLabels();
 	}
 	
 	private void setHomePanelLabels() {
