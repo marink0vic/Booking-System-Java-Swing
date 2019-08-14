@@ -9,6 +9,7 @@ import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.User;
 import com.comtrade.transfer.TransferClass;
 import com.comtrade.view.MainForm;
+import com.comtrade.view.user.admin.AdminFrame;
 import com.comtrade.view.user.host.PropertyOwnerFrame;
 import com.comtrade.view.user.regular.UserHomeFrame;
 
@@ -36,7 +37,9 @@ public class ProxyLogin implements IProxy {
 		
 		if (user.getIdUser() != 0) {
 			if (user.getStatus().equals(UserType.ADMIN.getAccess())) {
-				JOptionPane.showMessageDialog(null, "You are admin");
+				AdminFrame adminFrame = new AdminFrame();
+				adminFrame.setLocationRelativeTo(null);
+				adminFrame.setVisible(true);
 			} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {
 				proxy = new PropertyOwnerFrame(user);
 				proxy.login(user);
