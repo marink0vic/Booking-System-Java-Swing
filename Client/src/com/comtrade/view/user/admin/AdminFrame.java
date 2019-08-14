@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
-
 import com.comtrade.constants.ColorConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,7 +26,7 @@ public class AdminFrame extends JFrame {
 	private JLabel lblUsers;
 	private JLabel tempLabel;
 	private HomePanel homePanel;
-	private JPanel PropertiesPanel;
+	private PropertiesPanel propertiesPanel;
 	private UsersPanel usersPanel;
 	
 	
@@ -68,13 +67,11 @@ public class AdminFrame extends JFrame {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		homePanel = new HomePanel();
-		layeredPane.add(homePanel, "name_1132329764788000");
-		
-		PropertiesPanel = new JPanel();
-		layeredPane.add(PropertiesPanel, "name_1133506876717400");
-		PropertiesPanel.setLayout(null);
-		
+		propertiesPanel = new PropertiesPanel();
 		usersPanel = new UsersPanel();
+		
+		layeredPane.add(homePanel, "name_1132329764788000");
+		layeredPane.add(propertiesPanel, "name_1133506876717400");
 		layeredPane.add(usersPanel, "name_1133538685523500");
 
 		setSideLabels();
@@ -120,7 +117,7 @@ public class AdminFrame extends JFrame {
 				lblProperties.setForeground(ColorConstants.BLUE);
 				tempLabel.setForeground(ColorConstants.LIGHT_GRAY);
 				tempLabel = lblProperties;
-				switchPanel(PropertiesPanel);
+				switchPanel(propertiesPanel);
 			}
 		});
 		lblProperties.setHorizontalAlignment(SwingConstants.CENTER);
