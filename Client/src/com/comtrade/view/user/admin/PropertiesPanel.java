@@ -3,14 +3,17 @@ package com.comtrade.view.user.admin;
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.domain.Transaction;
+import com.comtrade.dto.AdminWrapper;
+import com.comtrade.dto.PropertyWrapper;
 
 public class PropertiesPanel extends JPanel {
 
@@ -19,9 +22,10 @@ public class PropertiesPanel extends JPanel {
 	private JScrollPane scrollPane;
 	private JTable table;
 	private DefaultTableModel dtm = new DefaultTableModel();
-	private JLabel lblTotalSiteEarnings;
+	private AdminWrapper adminWrapper;
 	
-	public PropertiesPanel() {
+	public PropertiesPanel(AdminWrapper adminWrapper) {
+		this.adminWrapper = adminWrapper;
 		initializeComponents();
 	}
 
@@ -48,11 +52,31 @@ public class PropertiesPanel extends JPanel {
 		dtm.addColumn(object[3]);
 		scrollPane.setViewportView(table);
 		
-		lblTotalSiteEarnings = new JLabel("Total site fees: 25833$");
-		lblTotalSiteEarnings.setForeground(new Color(71, 71, 71));
-		lblTotalSiteEarnings.setFont(new Font("Dialog", Font.BOLD, 22));
-		lblTotalSiteEarnings.setBounds(99, 616, 458, 46);
-		add(lblTotalSiteEarnings);
+		fillTable();
 	}
+
+
+	private void fillTable() {
+		for (PropertyWrapper pw : adminWrapper.getAllProperties()) {
+			String name = pw.getProperty().getName();
+			int bookingCount = pw.getBookings().size();
+			double[] earnings = calculateRevenue(pw.getProperty().getIdProperty());
+			dtm.addRow(new Object[] {name, bookingCount, String.format("%.2f", earnings[0]), String.format("%.2f", earnings[1])});
+		}
+		
+	}
+
+
+	private double[] calculateRevenue(int id_property) {
+		double amount = 0d, fees = 0d;
+		for (Transaction transaction : adminWrapper.getTransactions()) {
+			if (transaction.getIdReceiver() == id_property) {
+				amount += transaction.getAmount();
+				fees += transaction.getSiteFees();
+			}
+		}
+		return new double[]{amount, fees};
+	}
+	
 
 }

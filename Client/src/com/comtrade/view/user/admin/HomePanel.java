@@ -8,14 +8,17 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.UserType;
+import com.comtrade.dto.AdminWrapper;
 
 public class HomePanel extends JPanel {
 
 	
 	private static final long serialVersionUID = 1L;
+	private AdminWrapper adminWrapper;
 
-
-	public HomePanel() {
+	public HomePanel(AdminWrapper adminWrapper) {
+		this.adminWrapper = adminWrapper;
 		initializeComponents();
 	}
 
@@ -32,22 +35,38 @@ public class HomePanel extends JPanel {
 		int[] txt_Y = {125, 434};
 		
 		String txt1 = "Number of users";
-		String value1 = "36";
+		String value1 = numberOfUsers() + "";
 		setLabelOnScreen(x_axis[0], y_axis[0], txt_Y[0], txt1, value1);
 	
 		String txt2 = "Number of properties";
-		String value2 = "9";
+		String value2 = adminWrapper.getAllProperties().size() + "";
 		setLabelOnScreen(x_axis[1], y_axis[0], txt_Y[0], txt2, value2);
 	
 		String txt3 = "Number of bookings";
-		String value3 = "41";
+		String value3 = adminWrapper.getTransactions().size() + "";
 		setLabelOnScreen(x_axis[0], y_axis[1], txt_Y[1], txt3, value3);
 
 		String txt4 = "Total site earnings";
-		String value4 = "256336";
+		String value4 = String.format("%.2f", calculateTolalEearnings());
 		setLabelOnScreen(x_axis[1], y_axis[1], txt_Y[1], txt4, value4);
 	}
 
+
+	private long numberOfUsers() {
+		return adminWrapper
+				.getAllUsers()
+				.stream()
+				.filter(u -> u.getStatus().equals(UserType.USER.getAccess()))
+				.count();
+	}
+
+	private Double calculateTolalEearnings() {
+		return adminWrapper
+			   .getTransactions()
+			   .stream()
+			   .mapToDouble(m -> m.getSiteFees())
+			   .sum();
+	}
 
 	private void setLabelOnScreen(int x_axis, int y_axis, int txt_Y, String txt, String num_val) {
 		JLabel lblNumOFUsers = new JLabel(txt);
@@ -66,7 +85,7 @@ public class HomePanel extends JPanel {
 		JLabel lblNum = new JLabel(num_val);
 		lblNum.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNum.setForeground(ColorConstants.GRAY);
-		lblNum.setFont(new Font("Tahoma", Font.BOLD, 40));
+		lblNum.setFont(new Font("Tahoma", Font.BOLD, 35));
 		lblNum.setOpaque(true);
 		lblNum.setBackground(new Color(255, 255, 255));
 		lblNum.setBounds(x_axis, y_axis, 233, 184);

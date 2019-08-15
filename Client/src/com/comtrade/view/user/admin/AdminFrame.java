@@ -1,6 +1,5 @@
 package com.comtrade.view.user.admin;
 
-import java.awt.EventQueue;
 
 import javax.swing.Icon;
 import javax.swing.JFrame;
@@ -12,7 +11,6 @@ import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import javax.swing.border.LineBorder;
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
@@ -37,7 +35,7 @@ public class AdminFrame extends JFrame {
 	private JLabel tempLabel;
 	private HomePanel homePanel;
 	private PropertiesPanel propertiesPanel;
-	private UsersPanel usersPanel;
+	private EarningsPanel earningsPanel;
 	private User user;
 	private AdminWrapper adminWrapper;
 
@@ -57,26 +55,25 @@ public class AdminFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		setSideLabels();
+		
 		layeredPane = new JLayeredPane();
 		layeredPane.setBounds(435, 0, 1047, 803);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		homePanel = new HomePanel();
-		propertiesPanel = new PropertiesPanel();
-		usersPanel = new UsersPanel();
+		homePanel = new HomePanel(adminWrapper);
+		propertiesPanel = new PropertiesPanel(adminWrapper);
+		earningsPanel = new EarningsPanel(adminWrapper.getTransactions());
 		
 		layeredPane.add(homePanel, "name_1132329764788000");
 		layeredPane.add(propertiesPanel, "name_1133506876717400");
-		layeredPane.add(usersPanel, "name_1133538685523500");
-
-		setSideLabels();
-		
+		layeredPane.add(earningsPanel, "name_1133538685523500");
 	}
 
 	private void setSideLabels() {
 		JLabel lblProfilePic = new JLabel("");
-		lblProfilePic.setBorder(new LineBorder(new Color(0, 0, 0)));
+		lblProfilePic.setBorder(null);
 		lblProfilePic.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblProfilePic.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProfilePic.setBounds(124, 35, 175, 150);
@@ -85,7 +82,7 @@ public class AdminFrame extends JFrame {
 		lblProfilePic.setIcon(icon);
 		contentPane.add(lblProfilePic);
 		
-		JLabel lblName = new JLabel(user.getFirstName() + user.getLastName());
+		JLabel lblName = new JLabel(user.getFirstName() + " " + user.getLastName());
 		lblName.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblName.setForeground(ColorConstants.GRAY);
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,14 +122,14 @@ public class AdminFrame extends JFrame {
 		lblProperties.setBounds(124, 454, 170, 70);
 		contentPane.add(lblProperties);
 		
-		lblUsers = new JLabel("USERS");
+		lblUsers = new JLabel("EARNINGS");
 		lblUsers.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				lblUsers.setForeground(ColorConstants.BLUE);
 				tempLabel.setForeground(ColorConstants.LIGHT_GRAY);
 				tempLabel = lblUsers;
-				switchPanel(usersPanel);
+				switchPanel(earningsPanel);
 			}
 		});
 		lblUsers.setHorizontalAlignment(SwingConstants.CENTER);
