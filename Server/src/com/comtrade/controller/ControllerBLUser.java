@@ -5,11 +5,13 @@ import java.sql.SQLException;
 import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.domain.User;
+import com.comtrade.dto.AdminWrapper;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.UserWrapper;
 import com.comtrade.generics.GenericClass;
 import com.comtrade.serverdata.UserActiveThreads;
 import com.comtrade.sysoperation.GeneralSystemOperation;
+import com.comtrade.sysoperation.user.AdminInfoSO;
 import com.comtrade.sysoperation.user.LoginUserSO;
 import com.comtrade.sysoperation.user.SaveUserSO;
 import com.comtrade.sysoperation.user.UpdateUserSO;
@@ -91,6 +93,18 @@ public class ControllerBLUser implements IControllerBL {
 			}
 			return receiver;
 		}
+		case RETURN_ALL_INFO_FOR_ADMIN:
+		{
+			try {
+				AdminWrapper admin = returnAllInfoFormAdmin();
+				receiver.setServerResponse(admin);
+				receiver.setDomainType(DomainType.USER);
+				receiver.setOperation(Operations.RETURN_ALL_INFO_FOR_ADMIN);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return receiver;
+		}
 		case UPDATE:
 		{
 			User user = (User) sender.getClientRequest();
@@ -144,6 +158,13 @@ public class ControllerBLUser implements IControllerBL {
 		GenericClass<User> domainUser = new GenericClass<>(user);
 		GeneralSystemOperation<GenericClass<User>> sysOperation = new UpdateUserSO();
 		sysOperation.executeSystemOperation(domainUser);
+	}
+	
+	private AdminWrapper returnAllInfoFormAdmin() throws SQLException {
+		AdminWrapper admin = new AdminWrapper();
+		GeneralSystemOperation<AdminWrapper> sysOperation = new AdminInfoSO();
+		sysOperation.executeSystemOperation(admin);
+		return admin;
 	}
 	
 	private boolean loggedIn(User user) {

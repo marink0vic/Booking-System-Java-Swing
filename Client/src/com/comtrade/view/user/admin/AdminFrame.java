@@ -2,6 +2,7 @@ package com.comtrade.view.user.admin;
 
 import java.awt.EventQueue;
 
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,8 +14,17 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import com.comtrade.constants.ColorConstants;
+import com.comtrade.constants.DomainType;
+import com.comtrade.constants.Operations;
+import com.comtrade.controller.ControllerUI;
+import com.comtrade.domain.User;
+import com.comtrade.dto.AdminWrapper;
+import com.comtrade.transfer.TransferClass;
+import com.comtrade.util.ImageResize;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class AdminFrame extends JFrame {
 	
@@ -28,27 +38,13 @@ public class AdminFrame extends JFrame {
 	private HomePanel homePanel;
 	private PropertiesPanel propertiesPanel;
 	private UsersPanel usersPanel;
-	
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdminFrame frame = new AdminFrame();
-					frame.setLocationRelativeTo(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private User user;
+	private AdminWrapper adminWrapper;
 
 	
-	public AdminFrame() {
+	public AdminFrame(User user) {
+		this.user = user;
+		loadInformationFromDB();
 		initializeComponents();
 	}
 
@@ -79,14 +75,17 @@ public class AdminFrame extends JFrame {
 	}
 
 	private void setSideLabels() {
-		JLabel lblProfilePic = new JLabel("New label");
+		JLabel lblProfilePic = new JLabel("");
 		lblProfilePic.setBorder(new LineBorder(new Color(0, 0, 0)));
 		lblProfilePic.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		lblProfilePic.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProfilePic.setBounds(124, 35, 175, 150);
+		File f = new File(user.getProfilePicture());
+		Icon icon = ImageResize.resizeImage(f, lblProfilePic.getWidth(), lblProfilePic.getHeight());
+		lblProfilePic.setIcon(icon);
 		contentPane.add(lblProfilePic);
 		
-		JLabel lblName = new JLabel("Marko Marinkovic");
+		JLabel lblName = new JLabel(user.getFirstName() + user.getLastName());
 		lblName.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblName.setForeground(ColorConstants.GRAY);
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -148,5 +147,14 @@ public class AdminFrame extends JFrame {
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
+	}
+	
+	private void loadInformationFromDB() {
+		TransferClass transfer = new TransferClass();
+		transfer.setDomainType(DomainType.USER);
+		transfer.setOperation(Operations.RETURN_ALL_INFO_FOR_ADMIN);
+		ControllerUI.getController().sendToServer(transfer);
+		
+		adminWrapper = ControllerUI.getController().getAdminWrapper();
 	}
 }

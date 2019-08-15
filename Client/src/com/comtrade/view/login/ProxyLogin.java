@@ -37,7 +37,7 @@ public class ProxyLogin implements IProxy {
 		
 		if (user.getIdUser() != 0) {
 			if (user.getStatus().equals(UserType.ADMIN.getAccess())) {
-				AdminFrame adminFrame = new AdminFrame();
+				AdminFrame adminFrame = new AdminFrame(user);
 				adminFrame.setLocationRelativeTo(null);
 				adminFrame.setVisible(true);
 			} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {

@@ -11,6 +11,7 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.Country;
 import com.comtrade.domain.PaymentType;
 import com.comtrade.domain.User;
+import com.comtrade.dto.AdminWrapper;
 import com.comtrade.dto.Message;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
@@ -34,6 +35,7 @@ public class ControllerUI {
 	private Map<Booking, List<BookedRoom>> bookedRooms;
 	private List<Booking> acceptedBookings;
 	private PropertyWrapper hostReservationInfo = new PropertyWrapper();
+	private AdminWrapper adminWrapper;
 	private UserWrapper userWrapper;
 	private PropertyOwnerFrame ownerFrame;
 	
@@ -126,6 +128,18 @@ public class ControllerUI {
 		return temp;
 	}
 	
+	public AdminWrapper getAdminWrapper() {
+		while (adminWrapper == null) {
+			System.out.println("Waiting for admin info");
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return adminWrapper;
+	}
+	
 	//OBRATI PAZNJU AKO SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
 	public List<PropertyWrapper> getProperties() {
 		while (properties == null) {
@@ -189,6 +203,11 @@ public class ControllerUI {
 		case UPDATE:
 		{
 			messageResponseFromServer = transfer.getMessageResponse();
+			break;
+		}
+		case RETURN_ALL_INFO_FOR_ADMIN:
+		{
+			adminWrapper = (AdminWrapper) transfer.getServerResponse();
 			break;
 		}
 		case MESSAGE:
