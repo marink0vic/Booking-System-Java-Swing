@@ -69,6 +69,14 @@ public class ServerData {
 	public List<PropertyWrapper> returnAllProperties() {
 		return properties;
 	}
+	
+	public List<Transaction> getTransactions() {
+		return Collections.unmodifiableList(transactions);
+	}
+
+	public List<User> getUsers() {
+		return Collections.unmodifiableList(users);
+	}
 
 	public void addNewProperty(PropertyWrapper property) {
 		properties.add(property);
