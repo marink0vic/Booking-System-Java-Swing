@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +21,6 @@ import com.comtrade.constants.DomainType;
 import com.comtrade.constants.Operations;
 import com.comtrade.controller.ControllerUI;
 import com.comtrade.domain.Booking;
-import com.comtrade.domain.PropertyReview;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.dto.UserWrapper;
@@ -81,7 +79,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		
 		returnBookingsForUser();
 		loadAllProperties();
-		sortPropertiesBasedOnReviewRating();
 		setSearchPanel();
 		
 		headerPanel = new HeaderPanel();
@@ -232,25 +229,6 @@ public class UserHomeFrame extends JFrame implements IProxy {
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
-	}
-
-	private void sortPropertiesBasedOnReviewRating() {
-		listOfProperties.sort(new Comparator<PropertyWrapper>() {
-			@Override
-			public int compare(PropertyWrapper wrapper1, PropertyWrapper wrapper2) {
-				Double avg1 = calculateAverage(wrapper1.getReviews());
-				Double avg2 = calculateAverage(wrapper2.getReviews());
-				if (avg1 == avg2) return 0;
-				if (avg1 > avg2) return -1;
-				else return 1;
-			}
-		});
-	}
-
-	private double calculateAverage(List<PropertyReview> reviews) {
-		int sum = reviews.stream().mapToInt(v -> v.getRating()).sum();
-		if (sum == 0) return 0.0;
-		return (double) sum / reviews.size();
 	}
 
 	private void returnBookingsForUser() {

@@ -61,7 +61,7 @@ public class HomePagePanel extends JPanel {
 	}
 
 	private void setTopDestinationsLabels() {
-		JLabel lblTopDestinations = new JLabel("Top rated destinations");
+		JLabel lblTopDestinations = new JLabel("Top destinations");
 		lblTopDestinations.setForeground(new Color(71, 71, 71));
 		lblTopDestinations.setFont(new Font("Dialog", Font.BOLD, 20));
 		lblTopDestinations.setBounds(49, 27, 430, 43);

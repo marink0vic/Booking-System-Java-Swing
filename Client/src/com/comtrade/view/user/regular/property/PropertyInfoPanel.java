@@ -50,7 +50,6 @@ public class PropertyInfoPanel extends JPanel {
 	private final static int DIMENSION = 120;
 	private JLabel lblPropertyName;
 	private JLabel lblAddress;
-	private JLabel lblLocation;
 	private JLabel lblGrade;
 	private JLabel lblHelper1;
 	private JTextArea messageArea;
@@ -89,12 +88,6 @@ public class PropertyInfoPanel extends JPanel {
 		String city = address.getZipCode() + " " + address.getCity();
 		String info = "<html>"+street + ", " + city + "<br>" + propertyWrapper.getCountry().getName()+"</html>";
 		lblAddress.setText(info);
-		
-		lblLocation = new JLabel("map location");
-		lblLocation.setForeground(new Color(71, 71, 71));
-		lblLocation.setFont(new Font("Dialog", Font.PLAIN, 17));
-		lblLocation.setBounds(0, 105, 158, 32);
-		this.add(lblLocation);
 		
 		lblGrade = new JLabel(setPropertyRating());
 		lblGrade.setOpaque(true);
