@@ -36,6 +36,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.LineBorder;
+import java.awt.Cursor;
 
 public class PropertyInfoPanel extends JPanel {
 
@@ -172,6 +173,15 @@ public class PropertyInfoPanel extends JPanel {
 	
 	private void addImagesToLabels() {
 		lblMainImage = new JLabel("");
+		lblMainImage.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblMainImage.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ImageGalleryFrame gallery = new ImageGalleryFrame(propertyImages);
+				gallery.setLocationRelativeTo(null);
+				gallery.setVisible(true);
+			}
+		});
 		lblMainImage.setBackground(new Color(64, 224, 208));
 		lblMainImage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMainImage.setOpaque(true);
