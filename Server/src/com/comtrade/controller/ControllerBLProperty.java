@@ -13,6 +13,7 @@ import com.comtrade.sysoperation.property.ReturnAllPropertiesSO;
 import com.comtrade.sysoperation.property.ReturnUserPropertySO;
 import com.comtrade.sysoperation.property.SavePropertySO;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.ServerForm;
 
 public class ControllerBLProperty implements IControllerBL {
 
@@ -30,6 +31,7 @@ public class ControllerBLProperty implements IControllerBL {
 				receiver.setServerResponse(owner);
 				receiver.setDomainType(DomainType.PROPERTY);
 				receiver.setOperation(Operations.SAVE_ALL_PROPERTY_INFO);
+				appendNewPropertyToServerUI(owner);
 			} catch (SQLException e) {
 				receiver.setMessageResponse("Problem occurred while saving property to database");
 				e.printStackTrace();
@@ -88,6 +90,11 @@ public class ControllerBLProperty implements IControllerBL {
 		GeneralSystemOperation<PropertyWrapper> sysOperation = new SavePropertySO();
 		sysOperation.executeSystemOperation(propertyData);
 		return propertyData;
+	}
+	
+	private void appendNewPropertyToServerUI(PropertyWrapper owner) {
+		String txt = "User " + owner.getUser().getUsername() + " has registered the property " + owner.getProperty().getName() + "\n";
+		ServerForm.txtAreaServer.append(txt);
 	}
 
 }

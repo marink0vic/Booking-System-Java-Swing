@@ -18,6 +18,7 @@ import com.comtrade.sysoperation.user.UpdateUserSO;
 import com.comtrade.sysoperation.user.UserBookingSO;
 import com.comtrade.threads.ClientThread;
 import com.comtrade.transfer.TransferClass;
+import com.comtrade.view.ServerForm;
 
 public class ControllerBLUser implements IControllerBL {
 	
@@ -42,9 +43,10 @@ public class ControllerBLUser implements IControllerBL {
 				if (returnedUser.getIdUser() == 0) {
 					receiver.setMessageResponse("Entered data already exists in the database\nCheck your username and email");
 				} else {
+					String txt = "User with username " + returnedUser.getUsername() + " opened an account\n";
+					ServerForm.txtAreaServer.append(txt);
 					UserActiveThreads.getActiveThreads().register(returnedUser, clientThread);
 				}
-				
 				receiver.setServerResponse(returnedUser);
 				receiver.setDomainType(DomainType.USER);
 				receiver.setOperation(Operations.SAVE);

@@ -11,6 +11,7 @@ import com.comtrade.domain.Booking;
 import com.comtrade.domain.User;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.threads.ClientThread;
+import com.comtrade.view.ServerForm;
 
 public class UserActiveThreads {
 
@@ -48,6 +49,8 @@ public class UserActiveThreads {
 		} else if (user.getStatus().equals(UserType.SUPER_USER.getAccess())) {
 			hostThreads.put(user, thread);
 		}
+		String txt = "User " + user.getUsername() + " has logged in\n";
+		ServerForm.txtAreaServer.append(txt);
 	}
 	
 	
@@ -55,7 +58,10 @@ public class UserActiveThreads {
 		for (Map.Entry<User, ClientThread> entry : userThreads.entrySet()) {
 			ClientThread temp = entry.getValue();
 			if (temp == clientThread) {
-				unregister(entry.getKey());
+				User user = entry.getKey();
+				unregister(user);
+				String txt = "User " + user.getUsername() + " has logged out\n";
+				ServerForm.txtAreaServer.append(txt);
 				return;
 			}
 		}
@@ -64,6 +70,8 @@ public class UserActiveThreads {
 			ClientThread temp = entry.getValue();
 			if (temp == clientThread) {
 				unregister(entry.getKey());
+				String txt = "User " + entry.getKey().getUsername() + " has logged out\n";
+				ServerForm.txtAreaServer.append(txt);
 				return;
 			}
 		}
