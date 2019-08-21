@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
+import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.User;
 import com.comtrade.thread.ServerProcessThread;
 import com.comtrade.view.login.IProxy;
@@ -25,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
 
 public class MainForm extends JFrame {
 
@@ -59,44 +62,62 @@ public class MainForm extends JFrame {
 
 	private void initializeComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 700);
+		setBounds(100, 100, 1004, 700);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(71, 71, 71));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
-		JLabel lblNewLabel = new JLabel("BOOKING");
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 66));
-		lblNewLabel.setForeground(new Color(255, 255, 255));
-		lblNewLabel.setBounds(620, 75, 326, 52);
-		contentPane.add(lblNewLabel);
-		
 		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(0, 0, 1200, 700);
+		layeredPane.setBounds(0, 174, 986, 479);
 		contentPane.add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 986, 175);
+		contentPane.add(panel);
+		panel.setBackground(ColorConstants.BLUE);
+		panel.setLayout(null);
+		
+		JLabel lblSmallText = new JLabel("Access your account and start vacation now");
+		lblSmallText.setBounds(306, 104, 350, 24);
+		panel.add(lblSmallText);
+		lblSmallText.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSmallText.setForeground(new Color(255, 255, 255));
+		lblSmallText.setFont(new Font("Dialog", Font.PLAIN, 18));
+		
+		JLabel lblNewLabel = new JLabel("Welcome to Booking.com");
+		lblNewLabel.setBounds(188, 31, 614, 64);
+		panel.add(lblNewLabel);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBackground(new Color(255, 255, 255));
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 50));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		
 		JPanel loginPanel = new JPanel();
-		loginPanel.setBackground(new Color(71, 71, 71));
+		loginPanel.setBackground(Color.WHITE);
 		layeredPane.add(loginPanel, "name_12723390239800");
 		loginPanel.setLayout(null);
 		
 		tfUsernane = new JTextField();
+		tfUsernane.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		tfUsernane.setFont(new Font("Dialog", Font.BOLD, 20));
 		tfUsernane.setText("");
 		tfUsernane.setForeground(new Color(71, 71, 71));
 		tfUsernane.setColumns(10);
-		tfUsernane.setBounds(557, 259, 477, 55);
+		tfUsernane.setBounds(253, 126, 477, 55);
 		loginPanel.add(tfUsernane);
 		
 		passwordField = new JPasswordField();
+		passwordField.setBorder(new LineBorder(ColorConstants.LIGHT_GRAY));
 		passwordField.setForeground(new Color(71, 71, 71));
 		passwordField.setFont(new Font("Dialog", Font.BOLD, 15));
-		passwordField.setBounds(557, 361, 477, 55);
+		passwordField.setBounds(253, 231, 477, 55);
 		loginPanel.add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setBackground(ColorConstants.RED);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String username = tfUsernane.getText();
@@ -108,43 +129,13 @@ public class MainForm extends JFrame {
 				proxy.login(user);
 			}
 		});
-		btnLogin.setContentAreaFilled(false);
-		btnLogin.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnLogin.setContentAreaFilled(true);
-				btnLogin.setBackground(new Color(255, 88, 93));
-				btnLogin.setBorder(new LineBorder(new Color(255, 88, 93), 2));
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				btnLogin.setContentAreaFilled(false);
-				btnLogin.setBackground(null);
-				btnLogin.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-			}
-		});
 		btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLogin.setForeground(Color.WHITE);
 		btnLogin.setFont(new Font("Dialog", Font.PLAIN, 18));
-		btnLogin.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		btnLogin.setBounds(557, 451, 231, 55);
+		btnLogin.setBounds(253, 321, 231, 55);
 		loginPanel.add(btnLogin);
 		
 		JButton btnRegister = new JButton("Register");
-		btnRegister.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnRegister.setContentAreaFilled(true);
-				btnRegister.setBackground(new Color(255, 88, 93));
-				btnRegister.setBorder(new LineBorder(new Color(255, 88, 93), 2));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnRegister.setContentAreaFilled(false);
-				btnRegister.setBackground(null);
-				btnRegister.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-			}
-		});
 		btnRegister.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -154,33 +145,34 @@ public class MainForm extends JFrame {
 				layeredPane.revalidate();
 			}
 		});
+		btnRegister.setBackground(ColorConstants.RED);
 		btnRegister.setForeground(Color.WHITE);
 		btnRegister.setFont(new Font("Dialog", Font.PLAIN, 18));
-		btnRegister.setContentAreaFilled(false);
-		btnRegister.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		btnRegister.setBounds(803, 451, 231, 55);
+		btnRegister.setBounds(499, 321, 231, 55);
 		loginPanel.add(btnRegister);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(255, 255, 255), 3));
-		panel.setBounds(453, 177, 646, 396);
-		panel.setBackground(null);
-		loginPanel.add(panel);
-		panel.setLayout(null);
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setHorizontalTextPosition(SwingConstants.LEADING);
+		lblUsername.setForeground(new Color(71, 71, 71));
+		lblUsername.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblUsername.setBounds(253, 75, 97, 38);
+		loginPanel.add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setHorizontalTextPosition(SwingConstants.LEADING);
+		lblPassword.setForeground(new Color(71, 71, 71));
+		lblPassword.setFont(new Font("Dialog", Font.PLAIN, 18));
+		lblPassword.setBounds(253, 186, 97, 38);
+		loginPanel.add(lblPassword);
 		
 		registerPanel = new JPanel();
-		registerPanel.setBackground(new Color(71, 71, 71));
+		registerPanel.setBackground(Color.WHITE);
 		layeredPane.add(registerPanel, "name_12845655894600");
 		registerPanel.setLayout(null);
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(null);
-		panel_2.setBounds(455, 177, 656, 387);
-		panel_2.setBorder(new LineBorder(new Color(255, 255, 255), 3));
-		registerPanel.add(panel_2);
-		panel_2.setLayout(null);
-		
 		JButton btnRegUser = new JButton("Register as user");
+		btnRegUser.setBounds(209, 188, 231, 82);
+		registerPanel.add(btnRegUser);
 		btnRegUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegisterForm registerForm = new RegisterForm(USER_REGULAR);
@@ -190,28 +182,13 @@ public class MainForm extends JFrame {
 			}
 		});
 		btnRegUser.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnRegUser.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnRegUser.setContentAreaFilled(true);
-				btnRegUser.setBackground(new Color(255, 88, 93));
-				btnRegUser.setBorder(new LineBorder(new Color(255, 88, 93), 2));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnRegUser.setContentAreaFilled(false);
-				btnRegUser.setBackground(null);
-				btnRegUser.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-			}
-		});
 		btnRegUser.setForeground(Color.WHITE);
+		btnRegUser.setBackground(ColorConstants.RED);
 		btnRegUser.setFont(new Font("Dialog", Font.PLAIN, 18));
-		btnRegUser.setContentAreaFilled(false);
-		btnRegUser.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		btnRegUser.setBounds(82, 172, 231, 55);
-		panel_2.add(btnRegUser);
 		
 		JButton btnHost = new JButton("Become a host");
+		btnHost.setBounds(544, 188, 231, 82);
+		registerPanel.add(btnHost);
 		btnHost.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				RegisterForm registerForm = new RegisterForm(USER_HOST);
@@ -220,27 +197,10 @@ public class MainForm extends JFrame {
 				dispose();
 			}
 		});
-		btnHost.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnHost.setContentAreaFilled(true);
-				btnHost.setBackground(new Color(255, 88, 93));
-				btnHost.setBorder(new LineBorder(new Color(255, 88, 93), 2));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnHost.setContentAreaFilled(false);
-				btnHost.setBackground(null);
-				btnHost.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-			}
-		});
 		btnHost.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnHost.setForeground(Color.WHITE);
+		btnHost.setBackground(ColorConstants.RED);
 		btnHost.setFont(new Font("Dialog", Font.PLAIN, 18));
-		btnHost.setContentAreaFilled(false);
-		btnHost.setBorder(new LineBorder(new Color(255, 255, 255), 2));
-		btnHost.setBounds(371, 172, 231, 55);
-		panel_2.add(btnHost);
 		
 		ServerProcessThread serverProcess = new ServerProcessThread();
 		Thread thread = new Thread(serverProcess);
