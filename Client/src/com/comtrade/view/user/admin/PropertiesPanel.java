@@ -8,7 +8,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableRowSorter;
 
 import com.comtrade.constants.ColorConstants;
 import com.comtrade.domain.Transaction;

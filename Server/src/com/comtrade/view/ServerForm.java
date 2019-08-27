@@ -16,12 +16,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class ServerForm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	public static JTextArea txtAreaServer;
+	private JLabel lblText;
 
 	/**
 	 * Launch the application.
@@ -57,6 +60,7 @@ public class ServerForm extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				ServerThread serverThread = new ServerThread();
 				serverThread.start();
+				lblText.setText("The server is up and running and ready to accept clients");
 				btnStart.setEnabled(false);
 			}
 		});
@@ -79,5 +83,12 @@ public class ServerForm extends JFrame {
 		txtAreaServer.setWrapStyleWord(true);
 		txtAreaServer.setEditable(false);
 		scrollPane.setViewportView(txtAreaServer);
+		
+		lblText = new JLabel("");
+		lblText.setHorizontalAlignment(SwingConstants.CENTER);
+		lblText.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblText.setBounds(185, 123, 497, 36);
+		lblText.setForeground(new Color(71,71,71));
+		contentPane.add(lblText);
 	}
 }

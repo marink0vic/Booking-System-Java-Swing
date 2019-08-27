@@ -9,8 +9,8 @@ import com.comtrade.domain.PropertyImage;
 import com.comtrade.dto.PropertyWrapper;
 import com.comtrade.generics.GenericList;
 import com.comtrade.sysoperation.GeneralSystemOperation;
-import com.comtrade.sysoperation.images.DeleteImagesSO;
-import com.comtrade.sysoperation.images.SaveImagesSO;
+import com.comtrade.sysoperation.image.DeleteImagesSO;
+import com.comtrade.sysoperation.image.SaveImagesSO;
 import com.comtrade.transfer.TransferClass;
 
 public class ControllerBLImages implements IControllerBL {
