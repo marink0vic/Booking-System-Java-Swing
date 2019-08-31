@@ -96,7 +96,6 @@ public class UserActiveThreads {
 				break;
 			}
 		}
-		
 	}
 	
 	public void notifyUsersForAcceptedBookings(List<Booking> accepted_bookings) {

@@ -140,7 +140,6 @@ public class ControllerUI {
 		return adminWrapper;
 	}
 	
-	//OBRATI PAZNJU AKO SE ZOVE DRUGI PUT. NECE BITI NULL!!!!!!!
 	public List<PropertyWrapper> getProperties() {
 		while (properties == null) {
 			System.out.println("Waiting for list of all properties");

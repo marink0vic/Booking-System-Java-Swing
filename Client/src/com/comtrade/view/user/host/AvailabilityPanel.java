@@ -9,6 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class AvailabilityPanel extends JPanel {
 	private Set<RoomType> roomTypes;
 	private Map<Booking, List<BookedRoom>> oldBookings;
 	private JTable table;
-	private JDateChooser chooserCheckIn ;
+	private JDateChooser chooserCheckIn;
 	private JDateChooser chooserCheckOut;
 	private LocalDate checkIn;
 	private LocalDate checkOut;
@@ -77,6 +78,7 @@ public class AvailabilityPanel extends JPanel {
 				chooserCheckOut.setMinSelectableDate(chooserCheckIn.getDate());
 			}
 		});
+		chooserCheckIn.setMinSelectableDate(new Date());
 		chooserCheckIn.setForeground(new Color(71, 71, 71));
 		chooserCheckIn.setFont(new Font("Dialog", Font.BOLD, 16));
 		chooserCheckIn.setBounds(268, 132, 191, 56);

@@ -21,7 +21,7 @@ In order to activate application on your computer follow the instructions below
 - Open project in your editor - 
 
 5 - In all three projects(client, common, server) right click on project - properties - java Buld Path -
-	remove libraries with bad url, then click to Add External Jars and add correct jar from project lib folder
+	remove libraries with bad path, then click to Add External Jars and add correct jar from project lib folder
 
 6 - in application.properties in both server and client project change port and urls
 

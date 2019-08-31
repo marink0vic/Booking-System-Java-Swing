@@ -519,6 +519,7 @@ public class PropertyOwnerFrame extends JFrame implements IProxy {
 		Map<Booking, List<BookedRoom>> temp = property_wrapper.getBookings();
 		if (temp.size() > 0) {
 			reservationPanelRight.addNewBookings(temp);
+			earningsPanelRight.addNewTransactions(property_wrapper.getTransactions());
 		}
 	}
 

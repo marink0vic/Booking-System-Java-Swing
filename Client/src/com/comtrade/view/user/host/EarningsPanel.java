@@ -221,4 +221,8 @@ public class EarningsPanel extends JPanel {
 			comboMonth.addItem(months[i]);
 		}
 	}
+
+	public void addNewTransactions(List<Transaction> new_transactions) {
+		transactions.addAll(new_transactions);
+	}
 }
