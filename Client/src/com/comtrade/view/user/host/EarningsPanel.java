@@ -210,7 +210,8 @@ public class EarningsPanel extends JPanel {
 
 	private void fillComboYear() {
 		int year = property.getCreated().getYear();
-		for (int i = year; i <= Year.now().getValue() ; i++) {
+		int limit = Year.now().getValue() + 1;
+		for (int i = year; i <= limit ; i++) {
 			comboYear.addItem(i);
 		}
 	}

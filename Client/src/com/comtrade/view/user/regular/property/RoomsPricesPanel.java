@@ -433,6 +433,7 @@ public class RoomsPricesPanel extends JPanel {
 						}
 						bookedRooms = new ArrayList<>();
 						pricesPerRoom = new double[rooms.size()];
+						reservations = new HashMap<>();
 						loadRoomScrollPane();
 					}
 				} else {
