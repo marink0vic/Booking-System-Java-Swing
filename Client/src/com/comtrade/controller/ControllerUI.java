@@ -224,7 +224,7 @@ public class ControllerUI {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public void processPropertyFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
@@ -236,7 +236,9 @@ public class ControllerUI {
 		}
 		case RETURN_ALL:
 		{
-			properties = (List<PropertyWrapper>) transfer.getServerResponse();
+			@SuppressWarnings("unchecked")
+			List<PropertyWrapper> returnedProperties = (List<PropertyWrapper>) transfer.getServerResponse();;
+			this.properties = returnedProperties; 
 			break;
 		}
 		default:
@@ -244,7 +246,6 @@ public class ControllerUI {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void processBookingFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
@@ -261,6 +262,7 @@ public class ControllerUI {
 		}
 		case NOTIFY_ALL_USERS_WITH_NEW_BOOKINGS:
 		{
+			@SuppressWarnings("unchecked")
 			Map<Booking, List<BookedRoom>> temp = (Map<Booking, List<BookedRoom>>) transfer.getServerResponse();
 			bookedRooms.putAll(temp);
 			break;
@@ -273,7 +275,9 @@ public class ControllerUI {
 		}
 		case NOTIFY_USER_WITH_ACCCEPTED_BOOKINGS:
 		{
-			acceptedBookings = (List<Booking>) transfer.getServerResponse();
+			@SuppressWarnings("unchecked")
+			List<Booking> returned = (List<Booking>) transfer.getServerResponse();
+			this.acceptedBookings = returned;
 			synchronized (newAcceptedBookingsLock) {
 				newAcceptedBookingsLock.notify();
 			}
@@ -330,13 +334,15 @@ public class ControllerUI {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public void processCountryFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
 		case RETURN_ALL:
 		{
-			countryImages = (List<Country>) transfer.getServerResponse();
+			@SuppressWarnings("unchecked")
+			List<Country> returnedImages = (List<Country>) transfer.getServerResponse();
+			this.countryImages = returnedImages; 
 			break;
 		}
 		default:
@@ -344,13 +350,15 @@ public class ControllerUI {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void processPaymentTypeFromServer(TransferClass transfer) {
 		Operations operation = transfer.getOperation();
 		switch (operation) {
 		case RETURN_ALL:
 		{
-			payments = (List<PaymentType>) transfer.getServerResponse();
+
+			@SuppressWarnings("unchecked")
+			List<PaymentType> returnedPayments = (List<PaymentType>) transfer.getServerResponse();
+			this.payments = returnedPayments; 
 			break;
 		}
 		default:
