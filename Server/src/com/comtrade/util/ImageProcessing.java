@@ -10,7 +10,11 @@ import java.util.List;
 import com.comtrade.constants.ImageFolder;
 import com.comtrade.domain.PropertyImage;
 
-public class ImageProcessing {
+public final class ImageProcessing {
+	
+	private ImageProcessing() {
+		throw new AssertionError();
+	}
 
 	public static List<PropertyImage> formatServerPath(List<PropertyImage> image_files, int id_property, String username) throws SQLException {
 		String pathToSave = ImageFolder.IMAGE_HOST_USER_FOLDER.getPath() + username + "_" + id_property;

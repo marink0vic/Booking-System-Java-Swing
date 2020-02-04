@@ -6,7 +6,11 @@ import java.io.File;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-public class ImageResize {
+public final class ImageResize {
+	
+	private ImageResize() {
+		throw new AssertionError();
+	}
 
 	public static Icon resizeImage(File selected_file, int width, int height) {
 		ImageIcon myImage = new ImageIcon(selected_file.getAbsolutePath());
