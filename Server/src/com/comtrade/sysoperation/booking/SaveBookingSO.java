@@ -30,23 +30,20 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 	protected void executeSpecificOperation(PropertyWrapper wrapper) throws SQLException {
 		saveReservation(wrapper);
 	}
+	
 	private void saveReservation(PropertyWrapper wrapper) throws SQLException {
 		Map.Entry<Booking, List<BookedRoom>> bookings = wrapper.getBookings().entrySet().iterator().next();
 		Transaction transaction = wrapper.getTransactions().get(0);
-		Set<RoomType> types = wrapper.getRooms().keySet();
-		dbLock.lock();
+		
 		try {
-			if (!checkRoomAvailability(bookings, types)) {
-				throw new SQLException();
-			}
-			//---saving to database
-			Booking booking = bookings.getKey();
-			booking.setIdBooking(saveBooking(booking));
-			booking.setStatus("PENDING");
+			dbLock.lock();
 			
-			saveRooms(booking.getIdBooking(), bookings.getValue());
-			transaction.setIdBooking(booking.getIdBooking());
-			transaction.setIdTransaction(saveTransaction(transaction));
+			if (!checkRoomAvailability(bookings, wrapper.getRooms().keySet()))
+				throw new SQLException();
+			Booking booking = bookings.getKey();
+			saveBookingToDB(booking);
+			saveBookedRoomsToDB(booking.getIdBooking(), bookings.getValue());
+			saveTransactionToDB(booking.getIdBooking(), transaction);	
 			wrapper.setTransactions(null);
 			
 			//---saving to server and notify logged users
@@ -55,6 +52,81 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 		} finally {
 			dbLock.unlock();
 		}
+	}
+	
+	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
+		Booking client = bookings.getKey();
+		List<BookedRoom> rooms = bookings.getValue();
+		Map<Integer, Integer> reservedRooms = numOfBookedRooms(client);
+		
+		outer:for (BookedRoom bookedRoom : rooms) {
+			if (reservedRooms.containsKey(bookedRoom.getIdRoomType())) {
+				for (RoomType type : types) {
+					if (type.getIdRoomType() == bookedRoom.getIdRoomType()) {
+						int numOfRooms = type.getNumberOfRooms();
+						int avaiableRooms = numOfRooms - reservedRooms.get(bookedRoom.getIdRoomType());
+						if (avaiableRooms - bookedRoom.getNumberOfRooms() < 0) 
+							return false;
+						continue outer;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	private Map<Integer, Integer> numOfBookedRooms(Booking client) {
+		Map<Integer, Integer> reservedRooms = new HashMap<>();
+		for (PropertyWrapper pw : server.returnAllProperties()) {
+			if (client.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
+				for (Map.Entry<Booking, List<BookedRoom>> savedBooking : pw.getBookings().entrySet()) {
+					Booking server = savedBooking.getKey();
+					if (checkDates(client, server)) continue;
+					addToReservedCount(reservedRooms, savedBooking.getValue());
+				}
+				break;
+			}
+		}
+		return reservedRooms;
+	}
+	
+	private void addToReservedCount(Map<Integer, Integer> reserved_rooms, List<BookedRoom> booked_rooms) {
+		for (BookedRoom room : booked_rooms) {
+			int id = room.getIdRoomType();
+			int occupiedRooms = room.getNumberOfRooms();
+			if (reserved_rooms.containsKey(id)) {
+				occupiedRooms += reserved_rooms.get(id);
+			}
+			reserved_rooms.put(id,occupiedRooms);
+		}
+												
+	}
+	
+	private boolean checkDates(Booking client, Booking server) {
+		if (client.getCheckIn().isAfter(server.getCheckOut()) || client.getCheckOut().isBefore(server.getCheckIn())) {
+			return true;
+		}
+		return false;
+	}
+	
+	private void saveBookingToDB(Booking booking) throws SQLException {
+		int savedBookingId = iBroker.save(booking);
+		booking.setIdBooking(savedBookingId);
+		booking.setStatus("PENDING");
+	}
+	
+	private void saveBookedRoomsToDB(int idBooking, List<BookedRoom> list) throws SQLException {
+		for (int i = 0; i < list.size(); i++) {
+			BookedRoom br = list.get(i);
+			br.setIdBooking(idBooking);
+			br.setIdBookedRoom(iBroker.save(br));
+		}
+	}
+	
+	private void saveTransactionToDB(int idBooking, Transaction transaction) throws SQLException {
+		transaction.setIdBooking(idBooking);
+		int transactionID = iBroker.save(transaction);
+		transaction.setIdTransaction(transactionID);
 	}
 	
 	private void notifyUsers(User user, Booking booking, List<BookedRoom> bookedRooms, Transaction tr) {
@@ -75,74 +147,4 @@ public class SaveBookingSO extends GeneralSystemOperation<PropertyWrapper> {
 			}
 		}
 	}
-	
-	private boolean checkRoomAvailability(Entry<Booking, List<BookedRoom>> bookings, Set<RoomType> types) throws SQLException {
-		Booking client = bookings.getKey();
-		List<BookedRoom> rooms = bookings.getValue();
-		
-		Map<Integer, Integer> reservedRooms = returnReservedRoomsCount(client);
-		
-		outer:for (BookedRoom bookedRoom : rooms) {
-			if (reservedRooms.containsKey(bookedRoom.getIdRoomType())) {
-				for (RoomType type : types) {
-					if (type.getIdRoomType() == bookedRoom.getIdRoomType()) {
-						int numOfRooms = type.getNumberOfRooms();
-						int avaiableRooms = numOfRooms - reservedRooms.get(bookedRoom.getIdRoomType());
-						if (avaiableRooms - bookedRoom.getNumberOfRooms() < 0) return false;
-						continue outer;
-					}
-				}
-			}
-		}
-		
-		return true;
-	}
-	private Map<Integer, Integer> returnReservedRoomsCount(Booking client) {
-		Map<Integer, Integer> reservedRooms = new HashMap<>();
-		for (PropertyWrapper pw : server.returnAllProperties()) {
-			if (client.getProperty().getIdProperty() == pw.getProperty().getIdProperty()) {
-				for (Map.Entry<Booking, List<BookedRoom>> savedBooking : pw.getBookings().entrySet()) {
-					Booking server = savedBooking.getKey();
-					if (checkDates(client, server)) continue;
-					addToReservedCount(reservedRooms, savedBooking.getValue());
-				}
-				break;
-			}
-		}
-		return reservedRooms;
-	}
-	private void addToReservedCount(Map<Integer, Integer> reserved_rooms, List<BookedRoom> booked_rooms) {
-		for (BookedRoom room : booked_rooms) {
-			int id = room.getIdRoomType();
-			int occupiedRooms = room.getNumberOfRooms();
-			if (reserved_rooms.containsKey(id)) {
-				occupiedRooms += reserved_rooms.get(id);
-			}
-			reserved_rooms.put(id,occupiedRooms);
-		}
-												
-	}
-	private boolean checkDates(Booking client, Booking server) {
-		if (client.getCheckIn().isAfter(server.getCheckOut()) || client.getCheckOut().isBefore(server.getCheckIn())) {
-			return true;
-		}
-		return false;
-	}
-	
-	private int saveTransaction(Transaction transaction) throws SQLException {
-		return iBroker.save(transaction);
-	}
-	
-	private void saveRooms(int idBooking, List<BookedRoom> list) throws SQLException {
-		for (int i = 0; i < list.size(); i++) {
-			BookedRoom br = list.get(i);
-			br.setIdBooking(idBooking);
-			br.setIdBookedRoom(iBroker.save(br));
-		}
-	}
-	
-	private int saveBooking(Booking booking) throws SQLException {
-		return iBroker.save(booking);
-	}
-
 }
